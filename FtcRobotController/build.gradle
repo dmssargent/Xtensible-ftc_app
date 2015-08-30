@@ -8,6 +8,10 @@ android {
         minSdkVersion 16
         targetSdkVersion 19
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 repositories {
@@ -18,10 +22,13 @@ repositories {
 
 dependencies {
     compile files('libs/android-support-v4.jar')
-    compile (name:'d2xx', ext:'jar')
-    compile (name:'RobotCore-release', ext:'aar')
-    compile (name:'ModernRobotics-release', ext:'aar')
-    compile (name:'FtcCommon-release', ext:'aar')
-    compile (name:'WirelessP2p-release', ext:'aar')
-    compile (name:'Analytics-release', ext:'aar')
+    compile(name: 'd2xx', ext: 'jar')
+    compile(name: 'RobotCore-release', ext: 'aar')
+    compile(name: 'ModernRobotics-release', ext: 'aar')
+    compile(name: 'FtcCommon-release', ext: 'aar')
+    compile(name: 'WirelessP2p-release', ext: 'aar')
+    compile(name: 'Analytics-release', ext: 'aar')
+    compile 'com.google.guava:guava:19.0-rc1'
+    compile files('libs/netty-all-4.0.30.Final.jar')
+    compile 'com.google.code.gson:gson:2.3.1'
 }
