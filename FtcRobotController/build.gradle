@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion = 'Google Inc.:Google APIs:19'
-    buildToolsVersion = '21.1.2'
+    buildToolsVersion = '19.1.0'
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 19
     }
     compileOptions {
@@ -21,14 +21,16 @@ repositories {
 }
 
 dependencies {
-    compile files('libs/android-support-v4.jar')
     compile(name: 'd2xx', ext: 'jar')
     compile(name: 'RobotCore-release', ext: 'aar')
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'FtcCommon-release', ext: 'aar')
     compile(name: 'WirelessP2p-release', ext: 'aar')
     compile(name: 'Analytics-release', ext: 'aar')
-    compile 'com.google.guava:guava:19.0-rc1'
+    compile files('libs/android-support-v4.jar')
     compile files('libs/netty-all-4.0.30.Final.jar')
+    compile 'com.google.guava:guava:19.0-rc1'
     compile 'com.google.code.gson:gson:2.3.1'
+    compile project(':FtcXtensible')
+    compile project(':OpModeLibrary')
 }
