@@ -1,0 +1,9 @@
+com.qualcomm.ftcrobotcontroller
+com.qualcomm.ftcrobotcontroller.opmodes
+com.qualcomm.ftcrobotcontroller.opmodes.examples
+org.ftccommunity.networkedopmode
+org.ftccommunity.networkedopmode.networking
+org.ftccommunity.networkedopmode.networking.http
+org.ftccommunity.networkedopmode.robot
+org.ftccommunity.networkedopmode.robot.formatters
+org.ftccommunity.opmodes

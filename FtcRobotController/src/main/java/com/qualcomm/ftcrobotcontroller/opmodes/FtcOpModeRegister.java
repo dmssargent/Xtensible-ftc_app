@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
+import org.ftc.opmodes.FallbackOpModeRegister;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
@@ -70,9 +71,10 @@ public class FtcOpModeRegister implements OpModeRegister {
      * @param mgr op mode manager
      */
     public void register(final OpModeManager mgr) {
-        // manager.register(TestOpMode.class.getSimpleName(), new TestOpMode());
+        // manager.register(NetworkOpMode.class.getSimpleName(), new NetworkOpMode());
         try {
-            FtcOpModeRegister userFallback = new FtcOpModeRegister();
+            FallbackOpModeRegister userFallback = new FallbackOpModeRegister();
+            userFallback.register(mgr);
 
             final LinkedList<String> noCheckList = new LinkedList<>();
             noCheckList.add("com.google");
@@ -242,7 +244,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
             for (LinkedList<Class> opModeList : sortedOpModes.values()) {
                 for (Class opMode : opModeList) {
-                    manager.register(getOpModeName(opMode), opMode);
+                    mgr.register(getOpModeName(opMode), opMode);
                 }
             }
 
