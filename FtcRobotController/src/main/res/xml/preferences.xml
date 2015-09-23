@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2015 David Sargent
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  -->
+
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
   <PreferenceCategory
     android:title="@string/pref_wifi_channel_selection_title">
 
     <PreferenceScreen
-      android:title="@string/pref_change_wifi_channel"
-      android:key="@string/pref_launch_settings">
+        android:key="@string/pref_launch_settings"
+        android:title="@string/pref_change_wifi_channel">
       <intent
         android:action="com.qualcomm.ftccommon.configuration.FtcWifiChannelSelectorActivity.intent.action.Launch"
-        android:targetPackage="com.qualcomm.ftccommon"
-        android:targetClass="com.qualcomm.ftccommon.FtcWifiChannelSelectorActivity" />
+        android:targetClass="com.qualcomm.ftccommon.FtcWifiChannelSelectorActivity"
+        android:targetPackage="com.qualcomm.ftccommon"/>
     </PreferenceScreen>
   </PreferenceCategory>
 
@@ -18,21 +28,21 @@
     android:title="@string/pref_configure_robot_title">
 
     <PreferenceScreen
-      android:title="@string/configure_activity"
-      android:key="@string/pref_launch_configure">
+        android:key="@string/pref_launch_configure"
+        android:title="@string/configure_activity">
       <intent
         android:action="com.qualcomm.ftccommon.configuration.FtcLoadFileActivity.intent.action.Launch"
-        android:targetPackage="com.qualcomm.ftccommon"
-        android:targetClass="com.qualcomm.ftccommon.configuration.FtcLoadFileActivity" />
+        android:targetClass="com.qualcomm.ftccommon.configuration.FtcLoadFileActivity"
+        android:targetPackage="com.qualcomm.ftccommon"/>
     </PreferenceScreen>
 
     <PreferenceScreen
-      android:title="@string/title_activity_autoconfigure"
-      android:key="@string/pref_launch_autoconfigure">
+        android:key="@string/pref_launch_autoconfigure"
+        android:title="@string/title_activity_autoconfigure">
       <intent
         android:action="com.qualcomm.ftccommon.configuration.FtcAutoconfigureActivity.intent.action.Launch"
-        android:targetPackage="com.qualcomm.ftccommon"
-        android:targetClass="com.qualcomm.ftccommon.configuration.AutoConfigureActivity" />
+        android:targetClass="com.qualcomm.ftccommon.configuration.AutoConfigureActivity"
+        android:targetPackage="com.qualcomm.ftccommon"/>
     </PreferenceScreen>
   </PreferenceCategory>
 </PreferenceScreen>

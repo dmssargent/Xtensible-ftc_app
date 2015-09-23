@@ -1,4 +1,6 @@
-# ftc_app
+# Xtensible OpMode Library
+### Note that this is a development release code function and syntax is not guaranteed to be the
+ same between versions and code quality may be below usual standards
 FTC Android Studio project to create FTC Robot Controller app.
 
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.
@@ -6,20 +8,71 @@ The FTC Robot Controller app is designed to work in conjunction with the FTC Dri
 The FTC Driver Station app is available through Google Play.
 
 To use this SDK, download/clone the entire project to your local computer.
-Use Android Studio to import the folder  ("Import project (Eclipse ADT, Gradle, etc.)").
+Use Android Studio to import the folder ("Import project (Eclipse ADT, Gradle, etc.)").
 
-Documentation for the FTC SDK are included with this repository.  There is a subfolder called "doc" which contains several subfolders:
+## Xtensible OpMode
+This is the main "OpMode" class for this library. You can extend this class for use
+within the FTC SDK. It also bootstraps our library for use.
 
- * The folder "apk" contains the .apk files for the FTC Driver Station and FTC Robot Controller apps.
- * The folder "javadoc" contains the JavaDoc user documentation for the FTC SDK.
- * The folder "tutorial" contains PDF files that help teach the basics of using the FTC SDK.
+#### Core syntactical changes:
+##### Getting references to robot hardware
+Old Way:
+```java
+hardwareMap.dcMotor.get("motor_1");
+```
+New Way:
+```java
+ctx.hardwareMap().getDcMotors().get("motor_1");
+```
+##### Getting access to a gamepad's left joystick X
+Old Way:
+```java
+gamepad1.left_joystick.X;
+```
+New Way:
+```java
+ctx.xGamepad1().getLeftJoystick().getX();
+```
 
-For technical questions regarding the SDK, please visit the FTC Technology forum:
+##### Logging
+Old Way:
+```java
+RobotLog.i("Hello World!");
+```
+New Way:
+```java
+ctx.log().i("Hi", "Hello World!");
+```
 
-  http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
+##### Networking
+Old Way:
+There was never an old way.
 
-In this latest version of the FTC SDK (20150803_001) the following changes should be noted:
+New Way:
+```java
+ctx.enableNetworking().startNetworking();
+```
 
+Modifying the server parameter:
+```java
+ctx.enableNetworking();
+// The default web directory is "/sdcard/FIRST/web"
+ctx.getServerSettings().setWebDirectory("/put/here/where/your/web/directory/is");
+ctx.startNetworking();
+```
+### Structure
+ * FtcRobotController
+     - doc - Documentation for the FTC SDK are included with this repository.
+        - "apk" - contains the .apk files for the FTC Driver Station and FTC Robot Controller apps.
+        - "javadoc" - contains the JavaDoc user documentation for the FTC SDK.
+        - "tutorial" - contains PDF files that help teach the basics of using the FTC SDK.
+     - src - contains the source code for the FTC SDK user-editable code portions
+        - "opmodes" - provides user-defined OpModes
+ * OpModeLibrary - This module is where you add your OpMode code (note that you must not have
+    dependencies on the FtcRobotController module, but you may depend on its libraries)
+ * FtcXtesible - This module contains our code to help you out with your programming
+
+### Upstream Changelog
  * New user interfaces for FTC Driver Station and FTC Robot Controller apps.
  * An init() method is added to the OpMode class.
    - For this release, init() is triggered right before the start() method.
@@ -33,7 +86,7 @@ In this latest version of the FTC SDK (20150803_001) the following changes shoul
    - Support for encoders with the Legacy Module is now working.
  * The hardware loop has been updated for better performance.
 
-
-T. Eng
+#### Authors
+David Sargent, T. Eng, Jonathan Berling
 August 3, 2015
 
