@@ -22,6 +22,8 @@ import org.ftc.opmodes.FallbackOpModeRegister;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
+import org.ftccommunity.ftcxtensible.versioning.RobotSdkApiLevel;
+import org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -218,11 +220,25 @@ public class FtcOpModeRegister implements OpModeRegister {
                 if (name.equals("")) {
                     name = opMode.getSimpleName();
                 }
+
                 sortedOpModes.put(name, opModes.get(key));
             }
 
             for (LinkedList<Class> opModeList : sortedOpModes.values()) {
                 for (Class opMode : opModeList) {
+                    if (opMode.isAnnotationPresent(RobotSdkVersion.class)) {
+                        RobotSdkVersion annotation = (RobotSdkVersion)
+                                opMode.getAnnotation(RobotSdkVersion.class);
+                        if (annotation.value() != RobotSdkApiLevel.currentVerison()) {
+                            if (annotation.strict() ||
+                                    annotation.compatibleUpTo()
+                                            .compareTo(RobotSdkApiLevel.currentVerison()) < 0) {
+                                Log.w(TAG, "Skipping OpMode " + getOpModeName(opMode) +
+                                        " because of incompatibility");
+                                continue;
+                            }
+                        }
+                    }
                     mgr.register(getOpModeName(opMode), opMode);
                 }
             }

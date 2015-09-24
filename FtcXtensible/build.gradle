@@ -56,4 +56,7 @@ dependencies {
     compile files('libs/netty-all-4.0.30.Final.jar')
     compile 'com.google.guava:guava:19.0-rc1'
     compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile 'de.akquinet.android.marvin:marvin:1.1.0'
+    androidTestCompile 'junit:junit:4.12'
 }

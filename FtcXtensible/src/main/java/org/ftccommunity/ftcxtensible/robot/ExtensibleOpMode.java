@@ -60,6 +60,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
 
     private int loopCount;
     private volatile int skipNextLoop;
+    private RobotStatus
 
     protected ExtensibleOpMode() {
         this.gamepad1 = super.gamepad1;
@@ -192,6 +193,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
                 }
             } else {
                 RobotLog.setGlobalErrorMsg(e.toString());
+
             }
         }
 
