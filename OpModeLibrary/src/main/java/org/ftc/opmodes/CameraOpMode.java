@@ -15,6 +15,7 @@ import android.hardware.Camera;
 import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
 
@@ -29,7 +30,9 @@ public class CameraOpMode extends ExtensibleOpMode {
 
         if (getLoopCount() % 5 == 0) {
             Byte[] image = ctx.cameraManager().getImages().peek();
-            ctx.log().i(TAG, Byte.toString(image[0]) + " " + Byte.toString(image[5]));
+            if (image != null) {
+                ctx.log().i(TAG, Byte.toString(image[0]) + " " + Byte.toString(image[5]));
+            }
         }
 
         ctx.cameraManager().getImages().peek();
@@ -57,7 +60,7 @@ public class CameraOpMode extends ExtensibleOpMode {
     }
 
     @Override
-    public int onFailure(RobotContext ctx, Type eventType, Object event, Object in) {
+    public int onFailure(RobotContext ctx, RobotStatus.Type eventType, Object event, Object in) {
         return -1;
     }
 

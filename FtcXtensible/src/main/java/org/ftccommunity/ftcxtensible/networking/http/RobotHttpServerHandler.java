@@ -111,7 +111,7 @@ public class RobotHttpServerHandler extends ChannelInboundHandlerAdapter {
                 HardwareMap hardwareMap = context.hardwareMap();
                 page = gson.toJson(ImmutableSet.copyOf(hardwareMap.dcMotor));
             } else if (uri.equals(context.getServerSettings().getLogPage())) {
-                page = context.getStatus().getLog();
+                page = context.status().getLog();
             } else {
                 if (cache.containsKey(uri)) {
                     page = cache.get(uri);

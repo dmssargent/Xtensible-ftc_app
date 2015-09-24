@@ -161,7 +161,7 @@ public class CameraManager {
     }
 
     public void takePicture() throws RuntimeException {
-        if (isReadyForCapture()) {
+        if (!isReadyForCapture()) {
             throw new IllegalStateException("Please wait one second after prep is called");
         }
 

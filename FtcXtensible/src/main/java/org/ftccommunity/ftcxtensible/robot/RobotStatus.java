@@ -32,6 +32,8 @@ public class RobotStatus {
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final ConcurrentLinkedQueue<LogElement> logElements;
     private LogTypes logType;
+    private MainStates state;
+    private Type type;
 
     private RobotStatus() {
         logElements = new ConcurrentLinkedQueue<>();
@@ -92,10 +94,36 @@ public class RobotStatus {
         }
     }
 
+    public MainStates getMainRobotState() {
+        return state;
+    }
+
+    public RobotStatus setMainState(MainStates newState) {
+        state = newState;
+        return this;
+    }
+
+    public Type getCurrentStateType() {
+        return type;
+    }
+
+    public RobotStatus setCurrentStateType(Type newType) {
+        type = newType;
+        return this;
+    }
+
     public enum LogTypes {
         HTML,
         TEXT,
         JSON
+    }
+
+    public enum MainStates {
+        CONSTRUCT, ARM, INIT, EXEC, STOP, EXCEPTION
+    }
+
+    public enum Type {
+        SUCCESS, FAILURE, IDK
     }
 
     private class LogElement {

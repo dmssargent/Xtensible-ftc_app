@@ -20,7 +20,7 @@
 package org.ftccommunity.ftcxtensible.interfaces;
 
 import org.ftccommunity.ftcxtensible.RobotContext;
-import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
 
@@ -33,5 +33,5 @@ public interface FullOpMode extends OpModeLoop {
     void onSuccess(final RobotContext ctx, Object event, Object in);
 
     int onFailure(final RobotContext ctx,
-                  ExtensibleOpMode.Type eventType, Object event, Object in);
+                  RobotStatus.Type eventType, Object event, Object in);
 }

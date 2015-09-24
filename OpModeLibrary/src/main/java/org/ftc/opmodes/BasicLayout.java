@@ -2,6 +2,7 @@ package org.ftc.opmodes;
 
 import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
 
@@ -40,7 +41,7 @@ public class BasicLayout extends ExtensibleOpMode {
      * @return an integer value representing what to do; values < 0 stop the robot
      */
     @Override
-    public int onFailure(RobotContext ctx, Type eventType, Object event, Object in) {
+    public int onFailure(RobotContext ctx, RobotStatus.Type eventType, Object event, Object in) {
         return -1;
     }
 }

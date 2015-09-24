@@ -4,6 +4,7 @@ package org.ftc.opmodes;
 import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -26,7 +27,7 @@ public class NetworkOpMode extends ExtensibleOpMode {
     public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
         loopCount++;
         if (loopCount % 10 == 0) {
-            ctx.getStatus().log(Level.WARNING, "FOO", "This is opMode test! " + loopCount++);
+            ctx.status().log(Level.WARNING, "FOO", "This is opMode test! " + loopCount++);
         }
     }
 
@@ -41,7 +42,7 @@ public class NetworkOpMode extends ExtensibleOpMode {
     }
 
     @Override
-    public int onFailure(RobotContext ctx, Type eventType, Object event, Object in) {
+    public int onFailure(RobotContext ctx, RobotStatus.Type eventType, Object event, Object in) {
         return -1;
     }
 

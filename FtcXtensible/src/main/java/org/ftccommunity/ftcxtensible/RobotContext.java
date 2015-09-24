@@ -256,7 +256,7 @@ public class RobotContext {
      *
      * @return the current status of the robot
      */
-    public RobotStatus getStatus() {
+    public RobotStatus status() {
         return status;
     }
 

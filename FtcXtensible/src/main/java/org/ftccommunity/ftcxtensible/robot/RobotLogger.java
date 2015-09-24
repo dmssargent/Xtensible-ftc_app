@@ -36,22 +36,22 @@ public class RobotLogger {
 
     public void d(String tag, String mess) {
         RobotLog.d(mess);
-        context.getStatus().log(Level.FINE, tag, mess);
+        context.status().log(Level.FINE, tag, mess);
     }
 
     public void i(String tag, String mess) {
         RobotLog.i(mess);
-        context.getStatus().log(Level.INFO, tag, mess);
+        context.status().log(Level.INFO, tag, mess);
     }
 
     public void w(String tag, String mess) {
         RobotLog.w(mess);
-        context.getStatus().log(Level.WARNING, tag, mess);
+        context.status().log(Level.WARNING, tag, mess);
     }
 
     public void e(String tag, String mess) {
         RobotLog.e(mess);
-        context.getStatus().log(Level.SEVERE, tag, mess);
+        context.status().log(Level.SEVERE, tag, mess);
     }
 
     public void wtf(String tag, String mess, Exception ex) {

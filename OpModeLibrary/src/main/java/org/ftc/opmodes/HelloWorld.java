@@ -3,6 +3,7 @@ package org.ftc.opmodes;
 import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -23,14 +24,14 @@ public class HelloWorld extends ExtensibleOpMode {
 
     @Override
     public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        ctx.getStatus().log(Level.INFO, "LOOP", "Current loop count: " + getLoopCount());
+        ctx.status().log(Level.INFO, "LOOP", "Current loop count: " + getLoopCount());
         ctx.telemetry().addData("MESS", "Hello, World!");
         ctx.telemetry().addData("MESS", "How are you doing?");
     }
 
     @Override
     public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        ctx.getStatus().log(Level.WARNING, "TIME", "End Date: " +
+        ctx.status().log(Level.WARNING, "TIME", "End Date: " +
                 (new Date(System.nanoTime() / 1000)).toString() + "This ran for " + getRuntime());
     }
 
@@ -40,7 +41,7 @@ public class HelloWorld extends ExtensibleOpMode {
     }
 
     @Override
-    public int onFailure(RobotContext ctx, Type eventType, Object event, Object in) {
+    public int onFailure(RobotContext ctx, RobotStatus.Type eventType, Object event, Object in) {
         // Return the default value; for when things go south
         return -1;
     }

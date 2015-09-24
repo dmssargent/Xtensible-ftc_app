@@ -60,7 +60,6 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
 
     private int loopCount;
     private volatile int skipNextLoop;
-    private RobotStatus
 
     protected ExtensibleOpMode() {
         this.gamepad1 = super.gamepad1;
@@ -108,9 +107,9 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         } catch (Exception e) {
             Log.e(TAG,
                     "An exception occurred running the OpMode " + getCallerClassName(e), e);
-            if (onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, e) >= 0) {
+            if (onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, e) >= 0) {
                 for (Object o : list) {
-                    onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, o);
+                    onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, o);
                 }
             } else {
                 RobotLog.setGlobalErrorMsg(e.toString());
@@ -118,10 +117,10 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         }
 
         if (list.isEmpty()) {
-            onSuccess(robotContext, MainStates.STOP, null);
+            onSuccess(robotContext, RobotStatus.MainStates.STOP, null);
         } else {
             for (Object o : list) {
-                onSuccess(robotContext, MainStates.STOP, o);
+                onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
     }
@@ -137,9 +136,9 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         } catch (Exception e) {
             Log.e(TAG,
                     "An exception occurred running the OpMode " + getCallerClassName(e), e);
-            if (onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, e) >= 0) {
+            if (onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, e) >= 0) {
                 for (Object o : list) {
-                    onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, o);
+                    onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, o);
                 }
             } else {
                 RobotLog.setGlobalErrorMsg(e.toString());
@@ -147,10 +146,10 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         }
 
         if (list.isEmpty()) {
-            onSuccess(robotContext, MainStates.STOP, null);
+            onSuccess(robotContext, RobotStatus.MainStates.STOP, null);
         } else {
             for (Object o : list) {
-                onSuccess(robotContext, MainStates.STOP, o);
+                onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
     }
@@ -162,6 +161,12 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
             skipNextLoop--;
             Log.i(TAG, "Skipping Loop #" + getLoopCount());
             return;
+        }
+
+        if (robotContext.status().getMainRobotState() == RobotStatus.MainStates.EXCEPTION &&
+                (robotContext.status().getCurrentStateType() == RobotStatus.Type.FAILURE ||
+                        robotContext.status().getCurrentStateType() == RobotStatus.Type.IDK)) {
+            throw new IllegalStateException("Robot cannot continue to execute, due to an exception");
         }
 
         long startTime = System.nanoTime();
@@ -187,13 +192,13 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         } catch (Exception e) {
             Log.e(TAG,
                     "An exception occurred running the OpMode " + getCallerClassName(e), e);
-            if (onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, e) >= 0) {
+            if (onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, e) >= 0) {
                 for (Object o : list) {
-                    onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, o);
+                    onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, o);
                 }
             } else {
                 RobotLog.setGlobalErrorMsg(e.toString());
-
+                //throw e;
             }
         }
 
@@ -210,10 +215,10 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         }
 
         if (list.isEmpty()) {
-            onSuccess(robotContext, MainStates.STOP, null);
+            onSuccess(robotContext, RobotStatus.MainStates.STOP, null);
         } else {
             for (Object o : list) {
-                onSuccess(robotContext, MainStates.STOP, o);
+                onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
 
@@ -234,9 +239,9 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         } catch (Exception e) {
             Log.e(TAG,
                     "An exception occurred running the OpMode " + getCallerClassName(e), e);
-            if (onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, e) >= 0) {
+            if (onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, e) >= 0) {
                 for (Object o : list) {
-                    onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, o);
+                    onFailure(robotContext, RobotStatus.Type.FAILURE, RobotStatus.MainStates.EXCEPTION, o);
                 }
             } else {
                 RobotLog.setGlobalErrorMsg(e.toString());
@@ -244,10 +249,10 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         }
 
         if (list.isEmpty()) {
-            onSuccess(robotContext, MainStates.STOP, null);
+            onSuccess(robotContext, RobotStatus.MainStates.STOP, null);
         } else {
             for (Object o : list) {
-                onSuccess(robotContext, MainStates.STOP, o);
+                onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
 
@@ -578,20 +583,27 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         } catch (Exception e) {
             Log.e(TAG,
                     "An exception occurred running the OpMode " + getCallerClassName(e), e);
-            if (onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, e) >= 0) {
+
+            robotContext.status().setCurrentStateType(RobotStatus.Type.IDK);
+            RobotStatus.Type failure = robotContext.status().getCurrentStateType();
+            if (onFailure(robotContext, failure, RobotStatus.MainStates.EXCEPTION, e) >= 0) {
+                robotContext.status().setCurrentStateType(RobotStatus.Type.SUCCESS);
                 for (Object o : list) {
-                    onFailure(robotContext, Type.FAILURE, MainStates.EXCEPTION, o);
+                    onFailure(robotContext, failure, RobotStatus.MainStates.EXCEPTION, o);
                 }
             } else {
+                robotContext.status().setCurrentStateType(RobotStatus.Type.FAILURE);
                 RobotLog.setGlobalErrorMsg(e.toString());
             }
         }
 
+        robotContext.status().setMainState(RobotStatus.MainStates.STOP);
+        RobotStatus.MainStates states = getContext().status().getMainRobotState();
         if (list.isEmpty()) {
-            onSuccess(robotContext, MainStates.STOP, null);
+            onSuccess(robotContext, states, null);
         } else {
             for (Object o : list) {
-                onSuccess(robotContext, MainStates.STOP, o);
+                onSuccess(robotContext, states, o);
             }
         }
     }
@@ -608,11 +620,5 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         return "";
     }
 
-    public enum MainStates {
-        CONSTRUCT, ARM, INIT, EXEC, STOP, EXCEPTION
-    }
 
-    public enum Type {
-        SUCCESS, FAILURE, IDK
-    }
 }
