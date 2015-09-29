@@ -10,11 +10,12 @@
 
 package org.ftc.opmodes;
 
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
@@ -29,13 +30,11 @@ public class CameraOpMode extends ExtensibleOpMode {
         }
 
         if (getLoopCount() % 5 == 0) {
-            Byte[] image = ctx.cameraManager().getImages().peek();
+            Bitmap image = ctx.cameraManager().getNextImage();
             if (image != null) {
-                ctx.log().i(TAG, Byte.toString(image[0]) + " " + Byte.toString(image[5]));
+                ctx.log().i(TAG, image.toString());
             }
         }
-
-        ctx.cameraManager().getImages().peek();
     }
 
     @Override

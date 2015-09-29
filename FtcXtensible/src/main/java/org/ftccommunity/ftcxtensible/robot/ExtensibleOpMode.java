@@ -28,7 +28,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.interfaces.FullOpMode;
 import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
@@ -50,11 +49,10 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
     private final Gamepad gamepad2;
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
+    private final LinkedHashMap<Integer, LinkedList<RunAssistant>> beforeXLoop;
+    private final TreeMap<Integer, OpModeLoop> loops;
     private RobotContext robotContext;
     private TreeMap<Integer, LinkedList<RunAssistant>> beforeEveryXLoop;
-    private LinkedHashMap<Integer, LinkedList<RunAssistant>> beforeXLoop;
-
-    private TreeMap<Integer, OpModeLoop> loops;
     private TreeMap<Integer, LinkedList<RunAssistant>> afterEveryXLoop;
     private LinkedHashMap<Integer, LinkedList<RunAssistant>> afterXLoop;
 
@@ -620,5 +618,19 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         return "";
     }
 
+    protected ExtensibleGamepad gamepad1() {
+        return robotContext.xGamepad1();
+    }
 
+    protected ExtensibleGamepad gamepad2() {
+        return robotContext.xGamepad2();
+    }
+
+    protected ExtensibleHardwareMap hardwareMap() {
+        return robotContext.hardwareMap();
+    }
+
+    protected Telemetry telemetry() {
+        return robotContext.telemetry();
+    }
 }

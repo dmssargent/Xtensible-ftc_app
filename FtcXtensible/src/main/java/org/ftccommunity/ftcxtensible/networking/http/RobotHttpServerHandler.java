@@ -28,8 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.io.File;
 import java.io.FileNotFoundException;

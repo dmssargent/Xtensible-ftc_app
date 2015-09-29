@@ -1,5 +1,3 @@
-
-
 package org.ftc.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;

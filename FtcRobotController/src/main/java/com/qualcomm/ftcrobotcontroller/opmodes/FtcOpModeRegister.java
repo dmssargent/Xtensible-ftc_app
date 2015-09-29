@@ -52,10 +52,8 @@ public class FtcOpModeRegister implements OpModeRegister {
      * @param mgr op mode manager
      */
     public void register(final OpModeManager mgr) {
-        // manager.register(NetworkOpMode.class.getSimpleName(), new NetworkOpMode());
         try {
-            FallbackOpModeRegister userFallback = new FallbackOpModeRegister();
-            userFallback.register(mgr);
+            FallbackOpModeRegister.register(mgr);
 
             final LinkedList<String> noCheckList = new LinkedList<>();
             noCheckList.add("com.google");

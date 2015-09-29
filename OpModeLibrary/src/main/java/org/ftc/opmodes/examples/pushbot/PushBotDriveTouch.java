@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /**
  * Created by Jordan Burklund on 7/30/2015.
- * An example linear op mode where the pushbot 
- * will run its motors unless a touch sensor 
+ * An example linear op mode where the pushbot
+ * will run its motors unless a touch sensor
  * is pressed.
  */
 public class PushBotDriveTouch extends LinearOpMode {
@@ -30,8 +30,8 @@ public class PushBotDriveTouch extends LinearOpMode {
         // Wait for the start button to be pressed
         waitForStart();
 
-        while(opModeIsActive()) {
-            if(touchSensor.isPressed()) {
+        while (opModeIsActive()) {
+            if (touchSensor.isPressed()) {
                 //Stop the motors if the touch sensor is pressed
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);

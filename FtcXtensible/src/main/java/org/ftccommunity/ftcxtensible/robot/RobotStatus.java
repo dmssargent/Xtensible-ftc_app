@@ -22,8 +22,6 @@ package org.ftccommunity.ftcxtensible.robot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;

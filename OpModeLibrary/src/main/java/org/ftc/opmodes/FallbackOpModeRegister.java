@@ -1,13 +1,12 @@
 package org.ftc.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
-import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
 /**
  * @author David Sargent - FTC5395, maths222, Qualcomm
  * @since 1.0
  */
-public class FallbackOpModeRegister implements OpModeRegister {
+public class FallbackOpModeRegister {
     private static String TAG = "FTC_OP_MODE_REGISTER::";
 
     /**
@@ -16,10 +15,9 @@ public class FallbackOpModeRegister implements OpModeRegister {
      *
      * @param mgr op mode manager
      */
-    @Override
-    public void register(final OpModeManager mgr) {
+    public static void register(final OpModeManager mgr) {
         // Add your hardcoded OpModes here
 
-        // Please note that this executes immediately right now
+        // Please note that this executes immediately
     }
 }

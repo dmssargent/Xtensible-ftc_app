@@ -35,28 +35,11 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
             switch (lhs) {
                 case A1_2015:
                     return 0;
-                case A2_2015:
-                    return 1;
                 case R1_2015:
                     return 1;
-                default:
-                    Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
+                case R2_2015:
                     return 1;
-            }
-        }
-    }, A2_2015 {
-        @Override
-        public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
-            if (lhs.equals(rhs)) {
-                return 0;
-            }
-
-            switch (lhs) {
-                case A1_2015:
-                    return -1;
-                case A2_2015:
-                    return 0;
-                case R1_2015:
+                case R3_2015:
                     return 1;
                 default:
                     Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
@@ -73,9 +56,53 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
             switch (lhs) {
                 case A1_2015:
                     return -1;
-                case A2_2015:
+                case R1_2015:
+                    return 0;
+                case R2_2015:
+                    return 1;
+                case R3_2015:
+                    return 1;
+                default:
+                    Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
+                    return 1;
+            }
+        }
+    }, R2_2015 {
+        @Override
+        public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+            if (lhs.equals(rhs)) {
+                return 0;
+            }
+
+            switch (lhs) {
+                case A1_2015:
                     return -1;
                 case R1_2015:
+                    return -1;
+                case R2_2015:
+                    return 0;
+                case R3_2015:
+                    return 1;
+                default:
+                    Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
+                    return 1;
+            }
+        }
+    }, R3_2015 {
+        @Override
+        public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+            if (lhs.equals(rhs)) {
+                return 0;
+            }
+
+            switch (lhs) {
+                case A1_2015:
+                    return -1;
+                case R1_2015:
+                    return -1;
+                case R2_2015:
+                    return -1;
+                case R3_2015:
                     return 0;
                 default:
                     Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
@@ -85,6 +112,6 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
     };
 
     public static RobotSdkApiLevel currentVerison() {
-        return R1_2015;
+        return R3_2015;
     }
 }

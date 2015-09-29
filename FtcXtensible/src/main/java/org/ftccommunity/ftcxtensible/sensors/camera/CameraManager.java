@@ -17,12 +17,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ftccommunity.ftcxtensible;
+package org.ftccommunity.ftcxtensible.sensors.camera;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.util.Log;
@@ -31,11 +32,13 @@ import android.view.ViewGroup;
 import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Queue;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Handles the camera the camera behind the scenes
@@ -44,18 +47,21 @@ import java.util.Queue;
  * @since 0.2
  */
 public class CameraManager {
-    private static String TAG = "CAMERA_MGR::";
-    final EvictingQueue<Byte[]> imageQueue;
+    private static final String TAG = "CAMERA_MGR::";
+
+    private final EvictingQueue<Bitmap> imageQueue;
+    CameraPreview view;
     private Camera camera;
     private Camera.CameraInfo info;
     private int cameraId;
     private Date latestTimestamp;
-    private RobotContext context;
     private Date prepTime;
+    private RobotContext context;
 
     public CameraManager(RobotContext ctx) {
         context = ctx;
         imageQueue = EvictingQueue.create(5);
+        latestTimestamp = new Date();
     }
 
     /**
@@ -87,19 +93,17 @@ public class CameraManager {
 
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "video_" + timeStamp + ".mp4");
 
-        return mediaFile;
+        return new File(mediaStorageDir.getPath() + File.separator +
+                "video_" + timeStamp + ".mp4");
     }
 
     /**
      * A safe way to get an instance of the Camera object.
      *
      * @param cameraRotation which side is the camera on
-     * @throws Exception when the Camera cannot be gotten
      */
-    public CameraManager bindCameraInstance(int cameraRotation) throws Exception {
+    public CameraManager bindCameraInstance(int cameraRotation) {
         try {
             cameraId = Camera.getNumberOfCameras();
             for (; getCameraId() > 0; cameraId = getCameraId() - 1) {
@@ -140,23 +144,23 @@ public class CameraManager {
     }
 
     public void stop() {
-        camera.release();
-        camera = null;
+        context.runOnUiThread(new StopCamera(context, this));
     }
 
-    public Queue<Byte[]> getImages() {
-        return imageQueue;
+    public Bitmap getNextImage() {
+        return imageQueue.poll();
     }
 
     public void prepareForCapture(final RobotContext ctx) {
         ctx.runOnUiThread(new PrepCapture(ctx, this));
     }
 
-    void finishPrep() {
+
+    private void finishPrep() {
         prepTime = new Date();
     }
 
-    public boolean isReadyForCapture() {
+    private boolean isReadyForCapture() {
         return prepTime.before(new Date(prepTime.getTime() + 1000));
     }
 
@@ -168,15 +172,12 @@ public class CameraManager {
         camera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-                Byte[] bytes = new Byte[data.length];
-
-                for (int i = 0; i < bytes.length; i++) {
-                    bytes[i] = data[i];
+                if (data != null) {
+                    byte[] imageBytes = new byte[data.length];
+                    System.arraycopy(data, 0, imageBytes, 0, imageBytes.length);
+                    imageQueue.add(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+                    latestTimestamp = new Date();
                 }
-
-
-                imageQueue.add(bytes);
-                latestTimestamp = new Date();
             }
         });
     }
@@ -192,12 +193,37 @@ public class CameraManager {
 
         @Override
         public void run() {
-            ViewGroup.LayoutParams params = new ActionBar.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            CameraPreview view = new CameraPreview(ctx.getAppContext(), manager);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            view = new CameraPreview(ctx.getAppContext(), manager);
 
             ((Activity) ctx.getAppContext()).addContentView(view, params);
             finishPrep();
+        }
+    }
+
+    private class StopCamera implements Runnable {
+        private final RobotContext ctx;
+        private final CameraManager manager;
+
+        public StopCamera(RobotContext ctx, CameraManager mgr) {
+            checkNotNull(ctx);
+            checkNotNull(mgr);
+
+            this.ctx = ctx;
+            this.manager = mgr;
+        }
+
+        @Override
+        public void run() {
+            if (view != null) {
+                ((ViewGroup) view.getParent()).removeView(view);
+            }
+
+            if (camera != null) {
+                camera.release();
+                camera = null;
+            }
         }
     }
 }

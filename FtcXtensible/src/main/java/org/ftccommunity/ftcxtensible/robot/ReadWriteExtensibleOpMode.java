@@ -21,7 +21,6 @@ package org.ftccommunity.ftcxtensible.robot;
 
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
 

@@ -19,7 +19,7 @@
 
 package org.ftccommunity.ftcxtensible.interfaces;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;

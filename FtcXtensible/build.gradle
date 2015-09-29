@@ -59,4 +59,5 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'de.akquinet.android.marvin:marvin:1.1.0'
     androidTestCompile 'junit:junit:4.12'
+    compile 'gov.nist.math:jama:1.0.3'
 }

@@ -1,7 +1,7 @@
 package org.ftc.opmodes;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
@@ -34,6 +34,7 @@ public class BasicLayout extends ExtensibleOpMode {
 
     /**
      * Something went wrong? This is where you process it.
+     *
      * @param ctx
      * @param eventType
      * @param event

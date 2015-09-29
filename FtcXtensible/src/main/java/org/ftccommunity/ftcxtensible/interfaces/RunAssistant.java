@@ -20,7 +20,7 @@
 package org.ftccommunity.ftcxtensible.interfaces;
 
 
-import org.ftccommunity.ftcxtensible.RobotContext;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.util.LinkedList;
 

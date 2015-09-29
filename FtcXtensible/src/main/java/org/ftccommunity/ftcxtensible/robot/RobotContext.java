@@ -17,7 +17,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ftccommunity.ftcxtensible;
+package org.ftccommunity.ftcxtensible.robot;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,10 +30,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
 
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
-import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
-import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
-import org.ftccommunity.ftcxtensible.robot.RobotLogger;
-import org.ftccommunity.ftcxtensible.robot.RobotStatus;
+import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

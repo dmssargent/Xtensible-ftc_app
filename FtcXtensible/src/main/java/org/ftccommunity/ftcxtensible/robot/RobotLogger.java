@@ -23,8 +23,6 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
-
 import java.util.logging.Level;
 
 public class RobotLogger {

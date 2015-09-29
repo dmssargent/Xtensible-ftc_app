@@ -21,8 +21,9 @@ package org.ftccommunity.ftcxtensible.robot;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.ftccommunity.ftcxtensible.RobotContext;
 import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
+import org.ftccommunity.ftcxtensible.math.CartesianCoordinates;
+import org.ftccommunity.ftcxtensible.math.PolarCoordinates;
 
 
 /**
@@ -34,31 +35,25 @@ import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
  * @since 0.1
  */
 public class ExtensibleGamepad {
+    private final Joystick leftJoystick;
+    private final Joystick rightJoystick;
+    private final Dpad dpad;
     private boolean a;
     private boolean b;
     private boolean x;
     private boolean y;
-
     private boolean guide;
     private boolean start;
     private boolean back;
-
     private boolean leftBumper;
     private boolean rightBumper;
     private float leftTrigger;
     private float rightTrigger;
-
     private long timestamp;
-
     private int userDefinedRight;
     private int userDefinedLeft;
-
-    private Joystick leftJoystick;
-    private Joystick rightJoystick;
-
     private JoystickScaler leftScaler;
     private JoystickScaler rightScaler;
-    private Dpad dpad;
 
     /**
      * Setup a basic gamepad; be sure to call {@link ExtensibleGamepad#updateGamepad}
@@ -122,7 +117,7 @@ public class ExtensibleGamepad {
 
         getDpad().update(gp.dpad_up, gp.dpad_down, gp.dpad_right, gp.dpad_left);
 
-        getRightJoystick().update(gp.right_stick_x, gp.right_stick_y, gp.right_stick_button);
+        rightJoystick().update(gp.right_stick_x, gp.right_stick_y, gp.right_stick_button);
 
         userDefinedLeft = getLeftScaler().userDefinedLeft(ctx, this);
         userDefinedRight = getRightScaler().userDefinedRight(ctx, this);
@@ -131,13 +126,13 @@ public class ExtensibleGamepad {
         double leftY = gp.left_stick_y;
         leftX = getLeftScaler().scaleX(this, leftX);
         leftY = getLeftScaler().scaleY(this, leftY);
-        getLeftJoystick().update(leftX, leftY, gp.left_stick_button);
+        leftJoystick().update(leftX, leftY, gp.left_stick_button);
 
         double rightX = gp.right_stick_x;
         double rightY = gp.right_stick_y;
         rightX = getRightScaler().scaleX(this, rightX);
         rightY = getRightScaler().scaleY(this, rightY);
-        getRightJoystick().update(rightX, rightY, gp.right_stick_button);
+        rightJoystick().update(rightX, rightY, gp.right_stick_button);
     }
 
     /**
@@ -273,7 +268,7 @@ public class ExtensibleGamepad {
      * {@link ExtensibleGamepad.Joystick}
      * </code> of this controller
      */
-    public Joystick getLeftJoystick() {
+    public Joystick leftJoystick() {
         return leftJoystick;
     }
 
@@ -282,7 +277,7 @@ public class ExtensibleGamepad {
      *
      * @return the right <code>Joystick</code> of this controller
      */
-    public Joystick getRightJoystick() {
+    public Joystick rightJoystick() {
         return rightJoystick;
     }
 
@@ -307,11 +302,12 @@ public class ExtensibleGamepad {
     /**
      * Gets the D-Pad of this controller
      *
-     * @return {@link org.ftccommunity.networkedopmode.robot.ExtensibleGamepad.Dpad} of this controller
+     * @return {@link org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad.Dpad} of this controller
      */
     public Dpad getDpad() {
         return dpad;
     }
+
 
 
     /**
@@ -345,7 +341,7 @@ public class ExtensibleGamepad {
          *
          * @return the Cartesian X of the Joystick
          */
-        public double getX() {
+        public double X() {
             return x;
         }
 
@@ -355,7 +351,7 @@ public class ExtensibleGamepad {
          *
          * @return the Cartesian Y-coordinate of the Joystick
          */
-        public double getY() {
+        public double Y() {
             return y;
         }
 
@@ -367,8 +363,32 @@ public class ExtensibleGamepad {
         public boolean isPressed() {
             return pressed;
         }
+
+        /**
+         * Gets the current coordinates in a Cartesian plane
+         *
+         * @return the current state of the joystick in a Cartesian plane
+         */
+        public CartesianCoordinates cartesian() {
+            return new CartesianCoordinates(x, y);
+        }
+
+        /**
+         * Gets the current coordinates in a Polar plane
+         *
+         * @return the current state of the joystick in a Polar plane
+         */
+        public PolarCoordinates polar() {
+            return new PolarCoordinates(cartesian());
+        }
     }
 
+    /**
+     * An representation of a gamepad's D-Pad control
+     *
+     * @author David Sargent
+     * @since 0.1.0
+     */
     public class Dpad {
         private boolean up;
         private boolean down;

@@ -47,7 +47,7 @@ import java.util.HashMap;
  *
  */
 public class ImmutableHardwareMap {
-    private HashMap<String, ImmutableMap> deviceMap;
+    private final HashMap<String, ImmutableMap> deviceMap;
 
     public ImmutableHardwareMap(ExtensibleHardwareMap hardwareMap) {
         deviceMap = new HashMap<>();

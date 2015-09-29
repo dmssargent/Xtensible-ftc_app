@@ -20,7 +20,6 @@
 package org.ftccommunity.ftcxtensible.robot;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.LinkedHashMultimap;
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogOutput;
@@ -98,7 +97,7 @@ public class ExtensibleHardwareMap extends HardwareMap {
     private DeviceMap<String, UltrasonicSensor> ultrasonicSensors;
     private DeviceMap<String, VoltageSensor> voltageSensors;
 
-    private LinkedHashMultimap<String, DeviceMap> cacheMap;
+    //private LinkedHashMultimap<String, DeviceMap> cacheMap;
 
     /**
      * Builds the base ExtensibleHardwareMap; need to complete setup afterwards, specifically calling
@@ -126,7 +125,7 @@ public class ExtensibleHardwareMap extends HardwareMap {
         ultrasonicSensor = super.ultrasonicSensor;
         voltageSensor = super.voltageSensor;
 
-        cacheMap = LinkedHashMultimap.create();
+        //cacheMap = LinkedHashMultimap.create();
 
         createDeviceMaps();
     }

@@ -27,7 +27,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import org.ftccommunity.ftcxtensible.CameraManager;
+import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
 
 import java.io.IOException;
 
@@ -39,8 +39,8 @@ import java.io.IOException;
  */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private static String TAG = "CAMERA_PREVIEW::";
+    private final Context context;
     private SurfaceHolder mHolder;
-    private Context context;
     private Camera mCamera;
     private CameraManager manager;
 
@@ -94,6 +94,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.stopPreview();
         } catch (Exception e) {
             // ignore: tried to stop a non-existent preview
+            Log.e(TAG, "An exception occured during preview stop.", e);
         }
 
         // set preview size and make any resize, rotate or
@@ -109,37 +110,42 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-    public void setCameraDisplayOrientation() {
-        Camera.CameraInfo info =
-                new Camera.CameraInfo();
-        Camera.getCameraInfo(manager.getCameraId(), info);
+    private void setCameraDisplayOrientation() {
+        try {
+            Camera.CameraInfo info =
+                    new Camera.CameraInfo();
+            Camera.getCameraInfo(manager.getCameraId(), info);
 
 
-        int rotation = ((Activity) context).getWindowManager().getDefaultDisplay()
-                .getRotation();
-        int degrees = 0;
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break;
-            case Surface.ROTATION_90:
-                degrees = 90;
-                break;
-            case Surface.ROTATION_180:
-                degrees = 180;
-                break;
-            case Surface.ROTATION_270:
-                degrees = 270;
-                break;
+            int rotation = ((Activity) context).getWindowManager().getDefaultDisplay()
+                    .getRotation();
+            int degrees = 0;
+            switch (rotation) {
+                case Surface.ROTATION_0:
+                    degrees = 0;
+                    break;
+                case Surface.ROTATION_90:
+                    degrees = 90;
+                    break;
+                case Surface.ROTATION_180:
+                    degrees = 180;
+                    break;
+                case Surface.ROTATION_270:
+                    degrees = 270;
+                    break;
+            }
+
+            int result;
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                result = (info.orientation + degrees) % 360;
+                result = (360 - result) % 360;  // compensate the mirror
+            } else {  // back-facing
+                result = (info.orientation - degrees + 360) % 360;
+            }
+
+            mCamera.setDisplayOrientation(result);
+        } catch (RuntimeException ex) {
+            Log.wtf(TAG, ex);
         }
-
-        int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation + degrees) % 360;
-            result = (360 - result) % 360;  // compensate the mirror
-        } else {  // back-facing
-            result = (info.orientation - degrees + 360) % 360;
-        }
-        mCamera.setDisplayOrientation(result);
     }
 }

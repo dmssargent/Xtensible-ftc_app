@@ -17,7 +17,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ftccommunity.ftcxtensible;
+package org.ftccommunity.ftcxtensible.robot;
 
 import org.ftccommunity.ftcxtensible.networking.http.RobotHttpServer;
 
@@ -29,17 +29,15 @@ import org.ftccommunity.ftcxtensible.networking.http.RobotHttpServer;
  * @since 0.1
  */
 public class NetworkedOpMode {
-    private Thread serverThread;
-    private RobotHttpServer server;
-    private RobotContext context;
+    private final Thread serverThread;
 
     /**
      * Create the networked version of an OpMode
      */
     protected NetworkedOpMode(RobotContext ctx) {
         super();
-        context = ctx;
-        server = new RobotHttpServer(context);
+        RobotContext context = ctx;
+        RobotHttpServer server = new RobotHttpServer(context);
         serverThread = new Thread(server);
     }
 
