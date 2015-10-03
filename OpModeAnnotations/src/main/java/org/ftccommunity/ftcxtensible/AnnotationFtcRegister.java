@@ -23,6 +23,11 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -111,5 +116,23 @@ public class AnnotationFtcRegister {
             }
         }
         return true;
+    }
+
+
+
+    public String getOpModeName(Class<OpMode> opMode) {
+        String name;
+        if (opMode.isAnnotationPresent(TeleOp.class)) {
+            name = opMode.getAnnotation(TeleOp.class).name();
+        } else if (opMode.isAnnotationPresent(Autonomous.class)) {
+            name = opMode.getAnnotation(Autonomous.class).name();
+        } else {
+            name = opMode.getSimpleName();
+        }
+
+        if (name.equals("")) {
+            name = opMode.getSimpleName();
+        }
+        return name;
     }
 }

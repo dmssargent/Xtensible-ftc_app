@@ -21,6 +21,7 @@ package org.ftccommunity.ftcxtensible.robot;
 
 import android.util.Log;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -95,7 +96,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
     public final void init() {
         robotContext.bindAppContext(super.hardwareMap.appContext);
 
-        // Upgrade thread pritory
+        // Upgrade thread priority
         Thread.currentThread().setPriority(7);
         LinkedList<Object> list = new LinkedList<>();
         try {
@@ -121,6 +122,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
                 onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
+
+        telemetry().sendData();
     }
 
     @Override
@@ -150,6 +153,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
                 onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
+
+        telemetry().sendData();
     }
 
     @Override
@@ -196,6 +201,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
                 }
             } else {
                 RobotLog.setGlobalErrorMsg(e.toString());
+                Throwables.propagate(e);
                 //throw e;
             }
         }
@@ -219,6 +225,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
                 onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
+
+        telemetry().sendData();
 
         long endTime = System.nanoTime();
         if ((endTime - startTime) - (1000000 * 50) > 0) {
@@ -253,6 +261,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
                 onSuccess(robotContext, RobotStatus.MainStates.STOP, o);
             }
         }
+        telemetry().sendData();
 
         parent = null;
         robotContext.release();
@@ -523,7 +532,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         return robotContext;
     }
 
-    private boolean checkRunAssistantRemoval(int loopNumber, List<Integer> candidate, boolean isLast) throws IllegalStateException {
+    private boolean checkRunAssistantRemoval(
+            int loopNumber, List<Integer> candidate, boolean isLast) throws IllegalStateException {
         if (candidate.size() < 1) {
             throw new IllegalStateException("Cannot remove something, if there is nothing");
         } else {
@@ -547,7 +557,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         return true;
     }
 
-    private void createNewRunAssistantKey(int loop, RunAssistant assistant, Map<Integer, LinkedList<RunAssistant>> RunAssistantMap) {
+    private void createNewRunAssistantKey(
+            int loop, RunAssistant assistant, Map<Integer, LinkedList<RunAssistant>> RunAssistantMap) {
         LinkedList<RunAssistant> assistants = new LinkedList<>();
         assistants.add(assistant);
         RunAssistantMap.put(loop, assistants);
@@ -619,18 +630,18 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
     }
 
     protected ExtensibleGamepad gamepad1() {
-        return robotContext.xGamepad1();
+        return robotContext.gamepad1();
     }
 
     protected ExtensibleGamepad gamepad2() {
-        return robotContext.xGamepad2();
+        return robotContext.gamepad2();
     }
 
     protected ExtensibleHardwareMap hardwareMap() {
         return robotContext.hardwareMap();
     }
 
-    protected Telemetry telemetry() {
+    protected ExtensibleTelemetry telemetry() {
         return robotContext.telemetry();
     }
 }

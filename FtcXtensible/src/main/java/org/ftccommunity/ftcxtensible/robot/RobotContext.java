@@ -32,6 +32,7 @@ import com.qualcomm.robotcore.robocol.Telemetry;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -43,7 +44,9 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 public class RobotContext {
     private ExtensibleHardwareMap hardwareMap;
     private Context appContext;
+
     private Telemetry telemetry;
+    private ExtensibleTelemetry extensibleTelemetry;
 
     private Gamepad gamepad1;
     private ExtensibleGamepad extensibleGamepad1;
@@ -105,6 +108,7 @@ public class RobotContext {
             }
         }
         telemetry = tlmtry;
+        extensibleTelemetry = new ExtensibleTelemetry(tlmtry);
     }
 
     public RobotContext enableNetworking() {
@@ -186,10 +190,10 @@ public class RobotContext {
      * Returns opMode reference to the first gamepad
      *
      * @return the first gamepad
-     * @deprecated Please use the xGamepad1 instead
+     * @deprecated Please use the gamepad1 instead
      */
     @Deprecated
-    public Gamepad getGamepad1() {
+    public Gamepad legacyGamepad1() {
         return gamepad1;
     }
 
@@ -197,10 +201,10 @@ public class RobotContext {
      * Returns opMode reference to the second gampepad
      *
      * @return the second gamepad
-     * @deprecated Please use the xGamepad2 instead
+     * @deprecated Please use the gamepad2 instead
      */
     @Deprecated
-    public Gamepad getGamepad2() {
+    public Gamepad legacyGamepad2() {
         return gamepad2;
     }
 
@@ -280,8 +284,8 @@ public class RobotContext {
      *
      * @return the telemetry as provide by the FTC SDK
      */
-    public Telemetry telemetry() {
-        return telemetry;
+    public ExtensibleTelemetry telemetry() {
+        return extensibleTelemetry;
     }
 
     /**
@@ -289,7 +293,7 @@ public class RobotContext {
      *
      * @return the first Gamepad (gamepad1) cast to an ExtensibleGamepad
      */
-    public ExtensibleGamepad xGamepad1() {
+    public ExtensibleGamepad gamepad1() {
         return extensibleGamepad1;
     }
 
@@ -298,7 +302,7 @@ public class RobotContext {
      *
      * @return the second gamepad (gampad2) cast to an ExtensibleGamepad
      */
-    public ExtensibleGamepad xGamepad2() {
+    public ExtensibleGamepad gamepad2() {
         return extensibleGamepad2;
     }
 
@@ -318,6 +322,15 @@ public class RobotContext {
 
         if (asyncService != null) {
             asyncService.shutdown();
+        }
+
+        if (extensibleTelemetry != null) {
+            try {
+                extensibleTelemetry.close();
+            } catch (IOException e) {
+                Log.wtf("ROBOT_CONTEXT::", e);
+            }
+            extensibleTelemetry = null;
         }
     }
 
