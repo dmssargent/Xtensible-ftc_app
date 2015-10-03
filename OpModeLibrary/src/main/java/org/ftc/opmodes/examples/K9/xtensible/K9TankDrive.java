@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
@@ -29,20 +28,18 @@ public class K9TankDrive extends ExtensibleOpMode {
     final static double ARM_MAX_RANGE = 0.90;
     final static double CLAW_MIN_RANGE = 0.20;
     final static double CLAW_MAX_RANGE = 0.7;
-
+    // amount to change the arm servo position.
+    private final double armDelta = 0.1;
+    // amount to change the claw servo position by
+    private final double clawDelta = 0.1;
     private DcMotor motorRight;
     private DcMotor motorLeft;
     private Servo claw;
     private Servo arm;
-
     // position of the arm servo.
     private double armPosition = 0.2;
-    // amount to change the arm servo position.
-    private final double armDelta = 0.1;
     // position of the claw servo
     private double clawPosition = 0.2;
-    // amount to change the claw servo position by
-    private final double clawDelta = 0.1;
 
     @Override
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {
@@ -110,6 +107,11 @@ public class K9TankDrive extends ExtensibleOpMode {
                 return 0;
             }
         });
+    }
+
+    @Override
+    public void init_loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+
     }
 
     @Override
@@ -181,6 +183,7 @@ public class K9TankDrive extends ExtensibleOpMode {
         telemetry().data("left tgt pwr", "left  pwr: " + String.format("%.2f", left));
         telemetry().data("right tgt pwr", "right pwr: " + String.format("%.2f", right));
     }
+
 
     @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
