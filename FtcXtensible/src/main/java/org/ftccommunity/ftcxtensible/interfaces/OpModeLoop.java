@@ -22,10 +22,12 @@
 package org.ftccommunity.ftcxtensible.interfaces;
 
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.util.LinkedList;
 
+@NotDocumentedWell
 public interface OpModeLoop {
     void loop(final RobotContext ctx,
               final LinkedList<Object> out) throws Exception;

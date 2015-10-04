@@ -43,11 +43,14 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
 import java.util.HashMap;
 
-/**
- *
- */
+
+@NotDocumentedWell
+@Alpha
 public class ImmutableHardwareMap {
     private final HashMap<String, ImmutableMap> deviceMap;
 

@@ -25,14 +25,15 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- */
+@Alpha
+@NotDocumentedWell
 public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
     private final DcMotorController[] controllers;
     private boolean skipReadMode;

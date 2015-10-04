@@ -25,12 +25,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
 
@@ -43,6 +45,8 @@ import java.util.concurrent.Executors;
 
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
+@Beta
+@NotDocumentedWell
 public class RobotContext {
     private ExtensibleHardwareMap hardwareMap;
     private Context appContext;

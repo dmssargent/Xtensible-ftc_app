@@ -21,11 +21,13 @@
 
 package org.ftccommunity.ftcxtensible.interfaces;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
 
+@NotDocumentedWell
 public interface FullOpMode extends OpModeLoop {
     void init(final RobotContext ctx,
               final LinkedList<Object> out) throws Exception;

@@ -21,5 +21,10 @@
 
 package org.ftccommunity.ftcxtensible.robot.formatters;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
+@Alpha
+@NotDocumentedWell
 public class PlainFormatter {
 }

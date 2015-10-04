@@ -36,6 +36,7 @@ import org.ftccommunity.ftcxtensible.math.PolarCoordinates;
  * @author David Sargent
  * @since 0.1
  */
+@Alpha
 public class ExtensibleGamepad {
     private final Joystick leftJoystick;
     private final Joystick rightJoystick;

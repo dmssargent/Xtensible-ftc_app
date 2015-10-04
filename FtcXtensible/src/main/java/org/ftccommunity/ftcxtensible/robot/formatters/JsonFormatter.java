@@ -25,12 +25,14 @@ package org.ftccommunity.ftcxtensible.robot.formatters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
-/**
- * Created by David on 8/30/2015.
- */
+@NotDocumentedWell
+@Alpha
 public class JsonFormatter extends Formatter {
     /**
      * Converts stopMode {@link LogRecord} object into stopMode string representation. The

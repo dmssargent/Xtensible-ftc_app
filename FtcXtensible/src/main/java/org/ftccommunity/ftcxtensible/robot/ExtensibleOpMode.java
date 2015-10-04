@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.ftccommunity.ftcxtensible.interfaces.FullOpMode;
 import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -45,6 +47,8 @@ import java.util.TreeMap;
  * @author David Sargent - FTC5395
  * @since 0.1
  */
+@Alpha
+@NotDocumentedWell
 public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
     public static final String TAG = "XTENSTIBLE_OP_MODE::";
     private transient static ExtensibleOpMode parent;

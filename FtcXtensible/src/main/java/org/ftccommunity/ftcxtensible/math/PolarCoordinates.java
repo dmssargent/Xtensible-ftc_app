@@ -21,12 +21,18 @@
 
 package org.ftccommunity.ftcxtensible.math;
 
+import com.google.common.annotations.Beta;
+
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
 /**
  * A representation of a point in the Cartesian coordinate system
  *
  * @author David
  * @since 0.2.1
  */
+@Beta
+@NotDocumentedWell
 public class PolarCoordinates {
     private double r;
     private double theta;

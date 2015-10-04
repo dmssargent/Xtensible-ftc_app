@@ -34,6 +34,8 @@ import android.view.ViewGroup;
 import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.io.File;
@@ -48,6 +50,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author David Sargent
  * @since 0.2
  */
+@Alpha
+@NotDocumentedWell
 public class CameraManager {
     private static final String TAG = "CAMERA_MGR::";
 

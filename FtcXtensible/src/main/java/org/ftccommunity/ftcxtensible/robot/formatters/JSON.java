@@ -21,12 +21,14 @@
 
 package org.ftccommunity.ftcxtensible.robot.formatters;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
 import java.util.Date;
 import java.util.logging.LogRecord;
 
-/**
- * Created by David on 8/30/2015.
- */
+@NotDocumentedWell
+@Alpha
 class JSON {
     private String level;
     private Date date;

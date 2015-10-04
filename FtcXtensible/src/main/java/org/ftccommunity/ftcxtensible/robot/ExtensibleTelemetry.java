@@ -31,6 +31,8 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multiset;
 import com.qualcomm.robotcore.robocol.Telemetry;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -45,6 +47,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+@Alpha
+@NotDocumentedWell
 public class ExtensibleTelemetry {
     public static final int DEFAULT_DATA_MAX = 192;
     public static final int MAX_DATA_MAX = 255;

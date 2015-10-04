@@ -54,7 +54,6 @@ dependencies {
     compile(name: 'RobotCore-release', ext: 'aar')
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'FtcCommon-release', ext: 'aar')
-
     compile files('libs/netty-all-4.0.30.Final.jar')
     compile 'com.google.guava:guava:19.0-rc1'
     compile 'com.google.code.gson:gson:2.3.1'
@@ -63,4 +62,5 @@ dependencies {
     androidTestCompile 'junit:junit:4.12'
     compile 'gov.nist.math:jama:1.0.3'
     compile 'org.jetbrains:annotations:13.0'
+    compile project(':OpModeAnnotations')
 }
