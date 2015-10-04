@@ -13,6 +13,11 @@ public class BasicLayout extends ExtensibleOpMode {
     }
 
     @Override
+    public void init_loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+
+    }
+
+    @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
 
     }
@@ -35,11 +40,11 @@ public class BasicLayout extends ExtensibleOpMode {
     /**
      * Something went wrong? This is where you process it.
      *
-     * @param ctx
-     * @param eventType
-     * @param event
-     * @param in
-     * @return an integer value representing what to do; values < 0 stop the robot
+     * @param ctx the Robot context
+     * @param eventType the type of event
+     * @param event the actual event
+     * @param in a failure event
+     * @return an integer value representing what to do; values < 0 stops the robot
      */
     @Override
     public int onFailure(RobotContext ctx, RobotStatus.Type eventType, Object event, Object in) {

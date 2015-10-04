@@ -24,6 +24,7 @@ package org.ftccommunity.ftcxtensible.robot;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
+import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.math.CartesianCoordinates;
 import org.ftccommunity.ftcxtensible.math.PolarCoordinates;
 

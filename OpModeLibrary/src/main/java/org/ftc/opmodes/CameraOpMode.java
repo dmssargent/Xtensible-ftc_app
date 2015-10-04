@@ -44,6 +44,11 @@ public class CameraOpMode extends ExtensibleOpMode {
     }
 
     @Override
+    public void init_loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+
+    }
+
+    @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
 
     }

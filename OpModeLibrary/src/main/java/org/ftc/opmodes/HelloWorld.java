@@ -17,6 +17,11 @@ public class HelloWorld extends ExtensibleOpMode {
     }
 
     @Override
+    public void init_loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+
+    }
+
+    @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
         ctx.telemetry().data("TIME", "Start Date: " +
                 (new Date(System.nanoTime() / 1000)).toString());
