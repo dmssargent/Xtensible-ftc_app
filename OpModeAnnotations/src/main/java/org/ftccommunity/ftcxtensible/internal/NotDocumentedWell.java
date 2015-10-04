@@ -19,18 +19,16 @@
  *
  */
 
-package org.ftccommunity.ftcxtensible.interfaces;
+package org.ftccommunity.ftcxtensible.internal;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
-import org.ftccommunity.ftcxtensible.robot.RobotContext;
-
-public interface JoystickScaler {
-    double scaleX(ExtensibleGamepad gamepad, double x);
-
-    double scaleY(ExtensibleGamepad gamepad, double y);
-
-    int userDefinedLeft(final RobotContext ctx, final ExtensibleGamepad gamepad);
-
-    int userDefinedRight(final RobotContext ctx, final ExtensibleGamepad gamepad);
+/**
+ * Marks a class to be documented further
+ */
+@Documented
+@Retention(RetentionPolicy.SOURCE)
+public @interface NotDocumentedWell {
 }

@@ -1,20 +1,22 @@
 /*
- * Copyright © 2015 David Sargent
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the “Software”), to deal in the Software without restriction,
- * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- * do so, subject to the following conditions:
+ *  * Copyright © 2015 David Sargent
+ *  *
+ *  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ *  * and associated documentation files (the “Software”), to deal in the Software without restriction,
+ *  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
+ *  * do so, subject to the following conditions:
+ *  *
+ *  * The above copyright notice and this permission notice shall be included in all copies or
+ *  * substantial portions of the Software.
+ *  *
+ *  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ *  * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ *  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.ftccommunity.ftcxtensible.robot;
@@ -32,6 +34,7 @@ import com.qualcomm.robotcore.robocol.Telemetry;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -43,7 +46,9 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 public class RobotContext {
     private ExtensibleHardwareMap hardwareMap;
     private Context appContext;
+
     private Telemetry telemetry;
+    private ExtensibleTelemetry extensibleTelemetry;
 
     private Gamepad gamepad1;
     private ExtensibleGamepad extensibleGamepad1;
@@ -105,6 +110,7 @@ public class RobotContext {
             }
         }
         telemetry = tlmtry;
+        extensibleTelemetry = new ExtensibleTelemetry(tlmtry);
     }
 
     public RobotContext enableNetworking() {
@@ -186,10 +192,10 @@ public class RobotContext {
      * Returns opMode reference to the first gamepad
      *
      * @return the first gamepad
-     * @deprecated Please use the xGamepad1 instead
+     * @deprecated Please use the gamepad1 instead
      */
     @Deprecated
-    public Gamepad getGamepad1() {
+    public Gamepad legacyGamepad1() {
         return gamepad1;
     }
 
@@ -197,10 +203,10 @@ public class RobotContext {
      * Returns opMode reference to the second gampepad
      *
      * @return the second gamepad
-     * @deprecated Please use the xGamepad2 instead
+     * @deprecated Please use the gamepad2 instead
      */
     @Deprecated
-    public Gamepad getGamepad2() {
+    public Gamepad legacyGamepad2() {
         return gamepad2;
     }
 
@@ -280,8 +286,8 @@ public class RobotContext {
      *
      * @return the telemetry as provide by the FTC SDK
      */
-    public Telemetry telemetry() {
-        return telemetry;
+    public ExtensibleTelemetry telemetry() {
+        return extensibleTelemetry;
     }
 
     /**
@@ -289,7 +295,7 @@ public class RobotContext {
      *
      * @return the first Gamepad (gamepad1) cast to an ExtensibleGamepad
      */
-    public ExtensibleGamepad xGamepad1() {
+    public ExtensibleGamepad gamepad1() {
         return extensibleGamepad1;
     }
 
@@ -298,7 +304,7 @@ public class RobotContext {
      *
      * @return the second gamepad (gampad2) cast to an ExtensibleGamepad
      */
-    public ExtensibleGamepad xGamepad2() {
+    public ExtensibleGamepad gamepad2() {
         return extensibleGamepad2;
     }
 
@@ -318,6 +324,15 @@ public class RobotContext {
 
         if (asyncService != null) {
             asyncService.shutdown();
+        }
+
+        if (extensibleTelemetry != null) {
+            try {
+                extensibleTelemetry.close();
+            } catch (IOException e) {
+                Log.wtf("ROBOT_CONTEXT::", e);
+            }
+            extensibleTelemetry = null;
         }
     }
 

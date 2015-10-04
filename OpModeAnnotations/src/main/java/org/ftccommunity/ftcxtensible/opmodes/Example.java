@@ -19,18 +19,25 @@
  *
  */
 
-package org.ftccommunity.ftcxtensible.interfaces;
+package org.ftccommunity.ftcxtensible.opmodes;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
-import org.ftccommunity.ftcxtensible.robot.RobotContext;
-
-public interface JoystickScaler {
-    double scaleX(ExtensibleGamepad gamepad, double x);
-
-    double scaleY(ExtensibleGamepad gamepad, double y);
-
-    int userDefinedLeft(final RobotContext ctx, final ExtensibleGamepad gamepad);
-
-    int userDefinedRight(final RobotContext ctx, final ExtensibleGamepad gamepad);
+/**
+ * Specify that the OpMode is an example, this does not prevent execution
+ *
+ * @author David Sargent
+ * @since 0.2.1
+ */
+@Documented
+@Retention(RetentionPolicy.SOURCE)
+public @interface Example {
+    /**
+     * Specifies the group of the example belongs to
+     *
+     * @return what group the example belongs to
+     */
+    String value();
 }

@@ -54,7 +54,7 @@ public class ArcadeDriveTeleop extends ExtensibleOpMode {
         driveRearLeft = ctx.hardwareMap().getDcMotors().get("green");
         driveRearRight = ctx.hardwareMap().getDcMotors().get("yellow");
 
-        ctx.xGamepad1().setupJoystickScalers(new JoystickScaler() {
+        ctx.gamepad1().setupJoystickScalers(new JoystickScaler() {
             @Override
             public double scaleX(ExtensibleGamepad gamepad, double x) {
                 return x;

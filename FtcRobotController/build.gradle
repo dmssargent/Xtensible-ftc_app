@@ -39,7 +39,8 @@ buildscript {
 
 repositories {
     flatDir {
-        dirs 'libs'
+        dirs '..\\libs'
+        dirs += 'libs'
     }
 }
 

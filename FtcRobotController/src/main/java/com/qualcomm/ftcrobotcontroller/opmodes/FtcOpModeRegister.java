@@ -67,7 +67,7 @@ public class FtcOpModeRegister implements OpModeRegister {
             DexFile df = new DexFile(context.getPackageCodePath());
 
             // Put the correct classes in stopMode HashMap out of the possible classes
-            HashMap<String, LinkedList<Class>> opModes = new HashMap<>();
+            HashMap<String, LinkedList<Class<OpMode>>> opModes = new HashMap<>();
 
             // Migrate the enum to stopMode LinkedList
             LinkedList<String> classes = new LinkedList<>(Collections.list(df.entries()));
@@ -83,13 +83,18 @@ public class FtcOpModeRegister implements OpModeRegister {
                     continue;
                 }
 
-                Class teleOpClass = TeleOp.class;
-                Class autoClass = Autonomous.class;
-                Class disabledClass = Disabled.class;
+                Class<TeleOp> teleOpClass = TeleOp.class;
+                Class<Autonomous> autoClass = Autonomous.class;
+                Class<Disabled> disabledClass = Disabled.class;
 
-                Class currentClass;
+                Class<OpMode> currentClass;
                 try {
-                    currentClass = Class.forName(klazz, false, context.getClassLoader());
+                    Class testKlazz = Class.forName(klazz, false, context.getClassLoader());
+                    try {
+                        currentClass = testKlazz;
+                    } catch (ClassCastException ex) {
+                        break;
+                    }
                 } catch (NoClassDefFoundError ex) {
                     Log.w(TAG, klazz + " " + ex.toString(), ex);
                     if (klazz.contains("$")) {
@@ -114,14 +119,14 @@ public class FtcOpModeRegister implements OpModeRegister {
                             while (opModes.containsKey(Integer.toString(i))) {
                                 i++;
                             }
-                            LinkedList<Class> temp = new LinkedList<>();
+                            LinkedList<Class<OpMode>> temp = new LinkedList<>();
                             temp.add(currentClass);
                             opModes.put(Integer.toString(i), temp);
                         } else {
                             if (opModes.containsKey(name)) {
                                 opModes.get(name).add(currentClass);
                             } else {
-                                LinkedList<Class> temp = new LinkedList<>();
+                                LinkedList<Class<OpMode>> temp = new LinkedList<>();
                                 temp.add(currentClass);
                                 opModes.put(name, temp);
                             }
@@ -135,14 +140,14 @@ public class FtcOpModeRegister implements OpModeRegister {
                             while (opModes.containsKey(Integer.toString(i))) {
                                 i++;
                             }
-                            LinkedList<Class> temp = new LinkedList<>();
+                            LinkedList<Class<OpMode>> temp = new LinkedList<>();
                             temp.add(currentClass);
                             opModes.put(Integer.toString(i), temp);
                         } else {
                             if (opModes.containsKey(name)) {
                                 opModes.get(name).add(currentClass);
                             } else {
-                                LinkedList<Class> temp = new LinkedList<>();
+                                LinkedList<Class<OpMode>> temp = new LinkedList<>();
                                 temp.add(currentClass);
                                 opModes.put(name, temp);
                             }
@@ -203,9 +208,9 @@ public class FtcOpModeRegister implements OpModeRegister {
 
             // Sort the map by keys, after discarding the old keys, use the new key from
             // the first item in each LinkedList, and change from stopMode HashMap to stopMode TreeMap
-            TreeMap<String, LinkedList<Class>> sortedOpModes = new TreeMap<>();
+            TreeMap<String, LinkedList<Class<OpMode>>> sortedOpModes = new TreeMap<>();
             for (String key : opModes.keySet()) {
-                Class<? extends OpMode> opMode = opModes.get(key).getFirst();
+                Class<OpMode> opMode = opModes.get(key).getFirst();
                 String name;
                 if (opMode.isAnnotationPresent(TeleOp.class)) {
                     name = opMode.getAnnotation(TeleOp.class).name();
@@ -222,11 +227,10 @@ public class FtcOpModeRegister implements OpModeRegister {
                 sortedOpModes.put(name, opModes.get(key));
             }
 
-            for (LinkedList<Class> opModeList : sortedOpModes.values()) {
-                for (Class opMode : opModeList) {
+            for (LinkedList<Class<OpMode>> opModeList : sortedOpModes.values()) {
+                for (Class<OpMode> opMode : opModeList) {
                     if (opMode.isAnnotationPresent(RobotSdkVersion.class)) {
-                        RobotSdkVersion annotation = (RobotSdkVersion)
-                                opMode.getAnnotation(RobotSdkVersion.class);
+                        RobotSdkVersion annotation = opMode.getAnnotation(RobotSdkVersion.class);
                         if (annotation.value() != RobotSdkApiLevel.currentVerison()) {
                             if (annotation.strict() ||
                                     annotation.compatibleUpTo()
@@ -241,101 +245,14 @@ public class FtcOpModeRegister implements OpModeRegister {
                 }
             }
 
-        } catch (final ClassNotFoundException e) {
+        } catch (final ClassNotFoundException |
+                NoSuchMethodException |
+                IllegalArgumentException |
+                IllegalAccessException |
+                InvocationTargetException |
+                IOException e) {
             Log.wtf(TAG, e.toString(), e);
-        } catch (final NoSuchMethodException e) {
-            Log.wtf(TAG, e.toString(), e);
-        } catch (final IllegalArgumentException e) {
-            Log.e(TAG, e.toString(), e);
-        } catch (final IllegalAccessException e) {
-            Log.e(TAG, e.toString(), e);
-        } catch (final InvocationTargetException e) {
-            Log.wtf(TAG, e.toString(), e);
-        } catch (IOException e) {
-            Log.e(TAG, e.toString(), e);
         }
-
-        /*try {
-            final LinkedList<String> noCheckList = new LinkedList<>();
-            noCheckList.add("com.google");
-            noCheckList.add("io.netty");
-            final Class<?> activityThreadClass =
-                    Class.forName("android.app.ActivityThread");
-            final Method method = activityThreadClass.getMethod("currentApplication");
-            Context context = (Application) method.invoke(null, (Object[]) null);
-            DexFile df = new DexFile(context.getPackageCodePath());
-            Thread process = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    final Class<?> activityThreadClass;
-                    try {
-                        activityThreadClass = Class.forName("android.app.ActivityThread");
-
-                        final Method method = activityThreadClass.getMethod("currentApplication");
-                        Context context = (Application) method.invoke(null, (Object[]) null);
-                        DexFile df = new DexFile(context.getPackageCodePath());
-
-                        LinkedList<String> classes = new LinkedList<>(Collections.list(df.entries()));
-                        for (String klazz : classes) {
-                            boolean shouldBreak = false;
-                            for (String noContinue : noCheckList) {
-                                if (klazz.contains(noContinue)) {
-                                    shouldBreak = true;
-                                    break;
-                                }
-                            }
-                            if (shouldBreak) {
-                                continue;
-                            }
-
-                            Class activeClass = ActiveOpMode.class;
-                            Class currentClass;
-                            try {
-                                currentClass = Class.forName(klazz, false, context.getClassLoader());
-                            } catch (NoClassDefFoundError ex) {
-                                Log.w(TAG, klazz + " " + ex.toString(), ex);
-                                return;
-                            } catch (ClassNotFoundException ex) {
-                                Log.w(TAG, klazz + " " + ex.toString(), ex);
-                                return;
-                            }
-                            Log.i("CLASSES", currentClass.toString());
-                            if(currentClass.isAnnotationPresent(activeClass)) {
-                                Annotation annotation = currentClass.getAnnotation(activeClass);
-                                String name = ((ActiveOpMode) annotation).value();
-                                if(name.length() == 0) {
-                                    name = currentClass.getSimpleName();
-                                }
-                                manager.register(name, currentClass);
-                            }
-                        }
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            process.start();
-        } catch (final ClassNotFoundException e) {
-            // handle exception
-        } catch (final NoSuchMethodException e) {
-            // handle exception
-        } catch (final IllegalArgumentException e) {
-            // handle exception
-        } catch (final IllegalAccessException e) {
-            // handle exception
-        } catch (final InvocationTargetException e) {
-            // handle exception
-        } catch (IOException e) {
-            // handle exception
-        }*/
     }
 
 

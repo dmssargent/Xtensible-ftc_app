@@ -18,15 +18,15 @@ public class HelloWorld extends ExtensibleOpMode {
 
     @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        ctx.telemetry().addData("TIME", "Start Date: " +
+        ctx.telemetry().data("TIME", "Start Date: " +
                 (new Date(System.nanoTime() / 1000)).toString());
     }
 
     @Override
     public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
         ctx.status().log(Level.INFO, "LOOP", "Current loop count: " + getLoopCount());
-        ctx.telemetry().addData("MESS", "Hello, World!");
-        ctx.telemetry().addData("MESS", "How are you doing?");
+        ctx.telemetry().data("MESS", "Hello, World!");
+        ctx.telemetry().data("MESS", "How are you doing?");
     }
 
     @Override
