@@ -22,6 +22,7 @@ package org.ftccommunity.ftcxtensible.networking.http;
 
 import android.util.Log;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -41,6 +42,7 @@ import io.netty.handler.logging.LoggingHandler;
  * An HTTP server that sends back the content of the received HTTP request
  * in stopMode pretty plaintext form.
  */
+@NotDocumentedWell
 public final class RobotHttpServer implements Runnable {
     static final int PORT = 8080;
     private RobotContext context;

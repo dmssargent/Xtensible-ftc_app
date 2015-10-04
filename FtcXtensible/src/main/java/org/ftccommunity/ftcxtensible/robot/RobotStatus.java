@@ -24,10 +24,13 @@ package org.ftccommunity.ftcxtensible.robot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@NotDocumentedWell
 public class RobotStatus {
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final ConcurrentLinkedQueue<LogElement> logElements;

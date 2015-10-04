@@ -44,6 +44,8 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -54,6 +56,7 @@ import java.util.Set;
  * @author David Sargent
  * @since 0.1
  */
+@Alpha
 public class ExtensibleHardwareMap extends HardwareMap {
     // Take care of the inherited variables, and restrict access
     private final DeviceMapping<DcMotorController> dcMotorController;

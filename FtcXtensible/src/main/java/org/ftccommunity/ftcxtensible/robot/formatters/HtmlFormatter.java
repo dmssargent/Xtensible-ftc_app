@@ -21,5 +21,8 @@
 
 package org.ftccommunity.ftcxtensible.robot.formatters;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+
+@Alpha
 public class HtmlFormatter {
 }

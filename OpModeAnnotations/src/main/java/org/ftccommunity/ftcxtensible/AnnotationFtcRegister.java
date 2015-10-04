@@ -27,6 +27,8 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 
@@ -44,6 +46,8 @@ import dalvik.system.DexFile;
  * @author David Sargent
  * @version 0.2.1
  */
+@NotDocumentedWell
+@Alpha
 public class AnnotationFtcRegister {
     private static String TAG = "FTC_OP_MODE_REGISTER::";
 

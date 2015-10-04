@@ -21,6 +21,9 @@
 
 package org.ftccommunity.ftcxtensible.math;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
 import Jama.Matrix;
 
 /**
@@ -30,6 +33,8 @@ import Jama.Matrix;
  * @author Ahmed Abdelkader, David Sargent
  */
 // TODO: update
+@Alpha
+@NotDocumentedWell
 public final class KalmanFilter {
     private Matrix X;
     private Matrix X0;

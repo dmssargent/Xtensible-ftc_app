@@ -21,6 +21,9 @@
 
 package org.ftccommunity.ftcxtensible.networking;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
+@NotDocumentedWell
 public class ServerSettings {
     private String webDirectory;
     private String index;

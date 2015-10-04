@@ -21,12 +21,15 @@
 
 package org.ftccommunity.ftcxtensible.math;
 
+import com.google.common.annotations.Beta;
+
 /**
  * A representation of a point in the Cartesian coordinate system
  *
  * @author David
  * @since 0.2.1
  */
+@Beta
 public class CartesianCoordinates {
     private double x;
     private double y;

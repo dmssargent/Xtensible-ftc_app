@@ -25,8 +25,11 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
 import java.util.logging.Level;
 
+@NotDocumentedWell
 public class RobotLogger {
     private RobotContext context;
 

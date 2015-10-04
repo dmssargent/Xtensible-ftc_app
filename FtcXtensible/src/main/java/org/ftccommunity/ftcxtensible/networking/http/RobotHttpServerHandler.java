@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
@@ -63,6 +64,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_MODIFIED;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
+@NotDocumentedWell
 public class RobotHttpServerHandler extends ChannelInboundHandlerAdapter {
     private HashMap<String, String> cache;
     private HashMap<String, String> mimeTypes;

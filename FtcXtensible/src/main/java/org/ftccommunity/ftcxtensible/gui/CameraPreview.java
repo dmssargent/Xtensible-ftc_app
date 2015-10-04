@@ -29,6 +29,9 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.google.common.annotations.Beta;
+
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
 
 import java.io.IOException;
@@ -39,6 +42,8 @@ import java.io.IOException;
  * @author David Sargent
  * @since 0.2.0
  */
+@Beta
+@NotDocumentedWell
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private static String TAG = "CAMERA_PREVIEW::";
     private final Context context;
