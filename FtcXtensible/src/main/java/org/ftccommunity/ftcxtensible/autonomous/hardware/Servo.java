@@ -17,55 +17,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ftccommunity.ftcxtensible.autonomous;
+package org.ftccommunity.ftcxtensible.autonomous.hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-/**
- * Created by David on 7/11/2015.
- */
-public class Motor implements BasicHardware {
-    final HardwareMap hardwareMap = new HardwareMap();
-    private DcMotor me;
+import org.ftccommunity.ftcxtensible.internal.Alpha;
 
-    private int speed;
+@Deprecated
+@Alpha
+public class Servo {
+    final HardwareMap hardwareMap = new HardwareMap();
+    private com.qualcomm.robotcore.hardware.Servo me;
+
+    private double position;
     private String hw_name;
     private String common_name;
 
+    public Servo(String motor_name) {
+        hw_name = motor_name;
+        me = hardwareMap.servo.get(hw_name);
 
-    public Motor(String hardware_name) {
-        hw_name = hardware_name;
-        me = hardwareMap.dcMotor.get(hw_name);
-
-        common_name = hardware_name;
-        speed = 0;
+        common_name = motor_name;
+        position = 0d;
     }
 
-    public Motor(String hardware_name, String name) {
+    public Servo(String hardware_name, String name) {
         hw_name = hardware_name;
         common_name = name;
-        speed = 0;
-    }
-
-    public String GetName() {
-        return common_name;
+        position = 0d;
     }
 
     public String GetHWName() {
         return hw_name;
     }
 
-    public int GetSpeed() {
-        return speed;
+    public String GetName() {
+        return common_name;
     }
 
-    public void SetSpeed(int motor_speed) {
-        speed = motor_speed;
+    public double GetPosition() {
+        return position;
     }
 
-    public void SetSpeedHW() {
-        me.setPower(speed);
+    public void SetPosition(int motor_speed) {
+        position = motor_speed;
+    }
+
+    public void SetPositionHW() {
+        me.setPosition(position);
     }
 }
-

@@ -336,13 +336,13 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             case 1:
                 //
                 // Continue moving the arm up.  If the touch sensor is
-                // triggered, then the arm will stop and this call will perform
+                // triggered, then the arm will gentleStop and this call will perform
                 // no action.  If the touch sensor has not been triggered, then
                 // motor power will still be applied.
                 //
                 if (move_arm_upward_until_touch()) {
                     //
-                    // Transition to the stop state.
+                    // Transition to the gentleStop state.
                     //
                     v_arm_state++;
                 }

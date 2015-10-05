@@ -17,22 +17,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ftccommunity.ftcxtensible.autonomous;
+package org.ftccommunity.ftcxtensible.autonomous.hardware;
 
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
+@Alpha
+@NotDocumentedWell
 public interface BasicSensor {
-    String GetHWName();
+    String getHWName();
 
-    String GetName();
+    String getName();
 
-    double Read();
+    double read();
 
-    void Write(IrSeekerSensor.Mode mode);
+    void write(IrSeekerSensor.Mode mode);
 
-    void ReadFromHW();
+    void readFromHW();
 
-    void WriteToHW();
+    void writeToHW();
 
-    boolean IsNew();
+    boolean isNew();
 }

@@ -19,9 +19,7 @@
 
 package org.ftccommunity.ftcxtensible.autonomous;
 
-/**
- * Created by David on 7/9/2015.
- */
+
 public interface RunLevel {
     int execute();
 

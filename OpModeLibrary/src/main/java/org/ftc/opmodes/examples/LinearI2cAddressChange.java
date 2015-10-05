@@ -125,7 +125,7 @@ public class LinearI2cAddressChange extends LinearOpMode {
 
         waitOneFullHardwareCycle();
 
-        // Write out the trigger bytes, and the new desired address.
+        // write out the trigger bytes, and the new desired address.
         writeNewAddress();
         dim.setI2cPortActionFlag(port);
         dim.writeI2cCacheToController(port);

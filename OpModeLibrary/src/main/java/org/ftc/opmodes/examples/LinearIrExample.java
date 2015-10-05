@@ -90,7 +90,7 @@ public class LinearIrExample extends LinearOpMode {
             waitOneFullHardwareCycle();
         }
 
-        // stop the motors
+        // gentleStop the motors
         motorRight.setPower(0);
         motorLeft.setPower(0);
     }

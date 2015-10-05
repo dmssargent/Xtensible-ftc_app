@@ -21,19 +21,44 @@ package org.ftccommunity.ftcxtensible.autonomous;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.ftccommunity.ftcxtensible.autonomous.hardware.BasicSensor;
+import org.ftccommunity.ftcxtensible.autonomous.hardware.Motor;
+import org.ftccommunity.ftcxtensible.autonomous.hardware.Servo;
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 /**
- * Created by David on 7/9/2015.
+ *
  */
-public class RobotState {
+@Alpha
+@NotDocumentedWell
+public class AutonomousRobotState {
     private HashMap<String, Motor> motors;
     private HashMap<String, Servo> servos;
     private HashMap<String, BasicSensor> sensors;
     private HardwareMap hardwareMap;
 
-    public RobotState(Motor[] robot_motors, Servo[] robot_servos) {
-        hardwareMap = new HardwareMap();
+    private RobotContext context;
+    private Autonomous auto;
+    private Thread autoThread;
+    private AutoMode exec;
+
+    public AutonomousRobotState(@NotNull RobotContext ctx, @NotNull AutoMode executor) {
+        auto = new Autonomous(null, ctx);
+        autoThread = new Thread(auto);
+        context = ctx;
+        exec = executor;
+    }
+
+    // Old code
+    @Deprecated
+    public AutonomousRobotState(HardwareMap hwMap, Motor[] robot_motors, Servo[] robot_servos) {
+        hardwareMap = hwMap;
+
         motors = new HashMap<>(robot_motors.length * 2);
         for (Motor motor : robot_motors) {
             motors.put(motor.GetName(), motor);
@@ -48,40 +73,81 @@ public class RobotState {
         sensors = new HashMap<>(robot_motors.length * 2);
     }
 
-    public RobotState() {
-        hardwareMap = new HardwareMap();
-        final int STANDARD_CAPACITY = 12; //six times two
-        motors = new HashMap<>(STANDARD_CAPACITY);
-        servos = new HashMap<>(STANDARD_CAPACITY);
+    @NotNull
+    public RobotContext context() {
+        return context;
     }
 
-    public void AddMotor(Motor motor) {
+    @NotNull
+    public Autonomous autonomous() {
+        return auto;
+    }
+
+    @NotNull
+    public AutoMode parentMode() {
+        return exec;
+    }
+
+    public void startAutonomous() {
+        autoThread.start();
+    }
+
+    public void notifyAutonomous() {
+        this.notifyAll();
+    }
+
+    public boolean isInGoodState() {
+        return autoThread.isAlive() && !auto.isDone();
+    }
+
+    public void init() {
+        auto.runInit();
+    }
+
+    public void gentleStop() {
+        auto.runFinishLevel();
+        auto.close();
+    }
+
+    public void stopNow() {
+        autoThread.notifyAll();
+        autoThread.interrupt();
+    }
+
+    @Deprecated
+    public void addMotor(Motor motor) {
         motors.put(motor.GetName(), motor);
     }
 
-    public Motor GetMotor(String name) {
+    @Deprecated
+    public Motor getMotor(String name) {
         return motors.get(name);
     }
 
-    public void AddServo(Servo servo) {
+    @Deprecated
+    public void addServo(Servo servo) {
         servos.put(servo.GetName(), servo);
     }
 
-    public Servo GetServo(String name) {
+    @Deprecated
+    public Servo getServo(String name) {
         return servos.get(name);
     }
 
-    public void AddIR_Seeker(IrSensor sensor) {
-        sensors.put(sensor.GetName(), sensor);
+    @Deprecated
+    public void addIrSeeker(IrSensor sensor) {
+        sensors.put(sensor.getName(), sensor);
     }
 
-    public IrSensor GetIR_Seeker(String name) {
+    @Deprecated
+    public IrSensor getIrSeeker(String name) {
         return (IrSensor) sensors.get(name);
     }
 
-    public synchronized void SyncState() {
+    @Deprecated
+    public synchronized void syncState() {
         for (HashMap.Entry<String, BasicSensor> entry : sensors.entrySet()) {
-            entry.getValue().WriteToHW();
+            entry.getValue().writeToHW();
         }
 
         for (HashMap.Entry<String, Motor> entry : motors.entrySet()) {
@@ -93,9 +159,7 @@ public class RobotState {
         }
 
         for (HashMap.Entry<String, BasicSensor> entry : sensors.entrySet()) {
-            entry.getValue().ReadFromHW();
+            entry.getValue().readFromHW();
         }
     }
-
-
 }

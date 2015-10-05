@@ -22,6 +22,8 @@ package org.ftccommunity.ftcxtensible.autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 
+import org.ftccommunity.ftcxtensible.autonomous.hardware.BasicSensor;
+
 /**
  * Created by David on 7/11/2015.
  */
@@ -50,24 +52,24 @@ public class IrSensor implements BasicSensor {
         me = hardwareMap.irSeekerSensor.get(hw_name);
     }
 
-    public void WriteToHW() {
+    public void writeToHW() {
         hardwareMap.irSeekerSensor.get(hw_name).setMode(temp_mode);
         mode = temp_mode;
     }
 
-    public String GetName() {
+    public String getName() {
         return common_name;
     }
 
-    public String GetHWName() {
+    public String getHWName() {
         return hw_name;
     }
 
-    public boolean IsNew() {
+    public boolean isNew() {
         return updated;
     }
 
-    public void ReadFromHW() {
+    public void readFromHW() {
 
         mode = me.getMode();
         angle = me.getAngle();
@@ -76,7 +78,7 @@ public class IrSensor implements BasicSensor {
         updated = true;
     }
 
-    public double Read() {
+    public double read() {
         updated = false;
         return angle;
     }
@@ -94,10 +96,10 @@ public class IrSensor implements BasicSensor {
     }
 
     public double GetAngle() {
-        return Read();
+        return read();
     }
 
-    public void Write(IrSeekerSensor.Mode new_mode) {
+    public void write(IrSeekerSensor.Mode new_mode) {
         temp_mode = new_mode;
     }
 

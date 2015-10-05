@@ -19,39 +19,26 @@
 
 package org.ftccommunity.ftcxtensible.autonomous;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
+
+import java.util.LinkedList;
 
 
-public abstract class AutoMode extends OpMode {
-    public Autonomous auto;
-    public RobotState state;
-    private Thread autoThread;
+public abstract class AutoMode extends ExtensibleOpMode {
+    protected AutonomousRobotState state;
 
-    public AutoMode() {
-        autoThread = new Thread(auto);
+    protected AutoMode() {
+        super();
+        state = new AutonomousRobotState(getContext(), this);
     }
 
-    public AutoMode(Autonomous newAuto) {
-        state = new RobotState();
-        auto = newAuto;
-        autoThread = new Thread(auto);
+    protected AutonomousRobotState autoState() {
+        return state;
     }
 
-    public void init() {
-        auto.RunInitLevel();
+    @Override
+    public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+
     }
-
-    public void run() {
-        if (!autoThread.isAlive() && !auto.isDone()) {
-            autoThread.start();
-        }
-        state.SyncState();
-    }
-
-    public void done() {
-        auto.RunFinishLevel();
-        auto.close();
-    }
-
-
 }

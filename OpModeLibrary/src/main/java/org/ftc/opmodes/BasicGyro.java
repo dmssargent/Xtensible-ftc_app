@@ -39,7 +39,7 @@ public class BasicGyro extends OpMode {
         double avg = gyro.getRotation() - gyroOffest;
 
         // If we suspect the degrees we have turned (based on the degrees per second) is
-        // greater than 90, stop.
+        // greater than 90, gentleStop.
         double degreesWeHaveTurned = (avg / 1000) * (System.currentTimeMillis() - start);
         if (degreesWeHaveTurned <= degreesToTurn) {
             motorLeft.setPower(-MOTOR_POWER);

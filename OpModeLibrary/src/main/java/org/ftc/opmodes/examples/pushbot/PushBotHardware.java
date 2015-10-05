@@ -92,7 +92,7 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // stop
+    // gentleStop
     //
 
     /**
@@ -323,7 +323,7 @@ public class PushBotHardware extends OpMode
         // Nothing needs to be done for this method.
         //
 
-    } // stop
+    } // gentleStop
 
     //--------------------------------------------------------------------------
     //
