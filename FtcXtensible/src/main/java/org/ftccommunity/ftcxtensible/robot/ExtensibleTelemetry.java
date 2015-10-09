@@ -204,10 +204,10 @@ public class ExtensibleTelemetry {
         }
 
         synchronized (log) {
-            if (data.size() < dataPointsToSend) {
+            if (log.size() < dataPointsToSend) {
                 int numberOfElementsAdded = 0;
                 for (;
-                     numberOfElementsAdded <= Math.min(dataPointsToSend - data.size(), log.size());
+                     numberOfElementsAdded < Math.min(dataPointsToSend - log.size(), log.size());
                      numberOfElementsAdded++) {
                     parent.addData("x_log" + numberOfElementsAdded, log.poll());
                 }

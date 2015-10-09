@@ -23,40 +23,51 @@ package org.ftccommunity.ftcxtensible.gui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.ViewGroup;
 
 import com.google.common.annotations.Beta;
 
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
+import org.ftccommunity.ftcxtensible.sensors.camera.CameraPreviewCallback;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * A basic Camera preview class
  *
- * @author David Sargent
+ * @author ~~David Sargent~~
  * @since 0.2.0
  */
 @Beta
 @NotDocumentedWell
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private static String TAG = "CAMERA_PREVIEW::";
+    private RobotContext robotContext;
     private final Context context;
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private CameraManager manager;
 
-    public CameraPreview(Context ctx) {
+    private CameraPreview(Context ctx) {
         super(ctx);
         this.context = ctx;
     }
 
-    public CameraPreview(Context ctx, CameraManager mgr) {
+    public CameraPreview(RobotContext ctx) {
+        this(ctx.getAppContext());
+        this.robotContext = ctx;
+    }
+
+    public CameraPreview(RobotContext ctx, CameraManager mgr) {
         this(ctx);
         bindCameraManager(mgr);
     }
@@ -70,14 +81,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder = getHolder();
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
-        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
-            mCamera.setPreviewDisplay(holder);
+            //mCamera.setPreviewDisplay(holder);
+            mCamera.setPreviewTexture(new SurfaceTexture(0));
             mCamera.startPreview();
+
+            mCamera.setPreviewCallback(new CameraPreviewCallback(robotContext));
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
@@ -101,7 +114,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.stopPreview();
         } catch (Exception e) {
             // ignore: tried to gentleStop a non-existent preview
-            Log.e(TAG, "An exception occured during preview gentleStop.", e);
+            Log.e(TAG, "An exception occurred during preview gentleStop.", e);
         }
 
         // set preview size and make any resize, rotate or
@@ -109,9 +122,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         setCameraDisplayOrientation();
         // start preview with new settings
         try {
-            mCamera.setPreviewDisplay(mHolder);
+            // mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
-
         } catch (Exception e) {
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }

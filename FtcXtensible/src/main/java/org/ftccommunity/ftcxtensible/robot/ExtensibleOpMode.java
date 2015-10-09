@@ -22,6 +22,7 @@
 package org.ftccommunity.ftcxtensible.robot;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
@@ -106,6 +107,21 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
+        robotContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                    @Override
+                    public void uncaughtException(Thread thread, Throwable ex) {
+                        Log.wtf("CORE_CONTROLLER::", Throwables.getRootCause(ex));
+                        Log.i("CORE_CONTROLLER::", "Exception Details:", ex);
+                        Toast.makeText(robotContext.getAppContext(),
+                                "An almost fatal exception occurred." + ex.getLocalizedMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
         LinkedList<Object> list = new LinkedList<>();
 
         try {

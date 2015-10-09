@@ -26,20 +26,21 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.hardware.Camera;
-import android.os.Environment;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.AbsoluteLayout;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
+import org.ftccommunity.ftcxtensible.gui.CameraPreview2;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -78,33 +79,6 @@ public class CameraManager {
     }
 
     /**
-     * Create a File for saving an image or video
-     */
-    private static File getOutputVideoFile(String name) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory() + "/FIRST",
-                name);
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d(name, "failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        return new File(mediaStorageDir.getPath() + File.separator +
-                "video_" + timeStamp + ".mp4");
-    }
-
-    /**
      * A safe way to get an instance of the Camera object.
      *
      * @param cameraRotation which side is the camera on
@@ -120,11 +94,7 @@ public class CameraManager {
                 }
             }
 
-            //Camera.open(cameraId);
             camera = Camera.open(getCameraId() - 1);
-            if (camera != null) {
-                camera.unlock();
-            }
         } catch (Exception e) {
             // CameraOpMode is not available (in use or does not exist)
             Log.e(TAG, e.toString(), e);
@@ -161,7 +131,6 @@ public class CameraManager {
         ctx.runOnUiThread(new PrepCapture(ctx, this));
     }
 
-
     private void finishPrep() {
         prepTime = new Date();
     }
@@ -170,22 +139,39 @@ public class CameraManager {
         return prepTime.before(new Date(prepTime.getTime() + 1000));
     }
 
-    public void takePicture() throws RuntimeException {
+    public void takePicture() {
         if (!isReadyForCapture()) {
             throw new IllegalStateException("Please wait one second after prep is called");
         }
 
-        camera.takePicture(null, null, new Camera.PictureCallback() {
+        context.runOnUiThread(new Runnable() {
             @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                if (data != null) {
-                    byte[] imageBytes = new byte[data.length];
-                    System.arraycopy(data, 0, imageBytes, 0, imageBytes.length);
-                    imageQueue.add(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                    latestTimestamp = new Date();
+            public void run() {
+                try {
+                    camera.takePicture(null, null, new Camera.PictureCallback() {
+                        @Override
+                        public void onPictureTaken(byte[] data, Camera camera) {
+                            if (data != null) {
+                                byte[] imageBytes = new byte[data.length];
+                                System.arraycopy(data, 0, imageBytes, 0, imageBytes.length);
+                                imageQueue.add(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+                                latestTimestamp = new Date();
+
+                                camera.startPreview();
+                            }
+                        }
+                    });
+                } catch (Exception ex) {
+                    Log.e(TAG, "An error occurred getting the photo." + ex.getLocalizedMessage());
+                    Log.i(TAG, Throwables.getStackTraceAsString(ex));
                 }
             }
         });
+    }
+
+    public void addImage(Bitmap jpg) {
+        imageQueue.add(jpg);
+        latestTimestamp = new Date();
     }
 
     private class PrepCapture implements Runnable {
@@ -199,12 +185,16 @@ public class CameraManager {
 
         @Override
         public void run() {
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            view = new CameraPreview(ctx.getAppContext(), manager);
+            Rect display = new Rect();
+            ((Activity) context.getAppContext()).getWindowManager().getDefaultDisplay().getRectSize(display);
+
+            ViewGroup.LayoutParams params = new AbsoluteLayout.LayoutParams(
+                    240, 240, display.centerX() - 240 / 2, display.centerY() - 240 / 2);
+            view = new CameraPreview(ctx, manager);
 
             ((Activity) ctx.getAppContext()).addContentView(view, params);
-            finishPrep();
+
+                finishPrep();
         }
     }
 
@@ -222,14 +212,19 @@ public class CameraManager {
 
         @Override
         public void run() {
-            if (view != null) {
-                ((ViewGroup) view.getParent()).removeView(view);
-            }
+            try {
+                if (view != null) {
+                    ((ViewGroup) view.getParent()).removeView(view);
+                }
 
-            if (camera != null) {
-                camera.release();
-                camera = null;
+                if (camera != null) {
+                    camera.release();
+                    camera = null;
+                }
+            } catch (Exception ex) {
+                Log.wtf(TAG, ex);
             }
         }
     }
+
 }
