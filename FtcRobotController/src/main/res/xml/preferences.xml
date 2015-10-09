@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory
+      android:title="@string/pref_change_wifi_channel">
+
+    <PreferenceScreen
+        android:key="@string/pref_launch_settings"
+        android:title="@string/pref_change_wifi_channel">
+      <intent
+        android:action="com.qualcomm.ftccommon.configuration.FtcWifiChannelSelectorActivity.intent.action.Launch"
+        android:targetClass="com.qualcomm.ftccommon.FtcWifiChannelSelectorActivity"
+        android:targetPackage="com.qualcomm.ftccommon"/>
+    </PreferenceScreen>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="@string/pref_configure_robot_title">
+
+    <PreferenceScreen
+        android:key="@string/pref_launch_configure"
+        android:title="@string/configure_activity">
+      <intent
+        android:action="com.qualcomm.ftccommon.configuration.FtcLoadFileActivity.intent.action.Launch"
+        android:targetClass="com.qualcomm.ftccommon.configuration.FtcLoadFileActivity"
+        android:targetPackage="com.qualcomm.ftccommon"/>
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:key="@string/pref_launch_autoconfigure"
+        android:title="@string/title_activity_autoconfigure">
+      <intent
+        android:action="com.qualcomm.ftccommon.configuration.FtcAutoconfigureActivity.intent.action.Launch"
+        android:targetClass="com.qualcomm.ftccommon.configuration.AutoConfigureActivity"
+        android:targetPackage="com.qualcomm.ftccommon"/>
+    </PreferenceScreen>
+  </PreferenceCategory>
+</PreferenceScreen>
