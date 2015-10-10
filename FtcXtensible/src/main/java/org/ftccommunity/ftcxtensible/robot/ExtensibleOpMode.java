@@ -22,10 +22,10 @@
 package org.ftccommunity.ftcxtensible.robot;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.util.concurrent.UncaughtExceptionHandlers;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -103,23 +103,36 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
 
     @Override
     public final void init() {
-        robotContext.bindAppContext(super.hardwareMap.appContext);
+        robotContext.prepare(super.hardwareMap.appContext);
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
         robotContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                Thread.currentThread().setUncaughtExceptionHandler(UncaughtExceptionHandlers.systemExit());
+                /*Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                     @Override
                     public void uncaughtException(Thread thread, Throwable ex) {
-                        Log.wtf("CORE_CONTROLLER::", Throwables.getRootCause(ex));
-                        Log.i("CORE_CONTROLLER::", "Exception Details:", ex);
-                        Toast.makeText(robotContext.getAppContext(),
-                                "An almost fatal exception occurred." + ex.getLocalizedMessage(),
-                                Toast.LENGTH_LONG).show();
+                        try {
+                            Log.wtf("CORE_CONTROLLER::", Throwables.getRootCause(ex));
+                            Log.i("CORE_CONTROLLER::", "Exception Details:", ex);
+                            *//*Toast.makeText(robotContext.getAppContext(),
+                                    "An almost fatal exception occurred." + ex.getLocalizedMessage(),
+                                    Toast.LENGTH_LONG).show();*//*
+                            
+                            Context context = RobotContext.buildApplicationContext();
+                            Intent restartIntent = context.getPackageManager()
+                                    .getLaunchIntentForPackage(context.getPackageName());
+                            restartIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            context.startActivity(restartIntent);
+
+                            //System.exit(2);
+                        } catch (Exception e) {
+                            Log.wtf("CORE_CONTROLLER::", e);
+                        }
                     }
-                });
+                });*/
             }
         });
         LinkedList<Object> list = new LinkedList<>();

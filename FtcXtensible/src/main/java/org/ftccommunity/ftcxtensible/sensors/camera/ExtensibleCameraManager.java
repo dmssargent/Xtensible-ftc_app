@@ -21,26 +21,21 @@
 
 package org.ftccommunity.ftcxtensible.sensors.camera;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
+import android.widget.RelativeLayout;
 
-import com.google.common.base.Throwables;
+import com.google.common.base.FinalizableSoftReference;
 import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
-import org.ftccommunity.ftcxtensible.gui.CameraPreview2;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
+import java.lang.ref.SoftReference;
 import java.util.Date;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -53,10 +48,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Alpha
 @NotDocumentedWell
-public class CameraManager {
+@TargetApi(19)
+public class ExtensibleCameraManager {
     private static final String TAG = "CAMERA_MGR::";
 
-    private final EvictingQueue<Bitmap> imageQueue;
+    private final EvictingQueue<SoftReference<Bitmap>> imageQueue;
     CameraPreview view;
     private Camera camera;
     private Camera.CameraInfo info;
@@ -65,17 +61,15 @@ public class CameraManager {
     private Date prepTime;
     private RobotContext context;
 
-    public CameraManager(RobotContext ctx) {
+    private Camera.PreviewCallback previewCallback;
+    private CameraImageCallback imageProcessingCallback;
+
+    public ExtensibleCameraManager(RobotContext ctx) {
         context = ctx;
         imageQueue = EvictingQueue.create(5);
         latestTimestamp = new Date();
-    }
 
-    /**
-     * Check if this device has a camera
-     */
-    public static boolean checkCameraHardware(Context context) {
-        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        previewCallback = new CameraPreviewCallback(ctx);
     }
 
     /**
@@ -83,28 +77,39 @@ public class CameraManager {
      *
      * @param cameraRotation which side is the camera on
      */
-    public CameraManager bindCameraInstance(int cameraRotation) {
+    public ExtensibleCameraManager bindCameraInstance(final int cameraRotation) {
         try {
             cameraId = Camera.getNumberOfCameras();
-            for (; getCameraId() > 0; cameraId = getCameraId() - 1) {
+            for (; getCameraId() > 0; cameraId--) {
                 info = new Camera.CameraInfo();
                 Camera.getCameraInfo(getCameraId() - 1, info);
                 if (info.facing == cameraRotation) {
+                    cameraId--;
                     break;
                 }
             }
-
-            camera = Camera.open(getCameraId() - 1);
         } catch (Exception e) {
             // CameraOpMode is not available (in use or does not exist)
             Log.e(TAG, e.toString(), e);
             throw e;
         }
+
+
         return this; // returns null if camera is unavailable
+    }
+
+    public ExtensibleCameraManager setImageProcessingCallback(CameraImageCallback cb) {
+        imageProcessingCallback = cb;
+
+        return this;
     }
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
     }
 
     public Camera.CameraInfo getInfo() {
@@ -120,15 +125,15 @@ public class CameraManager {
     }
 
     public void stop() {
-        context.runOnUiThread(new StopCamera(context, this));
+        context.runOnUiThread(new StopCamera(context));
     }
 
     public Bitmap getNextImage() {
-        return imageQueue.poll();
+        return imageQueue.poll().get();
     }
 
-    public void prepareForCapture(final RobotContext ctx) {
-        ctx.runOnUiThread(new PrepCapture(ctx, this));
+    public void prepareForCapture() {
+        context.runOnUiThread(new PrepCapture(context));
     }
 
     private void finishPrep() {
@@ -139,88 +144,59 @@ public class CameraManager {
         return prepTime.before(new Date(prepTime.getTime() + 1000));
     }
 
-    public void takePicture() {
-        if (!isReadyForCapture()) {
-            throw new IllegalStateException("Please wait one second after prep is called");
-        }
-
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    camera.takePicture(null, null, new Camera.PictureCallback() {
-                        @Override
-                        public void onPictureTaken(byte[] data, Camera camera) {
-                            if (data != null) {
-                                byte[] imageBytes = new byte[data.length];
-                                System.arraycopy(data, 0, imageBytes, 0, imageBytes.length);
-                                imageQueue.add(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                                latestTimestamp = new Date();
-
-                                camera.startPreview();
-                            }
-                        }
-                    });
-                } catch (Exception ex) {
-                    Log.e(TAG, "An error occurred getting the photo." + ex.getLocalizedMessage());
-                    Log.i(TAG, Throwables.getStackTraceAsString(ex));
+    public void addImage(final Bitmap jpg) {
+        if (imageProcessingCallback != null) {
+            context.submitAsyncTask(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Bitmap post = imageProcessingCallback.processImage(jpg);
+                        if (post != null) {
+                            imageQueue.add(new SoftReference<>(post));
                 }
-            }
-        });
+                    } catch (Exception ex) {
+                        Log.e("CAMERA_PROCESSING::", ex.getLocalizedMessage(), ex);
+                    }
+                }
+            });
+        } else {
+            imageQueue.add(new SoftReference<>(jpg));
+        }
     }
 
-    public void addImage(Bitmap jpg) {
-        imageQueue.add(jpg);
-        latestTimestamp = new Date();
+    public Camera.PreviewCallback getPreviewCallback() {
+        return previewCallback;
     }
 
     private class PrepCapture implements Runnable {
         private final RobotContext ctx;
-        private final CameraManager manager;
 
-        public PrepCapture(RobotContext ctx, CameraManager mgr) {
+        public PrepCapture(RobotContext ctx) {
             this.ctx = ctx;
-            this.manager = mgr;
         }
 
         @Override
         public void run() {
-            Rect display = new Rect();
-            ((Activity) context.getAppContext()).getWindowManager().getDefaultDisplay().getRectSize(display);
+            view = new CameraPreview(ctx);
+            ((RelativeLayout) ctx.robotControllerView()).addView(view);
 
-            ViewGroup.LayoutParams params = new AbsoluteLayout.LayoutParams(
-                    240, 240, display.centerX() - 240 / 2, display.centerY() - 240 / 2);
-            view = new CameraPreview(ctx, manager);
-
-            ((Activity) ctx.getAppContext()).addContentView(view, params);
-
-                finishPrep();
+            finishPrep();
         }
     }
 
     private class StopCamera implements Runnable {
         private final RobotContext ctx;
-        private final CameraManager manager;
 
-        public StopCamera(RobotContext ctx, CameraManager mgr) {
+        public StopCamera(RobotContext ctx) {
             checkNotNull(ctx);
-            checkNotNull(mgr);
-
             this.ctx = ctx;
-            this.manager = mgr;
         }
 
         @Override
         public void run() {
             try {
-                if (view != null) {
-                    ((ViewGroup) view.getParent()).removeView(view);
-                }
-
-                if (camera != null) {
-                    camera.release();
-                    camera = null;
-                }
+                ((RelativeLayout) ctx.robotControllerView()).removeView(view);
+                view = null;
             } catch (Exception ex) {
                 Log.wtf(TAG, ex);
             }

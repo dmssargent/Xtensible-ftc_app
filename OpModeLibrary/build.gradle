@@ -11,7 +11,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '22.0.1'
 
     defaultConfig {
@@ -20,10 +20,17 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
         }
     }
 }
@@ -33,6 +40,13 @@ repositories {
         dirs '..\\libs'
         dirs += 'libs'
     }
+}
+
+configurations {
+    all*.exclude group: 'xmlpull', module: 'xmlpull'
+    all*.exclude group: 'org.boofcv', module: 'visualize'
+    all*.exclude group: 'org.boofcv', module: 'sfm'
+    all*.exclude group: 'org.thoughtworks.xstream', module: 'xstream'
 }
 
 dependencies {
@@ -46,4 +60,7 @@ dependencies {
     compile(name: 'FtcCommon-release', ext: 'aar')
     compile project(':FtcXtensible')
     compile project(':OpModeAnnotations')
+    compile 'org.boofcv:all:0.19'
+    compile 'org.boofcv:android:0.19'
+    compile 'org.boofcv:boofcv:0.16'
 }

@@ -94,7 +94,7 @@ public class ExtensibleTelemetry {
     }
 
     public void data(String tag, String message) {
-        checkArgument(Strings.isNullOrEmpty(message), "Your message shouldn't be empty.");
+        checkArgument(!Strings.isNullOrEmpty(message), "Your message shouldn't be empty.");
         tag = Strings.nullToEmpty(tag);
         
         synchronized (dataCache) {
@@ -162,7 +162,7 @@ public class ExtensibleTelemetry {
 
             synchronized (dataCache) {
                 int numberOfElementsAdded = 0;
-                for (; numberOfElementsAdded <= Math.min(dataCache.size(),
+                for (; numberOfElementsAdded < Math.min(dataCache.size(),
                         (int) (dataPointsToSend * .75)); numberOfElementsAdded++) {
                     cache.put("0" + Integer.toString(numberOfElementsAdded), dataCache.poll());
                 }
@@ -182,12 +182,15 @@ public class ExtensibleTelemetry {
                     }
                 }
 
-                LinkedList<Map.Entry<String, String>> entriesToSend = new LinkedList<>(entries.entrySet());
-                for (; numberOfElementsAdded <=
-                        Math.min(data.size(), dataPointsToSend - numberOfElements);
-                     numberOfElementsAdded++) {
-                    Map.Entry<String, String> entry = entriesToSend.get(numberOfElementsAdded);
-                    cache.put(entry.getKey(), entry.getValue());
+                try {
+                    LinkedList<Map.Entry<String, String>> entriesToSend = new LinkedList<>(entries.entrySet());
+                    for (; numberOfElementsAdded <= Math.min(entriesToSend.size(), dataPointsToSend - numberOfElements);
+                         numberOfElementsAdded++) {
+                        Map.Entry<String, String> entry = entriesToSend.get(numberOfElementsAdded - 1 == -1 ? 0 : numberOfElementsAdded - 1);
+                        cache.put(entry.getKey(), entry.getValue());
+                    }
+                } catch (IndexOutOfBoundsException ex) {
+                    Log.d(TAG, "An index is out of bounds.", ex);
                 }
             }
 

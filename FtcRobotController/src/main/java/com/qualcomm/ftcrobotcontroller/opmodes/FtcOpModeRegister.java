@@ -14,11 +14,13 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
 import org.ftc.opmodes.FallbackOpModeRegister;
+import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
@@ -52,6 +54,9 @@ public class FtcOpModeRegister implements OpModeRegister {
      * @param mgr op mode manager
      */
     public void register(final OpModeManager mgr) {
+        DataBinder binding = DataBinder.getInstance();
+        binding.getIntegers().put("ftcview", R.id.RelativeLayout);
+
         try {
             FallbackOpModeRegister.register(mgr);
 
@@ -101,14 +106,14 @@ public class FtcOpModeRegister implements OpModeRegister {
                         klazz = klazz.substring(0, klazz.indexOf("$") - 1);
                     }
                     noCheckList.add(klazz);
-                    break;
+                    continue;
                 } catch (ClassNotFoundException ex) {
                     Log.w(TAG, klazz + " " + ex.toString(), ex);
                     if (klazz.contains("$")) {
                         klazz = klazz.substring(0, klazz.indexOf("$") - 1);
                     }
                     noCheckList.add(klazz);
-                    break;
+                    continue;
                 }
                 if (!currentClass.isAnnotationPresent(disabledClass)) {
                     if (currentClass.isAnnotationPresent(teleOpClass)) {

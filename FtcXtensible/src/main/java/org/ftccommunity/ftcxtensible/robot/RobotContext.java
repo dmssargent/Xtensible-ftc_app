@@ -24,6 +24,7 @@ package org.ftccommunity.ftcxtensible.robot;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
@@ -32,9 +33,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
 
+import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
-import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
+import org.ftccommunity.ftcxtensible.sensors.camera.ExtensibleCameraManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -44,6 +47,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 @Beta
 @NotDocumentedWell
@@ -61,7 +66,7 @@ public class RobotContext {
 
     private ServerSettings serverSettings;
     private RobotStatus status;
-    private CameraManager cameraManager;
+    private ExtensibleCameraManager extensibleCameraManager;
 
     private NetworkedOpMode networkedOpMode;
     private boolean networkingEnabled;
@@ -70,6 +75,9 @@ public class RobotContext {
 
     private ExecutorService asyncService;
     private RobotLogger logger;
+
+    private DataBinder bindings;
+    private View layout;
 
     private RobotContext() {
         serverSettings = ServerSettings.createServerSettings();
@@ -81,8 +89,10 @@ public class RobotContext {
 
         asyncService = MoreExecutors.listeningDecorator(
                 Executors.newCachedThreadPool(MoreExecutors.platformThreadFactory()));
-        cameraManager = new CameraManager(this);
+        extensibleCameraManager = new ExtensibleCameraManager(this);
         logger = new RobotLogger(this);
+
+        bindings = DataBinder.getInstance();
     }
 
     /**
@@ -103,18 +113,23 @@ public class RobotContext {
         hardwareMap = new ExtensibleHardwareMap(hwMap);
         appContext = hwMap.appContext;
         if (appContext == null) {
-            try {
-                final Class<?> activityThreadClass =
-                        Class.forName("android.app.ActivityThread");
-                final Method method = activityThreadClass.getMethod("currentApplication");
-
-                appContext = (Context) method.invoke(null, (Object[]) null);
-            } catch (Exception ex) {
-                Log.e("ROBOT_CONTEXT::", "Cannot build app context! It will be null.", ex);
-            }
+            appContext = buildApplicationContext();
         }
         telemetry = tlmtry;
         extensibleTelemetry = new ExtensibleTelemetry(tlmtry);
+    }
+
+    public static Context buildApplicationContext() {
+        try {
+            final Class<?> activityThreadClass =
+                    Class.forName("android.app.ActivityThread");
+            final Method method = activityThreadClass.getMethod("currentApplication");
+
+            return (Context) method.invoke(null, (Object[]) null);
+        } catch (Exception ex) {
+            Log.e("ROBOT_CONTEXT::", "Cannot build app context! It will be null.", ex);
+            return null;
+        }
     }
 
     public RobotContext enableNetworking() {
@@ -180,6 +195,16 @@ public class RobotContext {
             appContext = context;
         } else {
             throw new IllegalArgumentException("Invalid context; it must be of an activity context type");
+        }
+    }
+
+    public void prepare(Context ctx) {
+        checkArgument(ctx instanceof Activity, "Invalid context; it must be of an activity context type");
+        bindAppContext(ctx);
+
+        layout = ((Activity) getAppContext()).findViewById(controllerBindings().getIntegers().get("ftcview"));
+        if (robotControllerView() == null) {
+            Log.e("ROBOT_CONTEXT::", "Could not bind to the current for robotics");
         }
     }
 
@@ -312,14 +337,14 @@ public class RobotContext {
         return extensibleGamepad2;
     }
 
-    public CameraManager cameraManager() {
-        return cameraManager;
+    public ExtensibleCameraManager cameraManager() {
+        return extensibleCameraManager;
     }
 
     public void release() {
-        if (cameraManager != null) {
-            cameraManager.stop();
-            cameraManager = null;
+        if (extensibleCameraManager != null) {
+            extensibleCameraManager.stop();
+            extensibleCameraManager = null;
         }
 
         if (networkedOpMode != null) {
@@ -338,6 +363,26 @@ public class RobotContext {
             }
             extensibleTelemetry = null;
         }
+    }
+
+    /**
+     * Gets the robot controller data bindings
+     *
+     * @return the robot controller data binding
+     */
+    @NotNull
+    public DataBinder controllerBindings() {
+        return bindings;
+    }
+
+    /**
+     * Gets the recommended robot controller view area
+     *
+     * @return a View representing the real estate that Qualcomm has set aside
+     */
+    @NotNull
+    public View robotControllerView() {
+        return layout;
     }
 
    /* public LinkedList upstreamPipeline(HardwareDevice device) {

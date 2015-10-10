@@ -23,23 +23,20 @@ package org.ftccommunity.ftcxtensible.gui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.ViewGroup;
 
 import com.google.common.annotations.Beta;
 
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
-import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
 import org.ftccommunity.ftcxtensible.sensors.camera.CameraPreviewCallback;
+import org.ftccommunity.ftcxtensible.sensors.camera.ExtensibleCameraManager;
 
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * A basic Camera preview class
@@ -55,26 +52,30 @@ import java.util.Date;
     private final Context context;
     private SurfaceHolder mHolder;
     private Camera mCamera;
-    private CameraManager manager;
+    private ExtensibleCameraManager manager;
 
     private CameraPreview(Context ctx) {
         super(ctx);
         this.context = ctx;
     }
 
+
     public CameraPreview(RobotContext ctx) {
         this(ctx.getAppContext());
-        this.robotContext = ctx;
+        robotContext = ctx;
+        bindCameraManager(ctx.cameraManager());
     }
 
-    public CameraPreview(RobotContext ctx, CameraManager mgr) {
-        this(ctx);
-        bindCameraManager(mgr);
-    }
-
-    public void bindCameraManager(CameraManager mgr) {
+    public void bindCameraManager(ExtensibleCameraManager mgr) {
         manager = mgr;
-        mCamera = mgr.getCamera();
+
+        try {
+            mCamera = Camera.open(mgr.getCameraId());
+            mgr.setCamera(mCamera);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getLocalizedMessage());
+        }
+        //mCamera = mgr.getCamera();
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
@@ -86,11 +87,22 @@ import java.util.Date;
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
-            //mCamera.setPreviewDisplay(holder);
-            mCamera.setPreviewTexture(new SurfaceTexture(0));
-            mCamera.startPreview();
-
+            mCamera.setPreviewDisplay(holder);
             mCamera.setPreviewCallback(new CameraPreviewCallback(robotContext));
+
+            mCamera.enableShutterSound(false);
+            Camera.Parameters parameters = mCamera.getParameters();
+            parameters.setVideoStabilization(true);
+            parameters.setAutoWhiteBalanceLock(false);
+            parameters.setAutoWhiteBalanceLock(true);
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
+            parameters.setJpegQuality(70);
+            mCamera.setParameters(parameters);
+
+            // mCamera.startPreview();
+
+
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
@@ -98,6 +110,9 @@ import java.util.Date;
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         // empty. Take care of releasing the Camera preview in your activity.
+        mCamera.setPreviewCallback(null);
+        mCamera.release();
+        mCamera = null;
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -121,6 +136,10 @@ import java.util.Date;
         // reformatting changes here
         setCameraDisplayOrientation();
         // start preview with new settings
+
+        if (robotContext.cameraManager().getPreviewCallback() != null) {
+            mCamera.setPreviewCallback(robotContext.cameraManager().getPreviewCallback());
+        }
         try {
             // mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();

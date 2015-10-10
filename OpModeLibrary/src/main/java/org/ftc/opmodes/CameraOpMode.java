@@ -12,35 +12,80 @@ package org.ftc.opmodes;
 
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.support.annotation.Nullable;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
+import org.ftccommunity.ftcxtensible.sensors.camera.CameraImageCallback;
 
+import java.lang.ref.SoftReference;
 import java.util.LinkedList;
+
+import boofcv.alg.descriptor.UtilFeature;
+import boofcv.alg.feature.color.GHistogramFeatureOps;
+import boofcv.alg.feature.color.Histogram_F64;
+import boofcv.android.ConvertBitmap;
+import boofcv.struct.image.ImageFloat32;
+import boofcv.struct.image.MultiSpectral;
 
 @Autonomous
 public class CameraOpMode extends ExtensibleOpMode {
 
     @Override
     public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        if (getLoopCount() % 10 == 0) {
-            ctx.cameraManager().takePicture();
+        Bitmap image = ctx.cameraManager().getNextImage();
+        if (image != null) {
+            ctx.log().i(TAG, image.toString());
         }
 
-        if (getLoopCount() % 5 == 0) {
-            Bitmap image = ctx.cameraManager().getNextImage();
-            if (image != null) {
-                ctx.log().i(TAG, image.toString());
-            }
-        }
+        telemetry().data(TAG, "hello");
     }
 
     @Override
     public void init(final RobotContext ctx, LinkedList<Object> out) throws Exception {
         ctx.cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
-        ctx.cameraManager().prepareForCapture(ctx);
+        ctx.cameraManager().prepareForCapture();
+
+        CameraImageCallback cb = new CameraImageCallback() {
+            private byte[] storage;
+
+            @Nullable
+            @Override
+            public Bitmap processImage(Bitmap orig) {
+                try {
+                    if (storage == null) {
+                        storage = ConvertBitmap.declareStorage(orig, null);
+                    }
+
+                    // Functions are also provided for multi-spectral images
+                    MultiSpectral<ImageFloat32> color = ConvertBitmap.bitmapToMS(orig, null, ImageFloat32.class, storage);
+
+                    int[] lengths = new int[color.getNumBands()];
+                    for (int i = 0; i < lengths.length; i++) {
+                        lengths[i] = 10;
+                    }
+
+                    // The number of bins is an important parameter.  Try adjusting it
+                    SoftReference<Histogram_F64> histogram = new SoftReference<>(new Histogram_F64(lengths));
+
+                    for (int i = 0; i < lengths.length; i++) {
+                        histogram.get().setRange(i, 0, 255);
+                    }
+
+                    GHistogramFeatureOps.histogram(color, histogram.get());
+
+                    UtilFeature.normalizeL2(histogram.get()); // normalize so that image size doesn't matter
+
+                    return null;
+                } catch (NullPointerException ex) {
+                    ctx.log().i(TAG, ex.getLocalizedMessage());
+                    return null;
+                }
+            }
+        };
+        ctx.cameraManager().setImageProcessingCallback(cb);
     }
 
     @Override
@@ -67,6 +112,4 @@ public class CameraOpMode extends ExtensibleOpMode {
     public int onFailure(RobotContext ctx, RobotStatus.Type eventType, Object event, Object in) {
         return -1;
     }
-
-
 }
