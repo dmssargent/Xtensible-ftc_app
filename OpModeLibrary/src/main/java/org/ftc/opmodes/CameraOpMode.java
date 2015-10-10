@@ -11,8 +11,12 @@
 package org.ftc.opmodes;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.support.annotation.Nullable;
+
+import com.google.common.base.Throwables;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
@@ -20,15 +24,11 @@ import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 import org.ftccommunity.ftcxtensible.sensors.camera.CameraImageCallback;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.LinkedList;
-
-import boofcv.alg.descriptor.UtilFeature;
-import boofcv.alg.feature.color.GHistogramFeatureOps;
-import boofcv.alg.feature.color.Histogram_F64;
-import boofcv.android.ConvertBitmap;
-import boofcv.struct.image.ImageFloat32;
-import boofcv.struct.image.MultiSpectral;
 
 @Autonomous
 public class CameraOpMode extends ExtensibleOpMode {
@@ -47,44 +47,9 @@ public class CameraOpMode extends ExtensibleOpMode {
     public void init(final RobotContext ctx, LinkedList<Object> out) throws Exception {
         ctx.cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
         ctx.cameraManager().prepareForCapture();
+        ctx.cameraManager().getPreviewCallback().setDelay(20000);
 
-        CameraImageCallback cb = new CameraImageCallback() {
-            private byte[] storage;
-
-            @Nullable
-            @Override
-            public Bitmap processImage(Bitmap orig) {
-                try {
-                    if (storage == null) {
-                        storage = ConvertBitmap.declareStorage(orig, null);
-                    }
-
-                    // Functions are also provided for multi-spectral images
-                    MultiSpectral<ImageFloat32> color = ConvertBitmap.bitmapToMS(orig, null, ImageFloat32.class, storage);
-
-                    int[] lengths = new int[color.getNumBands()];
-                    for (int i = 0; i < lengths.length; i++) {
-                        lengths[i] = 10;
-                    }
-
-                    // The number of bins is an important parameter.  Try adjusting it
-                    SoftReference<Histogram_F64> histogram = new SoftReference<>(new Histogram_F64(lengths));
-
-                    for (int i = 0; i < lengths.length; i++) {
-                        histogram.get().setRange(i, 0, 255);
-                    }
-
-                    GHistogramFeatureOps.histogram(color, histogram.get());
-
-                    UtilFeature.normalizeL2(histogram.get()); // normalize so that image size doesn't matter
-
-                    return null;
-                } catch (NullPointerException ex) {
-                    ctx.log().i(TAG, ex.getLocalizedMessage());
-                    return null;
-                }
-            }
-        };
+        CameraImageCallback cb = new MyCameraImageCallback(ctx);
         ctx.cameraManager().setImageProcessingCallback(cb);
     }
 
@@ -111,5 +76,56 @@ public class CameraOpMode extends ExtensibleOpMode {
     @Override
     public int onFailure(RobotContext ctx, RobotStatus.Type eventType, Object event, Object in) {
         return -1;
+    }
+
+    private class MyCameraImageCallback implements CameraImageCallback {
+        private final RobotContext ctx;
+        private long time;
+        private byte[] storage;
+
+        public MyCameraImageCallback(RobotContext ctx) {
+            this.ctx = ctx;
+            time = System.nanoTime();
+        }
+
+        @Nullable
+        @Override
+        public Bitmap processImage(SoftReference<Bitmap> orig) {
+            try {
+                int[] pixels = new int[orig.get().getHeight() * orig.get().getWidth()];
+
+                if (time + 10 * 10000000 < System.nanoTime()) {
+                    time = System.nanoTime();
+
+                    File folder = new File(Environment.getExternalStorageDirectory() + "/robot/imgs/");
+                    folder.mkdirs();
+                    String path = System.currentTimeMillis() + ".png";
+                    File imageFile = new File(folder, path);
+                    FileOutputStream file = new FileOutputStream(imageFile);
+                    orig.get().compress(Bitmap.CompressFormat.PNG, 100, file);
+                    ctx.log().i(TAG, "Saving a data picture: " + path);
+                }
+
+                orig.get().getPixels(pixels, 0, orig.get().getWidth(), 0, 0, orig.get().getWidth(), orig.get().getHeight());
+
+                int sum = 0;
+                for (int pixel : pixels) {
+                    sum += pixel;
+                }
+
+                int averageColor = sum / pixels.length;
+                telemetry().data(TAG, "Average red color: " + Color.red(averageColor));
+                telemetry().data(TAG, "Average blue color: " + Color.blue(averageColor));
+                return null;
+            } catch (NullPointerException ex) {
+                ctx.log().i(TAG, ex.getLocalizedMessage());
+                return null;
+            } catch (IOException e) {
+                ctx.log().e(TAG, e.getLocalizedMessage());
+                Throwables.propagate(e);
+            }
+
+            return null;
+        }
     }
 }

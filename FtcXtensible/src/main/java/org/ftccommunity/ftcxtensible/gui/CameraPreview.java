@@ -33,7 +33,6 @@ import com.google.common.annotations.Beta;
 
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
-import org.ftccommunity.ftcxtensible.sensors.camera.CameraPreviewCallback;
 import org.ftccommunity.ftcxtensible.sensors.camera.ExtensibleCameraManager;
 
 import java.io.IOException;
@@ -88,7 +87,7 @@ import java.io.IOException;
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
             mCamera.setPreviewDisplay(holder);
-            mCamera.setPreviewCallback(new CameraPreviewCallback(robotContext));
+            mCamera.setPreviewCallback(manager.getPreviewCallback());
 
             mCamera.enableShutterSound(false);
             Camera.Parameters parameters = mCamera.getParameters();

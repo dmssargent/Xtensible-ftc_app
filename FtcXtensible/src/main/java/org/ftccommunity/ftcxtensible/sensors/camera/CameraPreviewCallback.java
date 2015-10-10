@@ -13,18 +13,19 @@ import java.io.ByteArrayOutputStream;
 
 public class CameraPreviewCallback implements Camera.PreviewCallback {
     private static final String TAG = CameraPreviewCallback.class.getSimpleName();
-    private static final int DEFAULT_DELAY = 100;
+    private int delay = 100;
     private RobotContext context;
 
     private long timestamp;
 
-    public CameraPreviewCallback(RobotContext ctx) {
+    public CameraPreviewCallback(RobotContext ctx, int captureDelay) {
         context = ctx;
+        setDelay(captureDelay);
     }
 
     @Override
     public void onPreviewFrame(final byte[] data, Camera camera) {
-        if (timestamp + DEFAULT_DELAY * 1000 > System.nanoTime()) {
+        if (timestamp + getDelay() * 1000 > System.nanoTime()) {
             return;
         }
 
@@ -47,6 +48,14 @@ public class CameraPreviewCallback implements Camera.PreviewCallback {
                 Log.e(TAG, e.getLocalizedMessage(), e);
             }
         }
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public void setDelay(int milliseconds) {
+        this.delay = milliseconds;
     }
 }
 

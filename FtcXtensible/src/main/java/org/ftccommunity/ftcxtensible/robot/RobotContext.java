@@ -88,8 +88,8 @@ public class RobotContext {
         extensibleGamepad2 = new ExtensibleGamepad();
 
         asyncService = MoreExecutors.listeningDecorator(
-                Executors.newCachedThreadPool(MoreExecutors.platformThreadFactory()));
-        extensibleCameraManager = new ExtensibleCameraManager(this);
+                Executors.newCachedThreadPool());
+        extensibleCameraManager = new ExtensibleCameraManager(this, 100);
         logger = new RobotLogger(this);
 
         bindings = DataBinder.getInstance();

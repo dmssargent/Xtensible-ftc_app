@@ -27,7 +27,6 @@ import android.hardware.Camera;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
-import com.google.common.base.FinalizableSoftReference;
 import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
@@ -61,15 +60,15 @@ public class ExtensibleCameraManager {
     private Date prepTime;
     private RobotContext context;
 
-    private Camera.PreviewCallback previewCallback;
+    private CameraPreviewCallback previewCallback;
     private CameraImageCallback imageProcessingCallback;
 
-    public ExtensibleCameraManager(RobotContext ctx) {
+    public ExtensibleCameraManager(RobotContext ctx, int captureDelay) {
         context = ctx;
         imageQueue = EvictingQueue.create(5);
         latestTimestamp = new Date();
 
-        previewCallback = new CameraPreviewCallback(ctx);
+        previewCallback = new CameraPreviewCallback(ctx, captureDelay);
     }
 
     /**
@@ -145,26 +144,27 @@ public class ExtensibleCameraManager {
     }
 
     public void addImage(final Bitmap jpg) {
+        final SoftReference<Bitmap> softBitmap = new SoftReference<>(jpg);
         if (imageProcessingCallback != null) {
             context.submitAsyncTask(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Bitmap post = imageProcessingCallback.processImage(jpg);
+                        Bitmap post = imageProcessingCallback.processImage(softBitmap);
                         if (post != null) {
                             imageQueue.add(new SoftReference<>(post));
-                }
+                        }
                     } catch (Exception ex) {
                         Log.e("CAMERA_PROCESSING::", ex.getLocalizedMessage(), ex);
                     }
                 }
             });
         } else {
-            imageQueue.add(new SoftReference<>(jpg));
+            imageQueue.add(softBitmap);
         }
     }
 
-    public Camera.PreviewCallback getPreviewCallback() {
+    public CameraPreviewCallback getPreviewCallback() {
         return previewCallback;
     }
 
