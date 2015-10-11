@@ -16,8 +16,6 @@ import android.hardware.Camera;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 
-import com.google.common.base.Throwables;
-
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
@@ -51,6 +49,7 @@ public class CameraOpMode extends ExtensibleOpMode {
 
         CameraImageCallback cb = new MyCameraImageCallback(ctx);
         ctx.cameraManager().setImageProcessingCallback(cb);
+        ctx.cameraManager().getNextImage();
     }
 
     @Override
@@ -122,7 +121,6 @@ public class CameraOpMode extends ExtensibleOpMode {
                 return null;
             } catch (IOException e) {
                 ctx.log().e(TAG, e.getLocalizedMessage());
-                Throwables.propagate(e);
             }
 
             return null;

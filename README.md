@@ -1,8 +1,6 @@
 # Xtensible OpMode Library
-### Note that this is a development release code function and syntax is not guaranteed to be the
- same between versions and code quality may be below usual standards
-FTC Android Studio project to create FTC Robot Controller app.
-
+### Note that this is a development release code function and syntax is not guaranteed to be the same between commits
+#### Code quality may be below usual standards
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.
 The FTC Robot Controller app is designed to work in conjunction with the FTC Driver Station app.
 The FTC Driver Station app is available through Google Play.
@@ -10,12 +8,23 @@ The FTC Driver Station app is available through Google Play.
 To use this SDK, download/clone the entire project to your local computer.
 Use Android Studio to import the folder ("Import project (Eclipse ADT, Gradle, etc.)").
 
-## Xtensible OpMode
+# Xtensible OpMode
 This is the main "OpMode" class for this library. You can extend this class for use
 within the FTC SDK. It also bootstraps our library for use.
 
-#### Core syntactical changes:
-##### Getting references to robot hardware
+### Bugs:
+- Lack of unit testing
+- On a fatal error (I mean fatal, when I say it), the app logs the behavior and closes without user notification, the app should be automatically restarting
+- Approaching the DexFile method limit
+- Unnecessary 3rd-party stuff needs to be striped
+- Dashboard somewhat works, we are catching an IndexOutOfBounds for whatever reason
+- @Alpha annotated classes need to be stabilized
+- @NotDocumentedWell classes need to be documented
+- We are using lots of memory in the CV system, this needs to be optimized
+
+
+### Core syntactical changes:
+#### Getting references to robot hardware
 Old Way:
 ```java
 hardwareMap.dcMotor.get("motor_1");
@@ -24,17 +33,17 @@ New Way:
 ```java
 ctx.hardwareMap().getDcMotors().get("motor_1");
 ```
-##### Getting access to a gamepad's left joystick X
+#### Getting access to a gamepad's left joystick X
 Old Way:
 ```java
 gamepad1.left_joystick.X;
 ```
 New Way:
 ```java
-ctx.xGamepad1().getLeftJoystick().getX();
+gamepad1().leftJoystick().X();
 ```
 
-##### Logging
+#### Logging
 Old Way:
 ```java
 RobotLog.i("Hello World!");
@@ -44,7 +53,7 @@ New Way:
 ctx.log().i("Hi", "Hello World!");
 ```
 
-##### Networking
+#### Networking
 Old Way:
 There was never an old way.
 
@@ -53,6 +62,7 @@ New Way:
 ctx.enableNetworking().startNetworking();
 ```
 
+
 Modifying the server parameter:
 ```java
 ctx.enableNetworking();
@@ -60,6 +70,37 @@ ctx.enableNetworking();
 ctx.getServerSettings().setWebDirectory("/put/here/where/your/web/directory/is");
 ctx.startNetworking();
 ```
+
+### Camera (Alpha)
+Old Way:
+
+Not something easy.
+
+New Way:
+```java
+// What direction, relative to the screen, does the camera face?
+ctx.cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
+// Set up the capture
+ctx.cameraManager().prepareForCapture();
+// Set the delay for image capture
+ctx.cameraManager().getPreviewCallback().setDelay(20000);
+
+// Get the latest image
+ctx.cameraManager().getNextImage();
+
+// Register a post-processing callback
+CameraImageCallback cb = new MyCameraImageCallback(ctx);
+ctx.cameraManager().setImageProcessingCallback(cb);
+```
+
+### Controller Bindings
+#### Under development, for internal use (for now)
+
+Binds core values and objects present in a module for use in any other module without requiring
+a dependency on that module. This is for use when there is no other sane, readable, or maintable way
+to do something.
+
+
 ### Structure
  * FtcRobotController
      - doc - Documentation for the FTC SDK are included with this repository.
@@ -86,7 +127,11 @@ ctx.startNetworking();
    - Support for encoders with the Legacy Module is now working.
  * The hardware loop has been updated for better performance.
 
-#### Authors
+### Authors
 David Sargent, T. Eng, Jonathan Berling
-August 3, 2015
+
+### Credits
+hexafraction - Image Processing
+Swerve Robotics - Sensor Class, and Dashboard functionalities
+
 
