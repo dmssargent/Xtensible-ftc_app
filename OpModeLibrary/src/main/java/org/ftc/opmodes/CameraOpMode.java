@@ -30,7 +30,8 @@ import java.util.LinkedList;
 
 @Autonomous
 public class CameraOpMode extends ExtensibleOpMode {
-
+    int red = 0;
+    int blue = 0;
     @Override
     public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
         Bitmap image = ctx.cameraManager().getNextImage();
@@ -38,14 +39,14 @@ public class CameraOpMode extends ExtensibleOpMode {
             ctx.log().i(TAG, image.toString());
         }
 
-        telemetry().data(TAG, "hello");
+        telemetry().data(TAG, "hello red: " + red / 255 + "%");
     }
 
     @Override
     public void init(final RobotContext ctx, LinkedList<Object> out) throws Exception {
         ctx.cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
         ctx.cameraManager().prepareForCapture();
-        ctx.cameraManager().getPreviewCallback().setDelay(20000);
+        ctx.cameraManager().getPreviewCallback().setDelay(500);
 
         CameraImageCallback cb = new MyCameraImageCallback(ctx);
         ctx.cameraManager().setImageProcessingCallback(cb);
@@ -93,7 +94,7 @@ public class CameraOpMode extends ExtensibleOpMode {
             try {
                 int[] pixels = new int[orig.get().getHeight() * orig.get().getWidth()];
 
-                if (time + 10 * 10000000 < System.nanoTime()) {
+                if (time + 10 * 1E9 < System.nanoTime()) {
                     time = System.nanoTime();
 
                     File folder = new File(Environment.getExternalStorageDirectory() + "/robot/imgs/");
@@ -102,7 +103,7 @@ public class CameraOpMode extends ExtensibleOpMode {
                     File imageFile = new File(folder, path);
                     FileOutputStream file = new FileOutputStream(imageFile);
                     orig.get().compress(Bitmap.CompressFormat.PNG, 100, file);
-                    ctx.log().i(TAG, "Saving a data picture: " + path);
+                    ctx.log().i(TAG, "Saving updateGamepads data picture: " + path);
                 }
 
                 orig.get().getPixels(pixels, 0, orig.get().getWidth(), 0, 0, orig.get().getWidth(), orig.get().getHeight());
@@ -115,6 +116,8 @@ public class CameraOpMode extends ExtensibleOpMode {
                 int averageColor = sum / pixels.length;
                 telemetry().data(TAG, "Average red color: " + Color.red(averageColor));
                 telemetry().data(TAG, "Average blue color: " + Color.blue(averageColor));
+                red = Color.red(averageColor);
+                blue = Color.blue(averageColor);
                 return null;
             } catch (NullPointerException ex) {
                 ctx.log().i(TAG, ex.getLocalizedMessage());

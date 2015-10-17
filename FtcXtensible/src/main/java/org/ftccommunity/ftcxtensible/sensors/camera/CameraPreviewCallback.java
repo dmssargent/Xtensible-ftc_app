@@ -13,19 +13,20 @@ import java.io.ByteArrayOutputStream;
 
 public class CameraPreviewCallback implements Camera.PreviewCallback {
     private static final String TAG = CameraPreviewCallback.class.getSimpleName();
+    private final ByteArrayOutputStream outputStream;
     private int delay = 100;
     private RobotContext context;
-
     private long timestamp;
 
     public CameraPreviewCallback(RobotContext ctx, int captureDelay) {
         context = ctx;
         setDelay(captureDelay);
+        outputStream = new ByteArrayOutputStream();
     }
 
     @Override
     public void onPreviewFrame(final byte[] data, Camera camera) {
-        if (timestamp + getDelay() * 1000 > System.nanoTime()) {
+        if (timestamp + getDelay() * 1E6 > System.nanoTime()) {
             return;
         }
 
@@ -35,18 +36,20 @@ public class CameraPreviewCallback implements Camera.PreviewCallback {
             YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
                     previewSize.width,
                     parameters.getPreviewSize().height, null);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            image.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 100, os);
-
-            byte[] jpeg = os.toByteArray();
+            byte[] jpeg;
+            synchronized (outputStream) {
+                image.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 100, outputStream);
+                jpeg = outputStream.toByteArray();
+                outputStream.reset();
+            }
             try {
-                os.close();
                 Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
                 context.cameraManager().addImage(bitmap);
                 timestamp = System.nanoTime();
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
             }
+
         }
     }
 

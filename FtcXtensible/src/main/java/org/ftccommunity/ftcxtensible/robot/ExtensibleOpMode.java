@@ -21,11 +21,13 @@
 
 package org.ftccommunity.ftcxtensible.robot;
 
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.util.concurrent.UncaughtExceptionHandlers;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -37,6 +39,7 @@ import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+import org.ftccommunity.ftcxtensible.robot.handlers.RobotUncaughtExceptionHandler;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -107,36 +110,20 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
+
+        // Build an exception handler
         robotContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Thread.currentThread().setUncaughtExceptionHandler(UncaughtExceptionHandlers.systemExit());
-                /*Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                    @Override
-                    public void uncaughtException(Thread thread, Throwable ex) {
-                        try {
-                            Log.wtf("CORE_CONTROLLER::", Throwables.getRootCause(ex));
-                            Log.i("CORE_CONTROLLER::", "Exception Details:", ex);
-                            *//*Toast.makeText(robotContext.getAppContext(),
-                                    "An almost fatal exception occurred." + ex.getLocalizedMessage(),
-                                    Toast.LENGTH_LONG).show();*//*
-                            
-                            Context context = RobotContext.buildApplicationContext();
-                            Intent restartIntent = context.getPackageManager()
-                                    .getLaunchIntentForPackage(context.getPackageName());
-                            restartIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            context.startActivity(restartIntent);
-
-                            //System.exit(2);
-                        } catch (Exception e) {
-                            Log.wtf("CORE_CONTROLLER::", e);
-                        }
-                    }
-                });*/
+                //Thread.currentThread().setUncaughtExceptionHandler(UncaughtExceptionHandlers.systemExit());
+                Activity controller = (Activity) robotContext.getAppContext();
+                @SuppressWarnings("ResourceType") PendingIntent intent = PendingIntent.getActivity(controller.getBaseContext(), 0,
+                        new Intent(controller.getIntent()), controller.getIntent().getFlags());
+                Thread.currentThread().setUncaughtExceptionHandler(new RobotUncaughtExceptionHandler(robotContext.getAppContext(), intent));
             }
         });
-        LinkedList<Object> list = new LinkedList<>();
 
+        LinkedList<Object> list = new LinkedList<>();
         try {
             init(robotContext, list);
         } catch (InterruptedException ex) {
@@ -193,8 +180,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         long startTime = System.nanoTime();
 
         // Update the gamepads
-        gamepad1().updateGamepad(robotContext, gamepad1);
-        gamepad2().updateGamepad(robotContext, gamepad2);
+        gamepad1().updateGamepad(robotContext, super.gamepad1);
+        gamepad2().updateGamepad(robotContext, super.gamepad2);
 
         // Pre loop init
         robotContext.status().setMainState(RobotStatus.MainStates.EXEC);

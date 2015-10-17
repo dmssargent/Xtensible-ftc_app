@@ -24,6 +24,7 @@ package org.ftccommunity.ftcxtensible.sensors.camera;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
@@ -127,8 +128,13 @@ public class ExtensibleCameraManager {
         context.runOnUiThread(new StopCamera(context));
     }
 
+    @Nullable
     public Bitmap getNextImage() {
-        return imageQueue.poll().get();
+        try {
+            return imageQueue.poll().get();
+        } catch (NullPointerException ex) {
+            return null;
+        }
     }
 
     public void prepareForCapture() {
@@ -178,7 +184,16 @@ public class ExtensibleCameraManager {
         @Override
         public void run() {
             view = new CameraPreview(ctx);
-            ((RelativeLayout) ctx.robotControllerView()).addView(view);
+
+            RelativeLayout relativeLayout = new RelativeLayout(context.getAppContext());
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(view.getLayoutParams());
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            layoutParams.width /= 2;
+            layoutParams.height /= 2;
+
+            relativeLayout.addView(view, layoutParams);
+            ((RelativeLayout) ctx.robotControllerView()).addView(relativeLayout);
 
             finishPrep();
         }
@@ -202,5 +217,4 @@ public class ExtensibleCameraManager {
             }
         }
     }
-
 }

@@ -184,17 +184,15 @@ public class ExtensibleTelemetry {
 
                 try {
                     LinkedList<Map.Entry<String, String>> entriesToSend = new LinkedList<>(entries.entrySet());
-                    for (; numberOfElementsAdded <= Math.min(entriesToSend.size(), dataPointsToSend - numberOfElements);
+                    for (; numberOfElementsAdded < Math.min(entriesToSend.size(), dataPointsToSend - numberOfElements);
                          numberOfElementsAdded++) {
-                        Map.Entry<String, String> entry = entriesToSend.get(numberOfElementsAdded - 1 == -1 ? 0 : numberOfElementsAdded - 1);
+                        Map.Entry<String, String> entry = entriesToSend.get(numberOfElementsAdded - 1);
                         cache.put(entry.getKey(), entry.getValue());
                     }
                 } catch (IndexOutOfBoundsException ex) {
                     Log.d(TAG, "An index is out of bounds.", ex);
                 }
             }
-
-
         }
     }
 

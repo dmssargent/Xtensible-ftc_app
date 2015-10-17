@@ -275,7 +275,6 @@ public class ExtensibleHardwareMap extends HardwareMap {
         return ImmutableMap.copyOf(voltageSensors);
     }
 
-
     private class DeviceMap<K, T> extends HashMap<String, T> {
         public DeviceMap(DeviceMapping<T> deviceMapping) {
             super(deviceMapping.size());
