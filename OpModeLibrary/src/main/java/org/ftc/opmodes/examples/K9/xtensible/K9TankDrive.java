@@ -59,12 +59,12 @@ public class K9TankDrive extends ExtensibleOpMode {
 		 *    "servo_1" controls the arm joint of the manipulator.
 		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
-        motorRight = hardwareMap().getDcMotors().get("motor_2");
-        motorLeft = hardwareMap().getDcMotors().get("motor_1");
+        motorRight = hardwareMap().dcMotors().get("motor_2");
+        motorLeft = hardwareMap().dcMotors().get("motor_1");
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        arm = hardwareMap().getServos().get("servo_1");
-        claw = hardwareMap().getServos().get("servo_6");
+        arm = hardwareMap().servos().get("servo_1");
+        claw = hardwareMap().servos().get("servo_6");
 
         gamepad1().setupJoystickScalers(new JoystickScaler() { // Left Joystick
             @Override

@@ -75,7 +75,7 @@ public class RobotHttpServerHandler extends ChannelInboundHandlerAdapter {
         if (ctx == null) {
             throw new NullPointerException();
         }
-        serverSettings = ctx.getServerSettings();
+        serverSettings = ctx.serverSettings();
         context = ctx;
         cache = new HashMap<>();
     }
@@ -108,13 +108,13 @@ public class RobotHttpServerHandler extends ChannelInboundHandlerAdapter {
             }
 
             HttpResponseStatus responseStatus = OK;
-            String uri = (req.getUri().equals("/") ? context.getServerSettings().getIndex() : req.getUri());
-            if (uri.equals(context.getServerSettings().getHardwareMapJsonPage())) {
+            String uri = (req.getUri().equals("/") ? context.serverSettings().getIndex() : req.getUri());
+            if (uri.equals(context.serverSettings().getHardwareMapJsonPage())) {
                 GsonBuilder gsonBuilder = new GsonBuilder().enableComplexMapKeySerialization();
                 Gson gson = gsonBuilder.create();
                 HardwareMap hardwareMap = context.hardwareMap();
                 page = gson.toJson(ImmutableSet.copyOf(hardwareMap.dcMotor));
-            } else if (uri.equals(context.getServerSettings().getLogPage())) {
+            } else if (uri.equals(context.serverSettings().getLogPage())) {
                 page = context.status().getLog();
             } else {
                 if (cache.containsKey(uri)) {

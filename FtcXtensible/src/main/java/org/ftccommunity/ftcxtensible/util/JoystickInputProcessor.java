@@ -51,12 +51,12 @@ public class JoystickInputProcessor {
     }
 
     public void loadFromSavedState() {
-        checkNotNull(context.getAppContext());
+        checkNotNull(context.appContext());
         checkState(questions != null && questions.size() > 0, "Register at least one question, first");
 
         FileInputStream inputStream;
         try {
-            inputStream = context.getAppContext().openFileInput("joystickInputState.json");
+            inputStream = context.appContext().openFileInput("joystickInputState.json");
         } catch (FileNotFoundException e) {
             return;
         }

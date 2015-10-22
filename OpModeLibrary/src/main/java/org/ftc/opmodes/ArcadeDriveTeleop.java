@@ -49,10 +49,10 @@ public class ArcadeDriveTeleop extends ExtensibleOpMode {
 
     @Override
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        driveForwardLeft = ctx.hardwareMap().getDcMotors().get("red");
-        driveForwardRight = ctx.hardwareMap().getDcMotors().get("blue");
-        driveRearLeft = ctx.hardwareMap().getDcMotors().get("green");
-        driveRearRight = ctx.hardwareMap().getDcMotors().get("yellow");
+        driveForwardLeft = ctx.hardwareMap().dcMotors().get("red");
+        driveForwardRight = ctx.hardwareMap().dcMotors().get("blue");
+        driveRearLeft = ctx.hardwareMap().dcMotors().get("green");
+        driveRearRight = ctx.hardwareMap().dcMotors().get("yellow");
 
         ctx.gamepad1().setupJoystickScalers(new JoystickScaler() {
             @Override

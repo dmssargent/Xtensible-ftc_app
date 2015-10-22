@@ -55,7 +55,7 @@ public class CameraOpMode extends ExtensibleOpMode {
 
     @Override
     public void init_loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-
+        hardwareMap().get("test");
     }
 
     @Override

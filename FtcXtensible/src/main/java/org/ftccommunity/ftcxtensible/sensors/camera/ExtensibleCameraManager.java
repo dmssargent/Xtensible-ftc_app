@@ -185,7 +185,7 @@ public class ExtensibleCameraManager {
         public void run() {
             view = new CameraPreview(ctx);
 
-            RelativeLayout relativeLayout = new RelativeLayout(context.getAppContext());
+            RelativeLayout relativeLayout = new RelativeLayout(context.appContext());
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(view.getLayoutParams());
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);

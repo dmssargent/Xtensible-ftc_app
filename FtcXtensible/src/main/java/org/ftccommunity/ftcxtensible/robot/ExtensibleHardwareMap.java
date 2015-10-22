@@ -22,6 +22,7 @@
 package org.ftccommunity.ftcxtensible.robot;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogOutput;
@@ -31,6 +32,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
@@ -47,6 +49,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -57,9 +60,9 @@ import java.util.Set;
  * @since 0.1
  */
 @Alpha
-public class ExtensibleHardwareMap extends HardwareMap {
+public class ExtensibleHardwareMap {
     // Take care of the inherited variables, and restrict access
-    private final DeviceMapping<DcMotorController> dcMotorController;
+   /* private final DeviceMapping<DcMotorController> dcMotorController;
     private final DeviceMapping<DcMotor> dcMotor;
     private final DeviceMapping<ServoController> servoController;
     private final DeviceMapping<Servo> servo;
@@ -78,7 +81,9 @@ public class ExtensibleHardwareMap extends HardwareMap {
     private final DeviceMapping<IrSeekerSensor> irSeekerSensor;
     private final DeviceMapping<LightSensor> lightSensor;
     private final DeviceMapping<UltrasonicSensor> ultrasonicSensor;
-    private final DeviceMapping<VoltageSensor> voltageSensor;
+    private final DeviceMapping<VoltageSensor> voltageSensor;*/
+    private HardwareMap basicMap;
+    private LinkedHashMultimap<String, HardwareDevice> fullMap;
 
     // Conversions to our DeviceMap
     private DeviceMap<String, DcMotorController> dcMotorControllers;
@@ -109,7 +114,7 @@ public class ExtensibleHardwareMap extends HardwareMap {
      * {@link ExtensibleHardwareMap#createDeviceMaps()}
      */
     private ExtensibleHardwareMap() {
-        dcMotorController = super.dcMotorController;
+        /*dcMotorController = super.dcMotorController;
         dcMotor = super.dcMotor;
         servoController = super.servoController;
         servo = super.servo;
@@ -128,7 +133,7 @@ public class ExtensibleHardwareMap extends HardwareMap {
         irSeekerSensor = super.irSeekerSensor;
         lightSensor = super.lightSensor;
         ultrasonicSensor = super.ultrasonicSensor;
-        voltageSensor = super.voltageSensor;
+        voltageSensor = super.voltageSensor;*/
 
         //cacheMap = LinkedHashMultimap.create();
 
@@ -142,8 +147,9 @@ public class ExtensibleHardwareMap extends HardwareMap {
      */
     public ExtensibleHardwareMap(HardwareMap hwMap) {
         this();
+        basicMap = hwMap;
 
-        super.dcMotorController = hwMap.dcMotorController;
+        /*super.dcMotorController = hwMap.dcMotorController;
         super.dcMotor = hwMap.dcMotor;
         super.servoController = hwMap.servoController;
         super.servo = hwMap.servo;
@@ -162,126 +168,141 @@ public class ExtensibleHardwareMap extends HardwareMap {
         super.irSeekerSensor = hwMap.irSeekerSensor;
         super.lightSensor = hwMap.lightSensor;
         super.ultrasonicSensor = hwMap.ultrasonicSensor;
-        super.voltageSensor = hwMap.voltageSensor;
+        super.voltageSensor = hwMap.voltageSensor;*/
 
         createDeviceMaps();
     }
 
     /**
-     * Move the propriety {@link DeviceMapping} to our
+     * Move the propriety {@link HardwareMap.DeviceMapping} to our
      * {@link DeviceMap} for our
      * internal use
      */
     private void createDeviceMaps() {
-        dcMotorControllers = new DeviceMap<>(dcMotorController);
-        dcMotors = new DeviceMap<>(dcMotor);
-        servoControllers = new DeviceMap<>(servoController);
-        servos = new DeviceMap<>(servo);
-        legacyModules = new DeviceMap<>(legacyModule);
-        deviceInterfaceModules = new DeviceMap<>(deviceInterfaceModule);
-        analogInputs = new DeviceMap<>(analogInput);
-        digitalChannels = new DeviceMap<>(digitalChannel);
-        opticalDistanceSensors = new DeviceMap<>(opticalDistanceSensor);
-        touchSensors = new DeviceMap<>(touchSensor);
-        pwmOutputs = new DeviceMap<>(pwmOutput);
-        i2cDevices = new DeviceMap<>(i2cDevice);
-        analogOutputs = new DeviceMap<>(analogOutput);
-        accelerationSensors = new DeviceMap<>(accelerationSensor);
-        compassSensors = new DeviceMap<>(compassSensor);
-        gyroSensors = new DeviceMap<>(gyroSensor);
-        irSeekerSensors = new DeviceMap<>(irSeekerSensor);
-        lightSensors = new DeviceMap<>(lightSensor);
-        ultrasonicSensors = new DeviceMap<>(ultrasonicSensor);
-        voltageSensors = new DeviceMap<>(voltageSensor);
+        dcMotorControllers = new DeviceMap<>(basicMap.dcMotorController);
+        dcMotors = new DeviceMap<>(basicMap.dcMotor);
+        servoControllers = new DeviceMap<>(basicMap.servoController);
+        servos = new DeviceMap<>(basicMap.servo);
+        legacyModules = new DeviceMap<>(basicMap.legacyModule);
+        deviceInterfaceModules = new DeviceMap<>(basicMap.deviceInterfaceModule);
+        analogInputs = new DeviceMap<>(basicMap.analogInput);
+        digitalChannels = new DeviceMap<>(basicMap.digitalChannel);
+        opticalDistanceSensors = new DeviceMap<>(basicMap.opticalDistanceSensor);
+        touchSensors = new DeviceMap<>(basicMap.touchSensor);
+        pwmOutputs = new DeviceMap<>(basicMap.pwmOutput);
+        i2cDevices = new DeviceMap<>(basicMap.i2cDevice);
+        analogOutputs = new DeviceMap<>(basicMap.analogOutput);
+        accelerationSensors = new DeviceMap<>(basicMap.accelerationSensor);
+        compassSensors = new DeviceMap<>(basicMap.compassSensor);
+        gyroSensors = new DeviceMap<>(basicMap.gyroSensor);
+        irSeekerSensors = new DeviceMap<>(basicMap.irSeekerSensor);
+        lightSensors = new DeviceMap<>(basicMap.lightSensor);
+        ultrasonicSensors = new DeviceMap<>(basicMap.ultrasonicSensor);
+        voltageSensors = new DeviceMap<>(basicMap.voltageSensor);
+
+        fullMap = LinkedHashMultimap.create();
+        for (Map.Entry device : dcMotorControllers.entrySet()) {
+            fullMap.entries().add(device);
+        }
     }
 
-    public ImmutableMap<String, DcMotorController> getDcMotorControllers() {
+    public HardwareDevice get(String name) {
+        if (dcMotorControllers.containsKey(name)) {
+            return dcMotorControllers.get(name);
+        } else if (dcMotors.containsKey(name)) {
+            return dcMotors.get(name);
+        }
+
+        return null;
+    }
+
+    public ImmutableMap<String, DcMotorController> dcMotorControllers() {
         return ImmutableMap.copyOf(dcMotorControllers);
     }
 
-    public ImmutableMap<String, DcMotor> getDcMotors() {
+    public ImmutableMap<String, DcMotor> dcMotors() {
         return ImmutableMap.copyOf(dcMotors);
     }
 
-    public ImmutableMap<String, ServoController> getServoControllers() {
+    public ImmutableMap<String, ServoController> servoControllers() {
         return ImmutableMap.copyOf(servoControllers);
     }
 
-    public ImmutableMap<String, Servo> getServos() {
+    public ImmutableMap<String, Servo> servos() {
         return ImmutableMap.copyOf(servos);
     }
 
-    public ImmutableMap<String, LegacyModule> getLegacyModules() {
+    public ImmutableMap<String, LegacyModule> legacyModules() {
         return ImmutableMap.copyOf(legacyModules);
     }
 
-    public ImmutableMap<String, DeviceInterfaceModule> getDeviceInterfaceModules() {
+    public ImmutableMap<String, DeviceInterfaceModule> deviceInterfaceModules() {
         return ImmutableMap.copyOf(deviceInterfaceModules);
     }
 
-    public ImmutableMap<String, AnalogInput> getAnalogInputs() {
+    public ImmutableMap<String, AnalogInput> analogInputs() {
         return ImmutableMap.copyOf(analogInputs);
     }
 
-    public ImmutableMap<String, DigitalChannel> getDigitalChannels() {
+    public ImmutableMap<String, DigitalChannel> digitalChannels() {
         return ImmutableMap.copyOf(digitalChannels);
     }
 
-    public ImmutableMap<String, OpticalDistanceSensor> getOpticalDistanceSensors() {
+    public ImmutableMap<String, OpticalDistanceSensor> opticalDistanceSensors() {
         return ImmutableMap.copyOf(opticalDistanceSensors);
     }
 
-    public ImmutableMap<String, TouchSensor> getTouchSensors() {
+    public ImmutableMap<String, TouchSensor> touchSensors() {
         return ImmutableMap.copyOf(touchSensors);
     }
 
-    public ImmutableMap<String, PWMOutput> getPwmOutputs() {
+    public ImmutableMap<String, PWMOutput> pwmOutputs() {
         return ImmutableMap.copyOf(pwmOutputs);
     }
 
-    public ImmutableMap<String, I2cDevice> getI2cDevices() {
+    public ImmutableMap<String, I2cDevice> i2cDevices() {
         return ImmutableMap.copyOf(i2cDevices);
     }
 
-    public ImmutableMap<String, AnalogOutput> getAnalogOutputs() {
+    public ImmutableMap<String, AnalogOutput> analogOutputs() {
         return ImmutableMap.copyOf(analogOutputs);
     }
 
-    public ImmutableMap<String, AccelerationSensor> getAccelerationSensors() {
+    public ImmutableMap<String, AccelerationSensor> accelerationSensors() {
         return ImmutableMap.copyOf(accelerationSensors);
     }
 
-    public ImmutableMap<String, CompassSensor> getCompassSensors() {
+    public ImmutableMap<String, CompassSensor> compassSensors() {
         return ImmutableMap.copyOf(compassSensors);
     }
 
-    public ImmutableMap<String, GyroSensor> getGyroSensors() {
+    public ImmutableMap<String, GyroSensor> gyroSensors() {
         return ImmutableMap.copyOf(gyroSensors);
     }
 
-    public ImmutableMap<String, IrSeekerSensor> getIrSeekerSensors() {
+    public ImmutableMap<String, IrSeekerSensor> irSeekerSensors() {
         return ImmutableMap.copyOf(irSeekerSensors);
     }
 
-    public ImmutableMap<String, LightSensor> getLightSensors() {
+    public ImmutableMap<String, LightSensor> lightSensors() {
         return ImmutableMap.copyOf(lightSensors);
     }
 
-    public ImmutableMap<String, UltrasonicSensor> getUltrasonicSensors() {
+    public ImmutableMap<String, UltrasonicSensor> ultrasonicSensors() {
         return ImmutableMap.copyOf(ultrasonicSensors);
     }
 
-    public ImmutableMap<String, VoltageSensor> getVoltageSensors() {
+    public ImmutableMap<String, VoltageSensor> voltageSensors() {
         return ImmutableMap.copyOf(voltageSensors);
     }
 
     private class DeviceMap<K, T> extends HashMap<String, T> {
-        public DeviceMap(DeviceMapping<T> deviceMapping) {
+        public DeviceMap(HardwareMap.DeviceMapping<T> deviceMapping) {
             super(deviceMapping.size());
             buildFromDeviceMapping(deviceMapping);
         }
 
-        public DeviceMap<K, T> buildFromDeviceMapping(DeviceMapping<T> deviceMapping) {
+        public DeviceMap<K, T> buildFromDeviceMapping(HardwareMap.DeviceMapping<T> deviceMapping) {
             Set<Entry<String, T>> entries = deviceMapping.entrySet();
             for (Entry<String, T> device : entries) {
                 super.put(device.getKey(), device.getValue());
@@ -289,5 +310,4 @@ public class ExtensibleHardwareMap extends HardwareMap {
             return this;
         }
     }
-
 }

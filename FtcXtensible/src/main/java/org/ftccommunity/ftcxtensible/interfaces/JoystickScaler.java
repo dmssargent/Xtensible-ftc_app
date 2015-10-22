@@ -24,7 +24,6 @@ package org.ftccommunity.ftcxtensible.interfaces;
 
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
-import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 @NotDocumentedWell
 public interface JoystickScaler {

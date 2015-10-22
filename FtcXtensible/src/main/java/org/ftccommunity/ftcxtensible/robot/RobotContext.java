@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
 
 import org.ftccommunity.bindings.DataBinder;
+import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.sensors.camera.ExtensibleCameraManager;
@@ -52,7 +53,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 @Beta
 @NotDocumentedWell
-public class RobotContext {
+public class RobotContext implements AbstractRobotContext {
     private ExtensibleHardwareMap hardwareMap;
     private Context appContext;
 
@@ -132,6 +133,7 @@ public class RobotContext {
         }
     }
 
+    @Override
     public RobotContext enableNetworking() {
         if (networkedOpMode == null) {
             networkedOpMode = new NetworkedOpMode(this);
@@ -141,6 +143,7 @@ public class RobotContext {
         return this;
     }
 
+    @Override
     public RobotContext disableNetworking() {
         if (!networkingEnabled || networkedOpMode == null) {
             throw new IllegalStateException("Networking is already disabled!");
@@ -153,6 +156,7 @@ public class RobotContext {
         return this;
     }
 
+    @Override
     public RobotContext startNetworking() {
         if (networkingEnabled && networkedOpMode == null) {
             throw new IllegalStateException("Networking is disabled!");
@@ -162,6 +166,7 @@ public class RobotContext {
         return this;
     }
 
+    @Override
     public RobotContext stopNetworking() {
         if (networkingEnabled && networkedOpMode == null) {
             throw new IllegalStateException("Networking is disabled!");
@@ -176,6 +181,7 @@ public class RobotContext {
      *
      * @return the <code>ExtensibleHardwareMap</code> currently in use
      */
+    @Override
     public ExtensibleHardwareMap hardwareMap() {
         return hardwareMap;
     }
@@ -186,6 +192,7 @@ public class RobotContext {
      * @param context a non-null activity context
      * @throws IllegalStateException, IllegalArgumentException
      */
+    @Override
     public void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException {
         if (context instanceof Activity) {
             /*if (appContext != null) {
@@ -198,11 +205,12 @@ public class RobotContext {
         }
     }
 
+    @Override
     public void prepare(Context ctx) {
         checkArgument(ctx instanceof Activity, "Invalid context; it must be of an activity context type");
         bindAppContext(ctx);
 
-        layout = ((Activity) getAppContext()).findViewById(controllerBindings().getIntegers().get("ftcview"));
+        layout = ((Activity) appContext()).findViewById(controllerBindings().getIntegers().get("ftcview"));
         if (robotControllerView() == null) {
             Log.e("ROBOT_CONTEXT::", "Could not bind to the current for robotics");
         }
@@ -213,7 +221,8 @@ public class RobotContext {
      *
      * @return the Android Context
      */
-    public Context getAppContext() {
+    @Override
+    public Context appContext() {
         return appContext;
     }
 
@@ -223,6 +232,7 @@ public class RobotContext {
      * @return the first gamepad
      * @deprecated Please use the gamepad1 instead
      */
+    @Override
     @Deprecated
     public Gamepad legacyGamepad1() {
         return gamepad1;
@@ -234,6 +244,7 @@ public class RobotContext {
      * @return the second gamepad
      * @deprecated Please use the gamepad2 instead
      */
+    @Override
     @Deprecated
     public Gamepad legacyGamepad2() {
         return gamepad2;
@@ -244,7 +255,8 @@ public class RobotContext {
      *
      * @return <code>ServerSettings</code>
      */
-    public ServerSettings getServerSettings() {
+    @Override
+    public ServerSettings serverSettings() {
         return serverSettings;
     }
 
@@ -253,6 +265,7 @@ public class RobotContext {
      *
      * @return the current {@link RobotLogger} to use
      */
+    @Override
     public RobotLogger log() {
         return logger;
     }
@@ -262,6 +275,7 @@ public class RobotContext {
      *
      * @param runnable Runnable to run at some time
      */
+    @Override
     public void submitAsyncTask(Runnable runnable) {
         if (runnable != null) {
             asyncService.execute(runnable);
@@ -275,6 +289,7 @@ public class RobotContext {
      *
      * @param runnable Runnable to run on the UI Thread.
      */
+    @Override
     public void runOnUiThread(Runnable runnable) {
         if (runnable == null) {
             throw new NullPointerException();
@@ -288,6 +303,7 @@ public class RobotContext {
      *
      * @return the current status of the robot
      */
+    @Override
     public RobotStatus status() {
         return status;
     }
@@ -297,6 +313,7 @@ public class RobotContext {
      *
      * @param datas a collection of type <code>InterfaceHttpData</code> to be added
      */
+    @Override
     public void addPostData(Collection<InterfaceHttpData> datas) {
         postedData.addAll(datas);
     }
@@ -306,6 +323,7 @@ public class RobotContext {
      *
      * @return an <code>ImmutableList</code> that is a copy of the data received via networking
      */
+    @Override
     public ImmutableList<InterfaceHttpData> getPostedData() {
         return ImmutableList.copyOf(postedData);
     }
@@ -315,6 +333,7 @@ public class RobotContext {
      *
      * @return the telemetry as provide by the FTC SDK
      */
+    @Override
     public ExtensibleTelemetry telemetry() {
         return extensibleTelemetry;
     }
@@ -324,6 +343,7 @@ public class RobotContext {
      *
      * @return the first Gamepad (gamepad1) cast to an ExtensibleGamepad
      */
+    @Override
     public ExtensibleGamepad gamepad1() {
         return extensibleGamepad1;
     }
@@ -333,14 +353,17 @@ public class RobotContext {
      *
      * @return the second gamepad (gampad2) cast to an ExtensibleGamepad
      */
+    @Override
     public ExtensibleGamepad gamepad2() {
         return extensibleGamepad2;
     }
 
+    @Override
     public ExtensibleCameraManager cameraManager() {
         return extensibleCameraManager;
     }
 
+    @Override
     public void release() {
         if (extensibleCameraManager != null) {
             extensibleCameraManager.stop();
@@ -370,6 +393,7 @@ public class RobotContext {
      *
      * @return the robot controller data binding
      */
+    @Override
     @NotNull
     public DataBinder controllerBindings() {
         return bindings;
@@ -380,6 +404,7 @@ public class RobotContext {
      *
      * @return a View representing the real estate that Qualcomm has set aside
      */
+    @Override
     @NotNull
     public View robotControllerView() {
         return layout;

@@ -56,29 +56,29 @@ public class ImmutableHardwareMap {
 
     public ImmutableHardwareMap(ExtensibleHardwareMap hardwareMap) {
         deviceMap = new HashMap<>();
-        deviceMap.put(DcMotorController.class.getSimpleName(), hardwareMap.getDcMotorControllers());
-        deviceMap.put(DcMotor.class.getSimpleName(), hardwareMap.getDcMotors());
-        deviceMap.put(ServoController.class.getSimpleName(), hardwareMap.getServoControllers());
-        deviceMap.put(Servo.class.getSimpleName(), hardwareMap.getServos());
-        deviceMap.put(LegacyModule.class.getSimpleName(), hardwareMap.getLegacyModules());
+        deviceMap.put(DcMotorController.class.getSimpleName(), hardwareMap.dcMotorControllers());
+        deviceMap.put(DcMotor.class.getSimpleName(), hardwareMap.dcMotors());
+        deviceMap.put(ServoController.class.getSimpleName(), hardwareMap.servoControllers());
+        deviceMap.put(Servo.class.getSimpleName(), hardwareMap.servos());
+        deviceMap.put(LegacyModule.class.getSimpleName(), hardwareMap.legacyModules());
         deviceMap.put(DeviceInterfaceModule.class.getSimpleName(),
-                hardwareMap.getDeviceInterfaceModules());
+                hardwareMap.deviceInterfaceModules());
 
-        deviceMap.put(AnalogInput.class.getSimpleName(), hardwareMap.getAnalogInputs());
-        deviceMap.put(DigitalChannel.class.getSimpleName(), hardwareMap.getDigitalChannels());
-        deviceMap.put(OpticalDistanceSensor.class.getSimpleName(), hardwareMap.getOpticalDistanceSensors());
-        deviceMap.put(TouchSensor.class.getSimpleName(), hardwareMap.getTouchSensors());
-        deviceMap.put(PWMOutput.class.getSimpleName(), hardwareMap.getPwmOutputs());
-        deviceMap.put(I2cDevice.class.getSimpleName(), hardwareMap.getI2cDevices());
-        deviceMap.put(AnalogOutput.class.getSimpleName(), hardwareMap.getAnalogOutputs());
-        deviceMap.put(AnalogOutput.class.getSimpleName(), hardwareMap.getAnalogInputs());
-        deviceMap.put(AccelerationSensor.class.getSimpleName(), hardwareMap.getAccelerationSensors());
-        deviceMap.put(CompassSensor.class.getSimpleName(), hardwareMap.getCompassSensors());
-        deviceMap.put(GyroSensor.class.getSimpleName(), hardwareMap.getGyroSensors());
-        deviceMap.put(IrSeekerSensor.class.getSimpleName(), hardwareMap.getIrSeekerSensors());
-        deviceMap.put(LightSensor.class.getSimpleName(), hardwareMap.getLightSensors());
-        deviceMap.put(UltrasonicSensor.class.getSimpleName(), hardwareMap.getUltrasonicSensors());
-        deviceMap.put(VoltageSensor.class.getSimpleName(), hardwareMap.getVoltageSensors());
+        deviceMap.put(AnalogInput.class.getSimpleName(), hardwareMap.analogInputs());
+        deviceMap.put(DigitalChannel.class.getSimpleName(), hardwareMap.digitalChannels());
+        deviceMap.put(OpticalDistanceSensor.class.getSimpleName(), hardwareMap.opticalDistanceSensors());
+        deviceMap.put(TouchSensor.class.getSimpleName(), hardwareMap.touchSensors());
+        deviceMap.put(PWMOutput.class.getSimpleName(), hardwareMap.pwmOutputs());
+        deviceMap.put(I2cDevice.class.getSimpleName(), hardwareMap.i2cDevices());
+        deviceMap.put(AnalogOutput.class.getSimpleName(), hardwareMap.analogOutputs());
+        deviceMap.put(AnalogOutput.class.getSimpleName(), hardwareMap.analogInputs());
+        deviceMap.put(AccelerationSensor.class.getSimpleName(), hardwareMap.accelerationSensors());
+        deviceMap.put(CompassSensor.class.getSimpleName(), hardwareMap.compassSensors());
+        deviceMap.put(GyroSensor.class.getSimpleName(), hardwareMap.gyroSensors());
+        deviceMap.put(IrSeekerSensor.class.getSimpleName(), hardwareMap.irSeekerSensors());
+        deviceMap.put(LightSensor.class.getSimpleName(), hardwareMap.lightSensors());
+        deviceMap.put(UltrasonicSensor.class.getSimpleName(), hardwareMap.ultrasonicSensors());
+        deviceMap.put(VoltageSensor.class.getSimpleName(), hardwareMap.voltageSensors());
     }
 
     public HashMap<String, ImmutableMap> getUnderlyingMap() {
