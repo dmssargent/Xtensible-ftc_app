@@ -31,7 +31,7 @@ hardwareMap.dcMotor.get("motor_1");
 ```
 New Way:
 ```java
-ctx.hardwareMap().getDcMotors().get("motor_1");
+hardwareMap().dcMotors().get("motor_1");
 ```
 #### Getting access to a gamepad's left joystick X
 Old Way:
@@ -50,7 +50,7 @@ RobotLog.i("Hello World!");
 ```
 New Way:
 ```java
-ctx.log().i("Hi", "Hello World!");
+log().i("Hi", "Hello World!");
 ```
 
 #### Networking
@@ -59,16 +59,16 @@ There was never an old way.
 
 New Way:
 ```java
-ctx.enableNetworking().startNetworking();
+enableNetworking().startNetworking();
 ```
 
 
 Modifying the server parameter:
 ```java
-ctx.enableNetworking();
+enableNetworking();
 // The default web directory is "/sdcard/FIRST/web"
-ctx.getServerSettings().setWebDirectory("/put/here/where/your/web/directory/is");
-ctx.startNetworking();
+getServerSettings().setWebDirectory("/put/here/where/your/web/directory/is");
+startNetworking();
 ```
 
 ### Camera (Alpha)
@@ -79,18 +79,18 @@ Not something easy.
 New Way:
 ```java
 // What direction, relative to the screen, does the camera face?
-ctx.cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
+cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
 // Set up the capture
-ctx.cameraManager().prepareForCapture();
+cameraManager().prepareForCapture();
 // Set the delay for image capture
-ctx.cameraManager().getPreviewCallback().setDelay(20000);
+cameraManager().getPreviewCallback().setDelay(20000);
 
 // Get the latest image
-ctx.cameraManager().getNextImage();
+cameraManager().getNextImage();
 
 // Register a post-processing callback
 CameraImageCallback cb = new MyCameraImageCallback(ctx);
-ctx.cameraManager().setImageProcessingCallback(cb);
+cameraManager().setImageProcessingCallback(cb);
 ```
 
 ### Controller Bindings
