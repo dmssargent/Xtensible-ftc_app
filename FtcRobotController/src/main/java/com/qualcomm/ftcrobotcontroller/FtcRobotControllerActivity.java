@@ -53,7 +53,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.ftccommon.FtcEventLoop;
+import com.qualcomm.ftccommon.FtcRobotControllerService;
+import com.qualcomm.ftccommon.LaunchActivityConstantsList;
+import com.qualcomm.ftccommon.Restarter;
+import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
+import com.qualcomm.hardware.ModernRoboticsHardwareFactory;
+import com.qualcomm.robotcore.hardware.HardwareFactory;
+import com.qualcomm.robotcore.hardware.configuration.Utility;
+import com.qualcomm.robotcore.util.Dimmer;
+import com.qualcomm.robotcore.util.ImmersiveMode;
+import com.qualcomm.robotcore.util.RobotLog;
+import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -101,7 +114,7 @@ public class FtcRobotControllerActivity extends Activity {
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-      FtcRobotControllerBinder binder = (FtcRobotControllerBinder) service;
+      FtcRobotControllerService.FtcRobotControllerBinder binder = (FtcRobotControllerService.FtcRobotControllerBinder) service;
       onServiceBind(binder.getService());
     }
 
@@ -307,7 +320,7 @@ public class FtcRobotControllerActivity extends Activity {
     HardwareFactory factory;
 
     // Modern Robotics Factory for use with Modern Robotics hardware
-    HardwareFactory modernRoboticsFactory = new HardwareFactory(context);
+    HardwareFactory modernRoboticsFactory = new ModernRoboticsHardwareFactory(context);
     modernRoboticsFactory.setXmlInputStream(fis);
     factory = modernRoboticsFactory;
 
