@@ -19,7 +19,7 @@ public class AccelerationSensorExample extends OpMode {
         double gForceInYAxis = currentAcceleration.y;
         double gForceInZAxis = currentAcceleration.z;
 
-        telemetry.addData("ACCL:", "Current accleration: x - " + gForceInXAxis + " y - " +
+        telemetry.addData("ACCL:", "Current acceleration: x - " + gForceInXAxis + " y - " +
                 gForceInYAxis + " z - " + gForceInZAxis);
     }
 }

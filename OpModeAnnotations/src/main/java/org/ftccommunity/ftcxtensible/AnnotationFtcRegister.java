@@ -22,12 +22,12 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
+
+import com.qualcomm.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -123,7 +123,7 @@ public class AnnotationFtcRegister {
 
 
 
-    public String getOpModeName(Class<OpMode> opMode) {
+    /*public String getOpModeName(Class<OpMode> opMode) {
         String name;
         if (opMode.isAnnotationPresent(TeleOp.class)) {
             name = opMode.getAnnotation(TeleOp.class).name();
@@ -137,5 +137,5 @@ public class AnnotationFtcRegister {
             name = opMode.getSimpleName();
         }
         return name;
-    }
+    }*/
 }
