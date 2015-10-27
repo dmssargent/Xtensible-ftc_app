@@ -34,8 +34,10 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Process;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
@@ -199,6 +201,20 @@ public class FtcRobotControllerActivity extends Activity {
         if (controllerService != null) unbindService(connection);
 
         RobotLog.cancelWriteLogcatToDisk(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAndRemoveTask();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        System.runFinalizersOnExit(true);
+        Process.killProcess(Process.myPid());
     }
 
     @Override

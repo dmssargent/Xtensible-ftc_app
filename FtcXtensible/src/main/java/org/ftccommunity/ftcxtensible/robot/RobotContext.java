@@ -1,22 +1,19 @@
 /*
+ * Copyright © 2015 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the “Software”), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
+ *  do so, subject to the following conditions:
  *
- *  * Copyright © 2015 David Sargent
- *  *
- *  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- *  * and associated documentation files (the “Software”), to deal in the Software without restriction,
- *  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  * do so, subject to the following conditions:
- *  *
- *  * The above copyright notice and this permission notice shall be included in all copies or
- *  * substantial portions of the Software.
- *  *
- *  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.ftccommunity.ftcxtensible.robot;
@@ -24,6 +21,7 @@ package org.ftccommunity.ftcxtensible.robot;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
@@ -32,9 +30,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
 
+import org.ftccommunity.bindings.DataBinder;
+import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
-import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
+import org.ftccommunity.ftcxtensible.sensors.camera.ExtensibleCameraManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -45,9 +46,11 @@ import java.util.concurrent.Executors;
 
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 @Beta
 @NotDocumentedWell
-public class RobotContext {
+public class RobotContext implements AbstractRobotContext {
     private ExtensibleHardwareMap hardwareMap;
     private Context appContext;
 
@@ -61,7 +64,7 @@ public class RobotContext {
 
     private ServerSettings serverSettings;
     private RobotStatus status;
-    private CameraManager cameraManager;
+    private ExtensibleCameraManager extensibleCameraManager;
 
     private NetworkedOpMode networkedOpMode;
     private boolean networkingEnabled;
@@ -70,6 +73,9 @@ public class RobotContext {
 
     private ExecutorService asyncService;
     private RobotLogger logger;
+
+    private DataBinder bindings;
+    private View layout;
 
     private RobotContext() {
         serverSettings = ServerSettings.createServerSettings();
@@ -80,9 +86,11 @@ public class RobotContext {
         extensibleGamepad2 = new ExtensibleGamepad();
 
         asyncService = MoreExecutors.listeningDecorator(
-                Executors.newCachedThreadPool(MoreExecutors.platformThreadFactory()));
-        cameraManager = new CameraManager(this);
+                Executors.newCachedThreadPool());
+        extensibleCameraManager = new ExtensibleCameraManager(this, 100);
         logger = new RobotLogger(this);
+
+        bindings = DataBinder.getInstance();
     }
 
     /**
@@ -103,20 +111,26 @@ public class RobotContext {
         hardwareMap = new ExtensibleHardwareMap(hwMap);
         appContext = hwMap.appContext;
         if (appContext == null) {
-            try {
-                final Class<?> activityThreadClass =
-                        Class.forName("android.app.ActivityThread");
-                final Method method = activityThreadClass.getMethod("currentApplication");
-
-                appContext = (Context) method.invoke(null, (Object[]) null);
-            } catch (Exception ex) {
-                Log.e("ROBOT_CONTEXT::", "Cannot build app context! It will be null.", ex);
-            }
+            appContext = buildApplicationContext();
         }
         telemetry = tlmtry;
         extensibleTelemetry = new ExtensibleTelemetry(tlmtry);
     }
 
+    public static Context buildApplicationContext() {
+        try {
+            final Class<?> activityThreadClass =
+                    Class.forName("android.app.ActivityThread");
+            final Method method = activityThreadClass.getMethod("currentApplication");
+
+            return (Context) method.invoke(null, (Object[]) null);
+        } catch (Exception ex) {
+            Log.e("ROBOT_CONTEXT::", "Cannot build app context! It will be null.", ex);
+            return null;
+        }
+    }
+
+    @Override
     public RobotContext enableNetworking() {
         if (networkedOpMode == null) {
             networkedOpMode = new NetworkedOpMode(this);
@@ -126,6 +140,7 @@ public class RobotContext {
         return this;
     }
 
+    @Override
     public RobotContext disableNetworking() {
         if (!networkingEnabled || networkedOpMode == null) {
             throw new IllegalStateException("Networking is already disabled!");
@@ -138,6 +153,7 @@ public class RobotContext {
         return this;
     }
 
+    @Override
     public RobotContext startNetworking() {
         if (networkingEnabled && networkedOpMode == null) {
             throw new IllegalStateException("Networking is disabled!");
@@ -147,6 +163,7 @@ public class RobotContext {
         return this;
     }
 
+    @Override
     public RobotContext stopNetworking() {
         if (networkingEnabled && networkedOpMode == null) {
             throw new IllegalStateException("Networking is disabled!");
@@ -161,6 +178,7 @@ public class RobotContext {
      *
      * @return the <code>ExtensibleHardwareMap</code> currently in use
      */
+    @Override
     public ExtensibleHardwareMap hardwareMap() {
         return hardwareMap;
     }
@@ -171,6 +189,7 @@ public class RobotContext {
      * @param context a non-null activity context
      * @throws IllegalStateException, IllegalArgumentException
      */
+    @Override
     public void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException {
         if (context instanceof Activity) {
             /*if (appContext != null) {
@@ -183,12 +202,24 @@ public class RobotContext {
         }
     }
 
+    @Override
+    public void prepare(Context ctx) {
+        checkArgument(ctx instanceof Activity, "Invalid context; it must be of an activity context type");
+        bindAppContext(ctx);
+
+        layout = ((Activity) appContext()).findViewById(controllerBindings().getIntegers().get("ftcview"));
+        if (robotControllerView() == null) {
+            Log.e("ROBOT_CONTEXT::", "Could not bind to the current for robotics");
+        }
+    }
+
     /**
      * Returns an App Context
      *
      * @return the Android Context
      */
-    public Context getAppContext() {
+    @Override
+    public Context appContext() {
         return appContext;
     }
 
@@ -198,6 +229,7 @@ public class RobotContext {
      * @return the first gamepad
      * @deprecated Please use the gamepad1 instead
      */
+    @Override
     @Deprecated
     public Gamepad legacyGamepad1() {
         return gamepad1;
@@ -209,6 +241,7 @@ public class RobotContext {
      * @return the second gamepad
      * @deprecated Please use the gamepad2 instead
      */
+    @Override
     @Deprecated
     public Gamepad legacyGamepad2() {
         return gamepad2;
@@ -219,7 +252,8 @@ public class RobotContext {
      *
      * @return <code>ServerSettings</code>
      */
-    public ServerSettings getServerSettings() {
+    @Override
+    public ServerSettings serverSettings() {
         return serverSettings;
     }
 
@@ -228,6 +262,7 @@ public class RobotContext {
      *
      * @return the current {@link RobotLogger} to use
      */
+    @Override
     public RobotLogger log() {
         return logger;
     }
@@ -237,6 +272,7 @@ public class RobotContext {
      *
      * @param runnable Runnable to run at some time
      */
+    @Override
     public void submitAsyncTask(Runnable runnable) {
         if (runnable != null) {
             asyncService.execute(runnable);
@@ -250,6 +286,7 @@ public class RobotContext {
      *
      * @param runnable Runnable to run on the UI Thread.
      */
+    @Override
     public void runOnUiThread(Runnable runnable) {
         if (runnable == null) {
             throw new NullPointerException();
@@ -263,6 +300,7 @@ public class RobotContext {
      *
      * @return the current status of the robot
      */
+    @Override
     public RobotStatus status() {
         return status;
     }
@@ -272,6 +310,7 @@ public class RobotContext {
      *
      * @param datas a collection of type <code>InterfaceHttpData</code> to be added
      */
+    @Override
     public void addPostData(Collection<InterfaceHttpData> datas) {
         postedData.addAll(datas);
     }
@@ -281,6 +320,7 @@ public class RobotContext {
      *
      * @return an <code>ImmutableList</code> that is a copy of the data received via networking
      */
+    @Override
     public ImmutableList<InterfaceHttpData> getPostedData() {
         return ImmutableList.copyOf(postedData);
     }
@@ -290,6 +330,7 @@ public class RobotContext {
      *
      * @return the telemetry as provide by the FTC SDK
      */
+    @Override
     public ExtensibleTelemetry telemetry() {
         return extensibleTelemetry;
     }
@@ -299,6 +340,7 @@ public class RobotContext {
      *
      * @return the first Gamepad (gamepad1) cast to an ExtensibleGamepad
      */
+    @Override
     public ExtensibleGamepad gamepad1() {
         return extensibleGamepad1;
     }
@@ -308,18 +350,21 @@ public class RobotContext {
      *
      * @return the second gamepad (gampad2) cast to an ExtensibleGamepad
      */
+    @Override
     public ExtensibleGamepad gamepad2() {
         return extensibleGamepad2;
     }
 
-    public CameraManager cameraManager() {
-        return cameraManager;
+    @Override
+    public ExtensibleCameraManager cameraManager() {
+        return extensibleCameraManager;
     }
 
+    @Override
     public void release() {
-        if (cameraManager != null) {
-            cameraManager.stop();
-            cameraManager = null;
+        if (extensibleCameraManager != null) {
+            extensibleCameraManager.stop();
+            extensibleCameraManager = null;
         }
 
         if (networkedOpMode != null) {
@@ -338,6 +383,28 @@ public class RobotContext {
             }
             extensibleTelemetry = null;
         }
+    }
+
+    /**
+     * Gets the robot controller data bindings
+     *
+     * @return the robot controller data binding
+     */
+    @Override
+    @NotNull
+    public DataBinder controllerBindings() {
+        return bindings;
+    }
+
+    /**
+     * Gets the recommended robot controller view area
+     *
+     * @return a View representing the real estate that Qualcomm has set aside
+     */
+    @Override
+    @NotNull
+    public View robotControllerView() {
+        return layout;
     }
 
    /* public LinkedList upstreamPipeline(HardwareDevice device) {

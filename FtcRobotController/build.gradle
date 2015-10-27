@@ -11,18 +11,31 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion = 'Google Inc.:Google APIs:19'
-    buildToolsVersion = '19.1.0'
+    //compileSdkVersion = 'Google Inc.:Google APIs:19'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
+
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 22
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
+        }
+    }
 }
 
 buildscript {
@@ -30,7 +43,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.android.tools.build:gradle:1.3.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -54,17 +67,15 @@ allprojects {
 }
 
 dependencies {
-    compile files('libs/android-support-v4.jar')
     compile(name: 'RobotCore-release', ext: 'aar')
     compile(name: 'Hardware-release', ext: 'aar')
     compile(name: 'FtcCommon-release', ext: 'aar')
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'Analytics-release', ext: 'aar')
     compile(name: 'WirelessP2p-release', ext: 'aar')
-    compile files('libs/netty-all-4.0.30.Final.jar')
-    compile 'com.google.guava:guava:19.0-rc1'
     compile 'com.google.code.gson:gson:2.3.1'
     compile project(':FtcXtensible')
     compile project(':OpModeAnnotations')
     compile project(':OpModeLibrary')
+    compile project(':XtensibleControllerBindings')
 }
