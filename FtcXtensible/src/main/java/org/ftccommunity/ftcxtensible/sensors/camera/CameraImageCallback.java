@@ -20,7 +20,8 @@ package org.ftccommunity.ftcxtensible.sensors.camera;
 
 
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.SoftReference;
 

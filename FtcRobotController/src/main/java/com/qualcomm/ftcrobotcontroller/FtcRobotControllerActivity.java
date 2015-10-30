@@ -53,7 +53,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.ftccommon.FtcEventLoop;
+import com.qualcomm.ftccommon.FtcRobotControllerService;
+import com.qualcomm.ftccommon.LaunchActivityConstantsList;
+import com.qualcomm.ftccommon.Restarter;
+import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
+import com.qualcomm.hardware.HardwareFactory;
+import com.qualcomm.robotcore.hardware.configuration.Utility;
+import com.qualcomm.robotcore.util.Dimmer;
+import com.qualcomm.robotcore.util.ImmersiveMode;
+import com.qualcomm.robotcore.util.RobotLog;
+import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -101,7 +113,7 @@ public class FtcRobotControllerActivity extends Activity {
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-      FtcRobotControllerBinder binder = (FtcRobotControllerBinder) service;
+      FtcRobotControllerService.FtcRobotControllerBinder binder = (FtcRobotControllerService.FtcRobotControllerBinder) service;
       onServiceBind(binder.getService());
     }
 
@@ -152,13 +164,18 @@ public class FtcRobotControllerActivity extends Activity {
     updateUI = new UpdateUI(this, dimmer);
     updateUI.setRestarter(restarter);
     updateUI.setTextViews(textWifiDirectStatus, textRobotStatus,
-        textGamepad, textOpMode, textErrorMessage, textDeviceName);
+            textGamepad, textOpMode, textErrorMessage, textDeviceName);
     callback = updateUI.new Callback();
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
     hittingMenuButtonBrightensScreen();
+    try {
+      Thread.sleep(0);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
 
     if (USE_DEVICE_EMULATION) { HardwareFactory.enableDeviceEmulation(); }
   }

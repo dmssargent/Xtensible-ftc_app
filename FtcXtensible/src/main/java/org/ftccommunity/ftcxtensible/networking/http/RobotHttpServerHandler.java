@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
+import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.io.File;
@@ -109,8 +110,8 @@ public class RobotHttpServerHandler extends ChannelInboundHandlerAdapter {
             if (uri.equals(context.serverSettings().getHardwareMapJsonPage())) {
                 GsonBuilder gsonBuilder = new GsonBuilder().enableComplexMapKeySerialization();
                 Gson gson = gsonBuilder.create();
-                HardwareMap hardwareMap = context.hardwareMap();
-                page = gson.toJson(ImmutableSet.copyOf(hardwareMap.dcMotor));
+                ExtensibleHardwareMap hardwareMap = context.hardwareMap();
+                page = gson.toJson(hardwareMap.dcMotors());
             } else if (uri.equals(context.serverSettings().getLogPage())) {
                 page = context.status().getLog();
             } else {

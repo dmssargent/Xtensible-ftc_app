@@ -27,7 +27,6 @@ import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 
-import com.qualcomm.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

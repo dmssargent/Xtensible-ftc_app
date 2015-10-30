@@ -36,9 +36,6 @@ import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-/**
- * Created by David on 10/21/2015.
- */
 public class ExtensibleLoopManager {
     private static final String TAG = "";
     private final LinkedHashMap<Integer, LinkedList<RunAssistant>> beforeXLoop;

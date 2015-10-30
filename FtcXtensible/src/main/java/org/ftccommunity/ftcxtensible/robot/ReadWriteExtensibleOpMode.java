@@ -58,22 +58,22 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
     }
 
     protected final void changeLoopChangeoverNumber(int loopCount) {
-        Map<Integer, LinkedList<RunAssistant>> everyX = getRegisterAfterEveryX();
+        Map<Integer, LinkedList<RunAssistant>> everyX = loopManager().getRegisterAfterEveryX();
 
         if (everyX.get(loopCount).get(readOnlyPos) instanceof ReadOnlySwitch) {
-            unregisterAfterEveryX(loopCount, readOnlyPos);
+            loopManager().unregisterAfterEveryX(loopCount, readOnlyPos);
         } else { // We need to find our registration
-            getPossibleCandidatesForAfterEveryX(loopCount, ReadOnlySwitch.class.getSimpleName());
+            loopManager().getPossibleCandidatesForAfterEveryX(loopCount, ReadOnlySwitch.class.getSimpleName());
         }
 
         if (everyX.get(loopCount + 1).get(writeOnlyPos) instanceof WriteOnlyAssistant) {
-            unregisterAfterEveryX(loopCount + 1, writeOnlyPos);
+            loopManager().unregisterAfterEveryX(loopCount + 1, writeOnlyPos);
         } else { // We need to find our registration
-            List<Integer> canditates = getPossibleCandidatesForAfterEveryX(
+            List<Integer> canditates = loopManager().getPossibleCandidatesForAfterEveryX(
                     loopCount, WriteOnlyAssistant.class.getSimpleName());
             for (int i = 0; i < canditates.size(); i++) {
                 if (everyX.get(loopCount).get(canditates.get(i)) instanceof WriteOnlyAssistant) {
-                    unregisterAfterEveryX(loopCount, canditates.get(i));
+                    loopManager().unregisterAfterEveryX(loopCount, canditates.get(i));
                 }
             }
         }
@@ -82,13 +82,13 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
     }
 
     private void modifyLoopChangeoverNumber(int loopCount) {
-        int currentStatus = getRegisterAfterEveryX().size();
+        int currentStatus = loopManager().getRegisterAfterEveryX().size();
         writeOnlyPos = currentStatus;
         readOnlyPos = ++currentStatus;
 
-        registerAfterEveryX(loopCount, new ReadOnlySwitch());
-        registerNewLoopOnEveryX(loopCount, new ReadLoop());
-        registerAfterEveryX(loopCount + 3, new WriteOnlyAssistant());
+        loopManager().registerAfterEveryX(loopCount, new ReadOnlySwitch());
+        loopManager().registerNewLoopOnEveryX(loopCount, new ReadLoop());
+        loopManager().registerAfterEveryX(loopCount + 3, new WriteOnlyAssistant());
 
         runEveryXTimes = loopCount;
     }

@@ -47,4 +47,5 @@ repositories {
 }
 
 dependencies {
+    compile project(':FtcXtensible')
 }

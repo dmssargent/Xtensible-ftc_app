@@ -21,7 +21,6 @@ package org.ftccommunity.ftcxtensible.sensors.camera;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
@@ -31,6 +30,7 @@ import org.ftccommunity.ftcxtensible.gui.CameraPreview;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.SoftReference;
 import java.util.Date;
