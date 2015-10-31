@@ -40,7 +40,7 @@ public class ExtensibleLoopManager {
     private static final String TAG = "";
     private final LinkedHashMap<Integer, LinkedList<RunAssistant>> beforeXLoop;
     private final TreeMap<Integer, OpModeLoop> loops;
-    private ExtensibleOpMode robotOp;
+    private final ExtensibleOpMode robotOp;
     private TreeMap<Integer, LinkedList<RunAssistant>> beforeEveryXLoop;
     private TreeMap<Integer, LinkedList<RunAssistant>> afterEveryXLoop;
     private LinkedHashMap<Integer, LinkedList<RunAssistant>> afterXLoop;

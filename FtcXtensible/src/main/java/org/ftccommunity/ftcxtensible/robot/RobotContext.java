@@ -208,9 +208,6 @@ public class RobotContext implements AbstractRobotContext {
         bindAppContext(ctx);
 
         layout = ((Activity) appContext()).findViewById(controllerBindings().getIntegers().get("ftcview"));
-        if (robotControllerView() == null) {
-            Log.e("ROBOT_CONTEXT::", "Could not bind to the current for robotics");
-        }
     }
 
     /**

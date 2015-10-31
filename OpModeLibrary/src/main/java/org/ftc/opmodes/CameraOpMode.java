@@ -106,6 +106,7 @@ public class CameraOpMode extends ExtensibleOpMode {
                     time = System.nanoTime();
 
                     File folder = new File(Environment.getExternalStorageDirectory() + "/robot/imgs/");
+                    //noinspection ResultOfMethodCallIgnored
                     folder.mkdirs();
                     String path = System.currentTimeMillis() + ".png";
                     File imageFile = new File(folder, path);

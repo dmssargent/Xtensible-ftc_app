@@ -31,8 +31,8 @@ import static com.google.common.base.Preconditions.checkState;
 
 
 public class Autonomous implements Runnable {
-    public static final String TAG = "AUTONOMOUS_RUNNER::";
-    private RobotContext robotContext;
+    private static final String TAG = "AUTONOMOUS_RUNNER::";
+    private final RobotContext robotContext;
     private RunLevel[] levels;
     // private RunLevel init;
     private int initLevel;

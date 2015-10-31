@@ -55,7 +55,7 @@ public class ExtensibleCameraManager {
     private int cameraId;
     private Date latestTimestamp;
     private Date prepTime;
-    private RobotContext context;
+    private final RobotContext context;
 
     private CameraPreviewCallback previewCallback;
     private CameraImageCallback imageProcessingCallback;

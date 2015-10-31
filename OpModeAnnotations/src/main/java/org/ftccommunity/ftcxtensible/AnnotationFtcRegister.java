@@ -41,7 +41,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.TreeMap;
 
 import dalvik.system.DexFile;
@@ -55,9 +54,9 @@ import dalvik.system.DexFile;
 @NotDocumentedWell
 @Alpha
 public class AnnotationFtcRegister {
-    private static String TAG = "FTC_OP_MODE_REGISTER::";
+    private static final String TAG = "FTC_OP_MODE_REGISTER::";
 
-    private LinkedList<String> noCheckList;
+    private final LinkedList<String> noCheckList;
 
     private AnnotationFtcRegister() {
         noCheckList = new LinkedList<>();
@@ -91,12 +90,12 @@ public class AnnotationFtcRegister {
         }
     }
 
-    protected void buildNoCheckList() {
+    private void buildNoCheckList() {
         noCheckList.add("com.google");
         noCheckList.add("io.netty");
     }
 
-    public Context getApplicationContext() {
+    private Context getApplicationContext() {
         final Class<?> activityThreadClass;
         Context ctx = null;
 
@@ -113,8 +112,8 @@ public class AnnotationFtcRegister {
         return ctx;
     }
 
-    public LinkedList<Class> buildClassList() {
-        DexFile df = null;
+    private LinkedList<Class> buildClassList() {
+        DexFile df;
         Context applicationContext = getApplicationContext();
 
         // Try to load the Dex-File
@@ -150,7 +149,7 @@ public class AnnotationFtcRegister {
         return classesToProcess;
     }
 
-    public void sortOpModeMap(HashMap<String, LinkedList<Class<OpMode>>> opModes) {
+    private void sortOpModeMap(HashMap<String, LinkedList<Class<OpMode>>> opModes) {
         Comparator<Class> firstComparator =
                 new OpModeComparator();
 
@@ -160,7 +159,7 @@ public class AnnotationFtcRegister {
     }
 
 
-    public HashMap<String, LinkedList<Class<OpMode>>> findOpModes(LinkedList<Class> klazzes) {
+    private HashMap<String, LinkedList<Class<OpMode>>> findOpModes(LinkedList<Class> klazzes) {
         Class<TeleOp> teleOpClass = TeleOp.class;
         Class<Autonomous> autoClass = Autonomous.class;
         Class<Disabled> disabledClass = Disabled.class;
@@ -220,7 +219,7 @@ public class AnnotationFtcRegister {
         return true;
     }
 
-    public TreeMap<String, LinkedList<Class<OpMode>>> treeMapify(
+    private TreeMap<String, LinkedList<Class<OpMode>>> treeMapify(
             HashMap<String, LinkedList<Class<OpMode>>> opModes) {
 
         TreeMap<String, LinkedList<Class<OpMode>>> sortedOpModes = new TreeMap<>();
@@ -234,7 +233,7 @@ public class AnnotationFtcRegister {
         return sortedOpModes;
     }
 
-    public static String getOpModeName(Class<OpMode> opMode) {
+    private static String getOpModeName(Class<OpMode> opMode) {
         String name;
         if (opMode.isAnnotationPresent(TeleOp.class)) {
             name = opMode.getAnnotation(TeleOp.class).name();

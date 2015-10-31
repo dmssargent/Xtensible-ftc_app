@@ -19,9 +19,7 @@
 package org.ftccommunity.xtensible.xsimplify;
 
 
-import com.google.common.collect.ImmutableMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
@@ -54,7 +52,7 @@ public abstract class SimpleOpMode extends StandardOpMode {
         if (child != null && childOpMode != null) {
             LinkedList<Field> fields = new LinkedList<>(Arrays.asList(childOpMode.getFields()));
             for (Field field : fields) {
-                ImmutableMap map = getFromClass(field.getType());
+                ExtensibleHardwareMap.DeviceMap map = getFromClass(field.getType());
                 if (map == null) {
                     continue;
                 }
@@ -73,7 +71,7 @@ public abstract class SimpleOpMode extends StandardOpMode {
         loop(ctx);
     }
 
-    public ImmutableMap<String, ? extends HardwareDevice> getFromClass(Class klazz) {
+    public ExtensibleHardwareMap.DeviceMap<String, DcMotor> getFromClass(Class klazz) {
         if (klazz == DcMotor.class) {
             return hardwareMap().dcMotors();
         }

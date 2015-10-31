@@ -40,7 +40,11 @@ import java.util.Collection;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
 /**
- * Created by David on 10/21/2015.
+ * Main Robot Context Interface, any class claiming to be a Robot Context complitable class
+ * should inherit this interface
+ *
+ * @author David
+ * @since 0.2.2
  */
 public interface AbstractRobotContext {
     RobotContext enableNetworking();

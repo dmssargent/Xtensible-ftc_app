@@ -37,7 +37,7 @@ public class CameraPreview2 extends ViewGroup implements SurfaceHolder.Callback 
     private final String TAG = "CameraSurfaceView";
     private Camera.Size mPreviewSize;
     private List<Camera.Size> mSupportedPreviewSizes;
-    private Context mContext;
+    private final Context mContext;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder;
     private Camera mCamera;
@@ -133,6 +133,7 @@ public class CameraPreview2 extends ViewGroup implements SurfaceHolder.Callback 
         }
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (changed) {
@@ -190,11 +191,6 @@ public class CameraPreview2 extends ViewGroup implements SurfaceHolder.Callback 
             if (ratio <= targetRatio + ASPECT_TOLERANCE && ratio >= targetRatio - ASPECT_TOLERANCE) {
                 optimalSize = size;
             }
-        }
-
-        // If we cannot find the one that matches the aspect ratio, ignore the requirement.
-        if (optimalSize == null) {
-            // TODO : Backup in case we don't get a size.
         }
 
         return optimalSize;

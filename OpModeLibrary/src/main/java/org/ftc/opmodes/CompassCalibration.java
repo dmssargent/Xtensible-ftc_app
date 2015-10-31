@@ -35,7 +35,7 @@ public class CompassCalibration extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
     // Turn around at least twice in 20 seconds.
-    private double turnTime = 20.0;
+    private final double turnTime = 20.0;
     private boolean keepTurning = true;
     private boolean returnToMeasurementMode = false;
     private boolean monitorCalibrationSuccess = false;

@@ -236,7 +236,7 @@ public class ExtensibleHardwareMap {
         return voltageSensors;
     }
 
-    private class DeviceMap<K, T extends HardwareDevice> extends HashMap<String, T> {
+    public class DeviceMap<K, T extends HardwareDevice> extends HashMap<String, T> {
         private TypeToken<T> type = new TypeToken<T>(getClass()) {
         };
         private boolean mock;
@@ -275,7 +275,7 @@ public class ExtensibleHardwareMap {
             if (o == null && mock) {
                 try {
                     T value = (T) type.getRawType().getConstructors()[0].newInstance("new");
-                    put((String) key, o);
+                    put((String) key, value);
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                     throw new IllegalStateException("Need to create a stub object, but" +
                             "failed to do so: " + ex.toString());

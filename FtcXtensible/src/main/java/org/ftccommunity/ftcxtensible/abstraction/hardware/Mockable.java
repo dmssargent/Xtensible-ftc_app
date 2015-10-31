@@ -19,7 +19,9 @@
 package org.ftccommunity.ftcxtensible.abstraction.hardware;
 
 /**
- * Created by David on 10/30/2015.
+ * Interface for mockable Hardware componenets
+ *
+ * @param <T> device type that gets mocked up, should be the same as the declaring class
  */
 public interface Mockable<T> {
     T mockup();

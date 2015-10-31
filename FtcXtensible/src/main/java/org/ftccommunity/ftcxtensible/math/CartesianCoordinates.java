@@ -99,6 +99,7 @@ public class CartesianCoordinates {
      *
      * @return this object after being reflected
      */
+    @SuppressWarnings("SuspiciousNameCombination")
     public CartesianCoordinates invert() {
         x = this.y;
         y = this.x;

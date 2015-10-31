@@ -35,8 +35,7 @@ public class NetworkedOpMode {
      */
     protected NetworkedOpMode(RobotContext ctx) {
         super();
-        RobotContext context = ctx;
-        RobotHttpServer server = new RobotHttpServer(context);
+        RobotHttpServer server = new RobotHttpServer(ctx);
         serverThread = new Thread(server);
     }
 

@@ -39,10 +39,10 @@ import java.util.LinkedList;
 @TeleOp
 @RobotSdkVersion(RobotSdkApiLevel.R3_2015)
 public class ArcadeDriveTeleop extends ExtensibleOpMode {
-    DcMotor driveForwardLeft;
-    DcMotor driveForwardRight;
-    DcMotor driveRearLeft;
-    DcMotor driveRearRight;
+    private DcMotor driveForwardLeft;
+    private DcMotor driveForwardRight;
+    private DcMotor driveRearLeft;
+    private DcMotor driveRearRight;
 
     double lastTurnFactor;
 

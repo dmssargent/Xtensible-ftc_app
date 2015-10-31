@@ -24,8 +24,13 @@ import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 import org.ftccommunity.ftcxtensible.autonomous.hardware.BasicSensor;
 
 /**
- * Created by David on 7/11/2015.
+ * A Ir Sensor
+ *
+ * @author David Sargent
+ * @since 0.0.5
+ *
  */
+@Deprecated
 public class IrSensor implements BasicSensor {
     final HardwareMap hardwareMap = new HardwareMap();
     private IrSeekerSensor me;
@@ -80,6 +85,16 @@ public class IrSensor implements BasicSensor {
     public double read() {
         updated = false;
         return angle;
+    }
+
+    /**
+     * Writes an object to the sensor, implementation dependent
+     *
+     * @param mode
+     */
+    @Override
+    public void write(Object mode) {
+        throw new IllegalStateException("Stub");
     }
 
     public IrSeekerSensor.Mode GetMode() {
