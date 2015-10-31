@@ -6,8 +6,14 @@ org.ftc.opmodes.examples
 org.ftc.opmodes.examples.K9
 org.ftc.opmodes.examples.K9.xtensible
 org.ftc.opmodes.examples.pushbot
+org.ftccommunity.bindings
 org.ftccommunity.ftcxtensible
+org.ftccommunity.ftcxtensible.abstraction.hardware
+org.ftccommunity.ftcxtensible.autonomous
+org.ftccommunity.ftcxtensible.autonomous.hardware
 org.ftccommunity.ftcxtensible.gui
+org.ftccommunity.ftcxtensible.hardware
+org.ftccommunity.ftcxtensible.hardware.camera
 org.ftccommunity.ftcxtensible.interfaces
 org.ftccommunity.ftcxtensible.internal
 org.ftccommunity.ftcxtensible.math
@@ -15,6 +21,10 @@ org.ftccommunity.ftcxtensible.networking
 org.ftccommunity.ftcxtensible.networking.http
 org.ftccommunity.ftcxtensible.opmodes
 org.ftccommunity.ftcxtensible.robot
+org.ftccommunity.ftcxtensible.robot.connection
+org.ftccommunity.ftcxtensible.robot.core
 org.ftccommunity.ftcxtensible.robot.formatters
-org.ftccommunity.ftcxtensible.sensors.camera
+org.ftccommunity.ftcxtensible.robot.handlers
+org.ftccommunity.ftcxtensible.util
 org.ftccommunity.ftcxtensible.versioning
+org.ftccommunity.xtensible.xsimplify

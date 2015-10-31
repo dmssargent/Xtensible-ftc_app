@@ -54,7 +54,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qualcomm.ftccommon.DbgLog;
-import com.qualcomm.ftccommon.FtcEventLoop;
 import com.qualcomm.ftccommon.FtcRobotControllerService;
 import com.qualcomm.ftccommon.LaunchActivityConstantsList;
 import com.qualcomm.ftccommon.Restarter;
@@ -67,25 +66,23 @@ import com.qualcomm.robotcore.util.ImmersiveMode;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
 
+import org.ftccommunity.ftcxtensible.robot.core.XtensibleEventLoop;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 
 public class FtcRobotControllerActivity extends Activity {
 
+  public static final String CONFIGURE_FILENAME = "CONFIGURE_FILENAME";
   private static final int REQUEST_CONFIG_WIFI_CHANNEL = 1;
   private static final boolean USE_DEVICE_EMULATION = false;
   private static final int NUM_GAMEPADS = 2;
-
-  public static final String CONFIGURE_FILENAME = "CONFIGURE_FILENAME";
-
   protected SharedPreferences preferences;
 
   protected UpdateUI.Callback callback;
   protected Context context;
-  private Utility utility;
   protected ImageButton buttonMenu;
-
   protected TextView textDeviceName;
   protected TextView textWifiDirectStatus;
   protected TextView textRobotStatus;
@@ -93,23 +90,12 @@ public class FtcRobotControllerActivity extends Activity {
   protected TextView textOpMode;
   protected TextView textErrorMessage;
   protected ImmersiveMode immersion;
-
   protected UpdateUI updateUI;
   protected Dimmer dimmer;
   protected LinearLayout entireScreenLayout;
-
   protected FtcRobotControllerService controllerService;
-
-  protected FtcEventLoop eventLoop;
-
-  protected class RobotRestarter implements Restarter {
-
-    public void requestRestart() {
-      requestRobotRestart();
-    }
-
-  }
-
+  protected XtensibleEventLoop eventLoop;
+  private Utility utility;
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -177,7 +163,9 @@ public class FtcRobotControllerActivity extends Activity {
       e.printStackTrace();
     }
 
-    if (USE_DEVICE_EMULATION) { HardwareFactory.enableDeviceEmulation(); }
+    if (USE_DEVICE_EMULATION) {
+      HardwareFactory.enableDeviceEmulation();
+    }
   }
 
   @Override
@@ -224,13 +212,13 @@ public class FtcRobotControllerActivity extends Activity {
   }
 
   @Override
-  public void onWindowFocusChanged(boolean hasFocus){
+  public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     // When the window loses focus (e.g., the action overflow is shown),
     // cancel any pending hide action. When the window gains focus,
     // hide the system UI.
     if (hasFocus) {
-      if (ImmersiveMode.apiOver19()){
+      if (ImmersiveMode.apiOver19()) {
         // Immersive flag only works on API 19 and above.
         immersion.hideSystemUI();
       }
@@ -238,7 +226,6 @@ public class FtcRobotControllerActivity extends Activity {
       immersion.cancelSystemUIHide();
     }
   }
-
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -328,7 +315,7 @@ public class FtcRobotControllerActivity extends Activity {
     modernRoboticsFactory.setXmlInputStream(fis);
     factory = modernRoboticsFactory;
 
-    eventLoop = new FtcEventLoop(factory, new FtcOpModeRegister(), callback, this);
+    eventLoop = new XtensibleEventLoop(factory, new FtcOpModeRegister(), callback, this);
 
     controllerService.setCallback(callback);
     controllerService.setupRobot(eventLoop);
@@ -384,5 +371,13 @@ public class FtcRobotControllerActivity extends Activity {
         toast.show();
       }
     });
+  }
+
+  protected class RobotRestarter implements Restarter {
+
+    public void requestRestart() {
+      requestRobotRestart();
+    }
+
   }
 }

@@ -104,8 +104,8 @@
     <orderEntry type="library" exported="" name="recognition-0.19" level="project" />
     <orderEntry type="library" exported="" name="ModernRobotics-release-" level="project" />
     <orderEntry type="library" exported="" name="WirelessP2p-release-" level="project" />
-    <orderEntry type="library" exported="" name="calibration-0.19" level="project" />
     <orderEntry type="library" exported="" name="georegression-0.8" level="project" />
+    <orderEntry type="library" exported="" name="calibration-0.19" level="project" />
     <orderEntry type="library" exported="" name="all-0.19" level="project" />
     <orderEntry type="library" exported="" name="FtcCommon-release-" level="project" />
     <orderEntry type="library" exported="" name="RobotCore-release-" level="project" />

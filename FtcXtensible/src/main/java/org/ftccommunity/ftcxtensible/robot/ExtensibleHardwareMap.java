@@ -1,7 +1,7 @@
 /*
  * Copyright © 2015 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the “Software”), to deal in the Software without restriction,
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
  *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
  *  do so, subject to the following conditions:
@@ -9,7 +9,7 @@
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
  *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
  *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
@@ -18,8 +18,8 @@
 
 package org.ftccommunity.ftcxtensible.robot;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.reflect.TypeToken;
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogOutput;
@@ -43,8 +43,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.ftccommunity.ftcxtensible.abstraction.hardware.Mockable;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -58,27 +61,6 @@ import java.util.Set;
  */
 @Alpha
 public class ExtensibleHardwareMap {
-    // Take care of the inherited variables, and restrict access
-   /* private final DeviceMapping<DcMotorController> dcMotorController;
-    private final DeviceMapping<DcMotor> dcMotor;
-    private final DeviceMapping<ServoController> servoController;
-    private final DeviceMapping<Servo> servo;
-    private final DeviceMapping<LegacyModule> legacyModule;
-    private final DeviceMapping<DeviceInterfaceModule> deviceInterfaceModule;
-    private final DeviceMapping<AnalogInput> analogInput;
-    private final DeviceMapping<DigitalChannel> digitalChannel;
-    private final DeviceMapping<OpticalDistanceSensor> opticalDistanceSensor;
-    private final DeviceMapping<TouchSensor> touchSensor;
-    private final DeviceMapping<PWMOutput> pwmOutput;
-    private final DeviceMapping<I2cDevice> i2cDevice;
-    private final DeviceMapping<AnalogOutput> analogOutput;
-    private final DeviceMapping<AccelerationSensor> accelerationSensor;
-    private final DeviceMapping<CompassSensor> compassSensor;
-    private final DeviceMapping<GyroSensor> gyroSensor;
-    private final DeviceMapping<IrSeekerSensor> irSeekerSensor;
-    private final DeviceMapping<LightSensor> lightSensor;
-    private final DeviceMapping<UltrasonicSensor> ultrasonicSensor;
-    private final DeviceMapping<VoltageSensor> voltageSensor;*/
     private HardwareMap basicMap;
     private LinkedHashMultimap<String, HardwareDevice> fullMap;
 
@@ -111,29 +93,6 @@ public class ExtensibleHardwareMap {
      * {@link ExtensibleHardwareMap#createDeviceMaps()}
      */
     private ExtensibleHardwareMap() {
-        /*dcMotorController = super.dcMotorController;
-        dcMotor = super.dcMotor;
-        servoController = super.servoController;
-        servo = super.servo;
-        legacyModule = super.legacyModule;
-        deviceInterfaceModule = super.deviceInterfaceModule;
-        analogInput = super.analogInput;
-        digitalChannel = super.digitalChannel;
-        opticalDistanceSensor = super.opticalDistanceSensor;
-        touchSensor = super.touchSensor;
-        pwmOutput = super.pwmOutput;
-        i2cDevice = super.i2cDevice;
-        analogOutput = super.analogOutput;
-        accelerationSensor = super.accelerationSensor;
-        compassSensor = super.compassSensor;
-        this.gyroSensor = super.gyroSensor;
-        irSeekerSensor = super.irSeekerSensor;
-        lightSensor = super.lightSensor;
-        ultrasonicSensor = super.ultrasonicSensor;
-        voltageSensor = super.voltageSensor;*/
-
-        //cacheMap = LinkedHashMultimap.create();
-
         createDeviceMaps();
     }
 
@@ -146,28 +105,12 @@ public class ExtensibleHardwareMap {
         this();
         basicMap = hwMap;
 
-        /*super.dcMotorController = hwMap.dcMotorController;
-        super.dcMotor = hwMap.dcMotor;
-        super.servoController = hwMap.servoController;
-        super.servo = hwMap.servo;
-        super.legacyModule = hwMap.legacyModule;
-        super.deviceInterfaceModule = hwMap.deviceInterfaceModule;
-        super.analogInput = hwMap.analogInput;
-        super.digitalChannel = hwMap.digitalChannel;
-        super.opticalDistanceSensor = hwMap.opticalDistanceSensor;
-        super.touchSensor = hwMap.touchSensor;
-        super.pwmOutput = hwMap.pwmOutput;
-        super.i2cDevice = hwMap.i2cDevice;
-        super.analogOutput = hwMap.analogOutput;
-        super.accelerationSensor = hwMap.accelerationSensor;
-        super.compassSensor = hwMap.compassSensor;
-        super.gyroSensor = hwMap.gyroSensor;
-        super.irSeekerSensor = hwMap.irSeekerSensor;
-        super.lightSensor = hwMap.lightSensor;
-        super.ultrasonicSensor = hwMap.ultrasonicSensor;
-        super.voltageSensor = hwMap.voltageSensor;*/
-
         createDeviceMaps();
+    }
+
+    public static boolean supportsMocking(Object object) {
+        return object.getClass().isAssignableFrom(Mockable.class);
+
     }
 
     /**
@@ -213,90 +156,108 @@ public class ExtensibleHardwareMap {
         return null;
     }
 
-    public ImmutableMap<String, DcMotorController> dcMotorControllers() {
-        return ImmutableMap.copyOf(dcMotorControllers);
+    public DeviceMap<String, DcMotorController> dcMotorControllers() {
+        return dcMotorControllers;
     }
 
-    public ImmutableMap<String, DcMotor> dcMotors() {
-        return ImmutableMap.copyOf(dcMotors);
+    public DeviceMap<String, DcMotor> dcMotors() {
+        return dcMotors;
     }
 
-    public ImmutableMap<String, ServoController> servoControllers() {
-        return ImmutableMap.copyOf(servoControllers);
+    public DeviceMap<String, ServoController> servoControllers() {
+        return servoControllers;
     }
 
-    public ImmutableMap<String, Servo> servos() {
-        return ImmutableMap.copyOf(servos);
+    public DeviceMap<String, Servo> servos() {
+        return servos;
     }
 
-    public ImmutableMap<String, LegacyModule> legacyModules() {
-        return ImmutableMap.copyOf(legacyModules);
+    public DeviceMap<String, LegacyModule> legacyModules() {
+        return legacyModules;
     }
 
-    public ImmutableMap<String, DeviceInterfaceModule> deviceInterfaceModules() {
-        return ImmutableMap.copyOf(deviceInterfaceModules);
+    public DeviceMap<String, DeviceInterfaceModule> deviceInterfaceModules() {
+        return deviceInterfaceModules;
     }
 
-    public ImmutableMap<String, AnalogInput> analogInputs() {
-        return ImmutableMap.copyOf(analogInputs);
+    public DeviceMap<String, AnalogInput> analogInputs() {
+        return analogInputs;
     }
 
-    public ImmutableMap<String, DigitalChannel> digitalChannels() {
-        return ImmutableMap.copyOf(digitalChannels);
+    public DeviceMap<String, DigitalChannel> digitalChannels() {
+        return digitalChannels;
     }
 
-    public ImmutableMap<String, OpticalDistanceSensor> opticalDistanceSensors() {
-        return ImmutableMap.copyOf(opticalDistanceSensors);
+    public DeviceMap<String, OpticalDistanceSensor> opticalDistanceSensors() {
+        return opticalDistanceSensors;
     }
 
-    public ImmutableMap<String, TouchSensor> touchSensors() {
-        return ImmutableMap.copyOf(touchSensors);
+    public DeviceMap<String, TouchSensor> touchSensors() {
+        return touchSensors;
     }
 
-    public ImmutableMap<String, PWMOutput> pwmOutputs() {
-        return ImmutableMap.copyOf(pwmOutputs);
+    public DeviceMap<String, PWMOutput> pwmOutputs() {
+        return pwmOutputs;
     }
 
-    public ImmutableMap<String, I2cDevice> i2cDevices() {
-        return ImmutableMap.copyOf(i2cDevices);
+    public DeviceMap<String, I2cDevice> i2cDevices() {
+        return i2cDevices;
     }
 
-    public ImmutableMap<String, AnalogOutput> analogOutputs() {
-        return ImmutableMap.copyOf(analogOutputs);
+    public DeviceMap<String, AnalogOutput> analogOutputs() {
+        return analogOutputs;
     }
 
-    public ImmutableMap<String, AccelerationSensor> accelerationSensors() {
-        return ImmutableMap.copyOf(accelerationSensors);
+    public DeviceMap<String, AccelerationSensor> accelerationSensors() {
+        return accelerationSensors;
     }
 
-    public ImmutableMap<String, CompassSensor> compassSensors() {
-        return ImmutableMap.copyOf(compassSensors);
+    public DeviceMap<String, CompassSensor> compassSensors() {
+        return compassSensors;
     }
 
-    public ImmutableMap<String, GyroSensor> gyroSensors() {
-        return ImmutableMap.copyOf(gyroSensors);
+    public DeviceMap<String, GyroSensor> gyroSensors() {
+        return gyroSensors;
     }
 
-    public ImmutableMap<String, IrSeekerSensor> irSeekerSensors() {
-        return ImmutableMap.copyOf(irSeekerSensors);
+    public DeviceMap<String, IrSeekerSensor> irSeekerSensors() {
+        return irSeekerSensors;
     }
 
-    public ImmutableMap<String, LightSensor> lightSensors() {
-        return ImmutableMap.copyOf(lightSensors);
+    public DeviceMap<String, LightSensor> lightSensors() {
+        return lightSensors;
     }
 
-    public ImmutableMap<String, UltrasonicSensor> ultrasonicSensors() {
-        return ImmutableMap.copyOf(ultrasonicSensors);
+    public DeviceMap<String, UltrasonicSensor> ultrasonicSensors() {
+        return ultrasonicSensors;
     }
 
-    public ImmutableMap<String, VoltageSensor> voltageSensors() {
-        return ImmutableMap.copyOf(voltageSensors);
+    public DeviceMap<String, VoltageSensor> voltageSensors() {
+        return voltageSensors;
     }
 
-    private class DeviceMap<K, T> extends HashMap<String, T> {
+    private class DeviceMap<K, T extends HardwareDevice> extends HashMap<String, T> {
+        private TypeToken<T> type = new TypeToken<T>(getClass()) {
+        };
+        private boolean mock;
+
         public DeviceMap(HardwareMap.DeviceMapping<T> deviceMapping) {
             super(deviceMapping.size());
             buildFromDeviceMapping(deviceMapping);
+        }
+
+        public void enableMocking() {
+            throw new IllegalArgumentException("Stub");
+
+            /*if (supportsMocking(type.getRawType())) {
+                mock = true;
+            } else {
+                throw new IllegalArgumentException("Object type does not support mocking");
+            }*/
+        }
+
+        public void disableMocking() {
+            mock = false;
         }
 
         public DeviceMap<K, T> buildFromDeviceMapping(HardwareMap.DeviceMapping<T> deviceMapping) {
@@ -306,5 +267,24 @@ public class ExtensibleHardwareMap {
             }
             return this;
         }
+
+        @Override
+        @Nullable
+        public T get(Object key) {
+            T o = super.get(key);
+            if (o == null && mock) {
+                try {
+                    T value = (T) type.getRawType().getConstructors()[0].newInstance("new");
+                    put((String) key, o);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    throw new IllegalStateException("Need to create a stub object, but" +
+                            "failed to do so: " + ex.toString());
+                }
+            }
+
+            return o;
+        }
     }
+
+
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2015 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the “Software”), to deal in the Software without restriction,
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
  *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
  *  do so, subject to the following conditions:
@@ -9,7 +9,7 @@
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
  *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
  *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
@@ -28,16 +28,16 @@ import android.view.SurfaceView;
 
 import com.google.common.annotations.Beta;
 
+import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
-import org.ftccommunity.ftcxtensible.sensors.camera.ExtensibleCameraManager;
 
 import java.io.IOException;
 
 /**
  * A basic Camera preview class
  *
- * @author ~~David Sargent~~
+ * @author David Sargent
  * @since 0.2.0
  */
 @Beta
@@ -50,18 +50,30 @@ import java.io.IOException;
     private Camera mCamera;
     private ExtensibleCameraManager manager;
 
+
     private CameraPreview(Context ctx) {
         super(ctx);
         this.context = ctx;
     }
 
 
+    /**
+     * Builds a Camera Preview View, based on a Robot Context
+     *
+     * @param ctx Robot Context
+     */
     public CameraPreview(RobotContext ctx) {
         this(ctx.appContext());
         robotContext = ctx;
         bindCameraManager(ctx.cameraManager());
     }
 
+    /**
+     * Binds a CameraManager to this preview, needed before output can occur
+     *
+     * @param mgr an Camera Manager of, or derived from, an ExtensibleCameraManager
+     * @see ExtensibleCameraManager
+     */
     public void bindCameraManager(ExtensibleCameraManager mgr) {
         manager = mgr;
 
@@ -71,7 +83,6 @@ import java.io.IOException;
         } catch (Exception ex) {
             Log.e(TAG, ex.getLocalizedMessage());
         }
-        //mCamera = mgr.getCamera();
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
