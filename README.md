@@ -1,4 +1,4 @@
-# Xtensible OpMode Library
+# Xtensible Library
 ### Alpha Release
 ##### Code quality may be below usual standards
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.

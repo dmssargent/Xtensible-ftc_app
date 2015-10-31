@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.Version;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Disabled
 @Autonomous
 public class Diag extends OpMode {
     private static String TAG = "DIAGNOSTICS::";
