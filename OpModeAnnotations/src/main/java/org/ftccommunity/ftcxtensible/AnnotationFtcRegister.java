@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
+import com.qualcomm.robotcore.util.Util;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -70,9 +72,10 @@ public class AnnotationFtcRegister {
         HashMap<String, LinkedList<Class<OpMode>>> opModes = me.findOpModes(me.buildClassList());
         me.sortOpModeMap(opModes);
 
-
+        LinkedList<Class<OpMode>> opModesToRegister = new LinkedList<>();
         for (LinkedList<Class<OpMode>> opModeList : me.treeMapify(opModes).values()) {
             for (Class<OpMode> opMode : opModeList) {
+                // todo: move this to the appropriate section
                 if (opMode.isAnnotationPresent(RobotSdkVersion.class)) {
                     RobotSdkVersion annotation = opMode.getAnnotation(RobotSdkVersion.class);
                     if (annotation.value() != RobotSdkApiLevel.currentVerison()) {
@@ -85,6 +88,25 @@ public class AnnotationFtcRegister {
                         }
                     }
                 }
+                // register.register(getOpModeName(opMode), opMode);
+                opModesToRegister.add(opMode);
+            }
+        }
+
+        // check OpModes name length
+        StringBuilder nameBuilder = new StringBuilder();
+        for (Class<OpMode> opMode : opModesToRegister) {
+            nameBuilder.append(getOpModeName(opMode)).append(Util.ASCII_RECORD_SEPARATOR);
+        }
+
+        int length = nameBuilder.toString().getBytes(Charset.defaultCharset()).length;
+        if (length > 255) {
+            Log.e(TAG, "OpMode names are " + (length - 255) +
+                    " too long, please rename them or shorten them");
+            register.register("Too Many OpMode Names", TooManyOpModes.class);
+        } else {
+            for (Class<OpMode> opMode :
+                    opModesToRegister) {
                 register.register(getOpModeName(opMode), opMode);
             }
         }
@@ -135,7 +157,7 @@ public class AnnotationFtcRegister {
                 try {
                     classesToProcess.add(Class.forName(klazz, false, applicationContext.getClassLoader()));
                 } catch (ClassNotFoundException|NoClassDefFoundError e) {
-                    Log.e(TAG, "Cannot add class to process list: " + klazz, e);
+                    Log.e(TAG, "Cannot add class to process list: " + klazz + "Reason: " + e.toString());
 
                     // Add code to prevent loading the next class
                     if (klazz.contains("$")) {
@@ -291,6 +313,20 @@ public class AnnotationFtcRegister {
             }
 
             return -1;
+        }
+    }
+
+    private class TooManyOpModes extends OpMode {
+        @Override
+        public void init() {
+            telemetry.addData("", "Too Many OpModes have been found, taking up too many" +
+                    "bytes");
+        }
+
+        @Override
+        public void loop() {
+            telemetry.addData("", "Too Many OpModes have been found, taking up too many" +
+                    "bytes");
         }
     }
 }

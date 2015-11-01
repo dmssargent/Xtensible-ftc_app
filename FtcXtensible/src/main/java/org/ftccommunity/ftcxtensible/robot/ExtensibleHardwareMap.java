@@ -45,6 +45,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.ftccommunity.ftcxtensible.abstraction.hardware.Mockable;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
@@ -93,7 +94,7 @@ public class ExtensibleHardwareMap {
      * {@link ExtensibleHardwareMap#createDeviceMaps()}
      */
     private ExtensibleHardwareMap() {
-        createDeviceMaps();
+        // createDeviceMaps();
     }
 
     /**
@@ -101,7 +102,7 @@ public class ExtensibleHardwareMap {
      *
      * @param hwMap the HardwareMap to base off of
      */
-    public ExtensibleHardwareMap(HardwareMap hwMap) {
+    public ExtensibleHardwareMap(@NotNull HardwareMap hwMap) {
         this();
         basicMap = hwMap;
 

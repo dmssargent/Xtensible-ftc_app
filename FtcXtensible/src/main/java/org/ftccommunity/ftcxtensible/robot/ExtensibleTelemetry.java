@@ -153,6 +153,8 @@ public class ExtensibleTelemetry {
     }
     
     public void forceUpdateCache() {
+        updateLog();
+
         int numberOfElements;
         synchronized (cache) {
             cache.invalidateAll();
