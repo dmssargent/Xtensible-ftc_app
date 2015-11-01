@@ -5,7 +5,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 22
 
-        useJack = true
+       // useJack = true
     }
     compileSdkVersion 22
     buildToolsVersion '23.0.1'

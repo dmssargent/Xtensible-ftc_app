@@ -134,7 +134,7 @@ public class AnnotationFtcRegister {
             if (shouldAdd(klazz)) {
                 try {
                     classesToProcess.add(Class.forName(klazz, false, applicationContext.getClassLoader()));
-                } catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException|NoClassDefFoundError e) {
                     Log.e(TAG, "Cannot add class to process list: " + klazz, e);
 
                     // Add code to prevent loading the next class
