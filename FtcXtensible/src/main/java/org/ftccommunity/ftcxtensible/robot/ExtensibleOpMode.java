@@ -164,8 +164,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         long startTime = System.nanoTime();
 
         // Update the gamepads
-        gamepad1().updateGamepad(robotContext, gamepad1);
-        gamepad2().updateGamepad(robotContext, gamepad2);
+        gamepad1().updateGamepad(robotContext, super.gamepad1);
+        gamepad2().updateGamepad(robotContext, super.gamepad2);
 
         // Pre loop init
         robotContext.status().setMainState(RobotStatus.MainStates.EXEC);
