@@ -1,47 +1,53 @@
 /*
+ * Copyright © 2015 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
+ *  do so, subject to the following conditions:
  *
- *  * Copyright © 2015 David Sargent
- *  *
- *  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- *  * and associated documentation files (the “Software”), to deal in the Software without restriction,
- *  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  * do so, subject to the following conditions:
- *  *
- *  * The above copyright notice and this permission notice shall be included in all copies or
- *  * substantial portions of the Software.
- *  *
- *  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.ftccommunity.ftcxtensible.robot;
 
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftccommunity.bindings.DataBinder;
+import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
+import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;
 import org.ftccommunity.ftcxtensible.interfaces.FullOpMode;
-import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+import org.ftccommunity.ftcxtensible.networking.ServerSettings;
+import org.ftccommunity.ftcxtensible.robot.handlers.RobotUncaughtExceptionHandler;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashMap;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+
+import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
 /**
  * @author David Sargent - FTC5395
@@ -49,7 +55,7 @@ import java.util.TreeMap;
  */
 @Alpha
 @NotDocumentedWell
-public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
+public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, AbstractRobotContext {
     public static final String TAG = "XTENSTIBLE_OP_MODE::";
     private transient static ExtensibleOpMode parent;
 
@@ -58,12 +64,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
 
-    private final LinkedHashMap<Integer, LinkedList<RunAssistant>> beforeXLoop;
-    private final TreeMap<Integer, OpModeLoop> loops;
-
-    private TreeMap<Integer, LinkedList<RunAssistant>> beforeEveryXLoop;
-    private TreeMap<Integer, LinkedList<RunAssistant>> afterEveryXLoop;
-    private LinkedHashMap<Integer, LinkedList<RunAssistant>> afterXLoop;
+    private ExtensibleLoopManager loopManager;
 
     private RobotContext robotContext;
     private int loopCount;
@@ -88,11 +89,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
             robotContext = parent.robotContext;
         }
 
-        loops = new TreeMap<>();
-        beforeXLoop = new LinkedHashMap<>();
-        beforeEveryXLoop = new TreeMap<>();
-        afterEveryXLoop = new TreeMap<>();
-        afterXLoop = new LinkedHashMap<>();
+        loopManager = new ExtensibleLoopManager(this);
     }
 
     protected ExtensibleOpMode(ExtensibleOpMode prt) {
@@ -102,12 +99,24 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
 
     @Override
     public final void init() {
-        robotContext.bindAppContext(super.hardwareMap.appContext);
+        robotContext.prepare(super.hardwareMap.appContext);
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
-        LinkedList<Object> list = new LinkedList<>();
 
+        // Build an exception handler
+        robotContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Thread.currentThread().setUncaughtExceptionHandler(UncaughtExceptionHandlers.systemExit());
+                Activity controller = (Activity) robotContext.appContext();
+                @SuppressWarnings("ResourceType") PendingIntent intent = PendingIntent.getActivity(controller.getBaseContext(), 0,
+                        new Intent(controller.getIntent()), controller.getIntent().getFlags());
+                Thread.currentThread().setUncaughtExceptionHandler(new RobotUncaughtExceptionHandler(robotContext.appContext(), intent));
+            }
+        });
+
+        LinkedList<Object> list = new LinkedList<>();
         try {
             init(robotContext, list);
         } catch (InterruptedException ex) {
@@ -172,16 +181,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         LinkedList<Object> list = new LinkedList<>();
 
         // Start loop checks
-        if (beforeXLoop.containsKey(loopCount)) {
-            for (RunAssistant assistant : beforeXLoop.get(loopCount)) {
-                runAssistant(assistant);
-            }
-        }
-
-        if (beforeEveryXLoop.containsKey(loopCount)) {
-            for (RunAssistant assistant : beforeEveryXLoop.get(loopCount)) {
-                runAssistant(assistant);
-            }
+        for (RunAssistant assistant : loopManager.getPreloopAssistants(getLoopCount())) {
+            runAssistant(assistant);
         }
 
         // Main loop
@@ -194,16 +195,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         }
 
         // Post loop processing
-        if (afterEveryXLoop.containsKey(loopCount)) {
-            for (RunAssistant assistant : afterEveryXLoop.get(loopCount)) {
-                runAssistant(assistant);
-            }
-        }
-
-        if (afterXLoop.containsKey(loopCount)) {
-            for (RunAssistant assistant : afterXLoop.get(loopCount)) {
-                runAssistant(assistant);
-            }
+        for (RunAssistant assistant : loopManager.getPostLoopAssistants(getLoopCount())) {
+            runAssistant(assistant);
         }
 
         postProcess(list, robotContext.status().getMainRobotState());
@@ -254,334 +247,6 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         skipNextLoop++;
     }
 
-    protected ExtensibleOpMode registerNewLoopOnEveryX(int loopX, OpModeLoop loop) {
-        if (loops.containsKey(loopX)) {
-            Log.w(TAG, "Loop already exists; replacing");
-            loops.remove(loopX);
-        }
-
-        loops.put(loopX, loop);
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterNewLoopOnEveryX(int loopX, OpModeLoop loop)
-            throws IllegalStateException {
-        if (loops.containsKey(loopX)) {
-            loops.remove(loopX);
-        } else {
-            Log.e(TAG, "There is no registered loop replacement for " + loopX);
-            throw new IllegalStateException("Loop has not registered replacement");
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode registerBeforeXLoop(int loop, RunAssistant assistant) {
-        if (assistant == null) {
-            throw new NullPointerException();
-        }
-
-        if (beforeXLoop.containsKey(loop)) {
-            beforeXLoop.get(loop).add(assistant);
-        } else {
-            createNewRunAssistantKey(loop, assistant, beforeXLoop);
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterBeforeX(int loopCountber, String name) throws IllegalStateException {
-        List<Integer> candidate = getPossibleCandidatesForBeforeX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, false)) {
-            unregisterAfterEveryX(loopCountber, candidate.get(0));
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterBeforeX(int loopCount, int pos) {
-        if (pos < 0 || pos > beforeXLoop.get(loopCount).size() - 1) {
-            throw new IllegalArgumentException();
-        }
-        afterEveryXLoop.get(loopCount).remove(pos);
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterLastBeforeX(int loopCountber, String name) {
-        List<Integer> candidate = getPossibleCandidatesForBeforeX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, true)) {
-            unregisterAfterEveryX(loopCountber, candidate.get(candidate.size() - 1));
-        }
-        return this;
-    }
-
-    protected List<Integer> getPossibleCandidatesForBeforeX(int loopCount, String name) {
-        return getCandidates(loopCount, name, beforeXLoop);
-    }
-
-    protected ExtensibleOpMode registerBeforeEveryX(int loop, RunAssistant assistant) {
-        if (assistant == null) {
-            throw new NullPointerException();
-        }
-
-        if (beforeEveryXLoop.containsKey(loop)) {
-            beforeEveryXLoop.get(loop).add(assistant);
-        } else {
-            createNewRunAssistantKey(loop, assistant, beforeEveryXLoop);
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode requestChangeOfRegisterBeforeX(Map<Integer, LinkedList<RunAssistant>> map) {
-        if (map == null) {
-            throw new NullPointerException();
-        }
-
-        checkRunAssistantMap(map);
-        afterEveryXLoop = new TreeMap<>(map);
-        return this;
-    }
-
-    protected ImmutableMap<Integer, LinkedList<RunAssistant>> getRegisterBeforeX() {
-        return ImmutableMap.copyOf(afterEveryXLoop);
-    }
-
-    protected ExtensibleOpMode unregisterBeforeEveryX(int loopCountber, String name) throws IllegalStateException {
-        List<Integer> candidate = getPossibleCandidatesForAfterEveryX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, false)) {
-            unregisterAfterEveryX(loopCountber, candidate.get(0));
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterBeforeEveryX(int loopCount, int pos) {
-        if (pos < 0 || pos > beforeEveryXLoop.get(loopCount).size() - 1) {
-            throw new IllegalArgumentException();
-        }
-        beforeEveryXLoop.get(loopCount).remove(pos);
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterLastBeforeEveryX(int loopCountber, String name) {
-        List<Integer> candidate = getPossibleCandidatesForAfterEveryX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, true)) {
-            unregisterAfterEveryX(loopCountber, candidate.get(candidate.size() - 1));
-        }
-        return this;
-    }
-
-    protected List<Integer> getPossibleCandidatesForBeforeEveryX(int loopCount, String name) {
-        return getCandidates(loopCount, name, beforeEveryXLoop);
-    }
-
-    protected ExtensibleOpMode requestChangeOfRegisterBeforeEveryX(Map<Integer, LinkedList<RunAssistant>> map) {
-        if (map == null) {
-            throw new NullPointerException();
-        }
-
-        checkRunAssistantMap(map);
-        beforeEveryXLoop = new TreeMap<>(map);
-        return this;
-    }
-
-    protected ImmutableMap<Integer, LinkedList<RunAssistant>> getRegisterBeforeEveryX() {
-        return ImmutableMap.copyOf(beforeEveryXLoop);
-    }
-
-    protected ExtensibleOpMode registerAfterEveryX(int loop, RunAssistant assistant) {
-        if (assistant == null) {
-            throw new NullPointerException();
-        }
-
-        if (afterEveryXLoop.containsKey(loop)) {
-            afterEveryXLoop.get(loop).add(assistant);
-        } else {
-            createNewRunAssistantKey(loop, assistant, afterEveryXLoop);
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterAfterEveryX(int loopCountber, String name) throws IllegalStateException {
-        List<Integer> candidate = getPossibleCandidatesForAfterEveryX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, false)) {
-            unregisterAfterX(loopCountber, candidate.get(candidate.size() - 1));
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterAfterEveryX(int loopCount, int pos) {
-        if (pos < 0 || pos > afterEveryXLoop.get(loopCount).size() - 1) {
-            throw new IllegalArgumentException();
-        }
-        afterEveryXLoop.get(loopCount).remove(pos);
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterLastEveryX(int loopCountber, String name) {
-        List<Integer> candidate = getPossibleCandidatesForAfterEveryX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, true)) {
-            unregisterAfterEveryX(loopCountber, candidate.get(candidate.size() - 1));
-        }
-
-        return this;
-    }
-
-    protected List<Integer> getPossibleCandidatesForAfterEveryX(int loopCount, String name) {
-        return getCandidates(loopCount, name, afterEveryXLoop);
-    }
-
-    protected ExtensibleOpMode requestChangeOfRegisterAfterEveryX(Map<Integer, LinkedList<RunAssistant>> map) {
-        if (map == null) {
-            throw new NullPointerException();
-        }
-
-        checkRunAssistantMap(map);
-        afterEveryXLoop = new TreeMap<>(map);
-        return this;
-    }
-
-    protected ImmutableMap<Integer, LinkedList<RunAssistant>> getRegisterAfterEveryX() {
-        return ImmutableMap.copyOf(afterEveryXLoop);
-    }
-
-    protected ExtensibleOpMode registerAfterX(int loop, RunAssistant assistant) {
-        if (assistant == null) {
-            throw new NullPointerException();
-        }
-
-        if (afterXLoop.containsKey(loop)) {
-            afterXLoop.get(loop).add(assistant);
-        } else {
-            createNewRunAssistantKey(loop, assistant, afterXLoop);
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterAfterX(int loopCountber, String name) throws IllegalStateException {
-        List<Integer> candidate = getPossibleCandidatesForAfterEveryX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, false)) {
-            unregisterAfterX(loopCountber, candidate.get(candidate.size() - 1));
-        }
-
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterAfterX(int loopCount, int pos) {
-        if (pos < 0 || pos > afterXLoop.get(loopCount).size() - 1) {
-            throw new IllegalArgumentException();
-        }
-        afterXLoop.get(loopCount).remove(pos);
-        return this;
-    }
-
-    protected ExtensibleOpMode unregisterLastAfterX(int loopCountber, String name) {
-        List<Integer> candidate = getPossibleCandidatesForAfterEveryX(loopCountber, name);
-        if (checkRunAssistantRemoval(loopCountber, candidate, true)) {
-            unregisterAfterX(loopCountber, candidate.get(candidate.size() - 1));
-        }
-
-        return this;
-    }
-
-    protected List<Integer> getPossibleCandidatesForAfterX(int loopCount, String name) {
-        return getCandidates(loopCount, name, afterXLoop);
-    }
-
-    protected ExtensibleOpMode requestChangeOfRegisterAfterX(Map<Integer, LinkedList<RunAssistant>> map) {
-        if (map == null) {
-            throw new NullPointerException();
-        }
-
-        checkRunAssistantMap(map);
-        afterXLoop = new LinkedHashMap<>(map);
-        return this;
-    }
-
-    protected ImmutableMap<Integer, LinkedList<RunAssistant>> getRegisterAfterX() {
-        return ImmutableMap.copyOf(afterXLoop);
-    }
-
-    protected final RobotContext getContext() {
-        return robotContext;
-    }
-
-    private boolean checkRunAssistantRemoval(
-            int loopCountber, List<Integer> candidate, boolean isLast) throws IllegalStateException {
-        if (candidate.size() < 1) {
-            throw new IllegalStateException("Cannot remove something, if there is nothing");
-        } else {
-            if (candidate.size() != 1) {
-                Log.w(TAG, "There are multiple removal candidates, removing the " +
-                        (isLast ? "last" : "first") + ".");
-                logRunAssistant(loopCountber, candidate);
-            }
-            return true;
-        }
-    }
-
-    private boolean checkRunAssistantMap(Map<Integer, LinkedList<RunAssistant>> map) {
-        for (Integer i : map.keySet()) {
-            for (RunAssistant runAssistant : map.get(i)) {
-                if (runAssistant == null) {
-                    throw new NullPointerException();
-                }
-            }
-        }
-        return true;
-    }
-
-    private void createNewRunAssistantKey(
-            int loop, RunAssistant assistant, Map<Integer, LinkedList<RunAssistant>> RunAssistantMap) {
-        LinkedList<RunAssistant> assistants = new LinkedList<>();
-        assistants.add(assistant);
-        RunAssistantMap.put(loop, assistants);
-    }
-
-    private LinkedList<Integer> getCandidates(int loopCount, String name, Map<Integer, LinkedList<RunAssistant>> runAssistantMap) {
-        LinkedList<Integer> list = new LinkedList<>();
-
-        for (int i = 0; i < runAssistantMap.get(loopCount).size(); i++) {
-            RunAssistant secondItem = runAssistantMap.get(loopCount).get(i);
-            if (secondItem.getClass().getSimpleName().indexOf(name) == 0) {
-                list.add(i);
-            }
-        }
-        return list;
-    }
-
-    private void logRunAssistant(int loopCountber, List<Integer> candidate) {
-        for (int i : candidate) {
-            Log.i(TAG, i + " " +
-                    afterEveryXLoop.get(loopCountber).get(i).getClass().getSimpleName());
-        }
-    }
-
-    private void runAssistant(RunAssistant assistant) {
-        LinkedList<Object> list = new LinkedList<>();
-        try {
-            assistant.onExecute(robotContext, list);
-        } catch (InterruptedException ex) {
-            handleInterrupt(ex);
-            return;
-        } catch (Exception e) {
-            handleException(list, e);
-        }
-
-        postProcess(list, robotContext.status().getMainRobotState());
-    }
-
-    private void handleInterrupt(InterruptedException ex) {
-        if (!Thread.currentThread().isInterrupted()) {
-            Thread.currentThread().interrupt();
-        }
-        Throwables.propagate(ex);
-    }
-
     private void handleException(LinkedList<Object> list, Exception e) {
         Log.e(TAG,
                 "An exception occurred running the OpMode " + getCallerClassName(e), e);
@@ -612,19 +277,153 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode {
         return "";
     }
 
-    protected ExtensibleGamepad gamepad1() {
+    protected final RobotContext getContext() {
+        return robotContext;
+    }
+
+    @NotNull
+    public ExtensibleLoopManager loopManager() {
+        return loopManager;
+    }
+
+    public ExtensibleGamepad gamepad1() {
         return robotContext.gamepad1();
     }
 
-    protected ExtensibleGamepad gamepad2() {
+    public ExtensibleGamepad gamepad2() {
         return robotContext.gamepad2();
     }
 
-    protected ExtensibleHardwareMap hardwareMap() {
+    @Override
+    public ExtensibleCameraManager cameraManager() {
+        return robotContext.cameraManager();
+    }
+
+    @Override
+    public void release() {
+        robotContext.release();
+    }
+
+    @NotNull
+    @Override
+    public DataBinder controllerBindings() {
+        return robotContext.controllerBindings();
+    }
+
+    @NotNull
+    @Override
+    public View robotControllerView() {
+        return robotContext.robotControllerView();
+    }
+
+    @Override
+    public RobotContext enableNetworking() {
+        return robotContext.enableNetworking();
+    }
+
+    private void runAssistant(RunAssistant assistant) {
+        LinkedList<Object> list = new LinkedList<>();
+        try {
+            assistant.onExecute(robotContext, list);
+        } catch (InterruptedException ex) {
+            handleInterrupt(ex);
+            return;
+        } catch (Exception e) {
+            handleException(list, e);
+        }
+
+        postProcess(list, robotContext.status().getMainRobotState());
+    }
+
+    private void handleInterrupt(InterruptedException ex) {
+        if (!Thread.currentThread().isInterrupted()) {
+            Thread.currentThread().interrupt();
+        }
+        Throwables.propagate(ex);
+    }
+
+    @Override
+    public RobotContext disableNetworking() {
+        return robotContext.disableNetworking();
+    }
+
+    @Override
+    public RobotContext startNetworking() {
+        return robotContext.startNetworking();
+    }
+
+    @Override
+    public RobotContext stopNetworking() {
+        return robotContext.stopNetworking();
+    }
+
+    public ExtensibleHardwareMap hardwareMap() {
         return robotContext.hardwareMap();
     }
 
-    protected ExtensibleTelemetry telemetry() {
+    @Override
+    public void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException {
+        robotContext.bindAppContext(context);
+    }
+
+    @Override
+    public void prepare(Context ctx) {
+        robotContext.prepare(ctx);
+    }
+
+    @Override
+    public Context appContext() {
+        return robotContext.appContext();
+    }
+
+    @Deprecated
+    @Override
+    public Gamepad legacyGamepad1() {
+        return robotContext.legacyGamepad1();
+    }
+
+    @Deprecated
+    @Override
+    public Gamepad legacyGamepad2() {
+        return robotContext.legacyGamepad2();
+    }
+
+    @Override
+    public ServerSettings serverSettings() {
+        return robotContext.serverSettings();
+    }
+
+    @Override
+    public RobotLogger log() {
+        return robotContext.log();
+    }
+
+    @Override
+    public void submitAsyncTask(Runnable runnable) {
+        robotContext.submitAsyncTask(runnable);
+    }
+
+    @Override
+    public void runOnUiThread(Runnable runnable) {
+        robotContext.runOnUiThread(runnable);
+    }
+
+    @Override
+    public RobotStatus status() {
+        return robotContext.status();
+    }
+
+    @Override
+    public void addPostData(Collection<InterfaceHttpData> datas) {
+        robotContext.addPostData(datas);
+    }
+
+    @Override
+    public ImmutableList<InterfaceHttpData> getPostedData() {
+        return robotContext.getPostedData();
+    }
+
+    public ExtensibleTelemetry telemetry() {
         return robotContext.telemetry();
     }
 }

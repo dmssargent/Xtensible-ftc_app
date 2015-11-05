@@ -14,11 +14,14 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
 import org.ftc.opmodes.FallbackOpModeRegister;
+import org.ftccommunity.bindings.DataBinder;
+import org.ftccommunity.ftcxtensible.AnnotationFtcRegister;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
@@ -52,7 +55,11 @@ public class FtcOpModeRegister implements OpModeRegister {
      * @param mgr op mode manager
      */
     public void register(final OpModeManager mgr) {
-        try {
+        DataBinder binding = DataBinder.getInstance();
+        binding.getIntegers().put("ftcview", R.id.RelativeLayout);
+
+      AnnotationFtcRegister.loadOpModes(mgr);
+        /*try {
             FallbackOpModeRegister.register(mgr);
 
             final LinkedList<String> noCheckList = new LinkedList<>();
@@ -101,14 +108,14 @@ public class FtcOpModeRegister implements OpModeRegister {
                         klazz = klazz.substring(0, klazz.indexOf("$") - 1);
                     }
                     noCheckList.add(klazz);
-                    break;
+                    continue;
                 } catch (ClassNotFoundException ex) {
                     Log.w(TAG, klazz + " " + ex.toString(), ex);
                     if (klazz.contains("$")) {
                         klazz = klazz.substring(0, klazz.indexOf("$") - 1);
                     }
                     noCheckList.add(klazz);
-                    break;
+                    continue;
                 }
                 if (!currentClass.isAnnotationPresent(disabledClass)) {
                     if (currentClass.isAnnotationPresent(teleOpClass)) {
@@ -207,7 +214,7 @@ public class FtcOpModeRegister implements OpModeRegister {
             }
 
             // Sort the map by keys, after discarding the old keys, use the new key from
-            // the first item in each LinkedList, and change from stopMode HashMap to stopMode TreeMap
+            // the first item in each LinkedList, and change from OpMode HashMap to OpMode TreeMap
             TreeMap<String, LinkedList<Class<OpMode>>> sortedOpModes = new TreeMap<>();
             for (String key : opModes.keySet()) {
                 Class<OpMode> opMode = opModes.get(key).getFirst();
@@ -270,5 +277,6 @@ public class FtcOpModeRegister implements OpModeRegister {
             name = opMode.getSimpleName();
         }
         return name;
+        */
     }
 }

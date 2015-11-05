@@ -1,19 +1,18 @@
 /*
  * Copyright © 2015 David Sargent
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the “Software”), to deal in the Software without restriction,
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- * do so, subject to the following conditions:
+ *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
+ *  do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -40,19 +39,19 @@ import java.util.LinkedList;
 @TeleOp
 @RobotSdkVersion(RobotSdkApiLevel.R3_2015)
 public class ArcadeDriveTeleop extends ExtensibleOpMode {
-    DcMotor driveForwardLeft;
-    DcMotor driveForwardRight;
-    DcMotor driveRearLeft;
-    DcMotor driveRearRight;
+    private DcMotor driveForwardLeft;
+    private DcMotor driveForwardRight;
+    private DcMotor driveRearLeft;
+    private DcMotor driveRearRight;
 
     double lastTurnFactor;
 
     @Override
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        driveForwardLeft = ctx.hardwareMap().getDcMotors().get("red");
-        driveForwardRight = ctx.hardwareMap().getDcMotors().get("blue");
-        driveRearLeft = ctx.hardwareMap().getDcMotors().get("green");
-        driveRearRight = ctx.hardwareMap().getDcMotors().get("yellow");
+        driveForwardLeft = ctx.hardwareMap().dcMotors().get("red");
+        driveForwardRight = ctx.hardwareMap().dcMotors().get("blue");
+        driveRearLeft = ctx.hardwareMap().dcMotors().get("green");
+        driveRearRight = ctx.hardwareMap().dcMotors().get("yellow");
 
         ctx.gamepad1().setupJoystickScalers(new JoystickScaler() {
             @Override

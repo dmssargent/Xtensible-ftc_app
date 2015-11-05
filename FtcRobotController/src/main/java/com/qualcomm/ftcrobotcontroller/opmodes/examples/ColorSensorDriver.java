@@ -15,7 +15,6 @@ public class ColorSensorDriver extends LinearOpMode {
 
     public ColorSensorDevice device = ColorSensorDevice.MODERN_ROBOTICS_I2C;
 
-    ;
     ColorSensor colorSensor;
     DeviceInterfaceModule cdim;
     LED led;

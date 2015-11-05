@@ -1,22 +1,19 @@
 /*
+ * Copyright © 2015 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
+ *  do so, subject to the following conditions:
  *
- *  * Copyright © 2015 David Sargent
- *  *
- *  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- *  * and associated documentation files (the “Software”), to deal in the Software without restriction,
- *  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  * do so, subject to the following conditions:
- *  *
- *  * The above copyright notice and this permission notice shall be included in all copies or
- *  * substantial portions of the Software.
- *  *
- *  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.ftccommunity.ftcxtensible.robot;
@@ -61,22 +58,22 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
     }
 
     protected final void changeLoopChangeoverNumber(int loopCount) {
-        Map<Integer, LinkedList<RunAssistant>> everyX = getRegisterAfterEveryX();
+        Map<Integer, LinkedList<RunAssistant>> everyX = loopManager().getRegisterAfterEveryX();
 
         if (everyX.get(loopCount).get(readOnlyPos) instanceof ReadOnlySwitch) {
-            unregisterAfterEveryX(loopCount, readOnlyPos);
+            loopManager().unregisterAfterEveryX(loopCount, readOnlyPos);
         } else { // We need to find our registration
-            getPossibleCandidatesForAfterEveryX(loopCount, ReadOnlySwitch.class.getSimpleName());
+            loopManager().getPossibleCandidatesForAfterEveryX(loopCount, ReadOnlySwitch.class.getSimpleName());
         }
 
         if (everyX.get(loopCount + 1).get(writeOnlyPos) instanceof WriteOnlyAssistant) {
-            unregisterAfterEveryX(loopCount + 1, writeOnlyPos);
+            loopManager().unregisterAfterEveryX(loopCount + 1, writeOnlyPos);
         } else { // We need to find our registration
-            List<Integer> canditates = getPossibleCandidatesForAfterEveryX(
+            List<Integer> canditates = loopManager().getPossibleCandidatesForAfterEveryX(
                     loopCount, WriteOnlyAssistant.class.getSimpleName());
             for (int i = 0; i < canditates.size(); i++) {
                 if (everyX.get(loopCount).get(canditates.get(i)) instanceof WriteOnlyAssistant) {
-                    unregisterAfterEveryX(loopCount, canditates.get(i));
+                    loopManager().unregisterAfterEveryX(loopCount, canditates.get(i));
                 }
             }
         }
@@ -85,13 +82,13 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
     }
 
     private void modifyLoopChangeoverNumber(int loopCount) {
-        int currentStatus = getRegisterAfterEveryX().size();
+        int currentStatus = loopManager().getRegisterAfterEveryX().size();
         writeOnlyPos = currentStatus;
         readOnlyPos = ++currentStatus;
 
-        registerAfterEveryX(loopCount, new ReadOnlySwitch());
-        registerNewLoopOnEveryX(loopCount, new ReadLoop());
-        registerAfterEveryX(loopCount + 3, new WriteOnlyAssistant());
+        loopManager().registerAfterEveryX(loopCount, new ReadOnlySwitch());
+        loopManager().registerNewLoopOnEveryX(loopCount, new ReadLoop());
+        loopManager().registerAfterEveryX(loopCount + 3, new WriteOnlyAssistant());
 
         runEveryXTimes = loopCount;
     }

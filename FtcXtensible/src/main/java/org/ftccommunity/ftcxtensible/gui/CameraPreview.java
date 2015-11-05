@@ -1,22 +1,19 @@
 /*
+ * Copyright © 2015 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
+ *  do so, subject to the following conditions:
  *
- *  * Copyright © 2015 David Sargent
- *  *
- *  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- *  * and associated documentation files (the “Software”), to deal in the Software without restriction,
- *  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  * do so, subject to the following conditions:
- *  *
- *  * The above copyright notice and this permission notice shall be included in all copies or
- *  * substantial portions of the Software.
- *  *
- *  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.ftccommunity.ftcxtensible.gui;
@@ -31,8 +28,9 @@ import android.view.SurfaceView;
 
 import com.google.common.annotations.Beta;
 
+import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
-import org.ftccommunity.ftcxtensible.sensors.camera.CameraManager;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.io.IOException;
 
@@ -44,40 +42,74 @@ import java.io.IOException;
  */
 @Beta
 @NotDocumentedWell
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-    private static String TAG = "CAMERA_PREVIEW::";
+ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+    private static final String TAG = "CAMERA_PREVIEW::";
     private final Context context;
+    private RobotContext robotContext;
     private SurfaceHolder mHolder;
     private Camera mCamera;
-    private CameraManager manager;
+    private ExtensibleCameraManager manager;
 
-    public CameraPreview(Context ctx) {
+
+    private CameraPreview(Context ctx) {
         super(ctx);
         this.context = ctx;
     }
 
-    public CameraPreview(Context ctx, CameraManager mgr) {
-        this(ctx);
-        bindCameraManager(mgr);
+
+    /**
+     * Builds a Camera Preview View, based on a Robot Context
+     *
+     * @param ctx Robot Context
+     */
+    public CameraPreview(RobotContext ctx) {
+        this(ctx.appContext());
+        robotContext = ctx;
+        bindCameraManager(ctx.cameraManager());
     }
 
-    public void bindCameraManager(CameraManager mgr) {
+    /**
+     * Binds a CameraManager to this preview, needed before output can occur
+     *
+     * @param mgr an Camera Manager of, or derived from, an ExtensibleCameraManager
+     * @see ExtensibleCameraManager
+     */
+    public void bindCameraManager(ExtensibleCameraManager mgr) {
         manager = mgr;
-        mCamera = mgr.getCamera();
+
+        try {
+            mCamera = Camera.open(mgr.getCameraId());
+            mgr.setCamera(mCamera);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getLocalizedMessage());
+        }
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
         mHolder = getHolder();
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
-        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
             mCamera.setPreviewDisplay(holder);
-            mCamera.startPreview();
+            mCamera.setPreviewCallback(manager.getPreviewCallback());
+
+            mCamera.enableShutterSound(false);
+            Camera.Parameters parameters = mCamera.getParameters();
+            parameters.setVideoStabilization(true);
+            parameters.setAutoWhiteBalanceLock(false);
+            parameters.setAutoWhiteBalanceLock(true);
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            parameters.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
+            parameters.setJpegQuality(70);
+            mCamera.setParameters(parameters);
+
+            // mCamera.startPreview();
+
+
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
@@ -85,6 +117,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         // empty. Take care of releasing the Camera preview in your activity.
+        mCamera.setPreviewCallback(null);
+        mCamera.release();
+        mCamera = null;
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -101,17 +136,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.stopPreview();
         } catch (Exception e) {
             // ignore: tried to gentleStop a non-existent preview
-            Log.e(TAG, "An exception occured during preview gentleStop.", e);
+            Log.e(TAG, "An exception occurred during preview gentleStop.", e);
         }
 
         // set preview size and make any resize, rotate or
         // reformatting changes here
         setCameraDisplayOrientation();
         // start preview with new settings
-        try {
-            mCamera.setPreviewDisplay(mHolder);
-            mCamera.startPreview();
 
+        if (robotContext.cameraManager().getPreviewCallback() != null) {
+            mCamera.setPreviewCallback(robotContext.cameraManager().getPreviewCallback());
+        }
+        try {
+            // mCamera.setPreviewDisplay(mHolder);
+            mCamera.startPreview();
         } catch (Exception e) {
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
