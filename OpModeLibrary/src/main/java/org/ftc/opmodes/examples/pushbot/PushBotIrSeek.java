@@ -1,4 +1,6 @@
-package org.ftc.opmodes.examples.pushbot;
+package com.qualcomm.ftcrobotcontroller.opmodes;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,7 +16,7 @@ public class PushBotIrSeek extends LinearOpMode {
     final static double kBaseSpeed = 0.15;  // Higher values will cause the robot to move faster
 
     final static double kMinimumStrength = 0.08; // Higher values will cause the robot to follow closer
-    final static double kMaximumStrength = 0.60; // Lower values will cause the robot to gentleStop sooner
+    final static double kMaximumStrength = 0.60; // Lower values will cause the robot to stop sooner
 
     IrSeekerSensor irSeeker;
     DcMotor leftMotor;
@@ -31,10 +33,10 @@ public class PushBotIrSeek extends LinearOpMode {
         waitForStart();
 
         // Continuously track the IR beacon
-        while (opModeIsActive()) {
+        while(opModeIsActive()) {
             double angle = irSeeker.getAngle() / 30;  // value between -4...4
             double strength = irSeeker.getStrength();
-            if (strength > kMinimumStrength && strength < kMaximumStrength) {
+            if (strength>kMinimumStrength && strength<kMaximumStrength) {
                 double leftSpeed = Range.clip(kBaseSpeed + (angle / 8), -1, 1);
                 double rightSpeed = Range.clip(kBaseSpeed - (angle / 8), -1, 1);
                 leftMotor.setPower(leftSpeed);

@@ -1,4 +1,4 @@
-package org.ftc.opmodes.examples.pushbot;
+package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -30,8 +30,8 @@ public class PushBotDriveTouch extends LinearOpMode {
         // Wait for the start button to be pressed
         waitForStart();
 
-        while (opModeIsActive()) {
-            if (touchSensor.isPressed()) {
+        while(opModeIsActive()) {
+            if(touchSensor.isPressed()) {
                 //Stop the motors if the touch sensor is pressed
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
