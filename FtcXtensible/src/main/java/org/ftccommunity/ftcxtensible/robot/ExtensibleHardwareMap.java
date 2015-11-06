@@ -44,7 +44,9 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.ftccommunity.ftcxtensible.abstraction.hardware.Mockable;
+import org.ftccommunity.ftcxtensible.hardware.i2c.Wire;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.util.I2cFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -203,6 +205,10 @@ public class ExtensibleHardwareMap {
 
     public DeviceMap<String, I2cDevice> i2cDevices() {
         return i2cDevices;
+    }
+
+    public Wire wire(String name, byte address) {
+        return I2cFactory.createWire(i2cDevices.get(name), address);
     }
 
     public DeviceMap<String, AnalogOutput> analogOutputs() {

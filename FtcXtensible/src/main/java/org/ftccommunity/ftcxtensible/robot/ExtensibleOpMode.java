@@ -22,11 +22,15 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -44,6 +48,9 @@ import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.robot.handlers.RobotUncaughtExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -70,6 +77,9 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     private int loopCount;
     private volatile int skipNextLoop;
 
+    private boolean logTimes;
+    private EvictingQueue<Integer> loopTimes;
+
     protected ExtensibleOpMode() {
         this.gamepad1 = super.gamepad1;
         this.gamepad2 = super.gamepad2;
@@ -90,6 +100,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         }
 
         loopManager = new ExtensibleLoopManager(this);
+        loopTimes = EvictingQueue.create(50);
     }
 
     protected ExtensibleOpMode(ExtensibleOpMode prt) {
@@ -108,7 +119,6 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         robotContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //Thread.currentThread().setUncaughtExceptionHandler(UncaughtExceptionHandlers.systemExit());
                 Activity controller = (Activity) robotContext.appContext();
                 @SuppressWarnings("ResourceType") PendingIntent intent = PendingIntent.getActivity(controller.getBaseContext(), 0,
                         new Intent(controller.getIntent()), controller.getIntent().getFlags());
@@ -203,9 +213,14 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
 
         // Get the delta time and check if it was longer than 50ms
         long endTime = System.nanoTime();
-        if ((endTime - startTime) - (1000000 * 50) > 0) {
+        long timeTaken = (endTime - startTime);
+        if (timeTaken - (1000000 * 50) > 0) {
             Log.w(TAG, "User code took long than " + 50 + "ms. Time: " +
-                    ((endTime - startTime) - (1000000 * 50)) + "ms");
+                    timeTaken + "ms");
+        }
+
+        if (logTimes) {
+            loopTimes.add((int) timeTaken);
         }
     }
 
@@ -221,6 +236,18 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         }
 
         postProcess(list, RobotStatus.MainStates.STOP);
+
+        if (logTimes) {
+            File perfFile = new File(Environment.getExternalStorageDirectory() + "/perf_" + System.currentTimeMillis() + ".json");
+            Log.i(TAG, "Saving Loop Performance File at " + perfFile);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            try {
+                FileWriter outputStream = new FileWriter(perfFile);
+                outputStream.write(gson.toJson(new PerformanceTuner((Integer[]) loopTimes.toArray())));
+            } catch (IOException ex) {
+                Log.e(TAG, ex.getMessage(), ex);
+            }
+        }
 
         parent = null;
         robotContext.release();
@@ -245,6 +272,14 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
 
     protected final void skipNextLoop() {
         skipNextLoop++;
+    }
+
+    protected final void enableLoopPerformanceCapture() {
+        logTimes = true;
+    }
+
+    protected final void disableLoopPerformanceCapture() {
+        logTimes = false;
     }
 
     private void handleException(LinkedList<Object> list, Exception e) {
