@@ -37,6 +37,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,8 +53,12 @@ import static com.google.common.base.Preconditions.checkState;
 // todo: finish class
 public class JoystickInputProcessor {
     private static final String TAG = "JOYSTICK_INPUT_PRSCR::";
+    private final String[] inputButtons = {
+            "A", "B", "X", "Y", "DPAD_UP", "DPAD_DOWN"
+    };
     private RobotContext context;
     private LinkedList<JoystickQuestion> questions;
+    private int index = -1;
 
     public JoystickInputProcessor(@NotNull RobotContext ctx) {
         context = ctx;
@@ -107,6 +112,46 @@ public class JoystickInputProcessor {
             if (currentQuestions.containsKey(setting.getKey())) {
                 currentQuestions.get(setting.getKey()).handleResponse(setting.getValue());
             }
+        }
+    }
+
+    public void loop() {
+        checkState(questions.size() > 0);
+
+        if (index == -1) {
+            index = 0;
+        }
+
+        JoystickQuestion joystickQuestion = questions.get(index);
+        List<String> answers = joystickQuestion.getPossibleAnswers();
+        context.telemetry().data(joystickQuestion.getIdentifier(), joystickQuestion.getQuestion());
+        for (int i = 0; i < answers.size() && i < inputButtons.length; i++) {
+            context.telemetry().data(inputButtons[i], answers.get(i));
+        }
+
+        int index = -1;
+        if (context.gamepad1().isAPressed()) {
+            index = 0;
+        } else if (context.gamepad1().isBPressed()) {
+            index = 1;
+        } else if (context.gamepad1().isXPressed()) {
+            index = 2;
+        } else if (context.gamepad1().isYPressed()) {
+            index = 3;
+        } else if (context.gamepad1().getDpad().isUpPressed()) {
+            index = 4;
+        } else if (context.gamepad1().getDpad().isDownPressed()) {
+            index = 5;
+        }
+
+        if (index != -1) {
+            joystickQuestion.handleResponse(answers.get(index));
+        }
+
+        if (context.gamepad1().getDpad().isLeftPressed()) {
+            this.index = --this.index % questions.size();
+        } else if (context.gamepad1().getDpad().isRightPressed()) {
+            this.index %= ++this.index % questions.size();
         }
     }
 }

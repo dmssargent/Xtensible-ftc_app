@@ -92,8 +92,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-0.19" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
-    <orderEntry type="library" exported="" name="io-0.19" level="project" />
     <orderEntry type="library" exported="" name="guava-19.0-rc1" level="project" />
+    <orderEntry type="library" exported="" name="io-0.19" level="project" />
     <orderEntry type="library" exported="" name="Analytics-release-" level="project" />
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
     <orderEntry type="library" exported="" name="learning-0.19" level="project" />
