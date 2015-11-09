@@ -68,4 +68,5 @@ dependencies {
     compile 'org.jetbrains:annotations:13.0'
     compile project(':OpModeAnnotations')
     compile project(':XtensibleControllerBindings')
+    androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
 }

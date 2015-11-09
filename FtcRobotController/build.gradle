@@ -45,4 +45,5 @@ dependencies {
     compile project(':OpModeLibrary')
     compile project(':XSimplify')
     compile project(':XtensibleControllerBindings')
+    androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
 }
