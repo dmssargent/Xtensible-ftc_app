@@ -12,9 +12,7 @@ package org.ftc.opmodes.examples.pushbot;
  * @author SSI Robotics
  * @version 2015-08-16-08-41
  */
-public class PushBotIrEvent extends PushBotTelemetrySensors
-
-{
+public class PushBotIrEvent extends PushBotTelemetrySensors {
     //--------------------------------------------------------------------------
     //
     // PushBotIrEvent
@@ -22,12 +20,10 @@ public class PushBotIrEvent extends PushBotTelemetrySensors
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotIrEvent()
-
-    {
+    public PushBotIrEvent() {
         //
         // Initialize base classes.
         //
@@ -47,15 +43,13 @@ public class PushBotIrEvent extends PushBotTelemetrySensors
 
     /**
      * Implement a state machine that controls the robot during auto-operation.
-     * <p/>
+     * <p>
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //
-        // When the robot is close to the IR beacon, gentleStop the motors and
+        // When the robot is close to the IR beacon, stop the motors and
         // transition to the next state.
         //
         int l_status = drive_to_ir_beacon();

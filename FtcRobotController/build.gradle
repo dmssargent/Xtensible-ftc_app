@@ -13,13 +13,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 
 repositories {
     flatDir {
         dirs 'libs'
-        dirs += '..\\libs'
+        dirs += '../libs'
     }
 }
 
@@ -45,4 +49,5 @@ dependencies {
     compile project(':OpModeLibrary')
     compile project(':XSimplify')
     compile project(':XtensibleControllerBindings')
+    androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
 }

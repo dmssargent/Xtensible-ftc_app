@@ -5,6 +5,7 @@ package org.ftc.opmodes.examples.pushbot;
 // PushBotOdsDetectEvent
 //
 
+
 /**
  * Provide a basic autonomous operational mode that demonstrates the use of an
  * optical distance sensor to detect a line implemented using a state machine
@@ -23,12 +24,10 @@ public class PushBotOdsDetectEvent extends PushBotTelemetrySensors
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotOdsDetectEvent()
-
-    {
+    public PushBotOdsDetectEvent() {
         //
         // Initialize base classes.
         //
@@ -48,13 +47,11 @@ public class PushBotOdsDetectEvent extends PushBotTelemetrySensors
 
     /**
      * Implement a state machine that controls the robot during auto-operation.
-     * <p/>
+     * <p>
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //
         // If a white line has been detected, then set the power level to zero.
         //

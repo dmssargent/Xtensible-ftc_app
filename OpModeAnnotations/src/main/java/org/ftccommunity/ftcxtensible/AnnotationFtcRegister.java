@@ -68,8 +68,9 @@ public class AnnotationFtcRegister {
         AnnotationFtcRegister me = new AnnotationFtcRegister();
         me.buildNoCheckList();
 
-        me.buildClassList();
-        HashMap<String, LinkedList<Class<OpMode>>> opModes = me.findOpModes(me.buildClassList());
+        LinkedList<Class> classes = me.buildClassList();
+        ServiceRegister.init((Class[]) classes.toArray());
+        HashMap<String, LinkedList<Class<OpMode>>> opModes = me.findOpModes(classes);
         me.sortOpModeMap(opModes);
 
         LinkedList<Class<OpMode>> opModesToRegister = new LinkedList<>();
@@ -110,6 +111,22 @@ public class AnnotationFtcRegister {
                 register.register(getOpModeName(opMode), opMode);
             }
         }
+    }
+
+    private static String getOpModeName(Class<OpMode> opMode) {
+        String name;
+        if (opMode.isAnnotationPresent(TeleOp.class)) {
+            name = opMode.getAnnotation(TeleOp.class).name();
+        } else if (opMode.isAnnotationPresent(Autonomous.class)) {
+            name = opMode.getAnnotation(Autonomous.class).name();
+        } else {
+            name = opMode.getSimpleName();
+        }
+
+        if (name.equals("")) {
+            name = opMode.getSimpleName();
+        }
+        return name;
     }
 
     private void buildNoCheckList() {
@@ -179,7 +196,6 @@ public class AnnotationFtcRegister {
             Collections.sort(opModes.get(key), firstComparator);
         }
     }
-
 
     private HashMap<String, LinkedList<Class<OpMode>>> findOpModes(LinkedList<Class> klazzes) {
         Class<TeleOp> teleOpClass = TeleOp.class;
@@ -253,22 +269,6 @@ public class AnnotationFtcRegister {
         }
 
         return sortedOpModes;
-    }
-
-    private static String getOpModeName(Class<OpMode> opMode) {
-        String name;
-        if (opMode.isAnnotationPresent(TeleOp.class)) {
-            name = opMode.getAnnotation(TeleOp.class).name();
-        } else if (opMode.isAnnotationPresent(Autonomous.class)) {
-            name = opMode.getAnnotation(Autonomous.class).name();
-        } else {
-            name = opMode.getSimpleName();
-        }
-
-        if (name.equals("")) {
-            name = opMode.getSimpleName();
-        }
-        return name;
     }
 
     private static class OpModeComparator implements Comparator<Class> {

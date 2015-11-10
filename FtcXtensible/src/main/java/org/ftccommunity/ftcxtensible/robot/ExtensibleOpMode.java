@@ -22,11 +22,15 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -44,12 +48,20 @@ import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.robot.handlers.RobotUncaughtExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
 /**
+ * The main Xtenisble OpMode, any devirable OpMode that this library presents has at one point devired from
+ * this class. This bootstraps the majority of the OpMode processing done by the Xtensible library
+ *
  * @author David Sargent - FTC5395
  * @since 0.1
  */
@@ -70,6 +82,13 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     private int loopCount;
     private volatile int skipNextLoop;
 
+    private boolean logTimes;
+    private EvictingQueue<Integer> loopTimes;
+    private VariableTracer tracer;
+
+    /**
+     * Bootstraps the Extensible OpMode to the Xtensible library
+     */
     protected ExtensibleOpMode() {
         this.gamepad1 = super.gamepad1;
         this.gamepad2 = super.gamepad2;
@@ -90,13 +109,23 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         }
 
         loopManager = new ExtensibleLoopManager(this);
+        loopTimes = EvictingQueue.create(50);
     }
 
+    /**
+     * Creates a new Extensible OpMode, with the master being the given parent
+     *
+     * @param prt the parent Extensible OpMode
+     */
     protected ExtensibleOpMode(ExtensibleOpMode prt) {
         this();
         parent = prt;
     }
 
+    /**
+     * Initialize the Extensible OpMode and perform the user code operations to initialize
+     * the robot
+     */
     @Override
     public final void init() {
         robotContext.prepare(super.hardwareMap.appContext);
@@ -108,7 +137,6 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         robotContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //Thread.currentThread().setUncaughtExceptionHandler(UncaughtExceptionHandlers.systemExit());
                 Activity controller = (Activity) robotContext.appContext();
                 @SuppressWarnings("ResourceType") PendingIntent intent = PendingIntent.getActivity(controller.getBaseContext(), 0,
                         new Intent(controller.getIntent()), controller.getIntent().getFlags());
@@ -130,6 +158,9 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     }
 
 
+    /**
+     * Starts the user code operations to start the robot
+     */
     @Override
     public final void start() {
         robotContext.status().setMainState(RobotStatus.MainStates.START);
@@ -154,6 +185,9 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     }
 
 
+    /**
+     * The looping system of Extensible OpMode
+     */
     @Override
     public final void loop() {
         loopCount++;
@@ -203,12 +237,21 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
 
         // Get the delta time and check if it was longer than 50ms
         long endTime = System.nanoTime();
-        if ((endTime - startTime) - (1000000 * 50) > 0) {
+        long timeTaken = (endTime - startTime);
+        if (timeTaken - (1000000 * 50) > 0) {
             Log.w(TAG, "User code took long than " + 50 + "ms. Time: " +
-                    ((endTime - startTime) - (1000000 * 50)) + "ms");
+                    timeTaken + "ms");
+        }
+
+        if (logTimes) {
+            loopTimes.add((int) timeTaken);
+            tracer.log();
         }
     }
 
+    /**
+     * Stop the robot
+     */
     @Override
     public final void stop() {
         LinkedList<Object> list = new LinkedList<>();
@@ -222,11 +265,29 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
 
         postProcess(list, RobotStatus.MainStates.STOP);
 
+        if (logTimes) {
+            File perfFile = new File(Environment.getExternalStorageDirectory() + "/perf_" + System.currentTimeMillis() + ".json");
+            Log.i(TAG, "Saving Loop Performance File at " + perfFile);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            try {
+                FileWriter outputStream = new FileWriter(perfFile);
+                outputStream.write(gson.toJson(new PerformanceTuner((Integer[]) loopTimes.toArray())));
+            } catch (IOException ex) {
+                Log.e(TAG, ex.getMessage(), ex);
+            }
+        }
+
         parent = null;
         robotContext.release();
         robotContext = null;
     }
 
+    /**
+     * Post process the given details of the user code segment
+     *
+     * @param list
+     * @param state
+     */
     private void postProcess(LinkedList<Object> list, RobotStatus.MainStates state) {
         if (list.isEmpty()) {
             onSuccess(robotContext, state, null);
@@ -239,14 +300,47 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         telemetry().sendData();
     }
 
+    /**
+     * Gets how many loop cycles have completed, including the current cycle
+     *
+     * @return the number of complete loop cycles, including the current one
+     */
     protected final int getLoopCount() {
         return loopCount;
     }
 
+    /**
+     * Tells the loop manager to skip the next loop cycle, this is additive, so calling this function
+     * twice skips two loops
+     */
     protected final void skipNextLoop() {
         skipNextLoop++;
     }
 
+    /**
+     * Enables the current OpMode that devires this to be recorded for debugging reasons
+     *
+     * @param child the OpMode that needs to be monitored
+     * @param <T>   the type of the monitored child
+     */
+    protected final <T> void enableLoopPerformanceCapture(@NotNull T child) {
+        this.tracer = new VariableTracer<>(child);
+        logTimes = true;
+    }
+
+    /**
+     * Disables loop capture
+     */
+    protected final void disableLoopPerformanceCapture() {
+        logTimes = false;
+    }
+
+    /**
+     * Handles an user code exception
+     *
+     * @param list
+     * @param e
+     */
     private void handleException(LinkedList<Object> list, Exception e) {
         Log.e(TAG,
                 "An exception occurred running the OpMode " + getCallerClassName(e), e);
@@ -425,5 +519,44 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
 
     public ExtensibleTelemetry telemetry() {
         return robotContext.telemetry();
+    }
+
+    private class VariableTrace {
+        private String name;
+        private Object value;
+
+        public VariableTrace(String name, Object value) {
+            this.name = name;
+            this.value = value;
+        }
+    }
+
+    class VariableTracer<T> {
+        private transient T current;
+        private LinkedList<VariableTrace> traces;
+
+        public VariableTracer(T o) {
+            current = o;
+            traces = new LinkedList<>();
+        }
+
+        public void log() {
+            LinkedList<VariableTrace> fields = new LinkedList<>();
+            for (Field field : current.getClass().getDeclaredFields()) {
+                if (!Modifier.isTransient(field.getModifiers())) {
+                    try {
+                        fields.add(new VariableTrace(field.getName(), field.get(current)));
+                    } catch (IllegalAccessException | ClassCastException e) {
+                        Log.e(TAG, e.getLocalizedMessage(), e);
+                    }
+                }
+            }
+
+            traces.addAll(fields);
+        }
+
+        public VariableTrace[] get() {
+            return (VariableTrace[]) traces.toArray();
+        }
     }
 }

@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 
 /**
  * Provide telemetry provided by the PushBotHardwareSensors class.
- * <p/>
+ * <p>
  * Insert this class between a custom op-mode and the PushBotHardwareSensors
  * class to display telemetry available from the hardware sensor class.
  *
  * @author SSI Robotics
  * @version 2015-08-02-13-57
- *          <p/>
+ *          <p>
  *          Telemetry Keys
  *          12 - The position of the touch sensor (true=pressed/false=not pressed).
  *          13 - The angle returned by the IR seeker class, which indicates the
@@ -38,12 +38,10 @@ public class PushBotTelemetrySensors extends PushBotHardwareSensors
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotTelemetrySensors()
-
-    {
+    public PushBotTelemetrySensors() {
         //
         // Initialize base classes.
         //
@@ -64,9 +62,7 @@ public class PushBotTelemetrySensors extends PushBotHardwareSensors
     /**
      * Update the telemetry with current values from the base class.
      */
-    public void update_telemetry()
-
-    {
+    public void update_telemetry() {
         //
         // Use a base class method to update telemetry for non-sensor hardware
         // (i.e. left/right drive wheels, left arm, etc.).

@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.Range;
  * Provides a single sensor access point between custom op-modes and the
  * OpMode class for the Push Bot.  It does this by extending the original Push
  * Bot's hardware and telemetry classes.
- * <p/>
+ * <p>
  * This class prevents the custom op-mode from throwing an exception at runtime.
  * If any hardware fails to map, a warning will be shown via telemetry data,
  * calls to methods will fail, but will not cause the application to crash.
@@ -88,12 +88,10 @@ public class PushBotHardwareSensors extends PushBotTelemetry
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotHardwareSensors()
-
-    {
+    public PushBotHardwareSensors() {
         //
         // Initialize base classes.
         //
@@ -108,13 +106,11 @@ public class PushBotHardwareSensors extends PushBotTelemetry
 
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
-     * <p/>
+     * <p>
      * The system calls this member once when the OpMode is enabled.
      */
     @Override
-    public void init()
-
-    {
+    public void init() {
         //
         // Use a base class method to associate class members to non-sensor
         // hardware ports (i.e. left/right drive wheels, left arm, etc.).
@@ -173,9 +169,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     /**
      * Indicate whether the touch sensor has been pressed.
      */
-    boolean is_touch_sensor_pressed()
-
-    {
+    boolean is_touch_sensor_pressed() {
         boolean l_return = false;
 
         if (v_sensor_touch != null) {
@@ -189,9 +183,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     /**
      * Apply upward power to the arm motor until the touch sensor is pressed.
      */
-    boolean move_arm_upward_until_touch()
-
-    {
+    boolean move_arm_upward_until_touch() {
         //
         // If the touch sensor is pressed, halt the motors.
         //
@@ -215,9 +207,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     /**
      * Access the IR sensor's estimated angle.
      */
-    double a_ir_angle()
-
-    {
+    double a_ir_angle() {
         double l_return = 0.0;
 
         if (v_sensor_ir != null) {
@@ -236,9 +226,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     /**
      * Access the IR sensor's estimated strength level.
      */
-    double a_ir_strength()
-
-    {
+    double a_ir_strength() {
         double l_return = 0.0;
 
         if (v_sensor_ir != null) {
@@ -257,9 +245,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     /**
      * Access the IR sensor's angle and strength levels.
      */
-    IrSeekerSensor.IrSeekerIndividualSensor[] a_ir_angles_and_strengths()
-
-    {
+    IrSeekerSensor.IrSeekerIndividualSensor[] a_ir_angles_and_strengths() {
         IrSeekerSensor.IrSeekerIndividualSensor[] l_return =
                 {new IrSeekerSensor.IrSeekerIndividualSensor()
                         , new IrSeekerSensor.IrSeekerIndividualSensor()
@@ -278,9 +264,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     // v_sensor_touch
     //
 
-    int drive_to_ir_beacon()
-
-    {
+    int drive_to_ir_beacon() {
         //
         // Assume that the IR beacon is far away.
         //
@@ -335,9 +319,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     /**
      * Access the amount of light detected by the Optical Distance Sensor.
      */
-    double a_ods_light_detected()
-
-    {
+    double a_ods_light_detected() {
         double l_return = 0.0;
 
         if (v_sensor_ods != null) {
@@ -356,9 +338,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     /**
      * Access whether the EOP is detecting white tape.
      */
-    boolean a_ods_white_tape_detected()
-
-    {
+    boolean a_ods_white_tape_detected() {
         //
         // Assume not.
         //

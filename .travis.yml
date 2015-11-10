@@ -1,0 +1,13 @@
+language:
+  android
+
+android:
+  components:
+    - build-tools-23.0.1
+    - android-22
+
+before_script:
+  - pip install --user codecov
+
+after_success:
+  - codecov

@@ -92,7 +92,7 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // gentleStop
+    // stop
     //
 
     /**
@@ -100,9 +100,7 @@ public class PushBotHardware extends OpMode
      * <p/>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotHardware()
-
-    {
+    public PushBotHardware() {
         //
         // Initialize base classes.
         //
@@ -126,9 +124,7 @@ public class PushBotHardware extends OpMode
      * The system calls this member once when the OpMode is enabled.
      */
     @Override
-    public void init()
-
-    {
+    public void init() {
         //
         // Use the hardwareMap to associate class members to hardware ports.
         //
@@ -216,9 +212,7 @@ public class PushBotHardware extends OpMode
     /**
      * Access whether a warning has been generated.
      */
-    boolean a_warning_generated()
-
-    {
+    boolean a_warning_generated() {
         return v_warning_generated;
 
     } // a_warning_generated
@@ -231,9 +225,7 @@ public class PushBotHardware extends OpMode
     /**
      * Access the warning message.
      */
-    String a_warning_message()
-
-    {
+    String a_warning_message() {
         return v_warning_message;
 
     } // a_warning_message
@@ -250,9 +242,7 @@ public class PushBotHardware extends OpMode
      * A comma will be added before the specified message if the message isn't
      * empty.
      */
-    void m_warning_message(String p_exception_message)
-
-    {
+    void m_warning_message(String p_exception_message) {
         if (v_warning_generated) {
             v_warning_message += ", ";
         }
@@ -272,9 +262,7 @@ public class PushBotHardware extends OpMode
      * The system calls this member once when the OpMode is enabled.
      */
     @Override
-    public void start()
-
-    {
+    public void start() {
         //
         // Only actions that are common to all Op-Modes (i.e. both automatic and
         // manual) should be implemented here.
@@ -295,9 +283,7 @@ public class PushBotHardware extends OpMode
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //
         // Only actions that are common to all OpModes (i.e. both auto and\
         // manual) should be implemented here.
@@ -323,7 +309,7 @@ public class PushBotHardware extends OpMode
         // Nothing needs to be done for this method.
         //
 
-    } // gentleStop
+    } // stop
 
     //--------------------------------------------------------------------------
     //
@@ -417,9 +403,7 @@ public class PushBotHardware extends OpMode
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_drive_power(double p_left_power, double p_right_power)
-
-    {
+    void set_drive_power(double p_left_power, double p_right_power) {
         if (v_motor_left_drive != null) {
             v_motor_left_drive.setPower(p_left_power);
         }
@@ -437,13 +421,9 @@ public class PushBotHardware extends OpMode
     /**
      * Set the left drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_using_left_drive_encoder()
-
-    {
+    public void run_using_left_drive_encoder() {
         if (v_motor_left_drive != null) {
-            v_motor_left_drive.setChannelMode
-                    (DcMotorController.RunMode.RUN_USING_ENCODERS
-                    );
+            v_motor_left_drive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
 
     } // run_using_left_drive_encoder
@@ -456,15 +436,10 @@ public class PushBotHardware extends OpMode
     /**
      * Set the right drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_using_right_drive_encoder()
-
-    {
+    public void run_using_right_drive_encoder() {
         if (v_motor_right_drive != null) {
-            v_motor_right_drive.setChannelMode
-                    (DcMotorController.RunMode.RUN_USING_ENCODERS
-                    );
+            v_motor_right_drive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
-
     } // run_using_right_drive_encoder
 
     //--------------------------------------------------------------------------
@@ -475,15 +450,11 @@ public class PushBotHardware extends OpMode
     /**
      * Set both drive wheel encoders to run, if the mode is appropriate.
      */
-    public void run_using_encoders()
-
-    {
+    public void run_using_encoders() {
         //
         // Call other members to perform the action on both motors.
         //
         run_using_left_drive_encoder();
-        run_using_right_drive_encoder();
-
     } // run_using_encoders
 
     //--------------------------------------------------------------------------
@@ -494,15 +465,10 @@ public class PushBotHardware extends OpMode
     /**
      * Set the left drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_without_left_drive_encoder()
-
-    {
+    public void run_without_left_drive_encoder() {
         if (v_motor_left_drive != null) {
-            if (v_motor_left_drive.getChannelMode() ==
-                    DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_left_drive.setChannelMode
-                        (DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
-                        );
+            if (v_motor_left_drive.getMode() == DcMotorController.RunMode.RESET_ENCODERS) {
+                v_motor_left_drive.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             }
         }
 
@@ -516,15 +482,11 @@ public class PushBotHardware extends OpMode
     /**
      * Set the right drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_without_right_drive_encoder()
-
-    {
+    public void run_without_right_drive_encoder() {
         if (v_motor_right_drive != null) {
-            if (v_motor_right_drive.getChannelMode() ==
-                    DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_right_drive.setChannelMode
-                        (DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
-                        );
+            if (v_motor_right_drive.getMode() == DcMotorController.RunMode.RESET_ENCODERS) {
+                v_motor_right_drive.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
+                );
             }
         }
 
@@ -538,9 +500,7 @@ public class PushBotHardware extends OpMode
     /**
      * Set both drive wheel encoders to run, if the mode is appropriate.
      */
-    public void run_without_drive_encoders()
-
-    {
+    public void run_without_drive_encoders() {
         //
         // Call other members to perform the action on both motors.
         //
@@ -557,11 +517,9 @@ public class PushBotHardware extends OpMode
     /**
      * Reset the left drive wheel encoder.
      */
-    public void reset_left_drive_encoder()
-
-    {
+    public void reset_left_drive_encoder() {
         if (v_motor_left_drive != null) {
-            v_motor_left_drive.setChannelMode
+            v_motor_left_drive.setMode
                     (DcMotorController.RunMode.RESET_ENCODERS
                     );
         }
@@ -576,11 +534,9 @@ public class PushBotHardware extends OpMode
     /**
      * Reset the right drive wheel encoder.
      */
-    public void reset_right_drive_encoder()
-
-    {
+    public void reset_right_drive_encoder() {
         if (v_motor_right_drive != null) {
-            v_motor_right_drive.setChannelMode
+            v_motor_right_drive.setMode
                     (DcMotorController.RunMode.RESET_ENCODERS
                     );
         }
@@ -595,9 +551,7 @@ public class PushBotHardware extends OpMode
     /**
      * Reset both drive wheel encoders.
      */
-    public void reset_drive_encoders()
-
-    {
+    public void reset_drive_encoders() {
         //
         // Reset the motor encoders on the drive wheels.
         //
@@ -633,9 +587,7 @@ public class PushBotHardware extends OpMode
     /**
      * Access the right encoder's count.
      */
-    int a_right_encoder_count()
-
-    {
+    int a_right_encoder_count() {
         int l_return = 0;
 
         if (v_motor_right_drive != null) {
@@ -654,9 +606,7 @@ public class PushBotHardware extends OpMode
     /**
      * Indicate whether the left drive motor's encoder has reached a value.
      */
-    boolean has_left_drive_encoder_reached(double p_count)
-
-    {
+    boolean has_left_drive_encoder_reached(double p_count) {
         //
         // Assume failure.
         //
@@ -691,9 +641,7 @@ public class PushBotHardware extends OpMode
     /**
      * Indicate whether the right drive motor's encoder has reached a value.
      */
-    boolean has_right_drive_encoder_reached(double p_count)
-
-    {
+    boolean has_right_drive_encoder_reached(double p_count) {
         //
         // Assume failure.
         //
@@ -728,12 +676,7 @@ public class PushBotHardware extends OpMode
     /**
      * Indicate whether the drive motors' encoders have reached a value.
      */
-    boolean have_drive_encoders_reached
-    (double p_left_count
-            , double p_right_count
-    )
-
-    {
+    boolean have_drive_encoders_reached(double p_left_count, double p_right_count) {
         //
         // Assume failure.
         //
@@ -765,14 +708,7 @@ public class PushBotHardware extends OpMode
     /**
      * Indicate whether the drive motors' encoders have reached a value.
      */
-    boolean drive_using_encoders
-    (double p_left_power
-            , double p_right_power
-            , double p_left_count
-            , double p_right_count
-    )
-
-    {
+    boolean drive_using_encoders(double p_left_power, double p_right_power, double p_left_count, double p_right_count) {
         //
         // Assume the encoders have not reached the limit.
         //
@@ -1004,9 +940,7 @@ public class PushBotHardware extends OpMode
     /**
      * Open the hand to its fullest.
      */
-    void open_hand()
-
-    {
+    void open_hand() {
         //
         // Set the value.  The right hand value must be opposite of the left
         // value.

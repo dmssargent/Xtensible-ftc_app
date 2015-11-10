@@ -23,12 +23,10 @@ public class PushBotManual1 extends PushBotTelemetry
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotManual1()
-
-    {
+    public PushBotManual1() {
         //
         // Initialize base classes.
         //
@@ -50,13 +48,11 @@ public class PushBotManual1 extends PushBotTelemetry
      * Implement a state machine that controls the robot during
      * manual-operation.  The state machine uses gamepad input to transition
      * between states.
-     * <p/>
+     * <p>
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //----------------------------------------------------------------------
         //
         // DC Motors
@@ -80,11 +76,11 @@ public class PushBotManual1 extends PushBotTelemetry
         //
         float l_gp1_left_stick_y = -gamepad1.left_stick_y;
         float l_left_drive_power
-                = scale_motor_power(l_gp1_left_stick_y);
+                = (float) scale_motor_power(l_gp1_left_stick_y);
 
         float l_gp1_right_stick_y = -gamepad1.right_stick_y;
         float l_right_drive_power
-                = scale_motor_power(l_gp1_right_stick_y);
+                = (float) scale_motor_power(l_gp1_right_stick_y);
 
         set_drive_power(l_left_drive_power, l_right_drive_power);
 
@@ -94,8 +90,8 @@ public class PushBotManual1 extends PushBotTelemetry
         // arm move from the back to the front (i.e. down).
         //
         float l_left_arm_power
-                = scale_motor_power(gamepad1.right_trigger)
-                - scale_motor_power(gamepad1.left_trigger);
+                = (float) scale_motor_power(gamepad1.right_trigger)
+                - (float) scale_motor_power(gamepad1.left_trigger);
         m_left_arm_power(l_left_arm_power);
 
         //----------------------------------------------------------------------

@@ -23,12 +23,10 @@ public class PushBotManual extends PushBotTelemetry
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotManual()
-
-    {
+    public PushBotManual() {
         //
         // Initialize base classes.
         //
@@ -50,13 +48,11 @@ public class PushBotManual extends PushBotTelemetry
      * Implement a state machine that controls the robot during
      * manual-operation.  The state machine uses gamepad input to transition
      * between states.
-     * <p/>
+     * <p>
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //----------------------------------------------------------------------
         //
         // DC Motors

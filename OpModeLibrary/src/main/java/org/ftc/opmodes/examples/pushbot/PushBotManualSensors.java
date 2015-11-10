@@ -42,12 +42,10 @@ public class PushBotManualSensors extends PushBotTelemetrySensors
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotManualSensors()
-
-    {
+    public PushBotManualSensors() {
         //
         // Initialize base classes.
         //
@@ -64,13 +62,11 @@ public class PushBotManualSensors extends PushBotTelemetrySensors
      * Implement a state machine that controls the robot during
      * manual-operation.  The state machine uses gamepad and sensor input to
      * transition between states.
-     * <p/>
+     * <p>
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //----------------------------------------------------------------------
         //
         // DC Motors
@@ -94,11 +90,11 @@ public class PushBotManualSensors extends PushBotTelemetrySensors
         //
         float l_gp1_left_stick_y = -gamepad1.left_stick_y;
         float l_left_drive_power
-                = scale_motor_power(l_gp1_left_stick_y);
+                = (float) scale_motor_power(l_gp1_left_stick_y);
 
         float l_gp1_right_stick_y = -gamepad1.right_stick_y;
         float l_right_drive_power
-                = scale_motor_power(l_gp1_right_stick_y);
+                = (float) scale_motor_power(l_gp1_right_stick_y);
 
         set_drive_power(l_left_drive_power, l_right_drive_power);
 
@@ -150,7 +146,7 @@ public class PushBotManualSensors extends PushBotTelemetrySensors
         else {
             v_raise_arm_automatically = false;
 
-            l_arm_command = scale_motor_power(l_gp2_left_stick_y);
+            l_arm_command = (float) scale_motor_power(l_gp2_left_stick_y);
         }
         m_left_arm_power(l_arm_command);
 
