@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
+package org.ftc.opmodes.examples.pushbot;
 
 //------------------------------------------------------------------------------
 //
