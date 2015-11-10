@@ -86,6 +86,8 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
@@ -107,15 +109,15 @@
     <orderEntry type="library" exported="" name="FtcCommon-release-" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="asm-debug-all-5.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="org.jacoco.core-0.7.5.201505241946" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-codec-1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-artifact-manager-2.0.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-3.8.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="commons-codec-1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="commons-digester-1.6" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-plugin-registry-2.0.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-plugin-api-2.0.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-shared-io-1.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="plexus-classworlds-1.2-alpha-9" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="doxia-decoration-model-1.1.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="plexus-classworlds-1.2-alpha-9" level="project" />
     <orderEntry type="library" exported="" name="feature-0.19" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="file-management-1.2.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-reporting-impl-2.1" level="project" />
@@ -151,8 +153,8 @@
     <orderEntry type="library" exported="" name="annotations-13.0" level="project" />
     <orderEntry type="library" exported="" name="dense64-0.28" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="doxia-logging-api-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jacoco-maven-plugin-0.7.5.201505241946" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="plexus-interpolation-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jacoco-maven-plugin-0.7.5.201505241946" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="xercesImpl-2.8.1" level="project" />
     <orderEntry type="library" exported="" name="simple-0.28" level="project" />
     <orderEntry type="library" exported="" name="jama-1.0.3" level="project" />
