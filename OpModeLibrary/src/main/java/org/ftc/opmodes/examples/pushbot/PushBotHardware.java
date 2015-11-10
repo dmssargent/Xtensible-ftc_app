@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
+package org.ftc.opmodes.examples.pushbot;
 
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -11,10 +11,11 @@ import com.qualcomm.robotcore.util.Range;
 //
 // PushBotHardware
 //
+
 /**
  * Provides a single hardware access point between custom op-modes and the
  * OpMode class for the Push Bot.
- *
+ * <p/>
  * This class prevents the custom op-mode from throwing an exception at runtime.
  * If any hardware fails to map, a warning will be shown via telemetry data,
  * calls to methods will fail, but will not cause the application to crash.
@@ -29,14 +30,77 @@ public class PushBotHardware extends OpMode
     //
     // PushBotHardware
     //
+
+    /**
+     * Indicate whether a message is a available to the class user.
+     */
+    private boolean v_warning_generated = false;
+
+    //--------------------------------------------------------------------------
+    //
+    // init
+    //
+    /**
+     * Store a message to the user if one has been generated.
+     */
+    private String v_warning_message;
+
+    //--------------------------------------------------------------------------
+    //
+    // a_warning_generated
+    //
+    /**
+     * Manage the aspects of the left drive motor.
+     */
+    private DcMotor v_motor_left_drive;
+
+    //--------------------------------------------------------------------------
+    //
+    // a_warning_message
+    //
+    /**
+     * Manage the aspects of the right drive motor.
+     */
+    private DcMotor v_motor_right_drive;
+
+    //--------------------------------------------------------------------------
+    //
+    // m_warning_message
+    //
+    /**
+     * Manage the aspects of the left arm motor.
+     */
+    private DcMotor v_motor_left_arm;
+
+    //--------------------------------------------------------------------------
+    //
+    // start
+    //
+    /**
+     * Manage the aspects of the left hand servo.
+     */
+    private Servo v_servo_left_hand;
+
+    //--------------------------------------------------------------------------
+    //
+    // loop
+    //
+    /**
+     * Manage the aspects of the right hand servo.
+     */
+    private Servo v_servo_right_hand;
+
+    //--------------------------------------------------------------------------
+    //
+    // stop
+    //
+
     /**
      * Construct the class.
-     *
+     * <p/>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotHardware ()
-
-    {
+    public PushBotHardware() {
         //
         // Initialize base classes.
         //
@@ -51,16 +115,16 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // init
+    // scale_motor_power
     //
+
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
-     *
+     * <p/>
      * The system calls this member once when the OpMode is enabled.
      */
-    @Override public void init ()
-
-    {
+    @Override
+    public void init() {
         //
         // Use the hardwareMap to associate class members to hardware ports.
         //
@@ -79,27 +143,21 @@ public class PushBotHardware extends OpMode
         // The direction of the right motor is reversed, so joystick inputs can
         // be more generically applied.
         //
-        try
-        {
-            v_motor_left_drive = hardwareMap.dcMotor.get ("left_drive");
-        }
-        catch (Exception p_exeception)
-        {
-            m_warning_message ("left_drive");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
+        try {
+            v_motor_left_drive = hardwareMap.dcMotor.get("left_drive");
+        } catch (Exception p_exeception) {
+            m_warning_message("left_drive");
+            DbgLog.msg(p_exeception.getLocalizedMessage());
 
             v_motor_left_drive = null;
         }
 
-        try
-        {
-            v_motor_right_drive = hardwareMap.dcMotor.get ("right_drive");
-            v_motor_right_drive.setDirection (DcMotor.Direction.REVERSE);
-        }
-        catch (Exception p_exeception)
-        {
-            m_warning_message ("right_drive");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
+        try {
+            v_motor_right_drive = hardwareMap.dcMotor.get("right_drive");
+            v_motor_right_drive.setDirection(DcMotor.Direction.REVERSE);
+        } catch (Exception p_exeception) {
+            m_warning_message("right_drive");
+            DbgLog.msg(p_exeception.getLocalizedMessage());
 
             v_motor_right_drive = null;
         }
@@ -107,14 +165,11 @@ public class PushBotHardware extends OpMode
         //
         // Connect the arm motor.
         //
-        try
-        {
-            v_motor_left_arm = hardwareMap.dcMotor.get ("left_arm");
-        }
-        catch (Exception p_exeception)
-        {
-            m_warning_message ("left_arm");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
+        try {
+            v_motor_left_arm = hardwareMap.dcMotor.get("left_arm");
+        } catch (Exception p_exeception) {
+            m_warning_message("left_arm");
+            DbgLog.msg(p_exeception.getLocalizedMessage());
 
             v_motor_left_arm = null;
         }
@@ -127,28 +182,22 @@ public class PushBotHardware extends OpMode
         //
         double l_hand_position = 0.5;
 
-        try
-        {
-            v_servo_left_hand = hardwareMap.servo.get ("left_hand");
-            v_servo_left_hand.setPosition (l_hand_position);
-        }
-        catch (Exception p_exeception)
-        {
-            m_warning_message ("left_hand");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
+        try {
+            v_servo_left_hand = hardwareMap.servo.get("left_hand");
+            v_servo_left_hand.setPosition(l_hand_position);
+        } catch (Exception p_exeception) {
+            m_warning_message("left_hand");
+            DbgLog.msg(p_exeception.getLocalizedMessage());
 
             v_servo_left_hand = null;
         }
 
-        try
-        {
-            v_servo_right_hand = hardwareMap.servo.get ("right_hand");
-            v_servo_right_hand.setPosition (l_hand_position);
-        }
-        catch (Exception p_exeception)
-        {
-            m_warning_message ("right_hand");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
+        try {
+            v_servo_right_hand = hardwareMap.servo.get("right_hand");
+            v_servo_right_hand.setPosition(l_hand_position);
+        } catch (Exception p_exeception) {
+            m_warning_message("right_hand");
+            DbgLog.msg(p_exeception.getLocalizedMessage());
 
             v_servo_right_hand = null;
         }
@@ -157,48 +206,44 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // a_warning_generated
+    // a_left_drive_power
     //
+
     /**
      * Access whether a warning has been generated.
      */
-    boolean a_warning_generated ()
-
-    {
+    boolean a_warning_generated() {
         return v_warning_generated;
 
     } // a_warning_generated
 
     //--------------------------------------------------------------------------
     //
-    // a_warning_message
+    // a_right_drive_power
     //
+
     /**
      * Access the warning message.
      */
-    String a_warning_message ()
-
-    {
+    String a_warning_message() {
         return v_warning_message;
 
     } // a_warning_message
 
     //--------------------------------------------------------------------------
     //
-    // m_warning_message
+    // set_drive_power
     //
+
     /**
      * Mutate the warning message by ADDING the specified message to the current
      * message; set the warning indicator to true.
-     *
+     * <p/>
      * A comma will be added before the specified message if the message isn't
      * empty.
      */
-    void m_warning_message (String p_exception_message)
-
-    {
-        if (v_warning_generated)
-        {
+    void m_warning_message(String p_exception_message) {
+        if (v_warning_generated) {
             v_warning_message += ", ";
         }
         v_warning_generated = true;
@@ -208,16 +253,16 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // start
+    // run_using_left_drive_encoder
     //
+
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
-     *
+     * <p/>
      * The system calls this member once when the OpMode is enabled.
      */
-    @Override public void start ()
-
-    {
+    @Override
+    public void start() {
         //
         // Only actions that are common to all Op-Modes (i.e. both automatic and
         // manual) should be implemented here.
@@ -229,16 +274,16 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // loop
+    // run_using_right_drive_encoder
     //
+
     /**
      * Perform any actions that are necessary while the OpMode is running.
-     *
+     * <p/>
      * The system calls this member repeatedly while the OpMode is running.
      */
-    @Override public void loop ()
-
-    {
+    @Override
+    public void loop() {
         //
         // Only actions that are common to all OpModes (i.e. both auto and\
         // manual) should be implemented here.
@@ -250,15 +295,16 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // stop
+    // run_using_encoders
     //
+
     /**
      * Perform any actions that are necessary when the OpMode is disabled.
-     *
+     * <p/>
      * The system calls this member once when the OpMode is disabled.
      */
-    @Override public void stop ()
-    {
+    @Override
+    public void stop() {
         //
         // Nothing needs to be done for this method.
         //
@@ -267,13 +313,13 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // scale_motor_power
+    // run_without_left_drive_encoder
     //
+
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    float scale_motor_power (float p_power)
-    {
+    float scale_motor_power(float p_power) {
         //
         // Assume no scaling.
         //
@@ -282,34 +328,28 @@ public class PushBotHardware extends OpMode
         //
         // Ensure the values are legal.
         //
-        float l_power = Range.clip (p_power, -1, 1);
+        float l_power = Range.clip(p_power, -1, 1);
 
         float[] l_array =
-            { 0.00f, 0.05f, 0.09f, 0.10f, 0.12f
-            , 0.15f, 0.18f, 0.24f, 0.30f, 0.36f
-            , 0.43f, 0.50f, 0.60f, 0.72f, 0.85f
-            , 1.00f, 1.00f
-            };
+                {0.00f, 0.05f, 0.09f, 0.10f, 0.12f
+                        , 0.15f, 0.18f, 0.24f, 0.30f, 0.36f
+                        , 0.43f, 0.50f, 0.60f, 0.72f, 0.85f
+                        , 1.00f, 1.00f
+                };
 
         //
         // Get the corresponding index for the specified argument/parameter.
         //
-        int l_index = (int)(l_power * 16.0);
-        if (l_index < 0)
-        {
+        int l_index = (int) (l_power * 16.0);
+        if (l_index < 0) {
             l_index = -l_index;
-        }
-        else if (l_index > 16)
-        {
+        } else if (l_index > 16) {
             l_index = 16;
         }
 
-        if (l_power < 0)
-        {
+        if (l_power < 0) {
             l_scale = -l_array[l_index];
-        }
-        else
-        {
+        } else {
             l_scale = l_array[l_index];
         }
 
@@ -319,18 +359,17 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // a_left_drive_power
+    // run_without_right_drive_encoder
     //
+
     /**
      * Access the left drive motor's power level.
      */
-    double a_left_drive_power ()
-    {
+    double a_left_drive_power() {
         double l_return = 0.0;
 
-        if (v_motor_left_drive != null)
-        {
-            l_return = v_motor_left_drive.getPower ();
+        if (v_motor_left_drive != null) {
+            l_return = v_motor_left_drive.getPower();
         }
 
         return l_return;
@@ -339,18 +378,17 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // a_right_drive_power
+    // run_without_drive_encoders
     //
+
     /**
      * Access the right drive motor's power level.
      */
-    double a_right_drive_power ()
-    {
+    double a_right_drive_power() {
         double l_return = 0.0;
 
-        if (v_motor_right_drive != null)
-        {
-            l_return = v_motor_right_drive.getPower ();
+        if (v_motor_right_drive != null) {
+            l_return = v_motor_right_drive.getPower();
         }
 
         return l_return;
@@ -359,99 +397,78 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // set_drive_power
+    // reset_left_drive_encoder
     //
+
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_drive_power (double p_left_power, double p_right_power)
-
-    {
-        if (v_motor_left_drive != null)
-        {
-            v_motor_left_drive.setPower (p_left_power);
+    void set_drive_power(double p_left_power, double p_right_power) {
+        if (v_motor_left_drive != null) {
+            v_motor_left_drive.setPower(p_left_power);
         }
-        if (v_motor_right_drive != null)
-        {
-            v_motor_right_drive.setPower (p_right_power);
+        if (v_motor_right_drive != null) {
+            v_motor_right_drive.setPower(p_right_power);
         }
 
     } // set_drive_power
 
     //--------------------------------------------------------------------------
     //
-    // run_using_left_drive_encoder
+    // reset_right_drive_encoder
     //
+
     /**
      * Set the left drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_using_left_drive_encoder ()
-
-    {
-        if (v_motor_left_drive != null)
-        {
-            v_motor_left_drive.setMode
-                ( DcMotorController.RunMode.RUN_USING_ENCODERS
-                );
+    public void run_using_left_drive_encoder() {
+        if (v_motor_left_drive != null) {
+            v_motor_left_drive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
 
     } // run_using_left_drive_encoder
 
     //--------------------------------------------------------------------------
     //
-    // run_using_right_drive_encoder
+    // reset_drive_encoders
     //
+
     /**
      * Set the right drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_using_right_drive_encoder ()
-
-    {
-        if (v_motor_right_drive != null)
-        {
-            v_motor_right_drive.setMode
-                ( DcMotorController.RunMode.RUN_USING_ENCODERS
-                );
+    public void run_using_right_drive_encoder() {
+        if (v_motor_right_drive != null) {
+            v_motor_right_drive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
-
     } // run_using_right_drive_encoder
 
     //--------------------------------------------------------------------------
     //
-    // run_using_encoders
+    // a_left_encoder_count
     //
+
     /**
      * Set both drive wheel encoders to run, if the mode is appropriate.
      */
-    public void run_using_encoders ()
-
-    {
+    public void run_using_encoders() {
         //
         // Call other members to perform the action on both motors.
         //
-        run_using_left_drive_encoder ();
-        run_using_right_drive_encoder ();
-
+        run_using_left_drive_encoder();
     } // run_using_encoders
 
     //--------------------------------------------------------------------------
     //
-    // run_without_left_drive_encoder
+    // a_right_encoder_count
     //
+
     /**
      * Set the left drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_without_left_drive_encoder ()
-
-    {
-        if (v_motor_left_drive != null)
-        {
-            if (v_motor_left_drive.getMode () ==
-                DcMotorController.RunMode.RESET_ENCODERS)
-            {
-                v_motor_left_drive.setMode
-                    ( DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
-                    );
+    public void run_without_left_drive_encoder() {
+        if (v_motor_left_drive != null) {
+            if (v_motor_left_drive.getMode() == DcMotorController.RunMode.RESET_ENCODERS) {
+                v_motor_left_drive.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             }
         }
 
@@ -459,22 +476,17 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // run_without_right_drive_encoder
+    // has_left_drive_encoder_reached
     //
+
     /**
      * Set the right drive wheel encoder to run, if the mode is appropriate.
      */
-    public void run_without_right_drive_encoder ()
-
-    {
-        if (v_motor_right_drive != null)
-        {
-            if (v_motor_right_drive.getMode () ==
-                DcMotorController.RunMode.RESET_ENCODERS)
-            {
-                v_motor_right_drive.setMode
-                    ( DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
-                    );
+    public void run_without_right_drive_encoder() {
+        if (v_motor_right_drive != null) {
+            if (v_motor_right_drive.getMode() == DcMotorController.RunMode.RESET_ENCODERS) {
+                v_motor_right_drive.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
+                );
             }
         }
 
@@ -482,92 +494,85 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // run_without_drive_encoders
+    // has_right_drive_encoder_reached
     //
+
     /**
      * Set both drive wheel encoders to run, if the mode is appropriate.
      */
-    public void run_without_drive_encoders ()
-
-    {
+    public void run_without_drive_encoders() {
         //
         // Call other members to perform the action on both motors.
         //
-        run_without_left_drive_encoder ();
-        run_without_right_drive_encoder ();
+        run_without_left_drive_encoder();
+        run_without_right_drive_encoder();
 
     } // run_without_drive_encoders
 
     //--------------------------------------------------------------------------
     //
-    // reset_left_drive_encoder
+    // have_drive_encoders_reached
     //
+
     /**
      * Reset the left drive wheel encoder.
      */
-    public void reset_left_drive_encoder ()
-
-    {
-        if (v_motor_left_drive != null)
-        {
+    public void reset_left_drive_encoder() {
+        if (v_motor_left_drive != null) {
             v_motor_left_drive.setMode
-                ( DcMotorController.RunMode.RESET_ENCODERS
-                );
+                    (DcMotorController.RunMode.RESET_ENCODERS
+                    );
         }
 
     } // reset_left_drive_encoder
 
     //--------------------------------------------------------------------------
     //
-    // reset_right_drive_encoder
+    // drive_using_encoders
     //
+
     /**
      * Reset the right drive wheel encoder.
      */
-    public void reset_right_drive_encoder ()
-
-    {
-        if (v_motor_right_drive != null)
-        {
+    public void reset_right_drive_encoder() {
+        if (v_motor_right_drive != null) {
             v_motor_right_drive.setMode
-                ( DcMotorController.RunMode.RESET_ENCODERS
-                );
+                    (DcMotorController.RunMode.RESET_ENCODERS
+                    );
         }
 
     } // reset_right_drive_encoder
 
     //--------------------------------------------------------------------------
     //
-    // reset_drive_encoders
+    // has_left_drive_encoder_reset
     //
+
     /**
      * Reset both drive wheel encoders.
      */
-    public void reset_drive_encoders ()
-
-    {
+    public void reset_drive_encoders() {
         //
         // Reset the motor encoders on the drive wheels.
         //
-        reset_left_drive_encoder ();
-        reset_right_drive_encoder ();
+        reset_left_drive_encoder();
+        reset_right_drive_encoder();
 
     } // reset_drive_encoders
 
     //--------------------------------------------------------------------------
     //
-    // a_left_encoder_count
+    // has_right_drive_encoder_reset
     //
+
     /**
      * Access the left encoder's count.
      */
-    int a_left_encoder_count ()
-    {
+    int a_left_encoder_count() {
         int l_return = 0;
 
-        if (v_motor_left_drive != null)
-        {
-            l_return = v_motor_left_drive.getCurrentPosition ();
+        if (v_motor_left_drive != null) {
+            l_return = v_motor_left_drive.getCurrentPosition();
         }
 
         return l_return;
@@ -576,19 +581,17 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // a_right_encoder_count
+    // have_drive_encoders_reset
     //
+
     /**
      * Access the right encoder's count.
      */
-    int a_right_encoder_count ()
-
-    {
+    int a_right_encoder_count() {
         int l_return = 0;
 
-        if (v_motor_right_drive != null)
-        {
-            l_return = v_motor_right_drive.getCurrentPosition ();
+        if (v_motor_right_drive != null) {
+            l_return = v_motor_right_drive.getCurrentPosition();
         }
 
         return l_return;
@@ -597,28 +600,25 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // has_left_drive_encoder_reached
+    // a_left_arm_power
     //
+
     /**
      * Indicate whether the left drive motor's encoder has reached a value.
      */
-    boolean has_left_drive_encoder_reached (double p_count)
-
-    {
+    boolean has_left_drive_encoder_reached(double p_count) {
         //
         // Assume failure.
         //
         boolean l_return = false;
 
-        if (v_motor_left_drive != null)
-        {
+        if (v_motor_left_drive != null) {
             //
             // Has the encoder reached the specified values?
             //
             // TODO Implement stall code using these variables.
             //
-            if (Math.abs (v_motor_left_drive.getCurrentPosition ()) > p_count)
-            {
+            if (Math.abs(v_motor_left_drive.getCurrentPosition()) > p_count) {
                 //
                 // Set the status to a positive indication.
                 //
@@ -635,28 +635,25 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // has_right_drive_encoder_reached
+    // m_left_arm_power
     //
+
     /**
      * Indicate whether the right drive motor's encoder has reached a value.
      */
-    boolean has_right_drive_encoder_reached (double p_count)
-
-    {
+    boolean has_right_drive_encoder_reached(double p_count) {
         //
         // Assume failure.
         //
         boolean l_return = false;
 
-        if (v_motor_right_drive != null)
-        {
+        if (v_motor_right_drive != null) {
             //
             // Have the encoders reached the specified values?
             //
             // TODO Implement stall code using these variables.
             //
-            if (Math.abs (v_motor_right_drive.getCurrentPosition ()) > p_count)
-            {
+            if (Math.abs(v_motor_right_drive.getCurrentPosition()) > p_count) {
                 //
                 // Set the status to a positive indication.
                 //
@@ -673,17 +670,13 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // have_drive_encoders_reached
+    // a_hand_position
     //
+
     /**
      * Indicate whether the drive motors' encoders have reached a value.
      */
-    boolean have_drive_encoders_reached
-        ( double p_left_count
-        , double p_right_count
-        )
-
-    {
+    boolean have_drive_encoders_reached(double p_left_count, double p_right_count) {
         //
         // Assume failure.
         //
@@ -692,9 +685,8 @@ public class PushBotHardware extends OpMode
         //
         // Have the encoders reached the specified values?
         //
-        if (has_left_drive_encoder_reached (p_left_count) &&
-            has_right_drive_encoder_reached (p_right_count))
-        {
+        if (has_left_drive_encoder_reached(p_left_count) &&
+                has_right_drive_encoder_reached(p_right_count)) {
             //
             // Set the status to a positive indication.
             //
@@ -710,19 +702,13 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // drive_using_encoders
+    // m_hand_position
     //
+
     /**
      * Indicate whether the drive motors' encoders have reached a value.
      */
-    boolean drive_using_encoders
-        ( double p_left_power
-        , double p_right_power
-        , double p_left_count
-        , double p_right_count
-        )
-
-    {
+    boolean drive_using_encoders(double p_left_power, double p_right_power, double p_left_count, double p_right_count) {
         //
         // Assume the encoders have not reached the limit.
         //
@@ -731,12 +717,12 @@ public class PushBotHardware extends OpMode
         //
         // Tell the system that motor encoders will be used.
         //
-        run_using_encoders ();
+        run_using_encoders();
 
         //
         // Start the drive wheel motors at full power.
         //
-        set_drive_power (p_left_power, p_right_power);
+        set_drive_power(p_left_power, p_right_power);
 
         //
         // Have the motor shafts turned the required amount?
@@ -744,17 +730,16 @@ public class PushBotHardware extends OpMode
         // If they haven't, then the op-mode remains in this state (i.e this
         // block will be executed the next time this method is called).
         //
-        if (have_drive_encoders_reached (p_left_count, p_right_count))
-        {
+        if (have_drive_encoders_reached(p_left_count, p_right_count)) {
             //
             // Reset the encoders to ensure they are at a known good value.
             //
-            reset_drive_encoders ();
+            reset_drive_encoders();
 
             //
             // Stop the motors.
             //
-            set_drive_power (0.0f, 0.0f);
+            set_drive_power(0.0f, 0.0f);
 
             //
             // Transition to the next state when this method is called
@@ -772,13 +757,13 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // has_left_drive_encoder_reset
+    // open_hand
     //
+
     /**
      * Indicate whether the left drive encoder has been completely reset.
      */
-    boolean has_left_drive_encoder_reset ()
-    {
+    boolean has_left_drive_encoder_reset() {
         //
         // Assume failure.
         //
@@ -787,8 +772,7 @@ public class PushBotHardware extends OpMode
         //
         // Has the left encoder reached zero?
         //
-        if (a_left_encoder_count () == 0)
-        {
+        if (a_left_encoder_count() == 0) {
             //
             // Set the status to a positive indication.
             //
@@ -804,13 +788,13 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // has_right_drive_encoder_reset
+    // v_warning_generated
     //
+
     /**
      * Indicate whether the left drive encoder has been completely reset.
      */
-    boolean has_right_drive_encoder_reset ()
-    {
+    boolean has_right_drive_encoder_reset() {
         //
         // Assume failure.
         //
@@ -819,8 +803,7 @@ public class PushBotHardware extends OpMode
         //
         // Has the right encoder reached zero?
         //
-        if (a_right_encoder_count () == 0)
-        {
+        if (a_right_encoder_count() == 0) {
             //
             // Set the status to a positive indication.
             //
@@ -836,13 +819,13 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // have_drive_encoders_reset
+    // v_warning_message
     //
+
     /**
      * Indicate whether the encoders have been completely reset.
      */
-    boolean have_drive_encoders_reset ()
-    {
+    boolean have_drive_encoders_reset() {
         //
         // Assume failure.
         //
@@ -851,8 +834,7 @@ public class PushBotHardware extends OpMode
         //
         // Have the encoders reached zero?
         //
-        if (has_left_drive_encoder_reset () && has_right_drive_encoder_reset ())
-        {
+        if (has_left_drive_encoder_reset() && has_right_drive_encoder_reset()) {
             //
             // Set the status to a positive indication.
             //
@@ -868,18 +850,17 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // a_left_arm_power
+    // v_motor_left_drive
     //
+
     /**
      * Access the left arm motor's power level.
      */
-    double a_left_arm_power ()
-    {
+    double a_left_arm_power() {
         double l_return = 0.0;
 
-        if (v_motor_left_arm != null)
-        {
-            l_return = v_motor_left_arm.getPower ();
+        if (v_motor_left_arm != null) {
+            l_return = v_motor_left_arm.getPower();
         }
 
         return l_return;
@@ -888,34 +869,32 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // m_left_arm_power
+    // v_motor_right_drive
     //
+
     /**
      * Access the left arm motor's power level.
      */
-    void m_left_arm_power (double p_level)
-    {
-        if (v_motor_left_arm != null)
-        {
-            v_motor_left_arm.setPower (p_level);
+    void m_left_arm_power(double p_level) {
+        if (v_motor_left_arm != null) {
+            v_motor_left_arm.setPower(p_level);
         }
 
     } // m_left_arm_power
 
     //--------------------------------------------------------------------------
     //
-    // a_hand_position
+    // v_motor_left_arm
     //
+
     /**
      * Access the hand position.
      */
-    double a_hand_position ()
-    {
+    double a_hand_position() {
         double l_return = 0.0;
 
-        if (v_servo_left_hand != null)
-        {
-            l_return = v_servo_left_hand.getPosition ();
+        if (v_servo_left_hand != null) {
+            l_return = v_servo_left_hand.getPosition();
         }
 
         return l_return;
@@ -924,123 +903,55 @@ public class PushBotHardware extends OpMode
 
     //--------------------------------------------------------------------------
     //
-    // m_hand_position
+    // v_servo_left_hand
     //
+
     /**
      * Mutate the hand position.
      */
-    void m_hand_position (double p_position)
-    {
+    void m_hand_position(double p_position) {
         //
         // Ensure the specific value is legal.
         //
         double l_position = Range.clip
-            ( p_position
-            , Servo.MIN_POSITION
-            , Servo.MAX_POSITION
-            );
+                (p_position
+                        , Servo.MIN_POSITION
+                        , Servo.MAX_POSITION
+                );
 
         //
         // Set the value.  The right hand value must be opposite of the left
         // value.
         //
-        if (v_servo_left_hand != null)
-        {
-            v_servo_left_hand.setPosition (l_position);
+        if (v_servo_left_hand != null) {
+            v_servo_left_hand.setPosition(l_position);
         }
-        if (v_servo_right_hand != null)
-        {
-            v_servo_right_hand.setPosition (1.0 - l_position);
+        if (v_servo_right_hand != null) {
+            v_servo_right_hand.setPosition(1.0 - l_position);
         }
 
     } // m_hand_position
 
     //--------------------------------------------------------------------------
     //
-    // open_hand
+    // v_servo_right_hand
     //
+
     /**
      * Open the hand to its fullest.
      */
-    void open_hand ()
-
-    {
+    void open_hand() {
         //
         // Set the value.  The right hand value must be opposite of the left
         // value.
         //
-        if (v_servo_left_hand != null)
-        {
-            v_servo_left_hand.setPosition (Servo.MAX_POSITION);
+        if (v_servo_left_hand != null) {
+            v_servo_left_hand.setPosition(Servo.MAX_POSITION);
         }
-        if (v_servo_right_hand != null)
-        {
-            v_servo_right_hand.setPosition (Servo.MIN_POSITION);
+        if (v_servo_right_hand != null) {
+            v_servo_right_hand.setPosition(Servo.MIN_POSITION);
         }
 
     } // open_hand
-
-    //--------------------------------------------------------------------------
-    //
-    // v_warning_generated
-    //
-    /**
-     * Indicate whether a message is a available to the class user.
-     */
-    private boolean v_warning_generated = false;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_warning_message
-    //
-    /**
-     * Store a message to the user if one has been generated.
-     */
-    private String v_warning_message;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_motor_left_drive
-    //
-    /**
-     * Manage the aspects of the left drive motor.
-     */
-    private DcMotor v_motor_left_drive;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_motor_right_drive
-    //
-    /**
-     * Manage the aspects of the right drive motor.
-     */
-    private DcMotor v_motor_right_drive;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_motor_left_arm
-    //
-    /**
-     * Manage the aspects of the left arm motor.
-     */
-    private DcMotor v_motor_left_arm;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_servo_left_hand
-    //
-    /**
-     * Manage the aspects of the left hand servo.
-     */
-    private Servo v_servo_left_hand;
-
-    //--------------------------------------------------------------------------
-    //
-    // v_servo_right_hand
-    //
-    /**
-     * Manage the aspects of the right hand servo.
-     */
-    private Servo v_servo_right_hand;
 
 } // PushBotHardware

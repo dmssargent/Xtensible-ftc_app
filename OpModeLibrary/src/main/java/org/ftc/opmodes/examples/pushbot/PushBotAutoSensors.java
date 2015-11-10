@@ -31,10 +31,6 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
      */
     private int v_state = 0;
 
-    //--------------------------------------------------------------------------
-    //
-    // start
-    //
     /**
      * This class member remembers which state is currently active.  When the
      * start method is called, the state will be initialize (0).  During the
@@ -44,19 +40,12 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
      */
     private int v_arm_state = 0;
 
-    //--------------------------------------------------------------------------
-    //
-    // loop
-    //
-
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotAutoSensors()
-
-    {
+    public PushBotAutoSensors() {
         //
         // Initialize base classes.
         //
@@ -76,13 +65,11 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
 
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
-     * <p/>
+     * <p>
      * The system calls this member once when the OpMode is enabled.
      */
     @Override
-    public void start()
-
-    {
+    public void start() {
         //
         // Call the PushBotHardware (super/base class) start method.
         //
@@ -104,13 +91,11 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
      * Implement a state machine that controls the robot during auto-operation.
      * The state machine uses a class member and sensor input to transition
      * between states.
-     * <p/>
+     * <p>
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //
         // Update the state machines
         //
@@ -304,7 +289,6 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
         update_telemetry(); // Update common telemetry
         telemetry.addData("11", "Drive State: " + v_state);
         telemetry.addData("12", "Arm State: " + v_arm_state);
-
     } // loop
 
     //--------------------------------------------------------------------------
@@ -315,9 +299,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
     /**
      * Implement a state machine that controls the arm during auto-operation.
      */
-    public void update_arm_state()
-
-    {
+    public void update_arm_state() {
         //
         // Update the arm state machine.
         //
@@ -359,7 +341,6 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
                 //
                 break;
         }
-
     } // update_arm_state
 
 } // PushBotAutoSensors

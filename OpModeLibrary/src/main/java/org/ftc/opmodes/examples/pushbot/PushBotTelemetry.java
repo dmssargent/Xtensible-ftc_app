@@ -7,13 +7,13 @@ package org.ftc.opmodes.examples.pushbot;
 
 /**
  * Provide telemetry provided by the PushBotHardware class.
- * <p/>
+ * <p>
  * Insert this class between a custom op-mode and the PushBotHardware class to
  * display telemetry available from the hardware class.
  *
  * @author SSI Robotics
  * @version 2015-08-02-13-57
- *          <p/>
+ *          <p>
  *          Telemetry Keys
  *          00 - Important message; sometimes used for error messages.
  *          01 - The power being sent to the left drive's motor controller and the
@@ -44,12 +44,10 @@ public class PushBotTelemetry extends PushBotHardware
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotTelemetry()
-
-    {
+    public PushBotTelemetry() {
         //
         // Initialize base classes.
         //
@@ -70,9 +68,7 @@ public class PushBotTelemetry extends PushBotHardware
     /**
      * Update the telemetry with current values from the base class.
      */
-    public void update_telemetry()
-
-    {
+    public void update_telemetry() {
         if (a_warning_generated()) {
             set_first_message(a_warning_message());
         }
@@ -112,9 +108,7 @@ public class PushBotTelemetry extends PushBotHardware
     /**
      * Update the telemetry with current gamepad readings.
      */
-    public void update_gamepad_telemetry()
-
-    {
+    public void update_gamepad_telemetry() {
         //
         // Send telemetry data concerning gamepads to the driver station.
         //
@@ -136,9 +130,7 @@ public class PushBotTelemetry extends PushBotHardware
     /**
      * Update the telemetry's first message with the specified message.
      */
-    public void set_first_message(String p_message)
-
-    {
+    public void set_first_message(String p_message) {
         telemetry.addData("00", p_message);
 
     } // set_first_message
@@ -151,9 +143,7 @@ public class PushBotTelemetry extends PushBotHardware
     /**
      * Update the telemetry's first message to indicate an error.
      */
-    public void set_error_message(String p_message)
-
-    {
+    public void set_error_message(String p_message) {
         set_first_message("ERROR: " + p_message);
 
     } // set_error_message

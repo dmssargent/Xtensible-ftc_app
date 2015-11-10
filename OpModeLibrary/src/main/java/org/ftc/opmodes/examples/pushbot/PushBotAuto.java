@@ -37,12 +37,10 @@ public class PushBotAuto extends PushBotTelemetry
 
     /**
      * Construct the class.
-     * <p/>
+     * <p>
      * The system calls this member when the class is instantiated.
      */
-    public PushBotAuto()
-
-    {
+    public PushBotAuto() {
         //
         // Initialize base classes.
         //
@@ -62,13 +60,11 @@ public class PushBotAuto extends PushBotTelemetry
 
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
-     * <p/>
+     * <p>
      * The system calls this member once when the OpMode is enabled.
      */
     @Override
-    public void start()
-
-    {
+    public void start() {
         //
         // Call the PushBotHardware (super/base class) start method.
         //
@@ -90,13 +86,11 @@ public class PushBotAuto extends PushBotTelemetry
      * Implement a state machine that controls the robot during auto-operation.
      * The state machine uses a class member and encoder input to transition
      * between states.
-     * <p/>
+     * <p>
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override
-    public void loop()
-
-    {
+    public void loop() {
         //----------------------------------------------------------------------
         //
         // State: Initialize (i.e. state_0).
@@ -224,5 +218,4 @@ public class PushBotAuto extends PushBotTelemetry
         telemetry.addData("18", "State: " + v_state);
 
     } // loop
-
 } // PushBotAuto
