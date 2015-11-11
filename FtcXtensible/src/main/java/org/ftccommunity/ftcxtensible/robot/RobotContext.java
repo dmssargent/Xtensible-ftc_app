@@ -47,11 +47,14 @@ import java.util.concurrent.Executors;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Beta
 @NotDocumentedWell
 public class RobotContext implements AbstractRobotContext {
     private ExtensibleHardwareMap hardwareMap;
+    private HardwareMap basicHardwareMap;
+
     private Context appContext;
 
     private Telemetry telemetry;
@@ -108,7 +111,10 @@ public class RobotContext implements AbstractRobotContext {
 
         gamepad1 = gp1;
         gamepad2 = gp2;
+
         hardwareMap = new ExtensibleHardwareMap(hwMap);
+        basicHardwareMap = hwMap;
+
         appContext = hwMap.appContext;
         if (appContext == null) {
             appContext = buildApplicationContext();
@@ -151,6 +157,27 @@ public class RobotContext implements AbstractRobotContext {
 
         networkingEnabled = false;
         return this;
+    }
+
+    /**
+     * Re-generates the {@link ExtensibleHardwareMap} form of a hardware map based on a given
+     * correct {@link HardwareMap}. This function has the same warning applied as {@link ExtensibleHardwareMap#rebuild(HardwareMap)}
+     *
+     * @param map a correct non-null {@code HardwareMap}
+     */
+    @Override
+    public void bindHardwareMap(@NotNull HardwareMap map) {
+        this.basicHardwareMap = checkNotNull(map);
+        rebuildHardwareMap();
+    }
+
+    /**
+     * Rebuilds the {@link ExtensibleHardwareMap} based on the current instance off the HardwareMap
+     * previously provided during instantiation, or by {@link #bindHardwareMap(HardwareMap)}.
+     */
+    @Override
+    public void rebuildHardwareMap() {
+        hardwareMap().rebuild(basicHardwareMap);
     }
 
     @Override

@@ -43,17 +43,17 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.ftccommunity.ftcxtensible.abstraction.hardware.Mockable;
 import org.ftccommunity.ftcxtensible.hardware.i2c.Wire;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.util.I2cFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The new version of the hardware map that provides a safer use for the hardware map.
@@ -106,15 +106,27 @@ public class ExtensibleHardwareMap {
      */
     public ExtensibleHardwareMap(@NotNull HardwareMap hwMap) {
         this();
-        basicMap = hwMap;
+        basicMap = checkNotNull(hwMap);
 
         createDeviceMaps();
     }
 
-    public static boolean supportsMocking(Object object) {
+    /**
+     * Rebuilds the Extensible HardwareMap from scacch based on a given {@link HardwareMap}. This modifies
+     * the reference to the maps within inside this HardwareMap, but not the reference to the HardwareMap
+     * itself.
+     *
+     * @param hwMap a valid non-null {@code HardwareMap} that contains what this needs to build on
+     */
+    public void rebuild(@NotNull HardwareMap hwMap) {
+        basicMap = checkNotNull(hwMap);
+        createDeviceMaps();
+    }
+
+   /* public static boolean supportsMocking(Object object) {
         return object.getClass().isAssignableFrom(Mockable.class);
 
-    }
+    }*/
 
     /**
      * Move the propriety {@link HardwareMap.DeviceMapping} to our
@@ -263,9 +275,9 @@ public class ExtensibleHardwareMap {
             }*/
         }
 
-        public void disableMocking() {
+       /* public void disableMocking() {
             mock = false;
-        }
+        }*/
 
         public DeviceMap<K, T> buildFromDeviceMapping(HardwareMap.DeviceMapping<T> deviceMapping) {
             Set<Entry<String, T>> entries = deviceMapping.entrySet();
@@ -279,7 +291,12 @@ public class ExtensibleHardwareMap {
         @Nullable
         public T get(Object key) {
             T o = super.get(key);
-            if (o == null && mock) {
+            if (o == null) {
+                throw new IllegalArgumentException("Cannot find device for " + key);
+            }
+
+            // todo
+           /* if (o == null && mock) {
                 try {
                     T value = (T) type.getRawType().getConstructors()[0].newInstance("new");
                     put((String) key, value);
@@ -287,7 +304,7 @@ public class ExtensibleHardwareMap {
                     throw new IllegalStateException("Need to create a stub object, but" +
                             "failed to do so: " + ex.toString());
                 }
-            }
+            }*/
 
             return o;
         }

@@ -10,35 +10,12 @@
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import android.app.Application;
-import android.content.Context;
-import android.util.Log;
-
 import com.qualcomm.ftcrobotcontroller.R;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
-import org.ftc.opmodes.FallbackOpModeRegister;
 import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.AnnotationFtcRegister;
-import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
-import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
-import org.ftccommunity.ftcxtensible.versioning.RobotSdkApiLevel;
-import org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion;
-
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.TreeMap;
-
-import dalvik.system.DexFile;
 
 /**
  *
@@ -56,6 +33,9 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
     public void register(final OpModeManager mgr) {
         DataBinder binding = DataBinder.getInstance();
+
+        // ----- BINDINGS SECTION, WILL BE MOVED
+        //binding.getObjects().put("R");
         binding.getIntegers().put("ftcview", R.id.RelativeLayout);
 
       AnnotationFtcRegister.loadOpModes(mgr);

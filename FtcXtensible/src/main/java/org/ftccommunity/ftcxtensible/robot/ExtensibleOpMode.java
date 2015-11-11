@@ -128,7 +128,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
      */
     @Override
     public final void init() {
-        robotContext.prepare(super.hardwareMap.appContext);
+        prepare(super.hardwareMap.appContext);
+        bindHardwareMap(super.hardwareMap);
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
@@ -196,6 +197,9 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
             Log.i(TAG, "Skipping Loop #" + getLoopCount());
             return;
         }
+
+        // todo determine if the following line is needed
+        bindHardwareMap(super.hardwareMap);
 
         if (robotContext.status().getMainRobotState() == RobotStatus.MainStates.EXCEPTION &&
                 (robotContext.status().getCurrentStateType() == RobotStatus.Type.FAILURE ||
@@ -338,8 +342,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     /**
      * Handles an user code exception
      *
-     * @param list
-     * @param e
+     * @param list the list of objects to process
+     * @param e the exception thrown by user code
      */
     private void handleException(LinkedList<Object> list, Exception e) {
         Log.e(TAG,
@@ -371,7 +375,23 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         return "";
     }
 
+    /**
+     * Returns the current {@link RobotContext}
+     *
+     * @return the master {@code RobotContext}
+     * @deprecated use {@link #context()} instead
+     */
+    @Deprecated
     protected final RobotContext getContext() {
+        return robotContext;
+    }
+
+    /**
+     * Returns the current {@link RobotContext}
+     *
+     * @return the master {@code RobotContext}
+     */
+    protected final RobotContext context() {
         return robotContext;
     }
 
@@ -519,6 +539,17 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
 
     public ExtensibleTelemetry telemetry() {
         return robotContext.telemetry();
+    }
+
+
+    @Override
+    public void bindHardwareMap(@NotNull HardwareMap hwMap) {
+        context().bindHardwareMap(hwMap);
+    }
+
+    @Override
+    public void rebuildHardwareMap() {
+        context().rebuildHardwareMap();
     }
 
     private class VariableTrace {

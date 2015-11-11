@@ -69,15 +69,12 @@ dependencies {
     compile(name: 'RobotCore-release', ext: 'aar')
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'FtcCommon-release', ext: 'aar')
-    compile(name: 'WirelessP2p-release', ext: 'aar')
-    compile(name: 'Analytics-release', ext: 'aar')
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'ModernRobotics-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
     compile project(':FtcXtensible')
     compile project(':OpModeAnnotations')
     compile project(':XSimplify')
-    compile 'org.boofcv:all:0.19'
-    compile 'org.boofcv:android:0.19'
-    compile 'org.boofcv:boofcv:0.16'
+    // Re-enable the below in roder to use Boof CV
+    //compile 'org.boofcv:all:0.19'
+    //compile 'org.boofcv:android:0.19'
+    //compile 'org.boofcv:boofcv:0.16'
+    compile project(':Open CV')
 }
