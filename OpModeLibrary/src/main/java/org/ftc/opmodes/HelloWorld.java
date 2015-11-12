@@ -43,6 +43,10 @@ public class HelloWorld extends SimpleOpMode {
         log().i("LOOP", "Current loop count: " + getLoopCount());
         telemetry.data("MESS", "Hello, World!");
         telemetry.data("MESS", "How are you doing?");
+
+        log().e("TEST", "TESTING null pointer");
+        String temp = null;
+        throw new NullPointerException();
     }
 
     @Override

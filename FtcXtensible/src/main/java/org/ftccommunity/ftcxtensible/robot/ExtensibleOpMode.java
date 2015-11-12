@@ -348,6 +348,19 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     private void handleException(LinkedList<Object> list, Exception e) {
         Log.e(TAG,
                 "An exception occurred running the OpMode " + getCallerClassName(e), e);
+        if (e instanceof NullPointerException && (e.getMessage() == null || e.getMessage().equals(""))) {
+            String className = "";
+            String lineNumber = "";
+            if (e.getStackTrace().length > 0 && e.getStackTrace()[0] != null) {
+                className = e.getStackTrace()[0].getClassName();
+                lineNumber = Integer.toString(e.getStackTrace()[0].getLineNumber());
+            }
+
+            e = new NullPointerException("Something went awry in the OpMode, because something" +
+                    " seems to be null." +
+                    (lineNumber.equals("") && className.equals("") ?
+                            "" : " Check the line " + lineNumber + "@" + className + " for possible errors."));
+        }
 
         robotContext.status().setCurrentStateType(RobotStatus.Type.IDK);
         RobotStatus.Type failure = robotContext.status().getCurrentStateType();

@@ -69,7 +69,8 @@ public class AnnotationFtcRegister {
         me.buildNoCheckList();
 
         LinkedList<Class> classes = me.buildClassList();
-        ServiceRegister.init((Class[]) classes.toArray());
+        Class[] classArray = classes.toArray(new Class[classes.size()]);
+        ServiceRegister.init(classArray);
         HashMap<String, LinkedList<Class<OpMode>>> opModes = me.findOpModes(classes);
         me.sortOpModeMap(opModes);
 

@@ -14,7 +14,6 @@ import java.util.List;
 // C++: class javaDescriptorExtractor
 //javadoc: javaDescriptorExtractor
 public class DescriptorExtractor {
-
     public static final int
             SIFT = 1,
             SURF = 2,

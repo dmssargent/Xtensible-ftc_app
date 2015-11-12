@@ -112,20 +112,18 @@ public class ExtensibleTelemetry {
     }
 
     public void updateLog() {
-        while (!Thread.currentThread().isInterrupted()) {
-            String temp = null;
+        //String temp = null;
+           /* StringBuilder buf = new StringBuilder();
             try {
-                temp = reader.readLine();
+                int temp = reader.read();
+                while (temp >= 0) {
+                    buf.append((char) temp);
+                    temp = reader.read();
+                }
             } catch (IOException e) {
                 Log.e(TAG, "An error occurred while reading the log.", e);
             }
-            if (temp != null) {
-                log.add(temp);
-            } else {
-                break;
-            }
-        }
-
+            log.add(buf.toString());*/
     }
 
     public void close() throws IOException {

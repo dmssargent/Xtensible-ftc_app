@@ -13,7 +13,6 @@ import java.util.List;
 // C++: class javaFeatureDetector
 //javadoc: javaFeatureDetector
 public class FeatureDetector {
-
     public static final int
             FAST = 1,
             STAR = 2,

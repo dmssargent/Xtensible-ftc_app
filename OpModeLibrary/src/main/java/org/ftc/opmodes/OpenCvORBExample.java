@@ -22,19 +22,19 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.Utils;
 import org.opencv.calib3d.Calib3d;
@@ -70,7 +70,6 @@ import java.util.List;
  * @author FTC Team 10182
  */
 @Autonomous
-@Disabled
 public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBase.CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
     public static final int VIEW_MODE_RGBA = 0;
     public static final int TRAIN = 8;
@@ -96,13 +95,10 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
     String _numMatches;
     int _minDistance;
     int _ransacThreshold = 3;
-    private MenuItem mItemPreviewRGBA;
-    private MenuItem mItemTrainDetector;
-    private MenuItem mItemShowMatches;
-    private MenuItem mItemShowBox;
-    private MenuItem mItemShowKeypoints;
+    private RelativeLayout relativeLayout;
     private CameraBridgeViewBase mOpenCvCameraView;
     private Mat mIntermediateMat;
+
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(appContext()) {
         @Override
         public void onManagerConnected(int status) {
@@ -418,33 +414,79 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
         return ((Activity) appContext()).findViewById(view);
     }
 
-    @Override
-    public void init(RobotContext ctx) {
-        // todo bind the neccesary R values to the Robot Controller
-        DataBinder binder = controllerBindings();
-        // For example this
-        Rn.id.image_manipulations_activity_surface_view = binder.getIntegers().get("foooo");
-
-        // End controller bindings
-
-        mOpenCvCameraView = (CameraBridgeViewBase) findViewById(Rn.id.image_manipulations_activity_surface_view);
+    void finishInit() {
         mOpenCvCameraView.setCvCameraViewListener(this);
-        _seekBar = (SeekBar) findViewById(Rn.id.ransacSeekBar);
-        _ransacThresholdTextView = (TextView) findViewById(Rn.id.ransacThreshold);
-        _numMatchesTextView = (TextView) findViewById(Rn.id.numMatches);
-        _minDistanceTextView = (TextView) findViewById(Rn.id.minValue);
         _seekBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
-    public void loop(RobotContext ctx) {
+    public void init(RobotContext ctx) {
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              cameraManager().bindCameraInstance(android.hardware.Camera.CameraInfo.CAMERA_FACING_BACK);
+
+                              relativeLayout = new RelativeLayout(appContext());
+                              JavaCameraView cameraView = new JavaCameraView(appContext(), cameraManager().getCameraId());
+                              TextView numMatches = new TextView(appContext());
+                              TextView minValue = new TextView(appContext());
+                              TextView ransacThreshold = new TextView(appContext());
+                              LinearLayout seekbars = new LinearLayout(appContext());
+                              SeekBar ransacSeekBar = new SeekBar(appContext());
+
+                              relativeLayout.addView(cameraView);
+                              relativeLayout.addView(numMatches);
+                              relativeLayout.addView(minValue);
+                              relativeLayout.addView(ransacThreshold);
+                              relativeLayout.addView(seekbars);
+                              relativeLayout.addView(ransacSeekBar);
+                              ((RelativeLayout) robotControllerView()).addView(relativeLayout);
+
+
+                              mOpenCvCameraView = cameraView;
+                              _seekBar = ransacSeekBar;
+                              _ransacThresholdTextView = ransacThreshold;
+                              _numMatchesTextView = numMatches;
+                              _minDistanceTextView = minValue;
+
+                              finishInit();
+                          }
+                      }
+        );
+
+
 
     }
 
     @Override
+    public void loop(RobotContext ctx) {
+        if (gamepad1().isAPressed()) {
+            viewMode = VIEW_MODE_RGBA;
+        } else if (gamepad1().isBPressed()) {
+            viewMode = TRAIN;
+        } else if (gamepad1().isYPressed()) {
+            viewMode = SHOW_MATCHES;
+        } else if (gamepad1().isXPressed()) {
+            viewMode = SHOW_BOX;
+        } else if (gamepad1().getDpad().isDownPressed()) {
+            viewMode = SHOW_KEYPOINTS;
+        } else if (gamepad1().getDpad().isUpPressed()) {
+            viewMode = TRAIN;
+        }
+
+        telemetry().data(this.getClass().getSimpleName(), viewMode);
+    }
+
+    @Override
     public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        if (mOpenCvCameraView != null)
+        if (mOpenCvCameraView != null) {
             mOpenCvCameraView.disableView();
+        }
+
+        if (relativeLayout != null) {
+            ((RelativeLayout) robotControllerView()).removeView(relativeLayout);
+        }
+
     }
 
 
@@ -529,19 +571,5 @@ class Utilities {
             }
         }
         return mediaStorageDir;
-    }
-}
-
-/**
- * Creates an R class to be used by this OpMode containing the IDs to necessary constant ID's, these
- * values should be created by the Controller Bindings mechanism or manually creating them
- */
-class Rn {
-    public static class id {
-        public static int ransacSeekBar;
-        public static int ransacThreshold;
-        public static int numMatches;
-        public static int minValue;
-        public static int image_manipulations_activity_surface_view;
     }
 }
