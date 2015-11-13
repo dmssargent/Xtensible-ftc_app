@@ -565,6 +565,12 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         context().rebuildHardwareMap();
     }
 
+    @Override
+    @Deprecated
+    public HardwareMap legacyHardwareMap() {
+        return robotContext.legacyHardwareMap();
+    }
+
     private class VariableTrace {
         private String name;
         private Object value;

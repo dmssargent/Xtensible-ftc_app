@@ -65,25 +65,21 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/bundles" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/coverage-instrumented-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/debug" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/WirelessP2p-release/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaResources" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/libs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/ndk" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/mockable-android-22.jar" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/release" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/build/test-results" />
@@ -103,9 +99,9 @@
     <orderEntry type="library" exported="" name="FtcCommon-release-" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="asm-debug-all-5.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="org.jacoco.core-0.7.5.201505241946" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-codec-1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-artifact-manager-2.0.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-3.8.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="commons-codec-1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="commons-digester-1.6" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-plugin-registry-2.0.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-plugin-api-2.0.10" level="project" />
@@ -130,13 +126,13 @@
     <orderEntry type="library" exported="" name="RobotCore-release-" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="doxia-module-xhtml-1.1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="doxia-core-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-repository-metadata-2.0.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="xml-apis-2.0.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="maven-repository-metadata-2.0.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="plexus-utils-1.5.12" level="project" />
     <orderEntry type="library" exported="" name="annotations-13.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="doxia-logging-api-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jacoco-maven-plugin-0.7.5.201505241946" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="plexus-interpolation-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jacoco-maven-plugin-0.7.5.201505241946" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="xercesImpl-2.8.1" level="project" />
     <orderEntry type="library" exported="" name="jama-1.0.3" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="org.jacoco.agent-0.7.5.201505241946-runtime" level="project" />

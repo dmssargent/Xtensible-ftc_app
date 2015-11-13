@@ -56,6 +56,9 @@ public interface AbstractRobotContext {
 
     void rebuildHardwareMap();
 
+    @Deprecated
+    HardwareMap legacyHardwareMap();
+
     RobotContext startNetworking();
 
     RobotContext stopNetworking();

@@ -180,6 +180,18 @@ public class RobotContext implements AbstractRobotContext {
         hardwareMap().rebuild(basicHardwareMap);
     }
 
+    /**
+     * Returns the underlying HardwareMap, in case of the {@link ExtensibleHardwareMap} is not
+     * functioning correctly
+     *
+     * @return the {@link HardwareMap} that is used internally
+     */
+    @Override
+    @Deprecated
+    public HardwareMap legacyHardwareMap() {
+        return basicHardwareMap;
+    }
+
     @Override
     public RobotContext startNetworking() {
         if (networkingEnabled && networkedOpMode == null) {
