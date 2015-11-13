@@ -62,11 +62,11 @@ dependencies {
     compile(name: 'Hardware-release', ext: 'aar')
     compile files('libs/netty-all-4.0.30.Final.jar')
     compile 'com.google.guava:guava:19.0-rc1'
-    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.code.gson:gson:2.4'
     androidTestCompile 'junit:junit:4.12'
     compile 'gov.nist.math:jama:1.0.3'
     compile 'org.jetbrains:annotations:13.0'
     compile project(':OpModeAnnotations')
     compile project(':XtensibleControllerBindings')
-    androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
+    //androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
 }
