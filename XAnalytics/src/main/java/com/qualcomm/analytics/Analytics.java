@@ -187,7 +187,6 @@ public class Analytics extends BroadcastReceiver {
 
                 String var8;
                 for (var4 = ""; (var8 = var10.readLine()) != null; var4 = var4 + var8) {
-                    ;
                 }
 
                 var10.close();
@@ -418,7 +417,6 @@ public class Analytics extends BroadcastReceiver {
                 try {
                     var3.close();
                 } catch (IOException var13) {
-                    ;
                 }
             }
 
@@ -436,7 +434,7 @@ public class Analytics extends BroadcastReceiver {
                 var6 = var6 + ",";
             }
 
-            var6 = var6 + this.a(((Analytics.DataInfo) dateInfo.get(var7)).date(), ",", String.valueOf(((Analytics.DataInfo) dateInfo.get(var7)).numUsages()));
+            var6 = var6 + this.a(dateInfo.get(var7).date(), ",", String.valueOf(dateInfo.get(var7).numUsages()));
         }
 
         var5 = var5 + this.a("dc", "=", "");
@@ -480,7 +478,7 @@ public class Analytics extends BroadcastReceiver {
 
             for (int var10 = 0; var10 < var9; ++var10) {
                 String var11 = var8[var10];
-                var14 = var14 + (String) var4.get(var11.toLowerCase()) + " ";
+                var14 = var14 + var4.get(var11.toLowerCase()) + " ";
             }
 
             var14 = var14.trim();

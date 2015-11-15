@@ -220,7 +220,11 @@ public class ExtensibleHardwareMap {
     }
 
     public Wire wire(String name, byte address) {
-        return I2cFactory.createWire(i2cDevices.get(name), address);
+        I2cDevice i2cDevice = i2cDevices.get(name);
+        if (i2cDevice == null) {
+            throw new IllegalArgumentException("The device " + name + " is not found.");
+        }
+        return I2cFactory.createWire(i2cDevice, address);
     }
 
     public DeviceMap<String, AnalogOutput> analogOutputs() {

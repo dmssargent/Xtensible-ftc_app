@@ -43,15 +43,11 @@ public class HelloWorld extends SimpleOpMode {
         log().i("LOOP", "Current loop count: " + getLoopCount());
         telemetry.data("MESS", "Hello, World!");
         telemetry.data("MESS", "How are you doing?");
-
-        log().e("TEST", "TESTING null pointer");
-        String temp = null;
-        throw new NullPointerException();
     }
 
     @Override
     public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
         log().w("TIME", "End Date: " +
-                (new Date(System.nanoTime() / 1000)).toString() + "This ran for " + getRuntime());
+                (new Date(System.nanoTime() / 1000)).toString() + ". This ran for " + getRuntime());
     }
 }

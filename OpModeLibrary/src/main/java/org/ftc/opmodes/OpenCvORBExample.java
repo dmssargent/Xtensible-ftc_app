@@ -230,8 +230,7 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
         _matcher.match(_descriptors2, _descriptors, matches21);
         List<DMatch> matches21_list = matches21.toList();
         List<DMatch> filtered_list = new ArrayList<>();
-        for (int i = 0; i < matches12_list.size(); i++) {
-            DMatch forward = matches12_list.get(i);
+        for (DMatch forward : matches12_list) {
             if (forward.trainIdx > matches21_list.size() - 1) continue;
             DMatch backward = matches21_list.get(forward.trainIdx);
             if (backward.trainIdx == forward.queryIdx)
@@ -242,8 +241,8 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
         double min_dist = 100;
 
         //-- Quick calculation of max and min distances between keypoints
-        for (int i = 0; i < filtered_list.size(); i++) {
-            double dist = filtered_list.get(i).distance;
+        for (DMatch aFiltered_list1 : filtered_list) {
+            double dist = aFiltered_list1.distance;
             if (dist < min_dist)
                 min_dist = dist;
             if (dist > max_dist)
@@ -252,9 +251,9 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
 
         //-- Draw only "good" matches (i.e. whose distance is less than 3*min_dist )
         List<DMatch> good_matches_list = new ArrayList<>();
-        for (int i = 0; i < filtered_list.size(); i++) {
-            if (filtered_list.get(i).distance < 60) {
-                good_matches_list.add(filtered_list.get(i));
+        for (DMatch aFiltered_list : filtered_list) {
+            if (aFiltered_list.distance < 60) {
+                good_matches_list.add(aFiltered_list);
             }
         }
 
@@ -288,9 +287,9 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
         List<KeyPoint> _keypoints2_List = _keypoints2.toList();
         List<KeyPoint> keypoints_List = _keypoints.toList();
 
-        for (int i = 0; i < good_matches_list.size(); i++) {
-            objList.addLast(keypoints_List.get(good_matches_list.get(i).queryIdx).pt);
-            sceneList.addLast(_keypoints2_List.get(good_matches_list.get(i).trainIdx).pt);
+        for (DMatch aGood_matches_list : good_matches_list) {
+            objList.addLast(keypoints_List.get(aGood_matches_list.queryIdx).pt);
+            sceneList.addLast(_keypoints2_List.get(aGood_matches_list.trainIdx).pt);
         }
 
         MatOfPoint2f obj = new MatOfPoint2f();

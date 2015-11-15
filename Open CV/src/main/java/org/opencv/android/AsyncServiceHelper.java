@@ -74,7 +74,6 @@ class AsyncServiceHelper {
                                         }
                                     } catch (RemoteException e) {
                                         e.printStackTrace();
-                                        ;
                                         Log.d(TAG, "Init finished with status " + LoaderCallbackInterface.INIT_FAILED);
                                         Log.d(TAG, "Unbind from service");
                                         mAppContext.unbindService(mServiceConnection);

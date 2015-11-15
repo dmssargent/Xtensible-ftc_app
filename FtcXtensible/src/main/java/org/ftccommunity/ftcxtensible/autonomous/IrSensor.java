@@ -90,7 +90,7 @@ public class IrSensor implements BasicSensor {
     /**
      * Writes an object to the sensor, implementation dependent
      *
-     * @param mode
+     * @param mode the mode of the IrSensor
      */
     @Override
     public void write(Object mode) {

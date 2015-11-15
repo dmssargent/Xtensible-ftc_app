@@ -317,8 +317,6 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
         }
     }
 
-    ;
-
     private class CameraWorker implements Runnable {
 
         @Override

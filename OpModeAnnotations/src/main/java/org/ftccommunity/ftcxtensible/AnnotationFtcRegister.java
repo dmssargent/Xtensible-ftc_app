@@ -228,7 +228,7 @@ public class AnnotationFtcRegister {
     /**
      * This sorts the {@link LinkedList<Class>} sorting the OpModes given by a special character
      *
-     * @param opModes
+     * @param opModes the OpMode HashMap
      */
     private void sortOpModeMap(HashMap<String, LinkedList<Class<OpMode>>> opModes) {
         Comparator<Class> firstComparator =
@@ -262,42 +262,44 @@ public class AnnotationFtcRegister {
                 if (currentClass.isAnnotationPresent(teleOpClass)) {
                     Annotation annotation = currentClass.getAnnotation(teleOpClass);
                     String name = ((TeleOp) annotation).pairWithAuto();
-                    if (name.equals("")) {
-                        int i = ++nextAvailableIndex;
-                        LinkedList<Class<OpMode>> temp = new LinkedList<>();
-                        temp.add(currentClass);
-                        opModes.put(Integer.toString(i), temp);
-                    } else {
-                        if (opModes.containsKey(name)) {
-                            opModes.get(name).add(currentClass);
-                        } else {
-                            LinkedList<Class<OpMode>> temp = new LinkedList<>();
-                            temp.add(currentClass);
-                            opModes.put(name, temp);
-                        }
-                    }
+                    nextAvailableIndex = getNextAvailableIndex(nextAvailableIndex, opModes, currentClass, name);
                 }
                 if (currentClass.isAnnotationPresent(autoClass)) {
                     Annotation annotation = currentClass.getAnnotation(autoClass);
                     String name = ((Autonomous) annotation).pairWithTeleOp();
-                    if (name.equals("")) {
-                        int i = ++nextAvailableIndex;
-                        LinkedList<Class<OpMode>> temp = new LinkedList<>();
-                        temp.add(currentClass);
-                        opModes.put(Integer.toString(i), temp);
-                    } else {
-                        if (opModes.containsKey(name)) {
-                            opModes.get(name).add(currentClass);
-                        } else {
-                            LinkedList<Class<OpMode>> temp = new LinkedList<>();
-                            temp.add(currentClass);
-                            opModes.put(name, temp);
-                        }
-                    }
+                    nextAvailableIndex = getNextAvailableIndex(nextAvailableIndex, opModes, currentClass, name);
                 }
             }
         }
         return opModes;
+    }
+
+    /**
+     * Gets the next possible grouping in the HashMap and handles it, also handling
+     * the incremation of the state index
+     *
+     * @param nextAvailableIndex
+     * @param opModes
+     * @param currentClass
+     * @param name
+     * @return
+     */
+    private int getNextAvailableIndex(int nextAvailableIndex, HashMap<String, LinkedList<Class<OpMode>>> opModes, Class<OpMode> currentClass, String name) {
+        if (name.equals("")) {
+            int i = ++nextAvailableIndex;
+            LinkedList<Class<OpMode>> temp = new LinkedList<>();
+            temp.add(currentClass);
+            opModes.put(Integer.toString(i), temp);
+        } else {
+            if (opModes.containsKey(name)) {
+                opModes.get(name).add(currentClass);
+            } else {
+                LinkedList<Class<OpMode>> temp = new LinkedList<>();
+                temp.add(currentClass);
+                opModes.put(name, temp);
+            }
+        }
+        return nextAvailableIndex;
     }
 
     /**
