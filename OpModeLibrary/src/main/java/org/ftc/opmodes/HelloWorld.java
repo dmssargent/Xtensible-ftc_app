@@ -48,6 +48,6 @@ public class HelloWorld extends SimpleOpMode {
     @Override
     public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
         log().w("TIME", "End Date: " +
-                (new Date(System.nanoTime() / 1000)).toString() + "This ran for " + getRuntime());
+                (new Date(System.nanoTime() / 1000)).toString() + ". This ran for " + getRuntime());
     }
 }

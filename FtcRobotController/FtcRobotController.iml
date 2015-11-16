@@ -71,7 +71,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/Analytics-release/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/WirelessP2p-release/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
@@ -92,78 +91,17 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
-    <orderEntry type="library" exported="" name="io-0.19" level="project" />
-    <orderEntry type="library" exported="" name="Analytics-release-" level="project" />
-    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="doxia-site-renderer-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-settings-2.0.10" level="project" />
-    <orderEntry type="library" exported="" name="ip-0.19" level="project" />
-    <orderEntry type="library" exported="" name="recognition-0.19" level="project" />
+    <orderEntry type="library" exported="" name="jama-1.0.3" level="project" />
+    <orderEntry type="library" exported="" name="RobotCore-release-" level="project" />
     <orderEntry type="library" exported="" name="ModernRobotics-release-" level="project" />
     <orderEntry type="library" exported="" name="WirelessP2p-release-" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="plexus-container-default-1.0-alpha-30" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="doxia-module-fml-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-lang-2.4" level="project" />
-    <orderEntry type="library" exported="" name="all-0.19" level="project" />
-    <orderEntry type="library" exported="" name="FtcCommon-release-" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="asm-debug-all-5.0.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="org.jacoco.core-0.7.5.201505241946" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-artifact-manager-2.0.10" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="junit-3.8.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-codec-1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-digester-1.6" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-plugin-registry-2.0.10" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-plugin-api-2.0.10" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-shared-io-1.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="doxia-decoration-model-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="plexus-classworlds-1.2-alpha-9" level="project" />
-    <orderEntry type="library" exported="" name="feature-0.19" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="file-management-1.2.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-reporting-impl-2.1" level="project" />
-    <orderEntry type="library" exported="" name="core-0.28" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-httpclient-3.1" level="project" />
-    <orderEntry type="library" exported="" name="Hardware-release-" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="plexus-velocity-1.1.7" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="velocity-1.5" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-beanutils-1.7.0" level="project" />
-    <orderEntry type="library" exported="" name="android-0.19" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-profile-2.0.10" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-reporting-api-3.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="org.jacoco.report-0.7.5.201505241946" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.4" level="project" />
     <orderEntry type="library" exported="" name="guava-19.0-rc1" level="project" />
-    <orderEntry type="library" exported="" name="learning-0.19" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="wagon-provider-api-1.0-beta-2" level="project" />
-    <orderEntry type="library" exported="" name="equation-0.28" level="project" />
-    <orderEntry type="library" exported="" name="geo-0.19" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="plexus-i18n-1.0-beta-7" level="project" />
-    <orderEntry type="library" exported="" name="xpp3_min-1.1.4c" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="doxia-sink-api-1.1.2" level="project" />
-    <orderEntry type="library" exported="" name="xstream-1.4.7" level="project" />
-    <orderEntry type="library" exported="" name="calibration-0.19" level="project" />
-    <orderEntry type="library" exported="" name="georegression-0.8" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-artifact-2.0.10" level="project" />
-    <orderEntry type="library" exported="" name="RobotCore-release-" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="doxia-module-xhtml-1.1.2" level="project" />
-    <orderEntry type="library" exported="" name="ddogleg-0.7" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="doxia-core-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-repository-metadata-2.0.10" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="xml-apis-2.0.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="plexus-utils-1.5.12" level="project" />
+    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
     <orderEntry type="library" exported="" name="annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" name="dense64-0.28" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="doxia-logging-api-1.1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="plexus-interpolation-1.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jacoco-maven-plugin-0.7.5.201505241946" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="xercesImpl-2.8.1" level="project" />
-    <orderEntry type="library" exported="" name="simple-0.28" level="project" />
-    <orderEntry type="library" exported="" name="jama-1.0.3" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="org.jacoco.agent-0.7.5.201505241946-runtime" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-collections-3.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-project-2.0.10" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="commons-validator-1.2.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="oro-2.0.8" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="maven-model-2.0.10" level="project" />
+    <orderEntry type="library" exported="" name="Hardware-release-" level="project" />
+    <orderEntry type="library" exported="" name="FtcCommon-release-" level="project" />
+    <orderEntry type="module" module-name="XAnalytics" exported="" />
     <orderEntry type="module" module-name="XSimplify" exported="" />
     <orderEntry type="module" module-name="XtensibleControllerBindings" exported="" />
     <orderEntry type="module" module-name="OpModeLibrary" exported="" />

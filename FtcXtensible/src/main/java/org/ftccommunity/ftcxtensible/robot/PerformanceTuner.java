@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @since 0.3.1
  */
 public class PerformanceTuner implements Serializable {
-    private static final long serialVersionUID = 0l;
+    private static final long serialVersionUID = 0;
     private Integer[] times;
     private double[] z_indexes;
     private double average;

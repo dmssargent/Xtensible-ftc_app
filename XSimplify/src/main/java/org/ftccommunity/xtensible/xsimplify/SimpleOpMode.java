@@ -49,6 +49,11 @@ public abstract class SimpleOpMode extends StandardOpMode {
 
     @Override
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {
+        hardwareMap = hardwareMap();
+        gamepad1 = gamepad1();
+        gamepad2 = gamepad2();
+        telemetry = telemetry();
+
         if (child != null && childOpMode != null) {
             LinkedList<Field> fields = new LinkedList<>(Arrays.asList(childOpMode.getFields()));
             for (Field field : fields) {

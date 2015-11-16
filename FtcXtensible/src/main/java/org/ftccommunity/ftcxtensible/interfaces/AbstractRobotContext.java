@@ -23,6 +23,7 @@ import android.view.View;
 
 import com.google.common.collect.ImmutableList;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
@@ -50,6 +51,13 @@ public interface AbstractRobotContext {
     RobotContext enableNetworking();
 
     RobotContext disableNetworking();
+
+    void bindHardwareMap(@NotNull HardwareMap map);
+
+    void rebuildHardwareMap();
+
+    @Deprecated
+    HardwareMap legacyHardwareMap();
 
     RobotContext startNetworking();
 

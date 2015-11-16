@@ -71,9 +71,9 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
         } else { // We need to find our registration
             List<Integer> canditates = loopManager().getPossibleCandidatesForAfterEveryX(
                     loopCount, WriteOnlyAssistant.class.getSimpleName());
-            for (int i = 0; i < canditates.size(); i++) {
-                if (everyX.get(loopCount).get(canditates.get(i)) instanceof WriteOnlyAssistant) {
-                    loopManager().unregisterAfterEveryX(loopCount, canditates.get(i));
+            for (Integer canditate : canditates) {
+                if (everyX.get(loopCount).get(canditate) instanceof WriteOnlyAssistant) {
+                    loopManager().unregisterAfterEveryX(loopCount, canditate);
                 }
             }
         }

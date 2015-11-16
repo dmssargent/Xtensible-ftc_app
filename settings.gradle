@@ -1,4 +1,4 @@
-include ':FtcRobotController', ':XSimplify',
+include ':FtcRobotController', ':XSimplify', ':XAnalytics',
         ':OpModeAnnotations',
         ':FtcXtensible',
         ':OpModeLibrary',
@@ -25,3 +25,4 @@ include ':FtcRobotController', ':XSimplify',
 */
 
 // FTC Apps
+include ':Open CV'
