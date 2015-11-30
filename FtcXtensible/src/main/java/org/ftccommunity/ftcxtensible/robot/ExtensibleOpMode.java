@@ -128,8 +128,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
      */
     @Override
     public final void init() {
-        prepare(super.hardwareMap.appContext);
-        bindHardwareMap(super.hardwareMap);
+        prepare(super.hardwareMap.appContext, super.hardwareMap);
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
@@ -141,7 +140,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
                 Activity controller = (Activity) robotContext.appContext();
                 @SuppressWarnings("ResourceType") PendingIntent intent = PendingIntent.getActivity(controller.getBaseContext(), 0,
                         new Intent(controller.getIntent()), controller.getIntent().getFlags());
-                Thread.currentThread().setUncaughtExceptionHandler(new RobotUncaughtExceptionHandler(robotContext.appContext(), intent));
+                Thread.currentThread().setUncaughtExceptionHandler(new RobotUncaughtExceptionHandler(robotContext.appContext(), intent, 250));
             }
         });
 
@@ -198,9 +197,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
             return;
         }
 
-        // todo determine if the following line is needed
-        bindHardwareMap(super.hardwareMap);
-
+        //  determine if the following line is needed;  I think not
+        // bindHardwareMap(super.hardwareMap);
         if (robotContext.status().getMainRobotState() == RobotStatus.MainStates.EXCEPTION &&
                 (robotContext.status().getCurrentStateType() == RobotStatus.Type.FAILURE ||
                         robotContext.status().getCurrentStateType() == RobotStatus.Type.IDK)) {
@@ -494,8 +492,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     }
 
     @Override
-    public void prepare(Context ctx) {
-        robotContext.prepare(ctx);
+    public void prepare(Context ctx, HardwareMap hwMap) {
+        robotContext.prepare(ctx, hwMap);
     }
 
     @Override

@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * TeleOp Mode
@@ -57,7 +58,7 @@ public class NullOp extends OpMode {
        */
     @Override
     public void init_loop() {
-        startDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+        startDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US).format(new Date());
         runtime.reset();
         telemetry.addData("Null Op Init Loop", runtime.toString());
     }

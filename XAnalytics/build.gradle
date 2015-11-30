@@ -24,7 +24,8 @@ android {
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 23
+        //noinspection OldTargetApi
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -33,6 +34,17 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        textReport true
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
     }
 }
 
@@ -49,4 +61,6 @@ dependencies {
     compile(name: 'RobotCore-release', ext: 'aar')
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'FtcCommon-release', ext: 'aar')
+
+    compile 'org.jetbrains:annotations:13.0'
 }

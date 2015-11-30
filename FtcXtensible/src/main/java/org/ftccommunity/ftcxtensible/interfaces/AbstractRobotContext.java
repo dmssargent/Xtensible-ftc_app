@@ -78,7 +78,7 @@ public interface AbstractRobotContext {
      */
     void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException;
 
-    void prepare(Context ctx);
+    void prepare(Context ctx, HardwareMap hwMap);
 
     /**
      * Returns an App Context

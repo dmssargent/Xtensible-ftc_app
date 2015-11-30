@@ -18,11 +18,11 @@
 
 package org.ftccommunity.ftcxtensible.robot;
 
-import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.reflect.TypeToken;
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogOutput;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.LegacyModule;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
@@ -40,17 +41,18 @@ import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.TouchSensorMultiplexer;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.ftccommunity.ftcxtensible.hardware.i2c.Wire;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.util.I2cFactory;
+import org.ftcommunity.i2clibrary.Wire;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -65,7 +67,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Alpha
 public class ExtensibleHardwareMap {
     private HardwareMap basicMap;
-    private LinkedHashMultimap<String, HardwareDevice> fullMap;
 
     // Conversions to our DeviceMap
     private DeviceMap<String, DcMotorController> dcMotorControllers;
@@ -88,8 +89,12 @@ public class ExtensibleHardwareMap {
     private DeviceMap<String, LightSensor> lightSensors;
     private DeviceMap<String, UltrasonicSensor> ultrasonicSensors;
     private DeviceMap<String, VoltageSensor> voltageSensors;
+    private DeviceMap<String, LED> leds;
+    private DeviceMap<String, TouchSensorMultiplexer> touchSensorMultiplexers;
+    private DeviceMap<String, ColorSensor> colorSensors;
 
-    //private LinkedHashMultimap<String, DeviceMap> cacheMap;
+    private HashMap<Class<? extends HardwareDevice>, DeviceMap<String, ? extends HardwareDevice>> fullMap;
+    private LinkedList<DeviceMap<String, ? extends HardwareDevice>> allMaps;
 
     /**
      * Builds the base ExtensibleHardwareMap; need to complete setup afterwards, specifically calling
@@ -155,10 +160,34 @@ public class ExtensibleHardwareMap {
         ultrasonicSensors = new DeviceMap<>(basicMap.ultrasonicSensor);
         voltageSensors = new DeviceMap<>(basicMap.voltageSensor);
 
-        fullMap = LinkedHashMultimap.create();
-        for (Map.Entry device : dcMotorControllers.entrySet()) {
-            fullMap.entries().add(device);
-        }
+        allMaps.add(dcMotorControllers);
+        allMaps.add(servoControllers);
+        allMaps.add(legacyModules);
+        allMaps.add(deviceInterfaceModules);
+        allMaps.add(colorSensors);
+        allMaps.add(dcMotors);
+        allMaps.add(gyroSensors);
+        allMaps.add(servos);
+        allMaps.add(analogInputs);
+        allMaps.add(digitalChannels);
+        allMaps.add(opticalDistanceSensors);
+        allMaps.add(touchSensors);
+        allMaps.add(pwmOutputs);
+        allMaps.add(i2cDevices);
+        allMaps.add(analogOutputs);
+        allMaps.add(leds);
+        allMaps.add(accelerationSensors);
+        allMaps.add(compassSensors);
+        allMaps.add(irSeekerSensors);
+        allMaps.add(lightSensors);
+        allMaps.add(ultrasonicSensors);
+        allMaps.add(voltageSensors);
+        allMaps.add(touchSensorMultiplexers);
+
+//        fullMap = LinkedHashMultimap.create();
+//        for (Map.Entry device : dcMotorControllers.entrySet()) {
+//            fullMap.entries().add(device);
+//        }
     }
 
     public HardwareDevice get(String name) {
@@ -314,5 +343,13 @@ public class ExtensibleHardwareMap {
         }
     }
 
+    public class DeviceMultiMap<K> extends HashMap<Class<K>, DeviceMap<String, ? extends K>> {
+        public DeviceMap<String, ? extends K> get(Class<K> object) {
+            if (!super.containsKey(object)) {
+                throw new IllegalArgumentException(String.format("Map doesn't contain %s", object.getSimpleName()));
+            }
 
+            return super.get(object);
+        }
+    }
 }

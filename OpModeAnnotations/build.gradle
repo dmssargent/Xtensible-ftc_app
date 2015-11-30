@@ -24,6 +24,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
+        //noinspection OldTargetApi
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -47,6 +48,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
+    lintOptions {
+        textReport true
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
+    }
 }
 
 repositories {

@@ -117,7 +117,7 @@ public class AnnotationFtcRegister {
 
         int length = nameBuilder.toString().getBytes(Charset.defaultCharset()).length;
         if (length > 255) {
-            Log.e(TAG, "OpMode names are " + (length - 255) +
+            RobotLog.setGlobalErrorMsg("OpMode names are " + (length - 255) +
                     " too long, please rename them or shorten them");
             register.register("Too Many OpMode Names", TooManyOpModes.class);
         } else {
@@ -253,10 +253,10 @@ public class AnnotationFtcRegister {
 
         int nextAvailableIndex = 0;
         HashMap<String, LinkedList<Class<OpMode>>> opModes = new HashMap<>();
-        for (Class<OpMode> currentClass : klazzes) {
-            if (!currentClass.isAssignableFrom(OpMode.class)) {
+        for (Class currentClass : klazzes) {
+            /*if (!currentClass.isAssignableFrom(OpMode.class)) {
                 continue;
-            }
+            }*/
 
             if (!currentClass.isAnnotationPresent(disabledClass)) {
                 if (currentClass.isAnnotationPresent(teleOpClass)) {

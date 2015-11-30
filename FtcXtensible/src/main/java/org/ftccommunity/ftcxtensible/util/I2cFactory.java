@@ -20,7 +20,7 @@ package org.ftccommunity.ftcxtensible.util;
 
 import com.qualcomm.robotcore.hardware.I2cDevice;
 
-import org.ftccommunity.ftcxtensible.hardware.i2c.Wire;
+import org.ftcommunity.i2clibrary.Wire;
 import org.jetbrains.annotations.NotNull;
 
 /**

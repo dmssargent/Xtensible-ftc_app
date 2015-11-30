@@ -31,6 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -275,6 +276,7 @@ public class FtcRobotControllerActivity extends Activity {
   protected void onActivityResult(int request, int result, Intent intent) {
     if (request == REQUEST_CONFIG_WIFI_CHANNEL) {
       if (result == RESULT_OK) {
+        @SuppressLint("ShowToast")
         Toast toast = Toast.makeText(context, "Configuration Complete", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         showToast(toast);
@@ -308,12 +310,10 @@ public class FtcRobotControllerActivity extends Activity {
     // if we can't find the file, don't try and build the robot.
     if (fis == null) { return; }
 
-    HardwareFactory factory;
-
     // Modern Robotics Factory for use with Modern Robotics hardware
     HardwareFactory modernRoboticsFactory = new HardwareFactory(context);
     modernRoboticsFactory.setXmlInputStream(fis);
-    factory = modernRoboticsFactory;
+    HardwareFactory factory = modernRoboticsFactory;
 
     eventLoop = new XtensibleEventLoop(factory, new FtcOpModeRegister(), callback, this);
 

@@ -242,10 +242,10 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     @Override
-    public void prepare(Context ctx) {
+    public void prepare(Context ctx, HardwareMap basicHardwareMap) {
         checkArgument(ctx instanceof Activity, "Invalid context; it must be of an activity context type");
         bindAppContext(ctx);
-
+        bindHardwareMap(basicHardwareMap);
         layout = ((Activity) appContext()).findViewById(controllerBindings().getIntegers().get("ftcview"));
     }
 

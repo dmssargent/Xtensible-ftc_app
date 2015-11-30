@@ -41,7 +41,7 @@ public class DriveForwardStop extends OpMode {
             startTime = System.nanoTime();
         }
 
-        if ((startTime + (1000000000 * (long) 5)) < System.nanoTime()) {
+        if ((startTime + (1E9 * (long) 5)) < System.nanoTime()) {
             left.setPower(1);
             right.setPower(1);
         } else {

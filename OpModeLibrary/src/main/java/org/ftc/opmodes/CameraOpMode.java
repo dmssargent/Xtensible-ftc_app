@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.LinkedList;
 
+@SuppressWarnings("deprecation")
 @Autonomous
 public class CameraOpMode extends ExtensibleOpMode {
     int red = 0;

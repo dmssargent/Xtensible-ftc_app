@@ -65,10 +65,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author FTC Team 10182
  */
+@SuppressWarnings("deprecation")
 @Autonomous
 public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBase.CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
     public static final int VIEW_MODE_RGBA = 0;
@@ -368,7 +370,7 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
     }
 
     private void updateTextViews() {
-        getContext().runOnUiThread(new Runnable() {
+        context().runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
@@ -400,7 +402,7 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
 
     private void showToast(String msg) {
         _toastMsg = msg;
-        getContext().runOnUiThread(new Runnable() {
+        context().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(appContext(), _toastMsg, Toast.LENGTH_SHORT).show();
@@ -538,7 +540,7 @@ class Utilities {
     private static File getOutputMediaFile(int type) {
         File mediaStorageDir = getStorageDirectory();
         // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +

@@ -403,7 +403,7 @@ public class PushBotHardware extends OpMode
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_drive_power(double p_left_power, double p_right_power) {
+    public void set_drive_power(double p_left_power, double p_right_power) {
         if (v_motor_left_drive != null) {
             v_motor_left_drive.setPower(p_left_power);
         }
@@ -676,7 +676,7 @@ public class PushBotHardware extends OpMode
     /**
      * Indicate whether the drive motors' encoders have reached a value.
      */
-    boolean have_drive_encoders_reached(double p_left_count, double p_right_count) {
+    protected boolean have_drive_encoders_reached(double p_left_count, double p_right_count) {
         //
         // Assume failure.
         //
@@ -825,7 +825,7 @@ public class PushBotHardware extends OpMode
     /**
      * Indicate whether the encoders have been completely reset.
      */
-    boolean have_drive_encoders_reset() {
+    protected boolean have_drive_encoders_reset() {
         //
         // Assume failure.
         //
