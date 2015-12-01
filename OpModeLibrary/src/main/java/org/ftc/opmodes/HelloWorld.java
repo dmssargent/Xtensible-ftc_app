@@ -27,6 +27,8 @@ import java.util.LinkedList;
 
 @Autonomous(name = "Hello World Example")
 public class HelloWorld extends SimpleOpMode {
+    private final String MESS = "MESS";
+
     @Override
     public void init(RobotContext ctx) {
         enableNetworking().startNetworking();
@@ -34,20 +36,20 @@ public class HelloWorld extends SimpleOpMode {
 
     @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        telemetry.data("TIME", "Start Date: " +
-                (new Date(System.nanoTime() / 1000)).toString());
+        telemetry.data(MESS, "Start Date: " +
+                (new Date((long) (System.nanoTime() / 1E3))).toString());
     }
 
     @Override
     public void loop(RobotContext ctx) {
-        log().i("LOOP", "Current loop count: " + getLoopCount());
-        telemetry.data("MESS", "Hello, World!");
-        telemetry.data("MESS", "How are you doing?");
+        log().i(MESS, "Current loop count: " + String.valueOf(getLoopCount()));
+        telemetry.data(MESS, "Hello, World!");
+        telemetry.data(MESS, "How are you doing?");
     }
 
     @Override
     public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        log().w("TIME", "End Date: " +
+        log().w(MESS, "End Date: " +
                 (new Date(System.nanoTime() / 1000)).toString() + ". This ran for " + getRuntime());
     }
 }

@@ -40,7 +40,8 @@ public class FtcOpModeRegister implements OpModeRegister {
     public void register(final OpModeManager mgr) {
         DataBinder binding = DataBinder.getInstance();
 
-        binding.getIntegers().put(DataBinder.RC_VIEW, R.id.RelativeLayout);
+        binding.integers().put(DataBinder.RC_VIEW, R.id.RelativeLayout);
+        binding.objects().put(DataBinder.RC_MANAGER, mgr);
 
         FallbackOpModeRegister.register(mgr);
         AnnotationFtcRegister.loadOpModes(mgr);

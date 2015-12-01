@@ -32,6 +32,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
@@ -68,7 +69,7 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 @Alpha
 @NotDocumentedWell
 public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, AbstractRobotContext {
-    public static final String TAG = "XTENSTIBLE_OP_MODE::";
+    public static final String TAG = "XTENSIBLE_OP_MODE::";
     private transient static ExtensibleOpMode parent;
 
     private final Gamepad gamepad1;
@@ -93,9 +94,10 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         this.gamepad1 = super.gamepad1;
         this.gamepad2 = super.gamepad2;
         this.hardwareMap = super.hardwareMap;
-        if (super.hardwareMap.appContext == null) {
-            RobotLog.w("App Context is null during construction.");
-        }
+
+//        if (super.hardwareMap.appContext == null) {
+//            RobotLog.w("App Context is null during construction.");
+//        }
 
         this.telemetry = super.telemetry;
         loopCount = 0;
@@ -561,6 +563,12 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     @Override
     public void rebuildHardwareMap() {
         context().rebuildHardwareMap();
+    }
+
+    @Override
+    @NotNull
+    public OpModeManager opModeManager() {
+        return robotContext.opModeManager();
     }
 
     @Override

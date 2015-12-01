@@ -114,7 +114,7 @@ public class AdafruitRGBExample extends LinearOpMode {
 
     // get a reference to the RelativeLayout so we can change the background
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
-    int relativeLayoutId = DataBinder.getInstance().getIntegers().get("ftcview");
+    int relativeLayoutId = DataBinder.getInstance().integers().get("ftcview");
     final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
     // bPrevState and bCurrState represent the previous and current state of the button.

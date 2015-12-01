@@ -82,6 +82,6 @@ dependencies {
     //compile 'org.boofcv:android:0.19'
     //compile 'org.boofcv:boofcv:0.16'
     compile project(':OpenCV')
-    compile 'org.python:jython:2.7.1b2'
+    //compile 'org.python:jython:2.7.1b2'
     compile 'org.jetbrains:annotations:13.0'
 }

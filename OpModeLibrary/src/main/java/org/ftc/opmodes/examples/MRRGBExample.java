@@ -88,7 +88,7 @@ public class MRRGBExample extends LinearOpMode {
     // get a reference to the RelativeLayout so we can change the background
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
     final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(
-            DataBinder.getInstance().getIntegers().get(DataBinder.RC_VIEW));
+            DataBinder.getInstance().integers().get(DataBinder.RC_VIEW));
 
     // bPrevState and bCurrState represent the previous and current state of the button.
     boolean bPrevState = false;

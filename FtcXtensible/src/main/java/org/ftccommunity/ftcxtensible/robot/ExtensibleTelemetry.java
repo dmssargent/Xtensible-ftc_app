@@ -47,6 +47,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Alpha
 @NotDocumentedWell
 public class ExtensibleTelemetry {
+    private static final String EMPTY = "";
+    private static final String SPACE = " ";
+    
     public static final int DEFAULT_DATA_MAX = 192;
     public static final int MAX_DATA_MAX = 255;
     private static final String TAG = "XTENSILBLE_TELEMETRY::";
@@ -96,7 +99,7 @@ public class ExtensibleTelemetry {
         
         synchronized (dataCache) {
             lastModificationTime = System.nanoTime();
-            dataCache.add((!tag.equals("") ? tag.toUpperCase(Locale.getDefault()) + " " : "") + message);
+            dataCache.add((!tag.equals(EMPTY) ? tag.toUpperCase(Locale.US) + SPACE : EMPTY) + message);
         }
     }
 
@@ -159,9 +162,10 @@ public class ExtensibleTelemetry {
 
             synchronized (dataCache) {
                 int numberOfElementsAdded = 0;
-                for (; numberOfElementsAdded < Math.min(dataCache.size(),
-                        (int) (dataPointsToSend * .75)); numberOfElementsAdded++) {
-                    cache.put("0" + Integer.toString(numberOfElementsAdded), dataCache.poll());
+                int min = Math.min(dataCache.size(),
+                        (int) (dataPointsToSend * .75));
+                for (; numberOfElementsAdded < min; numberOfElementsAdded++) {
+                    cache.put(String.valueOf(numberOfElementsAdded), dataCache.poll());
                 }
                 numberOfElements = numberOfElementsAdded;
             }
@@ -173,9 +177,11 @@ public class ExtensibleTelemetry {
                 LinkedList<Multiset.Entry<String>> keys = new LinkedList<>(data.keys().entrySet());
                 for (Multiset.Entry<String> key : keys) {
                     LinkedList<String> dataElements = new LinkedList<>(data.get(key.getElement()));
-                    for (int index = 0;
-                         numberOfElementsAdded < dataElements.size(); numberOfElementsAdded++) {
-                        entries.put(key.getElement() + Integer.toString(index), dataElements.get(index));
+
+                    int size = dataElements.size();
+                    for (int index = 0; numberOfElementsAdded < size; numberOfElementsAdded++) {
+                        StringBuilder builder = new StringBuilder(key.getElement().length() + String.valueOf(index).length());
+                        entries.put(builder.append(key.getElement()).append(Integer.toString(index)).toString(), dataElements.get(index));
                     }
                 }
 
@@ -204,10 +210,9 @@ public class ExtensibleTelemetry {
         synchronized (log) {
             if (log.size() < dataPointsToSend) {
                 int numberOfElementsAdded = 0;
-                for (;
-                     numberOfElementsAdded < Math.min(dataPointsToSend - log.size(), log.size());
-                     numberOfElementsAdded++) {
-                    parent.addData("x_log" + numberOfElementsAdded, log.poll());
+                int min = Math.min(dataPointsToSend - log.size(), log.size());
+                for (; numberOfElementsAdded < min; numberOfElementsAdded++) {
+                    parent.addData("xLog" + String.valueOf(numberOfElementsAdded), log.poll());
                 }
             }
         }

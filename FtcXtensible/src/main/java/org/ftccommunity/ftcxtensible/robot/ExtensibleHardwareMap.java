@@ -101,7 +101,8 @@ public class ExtensibleHardwareMap {
      * {@link ExtensibleHardwareMap#createDeviceMaps()}
      */
     private ExtensibleHardwareMap() {
-        // createDeviceMaps();
+        fullMap = new HashMap<>();
+        allMaps = new LinkedList<>();
     }
 
     /**
