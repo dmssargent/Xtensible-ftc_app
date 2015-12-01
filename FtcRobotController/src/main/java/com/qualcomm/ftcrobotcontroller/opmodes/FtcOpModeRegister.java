@@ -14,6 +14,7 @@ import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
+import org.ftc.opmodes.FallbackOpModeRegister;
 import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.AnnotationFtcRegister;
 
@@ -37,6 +38,8 @@ public class FtcOpModeRegister implements OpModeRegister {
         // ----- BINDINGS SECTION, WILL BE MOVED
         //binding.getObjects().put("R");
         binding.getIntegers().put("ftcview", R.id.RelativeLayout);
+
+        FallbackOpModeRegister.register(mgr);
 
       AnnotationFtcRegister.loadOpModes(mgr);
         /*try {

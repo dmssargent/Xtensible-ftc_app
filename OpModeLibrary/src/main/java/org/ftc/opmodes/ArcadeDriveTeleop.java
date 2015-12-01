@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
 import org.ftccommunity.ftcxtensible.math.PolarCoordinates;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
@@ -36,6 +37,7 @@ import java.util.LinkedList;
 /**
  * An arcade drive example, note that it is not finshed
  */
+@Disabled
 @TeleOp
 @RobotSdkVersion(RobotSdkApiLevel.R3_2015)
 public class ArcadeDriveTeleop extends ExtensibleOpMode {

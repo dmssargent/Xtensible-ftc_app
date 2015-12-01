@@ -35,7 +35,7 @@ public class FallbackOpModeRegister {
      */
     public static void register(final OpModeManager mgr) {
         // Add your hardcoded OpModes here
-
+        mgr.register("Test2", Test.class);
         // Please note that this executes immediately
     }
 }

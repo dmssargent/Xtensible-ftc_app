@@ -2,6 +2,7 @@ package org.ftc.opmodes;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
@@ -9,6 +10,7 @@ import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
 
+@Disabled
 @TeleOp
 public class xTest extends ExtensibleOpMode {
     DcMotor motor1;
@@ -16,8 +18,8 @@ public class xTest extends ExtensibleOpMode {
 
     @Override
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        motor1 = hardwareMap().getDcMotors().get("motor1");
-        motor2 = hardwareMap().getDcMotors().get("motor2");
+        motor1 = hardwareMap().dcMotors().get("motor1");
+        motor2 = hardwareMap().dcMotors().get("motor2");
     }
 
     @Override
@@ -40,8 +42,6 @@ public class xTest extends ExtensibleOpMode {
     public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
 
     }
-
-    @Override
     public void onSuccess(RobotContext ctx, Object event, Object in) {
 
     }

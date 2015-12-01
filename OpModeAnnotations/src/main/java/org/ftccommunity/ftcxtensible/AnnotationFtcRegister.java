@@ -124,6 +124,7 @@ public class AnnotationFtcRegister {
             for (Class<OpMode> opMode :
                     opModesToRegister) {
                 register.register(getOpModeName(opMode), opMode);
+                RobotLog.w("");getOpModeName(opMode);
             }
         }
     }
@@ -254,9 +255,9 @@ public class AnnotationFtcRegister {
         int nextAvailableIndex = 0;
         HashMap<String, LinkedList<Class<OpMode>>> opModes = new HashMap<>();
         for (Class<OpMode> currentClass : klazzes) {
-            if (!currentClass.isAssignableFrom(OpMode.class)) {
+            /*if (!currentClass.isAssignableFrom(OpMode.class)) {
                 continue;
-            }
+            }*/
 
             if (!currentClass.isAnnotationPresent(disabledClass)) {
                 if (currentClass.isAnnotationPresent(teleOpClass)) {

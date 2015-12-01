@@ -20,6 +20,7 @@ package org.ftc.opmodes;
 
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
@@ -29,6 +30,7 @@ import org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
+@Disabled
 @RobotSdkVersion(RobotSdkApiLevel.R3_2015)
 @Autonomous(name = "Network Op")
 public class NetworkOpMode extends ExtensibleOpMode {

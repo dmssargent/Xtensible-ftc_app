@@ -3,11 +3,13 @@ package org.ftc.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 
 /**
  * Created by First on 10/29/2015.
  */
+@Disabled
 @TeleOp
 public class TestBot  extends OpMode {
     DcMotor leftRear;

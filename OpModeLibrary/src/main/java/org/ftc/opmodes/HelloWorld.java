@@ -19,12 +19,14 @@
 package org.ftc.opmodes;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
 
 import java.util.Date;
 import java.util.LinkedList;
 
+@Disabled
 @Autonomous(name = "Hello World Example")
 public class HelloWorld extends SimpleOpMode {
     @Override
