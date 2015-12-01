@@ -125,7 +125,8 @@ to do something.
 David Sargent, T. Eng, Jonathan Berling
 
 ### Credits
-hexafraction - Image Processing
-Swerve Robotics - Sensor Class, and Dashboard functionalities
+- hexafraction - Image Processing
+- Swerve Robotics - Sensor Classes, I2C functionality, and Dashboard functionalities
+- Ollie - Generic I2C Functionality
 
 
