@@ -113,7 +113,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
         switch (v_state)
         {
         //
-        // State 0.
+            // StateNode 0.
         //
         case 0:
             //
@@ -134,7 +134,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
 
             break;
         //
-        // State 1.
+            // StateNode 1.
         //
         case 1:
             //
@@ -163,7 +163,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             }
             break;
         //
-        // State 2.
+            // StateNode 2.
         //
         case 2:
             //
@@ -195,7 +195,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             }
             break;
         //
-        // State 3.
+            // StateNode 3.
         //
         case 3:
             //
@@ -207,7 +207,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             }
             break;
         //
-        // State 4.
+            // StateNode 4.
         //
         case 4:
             //
@@ -230,7 +230,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             }
             break;
         //
-        // State 5.
+            // StateNode 5.
         //
         case 5:
             //
@@ -264,7 +264,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             }
             break;
         //
-        // State 6.
+            // StateNode 6.
         //
         case 6:
             //
@@ -331,7 +331,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
         switch (v_arm_state)
         {
             //
-            // State 0.
+            // StateNode 0.
             //
             case 0:
                 //
@@ -339,7 +339,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
                 //
                 break;
             //
-            // State 1.
+            // StateNode 1.
             //
             case 1:
                 //

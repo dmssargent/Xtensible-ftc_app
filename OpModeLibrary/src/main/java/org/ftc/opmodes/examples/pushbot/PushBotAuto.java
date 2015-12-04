@@ -95,7 +95,7 @@ public class PushBotAuto extends PushBotTelemetry
     {
         //----------------------------------------------------------------------
         //
-        // State: Initialize (i.e. state_0).
+        // StateNode: Initialize (i.e. state_0).
         //
         switch (v_state)
         {

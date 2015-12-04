@@ -21,9 +21,9 @@ package org.ftccommunity.ftcxtensible.hardware;
 import com.google.common.base.Throwables;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-import org.ftccommunity.ftcxtensible.abstraction.hardware.HardwareDevice;
-import org.ftccommunity.ftcxtensible.abstraction.hardware.Mockable;
 import org.ftccommunity.ftcxtensible.robot.connection.ConnectionInfo;
+import org.ftcommunity.ftcxtensible.core.hardware.Mockable;
+import org.ftcommunity.ftcxtensible.core.internal.HardwareDevice;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -31,6 +31,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
+
+//import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 /**
  * A simpler DcMotor implementation designed to be fast-failing in case of error

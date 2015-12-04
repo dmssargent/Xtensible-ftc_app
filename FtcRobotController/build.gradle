@@ -3,19 +3,27 @@ apply plugin: 'com.android.application'
 android {
     defaultConfig {
         minSdkVersion 19
+        //noinspection OldTargetApi
         targetSdkVersion 22
 
        // useJack = true
     }
     compileSdkVersion 22
     buildToolsVersion '23.0.1'
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
     lintOptions {
-        abortOnError false
+        textReport true
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "2g"
     }
 }
 

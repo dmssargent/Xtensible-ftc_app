@@ -8,7 +8,7 @@ org.ftc.opmodes.examples.K9.xtensible
 org.ftc.opmodes.examples.pushbot
 org.ftccommunity.bindings
 org.ftccommunity.ftcxtensible
-org.ftccommunity.ftcxtensible.abstraction.hardware
+org.ftcommunity.ftcxtensible.core.hardware
 org.ftccommunity.ftcxtensible.autonomous
 org.ftccommunity.ftcxtensible.autonomous.hardware
 org.ftccommunity.ftcxtensible.gui

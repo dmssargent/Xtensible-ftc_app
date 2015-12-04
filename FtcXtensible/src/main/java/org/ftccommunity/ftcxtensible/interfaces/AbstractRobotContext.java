@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.google.common.collect.ImmutableList;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -41,11 +42,12 @@ import java.util.Collection;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
 /**
- * Main Robot Context Interface, any class claiming to be a Robot Context complitable class
+ * Main Robot Context Interface, any class claiming to be a Robot Context compatible class
  * should inherit this interface
  *
  * @author David
  * @since 0.2.2
+ * @see RobotContext
  */
 public interface AbstractRobotContext {
     RobotContext enableNetworking();
@@ -64,7 +66,7 @@ public interface AbstractRobotContext {
     RobotContext stopNetworking();
 
     /**
-     * Returns the Hardware Map     *
+     * Returns the Hardware Map
      *
      * @return the <code>ExtensibleHardwareMap</code> currently in use
      */
@@ -78,7 +80,7 @@ public interface AbstractRobotContext {
      */
     void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException;
 
-    void prepare(Context ctx);
+    void prepare(Context ctx, HardwareMap hwMap);
 
     /**
      * Returns an App Context
@@ -194,4 +196,7 @@ public interface AbstractRobotContext {
      */
     @NotNull
     View robotControllerView();
+
+    @NotNull
+    OpModeManager opModeManager();
 }

@@ -32,6 +32,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
@@ -68,7 +69,7 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 @Alpha
 @NotDocumentedWell
 public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, AbstractRobotContext {
-    public static final String TAG = "XTENSTIBLE_OP_MODE::";
+    public static final String TAG = "XTENSIBLE_OP_MODE::";
     private transient static ExtensibleOpMode parent;
 
     private final Gamepad gamepad1;
@@ -93,9 +94,10 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         this.gamepad1 = super.gamepad1;
         this.gamepad2 = super.gamepad2;
         this.hardwareMap = super.hardwareMap;
-        if (super.hardwareMap.appContext == null) {
-            RobotLog.w("App Context is null during construction.");
-        }
+
+//        if (super.hardwareMap.appContext == null) {
+//            RobotLog.w("App Context is null during construction.");
+//        }
 
         this.telemetry = super.telemetry;
         loopCount = 0;
@@ -128,8 +130,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
      */
     @Override
     public final void init() {
-        prepare(super.hardwareMap.appContext);
-        bindHardwareMap(super.hardwareMap);
+        prepare(super.hardwareMap.appContext, super.hardwareMap);
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
@@ -141,7 +142,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
                 Activity controller = (Activity) robotContext.appContext();
                 @SuppressWarnings("ResourceType") PendingIntent intent = PendingIntent.getActivity(controller.getBaseContext(), 0,
                         new Intent(controller.getIntent()), controller.getIntent().getFlags());
-                Thread.currentThread().setUncaughtExceptionHandler(new RobotUncaughtExceptionHandler(robotContext.appContext(), intent));
+                Thread.currentThread().setUncaughtExceptionHandler(new RobotUncaughtExceptionHandler(robotContext.appContext(), intent, 250));
             }
         });
 
@@ -198,9 +199,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
             return;
         }
 
-        // todo determine if the following line is needed
-        bindHardwareMap(super.hardwareMap);
-
+        //  determine if the following line is needed;  I think not
+        // bindHardwareMap(super.hardwareMap);
         if (robotContext.status().getMainRobotState() == RobotStatus.MainStates.EXCEPTION &&
                 (robotContext.status().getCurrentStateType() == RobotStatus.Type.FAILURE ||
                         robotContext.status().getCurrentStateType() == RobotStatus.Type.IDK)) {
@@ -494,8 +494,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     }
 
     @Override
-    public void prepare(Context ctx) {
-        robotContext.prepare(ctx);
+    public void prepare(Context ctx, HardwareMap hwMap) {
+        robotContext.prepare(ctx, hwMap);
     }
 
     @Override
@@ -563,6 +563,12 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     @Override
     public void rebuildHardwareMap() {
         context().rebuildHardwareMap();
+    }
+
+    @Override
+    @NotNull
+    public OpModeManager opModeManager() {
+        return robotContext.opModeManager();
     }
 
     @Override

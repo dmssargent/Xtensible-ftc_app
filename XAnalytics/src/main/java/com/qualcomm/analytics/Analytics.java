@@ -69,13 +69,6 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 /**
  * Qualcomm Analytic Handler, this is a modified version to fix core issues within this module
  */
@@ -87,11 +80,11 @@ public class Analytics extends BroadcastReceiver {
     public static final String EXTERNAL_STORAGE_DIRECTORY_PATH = Environment.getExternalStorageDirectory() + "/";
     public static final String LAST_UPLOAD_DATE = "last_upload_date";
     public static final String MAX_DEVICES = "max_usb_devices";
-    static final HostnameVerifier l = new HostnameVerifier() {
-        public boolean verify(String hostname, SSLSession session) {
-            return true;
-        }
-    };
+//    static final HostnameVerifier l = new HostnameVerifier() {
+//        public boolean verify(String hostname, SSLSession session) {
+//            return true;
+//        }
+//    };
     private static final Charset CHARSET = Charset.defaultCharset();
     public static int MAX_ENTRIES_SIZE = 100;
     public static int TRIMMED_SIZE = 90;
@@ -168,30 +161,30 @@ public class Analytics extends BroadcastReceiver {
         if (url != null && data != null) {
             try {
                 long var2 = System.currentTimeMillis();
-                Object var5 = null;
-                if (url.getProtocol().toLowerCase().equals("https")) {
-                    c();
-                    HttpsURLConnection var6 = (HttpsURLConnection) url.openConnection();
-                    var6.setHostnameVerifier(l);
-                    var5 = var6;
-                } else {
-                    var5 = url.openConnection();
-                }
+//                Object var5 = null;
+//                if (url.getProtocol().toLowerCase().equals("https")) {
+//                    c();
+//                    HttpsURLConnection var6 = (HttpsURLConnection) url.openConnection();
+//                    var6.setHostnameVerifier(l);
+//                    var5 = var6;
+//                } else {
+//                    var5 = url.openConnection();
+//                }
 
-                ((HttpURLConnection) var5).setDoOutput(true);
-                OutputStreamWriter var7 = new OutputStreamWriter(((HttpURLConnection) var5).getOutputStream());
-                var7.write(data);
-                var7.flush();
-                var7.close();
-                BufferedReader var10 = new BufferedReader(new InputStreamReader(((HttpURLConnection) var5).getInputStream()));
-
-                String var8;
-                for (var4 = ""; (var8 = var10.readLine()) != null; var4 = var4 + var8) {
-                }
-
-                var10.close();
+//                ((HttpURLConnection) var5).setDoOutput(true);
+//                OutputStreamWriter var7 = new OutputStreamWriter(((HttpURLConnection) var5).getOutputStream());
+//                var7.write(data);
+//                var7.flush();
+//                var7.close();
+//                BufferedReader var10 = new BufferedReader(new InputStreamReader(((HttpURLConnection) var5).getInputStream()));
+//
+//                String var8;
+//                for (var4 = ""; (var8 = var10.readLine()) != null; var4 = var4 + var8) {
+//                }
+//
+//                var10.close();
                 RobotLog.i("Analytics took: " + (System.currentTimeMillis() - var2) + "ms");
-            } catch (IOException var9) {
+            } catch (Exception var9) {
                 RobotLog.i("Analytics Failed to process command.");
             }
         }
@@ -200,25 +193,25 @@ public class Analytics extends BroadcastReceiver {
     }
 
     private static void c() {
-        TrustManager[] var0 = new TrustManager[]{new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
+//        TrustManager[] var0 = new TrustManager[]{new X509TrustManager() {
+//            public X509Certificate[] getAcceptedIssuers() {
+//                return new X509Certificate[0];
+//            }
+//
+//            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//            }
+//
+//            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//            }
+//        }
 
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-        }};
-
-        try {
-            SSLContext var1 = SSLContext.getInstance("TLS");
-            var1.init(null, var0, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(var1.getSocketFactory());
-        } catch (Exception var2) {
-            var2.printStackTrace();
-        }
+//        try {
+//            SSLContext var1 = SSLContext.getInstance("TLS");
+//            var1.init(null, var0, new SecureRandom());
+//            HttpsURLConnection.setDefaultSSLSocketFactory(var1.getSocketFactory());
+//        } catch (Exception var2) {
+//            var2.printStackTrace();
+//        }
 
     }
 

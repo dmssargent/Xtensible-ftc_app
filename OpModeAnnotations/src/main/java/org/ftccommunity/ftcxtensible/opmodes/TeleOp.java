@@ -23,8 +23,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * The <code>ActiveOpMode</code> annotation is used to specify that an op mode should be registered
+ * The {@code TeleOp} annotation is used to specify that an op mode should be registered
  * for display on the driver station.
+ *
+ * @author David Sargent, maths222
+ * @since 0.1.0
+ *
+ * @see Autonomous
+ * @see Disabled
+ * @see org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

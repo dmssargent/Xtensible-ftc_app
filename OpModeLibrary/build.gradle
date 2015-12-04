@@ -24,6 +24,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
+        //noinspection OldTargetApi
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -48,6 +49,10 @@ android {
 
     lintOptions {
         disable "InvalidPackage"
+        textReport true
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
+
     }
 }
 
@@ -76,5 +81,7 @@ dependencies {
     //compile 'org.boofcv:all:0.19'
     //compile 'org.boofcv:android:0.19'
     //compile 'org.boofcv:boofcv:0.16'
-    compile project(':Open CV')
+    compile project(':OpenCV')
+    //compile 'org.python:jython:2.7.1b2'
+    compile 'org.jetbrains:annotations:13.0'
 }

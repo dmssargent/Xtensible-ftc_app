@@ -26,6 +26,7 @@ import android.view.View;
 import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Telemetry;
@@ -79,6 +80,7 @@ public class RobotContext implements AbstractRobotContext {
 
     private DataBinder bindings;
     private View layout;
+    private OpModeManager opModeManager;
 
     private RobotContext() {
         serverSettings = ServerSettings.createServerSettings();
@@ -242,11 +244,13 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     @Override
-    public void prepare(Context ctx) {
+    public void prepare(Context ctx, HardwareMap basicHardwareMap) {
         checkArgument(ctx instanceof Activity, "Invalid context; it must be of an activity context type");
         bindAppContext(ctx);
+        bindHardwareMap(basicHardwareMap);
 
-        layout = ((Activity) appContext()).findViewById(controllerBindings().getIntegers().get("ftcview"));
+        layout = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.RC_VIEW));
+        opModeManager = ((OpModeManager) controllerBindings().objects().get(DataBinder.RC_MANAGER));
     }
 
     /**
@@ -440,7 +444,20 @@ public class RobotContext implements AbstractRobotContext {
     @Override
     @NotNull
     public View robotControllerView() {
+        if (layout == null) {
+            throw new IllegalStateException("Prepare has not been called correctly yet.");
+        }
         return layout;
+    }
+
+    @Override
+    @NotNull
+    public OpModeManager opModeManager() {
+        if (opModeManager == null) {
+            throw new IllegalStateException("Prepare has not been called correctly yet.");
+        }
+
+        return opModeManager;
     }
 
    /* public LinkedList upstreamPipeline(HardwareDevice device) {

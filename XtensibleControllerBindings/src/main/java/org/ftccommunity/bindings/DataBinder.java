@@ -30,6 +30,16 @@ import java.util.HashMap;
  * @since 0.2.2
  */
 public class DataBinder {
+    /**
+     * The view identity for the FTC SDK, you can access this value by
+     * <code>DataBinder.getInstance().integers(DataBinder.RC_VIEW)</code>
+     *
+     * @see #integers()
+     */
+    public static final String RC_VIEW = "ftcview";
+
+    public static final String RC_MANAGER ="ftcopmanager";
+
     private static DataBinder instance;
     private static HashMap<String, Integer> integerBindings;
     private static HashMap<String, View> viewBindings;
@@ -68,7 +78,7 @@ public class DataBinder {
      *
      * @return integer map
      */
-    public HashMap<String, Integer> getIntegers() {
+    public HashMap<String, Integer> integers() {
         return integerBindings;
     }
 
@@ -78,7 +88,7 @@ public class DataBinder {
      * @return view map
      * @see View
      */
-    public HashMap<String, View> getViews() {
+    public HashMap<String, View> views() {
         return viewBindings;
     }
 
@@ -87,7 +97,7 @@ public class DataBinder {
      *
      * @return {@code String} map
      */
-    public HashMap<String, String> getStrings() {
+    public HashMap<String, String> strings() {
         return stringBindings;
     }
 
@@ -96,7 +106,7 @@ public class DataBinder {
      *
      * @return a generic {@code Object} map
      */
-    public HashMap<String, Object> getObjects() {
+    public HashMap<String, Object> objects() {
         return objectBindings;
     }
 }

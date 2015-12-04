@@ -19,15 +19,14 @@
 package org.ftccommunity.ftcxtensible.versioning;
 
 
-import android.util.Log;
-
 import java.util.Comparator;
 
 public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
     A1_2015 {
         @Override
         public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
-            if (lhs.equals(rhs)) {
+            return comparator(lhs, rhs);
+            /*if (lhs.equals(rhs)) {
                 return 0;
             }
 
@@ -43,12 +42,13 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
                 default:
                     Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
                     return 1;
-            }
+            }*/
         }
     }, R1_2015 {
         @Override
         public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
-            if (lhs.equals(rhs)) {
+            return comparator(lhs, rhs);
+            /*if (lhs.equals(rhs)) {
                 return 0;
             }
 
@@ -64,12 +64,13 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
                 default:
                     Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
                     return 1;
-            }
+            }*/
         }
     }, R2_2015 {
         @Override
         public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
-            if (lhs.equals(rhs)) {
+            return comparator(lhs, rhs);
+            /*if (lhs.equals(rhs)) {
                 return 0;
             }
 
@@ -85,12 +86,13 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
                 default:
                     Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
                     return 1;
-            }
+            }*/
         }
     }, R3_2015 {
         @Override
         public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
-            if (lhs.equals(rhs)) {
+            return comparator(lhs, rhs);
+            /*if (lhs.equals(rhs)) {
                 return 0;
             }
 
@@ -106,11 +108,39 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
                 default:
                     Log.w("ROBOT_SDK::", "Comparison does not have a handled result");
                     return 1;
-            }
+            }*/
+        }
+    }, R4_2015_VER2_10 {
+        @Override
+        public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+            return comparator(lhs, rhs);
+        }
+    },
+    R5_2015_VER2_25 {
+        @Override
+        public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+            return comparator(lhs, rhs);
         }
     };
 
     public static RobotSdkApiLevel currentVerison() {
         return R3_2015;
+    }
+
+    int comparator(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+        return compare(lhs, rhs);
+    }
+
+    public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+        int leftHandSide = lhs.ordinal();
+        int rightHandSide = rhs.ordinal();
+
+        if (leftHandSide > rightHandSide) {
+            return -1;
+        } else if (leftHandSide == rightHandSide) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

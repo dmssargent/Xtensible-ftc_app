@@ -108,7 +108,7 @@ public class LinearI2cAddressChange extends LinearOpMode {
         // make sure the first bytes are what we think they should be.
         int count = 0;
         int[] initialArray = {READ_MODE, currentAddress, ADDRESS_MEMORY_START, TOTAL_MEMORY_LENGTH, FIRMWARE_REV, MANUFACTURER_CODE, SENSOR_ID};
-        while (!foundExpectedBytes(initialArray, readLock, readCache)) {
+        while (notFoundExpectedBytes(initialArray, readLock, readCache)) {
             telemetry.addData("I2cAddressChange", "Confirming that we're reading the correct bytes...");
             dim.readI2cCacheFromController(port);
             sleep(1000);
@@ -143,7 +143,7 @@ public class LinearI2cAddressChange extends LinearOpMode {
         dim.writeI2cCacheToController(port);
 
         int[] confirmArray = {READ_MODE, newAddress, ADDRESS_MEMORY_START, TOTAL_MEMORY_LENGTH, FIRMWARE_REV, MANUFACTURER_CODE, SENSOR_ID};
-        while (!foundExpectedBytes(confirmArray, readLock, readCache)) {
+        while (notFoundExpectedBytes(confirmArray, readLock, readCache)) {
             telemetry.addData("I2cAddressChange", "Have not confirmed the changes yet...");
             dim.readI2cCacheFromController(port);
             sleep(1000);
@@ -159,7 +159,7 @@ public class LinearI2cAddressChange extends LinearOpMode {
 
     }
 
-    private boolean foundExpectedBytes(int[] byteArray, Lock lock, byte[] cache) {
+    private boolean notFoundExpectedBytes(int[] byteArray, Lock lock, byte[] cache) {
         try {
             lock.lock();
             boolean allMatch = true;
@@ -174,7 +174,7 @@ public class LinearI2cAddressChange extends LinearOpMode {
                 }
             }
             RobotLog.e(s.toString() + "\n allMatch: " + allMatch + ", mismatch: " + mismatch);
-            return allMatch;
+            return !allMatch;
         } finally {
             lock.unlock();
         }

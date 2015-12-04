@@ -30,11 +30,13 @@ import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 
 public class RobotUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     public static Context context;
+    private final int delay;
     PendingIntent pendingIntent;
 
-    public RobotUncaughtExceptionHandler(Context ctx, PendingIntent intent) {
+    public RobotUncaughtExceptionHandler(Context ctx, PendingIntent intent, int delay) {
         context = ctx;
         pendingIntent = intent;
+        this.delay = delay;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class RobotUncaughtExceptionHandler implements Thread.UncaughtExceptionHa
             }
 
             AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + delay, pendingIntent);
             System.exit(2);
         } catch (Exception e) {
             Log.wtf("CORE_CONTROLLER::", e);

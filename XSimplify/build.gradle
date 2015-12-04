@@ -24,6 +24,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
+        //noinspection OldTargetApi
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -33,10 +34,20 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        textReport true
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
     }
 }
 
@@ -48,4 +59,5 @@ repositories {
 
 dependencies {
     compile project(':FtcXtensible')
+    compile 'org.jetbrains:annotations:13.0'
 }
