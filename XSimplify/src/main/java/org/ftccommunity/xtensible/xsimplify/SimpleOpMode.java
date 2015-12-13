@@ -21,6 +21,7 @@ package org.ftccommunity.xtensible.xsimplify;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.ftccommunity.ftcxtensible.collections.DeviceMap;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleTelemetry;
@@ -57,7 +58,7 @@ public abstract class SimpleOpMode extends StandardOpMode {
         if (child != null && childOpMode != null) {
             LinkedList<Field> fields = new LinkedList<>(Arrays.asList(childOpMode.getFields()));
             for (Field field : fields) {
-                ExtensibleHardwareMap.DeviceMap map = getFromClass(field.getType());
+                DeviceMap map = getFromClass(field.getType());
                 if (map == null) {
                     continue;
                 }
@@ -76,7 +77,7 @@ public abstract class SimpleOpMode extends StandardOpMode {
         loop(ctx);
     }
 
-    public ExtensibleHardwareMap.DeviceMap<String, DcMotor> getFromClass(Class klazz) {
+    public DeviceMap<String, DcMotor> getFromClass(Class klazz) {
         if (klazz == DcMotor.class) {
             return hardwareMap().dcMotors();
         }
