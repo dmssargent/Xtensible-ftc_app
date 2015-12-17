@@ -21,7 +21,7 @@ package org.ftccommunity.ftcxtensible.hardware;
 import com.google.common.base.Throwables;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-import org.ftccommunity.ftcxtensible.robot.connection.ConnectionInfo;
+
 import org.ftcommunity.ftcxtensible.core.hardware.Mockable;
 import org.ftcommunity.ftcxtensible.core.internal.HardwareDevice;
 
@@ -41,7 +41,7 @@ public class DcMotor extends com.qualcomm.robotcore.hardware.DcMotor implements 
     private final Lock motorLock;
     private volatile double speed;
     private String name;
-    private ConnectionInfo info;
+    //private ConnectionInfo info;
     private boolean isMock;
 
     public DcMotor(DcMotorController controller, int portNumber) {
@@ -52,8 +52,8 @@ public class DcMotor extends com.qualcomm.robotcore.hardware.DcMotor implements 
         super(controller, portNumber, direction);
 
         motorLock = new ReentrantLock();
-        info = new ConnectionInfo(ConnectionInfo.ConnectionType.USB,
-                ConnectionInfo.ConnectionState.GOOD);
+        //info = new ConnectionInfo(ConnectionInfo.ConnectionType.USB,
+          //      ConnectionInfo.ConnectionState.GOOD);
 
         isMock = false;
     }
@@ -90,10 +90,10 @@ public class DcMotor extends com.qualcomm.robotcore.hardware.DcMotor implements 
         return speed;
     }
 
-    @Override
-    public ConnectionInfo getConnection() {
+    /*@Override
+    //public ConnectionInfo getConnection() {
         return info;
-    }
+    }*/
 
     @Override
     public String getName() {

@@ -5,6 +5,7 @@ android {
         minSdkVersion 19
         //noinspection OldTargetApi
         targetSdkVersion 22
+        multiDexEnabled = true
 
        // useJack = true
     }
@@ -22,11 +23,8 @@ android {
         textOutput 'stdout'
     }
 
-    dexOptions {
-        javaMaxHeapSize "2g"
-    }
-}
 
+}
 
 repositories {
     flatDir {

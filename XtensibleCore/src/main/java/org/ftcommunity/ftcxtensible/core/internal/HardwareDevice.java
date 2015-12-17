@@ -18,10 +18,10 @@
 
 package org.ftcommunity.ftcxtensible.core.internal;
 
-import org.ftccommunity.ftcxtensible.robot.connection.ConnectionInfo;
+//import org.ftccommunity.ftcxtensible.robot.connection.ConnectionInfo;
 
 public interface HardwareDevice extends com.qualcomm.robotcore.hardware.HardwareDevice {
-    ConnectionInfo getConnection();
+    //ConnectionInfo getConnection();
 
     String getName();
 

@@ -13,10 +13,15 @@ import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
  */
 @TeleOp
 public class TeamClutchTeleop extends OpMode {
-    DcMotor right0;
-    DcMotor right1;
-    DcMotor left0;
-    DcMotor left1;
+    private DcMotor right0;
+    private DcMotor right1;
+    private DcMotor left0;
+    private DcMotor left1;
+
+    private DcMotor armLift;
+    private DcMotor armWrench;
+
+    private double ARM_MOTOR_BASE = 0.50;
 
     @Override
     public void init() {
@@ -25,6 +30,9 @@ public class TeamClutchTeleop extends OpMode {
 
         left0 = hardwareMap.dcMotor.get("motor2");
         left1 = hardwareMap.dcMotor.get("motor3");
+
+        armLift = hardwareMap.dcMotor.get("armLift");
+        armWrench = hardwareMap.dcMotor.get("armWrench");
 
 
         right0.setDirection(DcMotor.Direction.REVERSE);
@@ -54,8 +62,23 @@ public class TeamClutchTeleop extends OpMode {
         left0.setPower(leftPower);
         left1.setPower(leftPower);
 
-        telemetry.addData("Left:", leftPower);
+        double wrenchPower = gamepad1.dpad_down ? ARM_MOTOR_BASE : 0;
+        //wrenchPower = gamepad1.dpad_up ? (wrenchPower != 0 ? ARM_MOTOR_BASE : 0) : 0;
+        armWrench.setPower(wrenchPower);
 
+        double armPower = gamepad1.dpad_right ? ARM_MOTOR_BASE : 0;
+        //armPower = gamepad1.dpad_up ? (armPower != 0 ? ARM_MOTOR_BASE : 0) : 0;
+        armLift.setPower(armPower);
+
+        if (gamepad1.left_trigger > .25) {
+            ARM_MOTOR_BASE += .01 * (gamepad1.left_bumper ? -1 : 1);
+            ARM_MOTOR_BASE += 1;
+            ARM_MOTOR_BASE %= 2;
+            ARM_MOTOR_BASE -= 1;
+        }
+
+        telemetry.addData("Left:", leftPower);
         telemetry.addData("Right:", rightPower);
+        telemetry.addData("Arm Power:", ARM_MOTOR_BASE + " " + armPower + " " + wrenchPower);
     }
 }

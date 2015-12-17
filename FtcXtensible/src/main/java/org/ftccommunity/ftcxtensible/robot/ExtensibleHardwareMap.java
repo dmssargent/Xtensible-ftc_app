@@ -46,8 +46,8 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
-import org.ftccommunity.ftcxtensible.util.I2cFactory;
-import org.ftcommunity.i2clibrary.Wire;
+//import org.ftccommunity.ftcxtensible.util.I2cFactory;
+//import org.ftcommunity.i2clibrary.Wire;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -249,13 +249,13 @@ public class ExtensibleHardwareMap {
         return i2cDevices;
     }
 
-    public Wire wire(String name, byte address) {
+    /*public Wire wire(String name, byte address) {
         I2cDevice i2cDevice = i2cDevices.get(name);
         if (i2cDevice == null) {
             throw new IllegalArgumentException("The device " + name + " is not found.");
         }
         return I2cFactory.createWire(i2cDevice, address);
-    }
+    }*/
 
     public DeviceMap<String, AnalogOutput> analogOutputs() {
         return analogOutputs;

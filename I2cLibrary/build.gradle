@@ -28,6 +28,10 @@ android {
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
     }
+
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
 }
 
 repositories {

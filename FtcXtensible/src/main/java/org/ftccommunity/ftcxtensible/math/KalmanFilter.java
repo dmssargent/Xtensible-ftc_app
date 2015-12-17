@@ -14,7 +14,8 @@
  *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+ *//*
+
 
 package org.ftccommunity.ftcxtensible.math;
 
@@ -23,12 +24,14 @@ import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 
 import Jama.Matrix;
 
+*/
 /**
  * This work is licensed under a Creative Commons Attribution 3.0 License,
  * the Creative Commons overrides the MIT
  *
  * @author Ahmed Abdelkader, David Sargent
- */
+ *//*
+
 // TODO: update
 @Alpha
 @NotDocumentedWell
@@ -149,4 +152,4 @@ public final class KalmanFilter {
         P0 = p0;
     }
 
-}
+}*/
