@@ -14,7 +14,8 @@
  *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+ *//*
+
 
 package org.ftc.opmodes.statemachine;
 
@@ -22,20 +23,24 @@ import org.ftc.opmodes.examples.pushbot.PushBotHardware;
 
 // PushBotAuto
 public class PushBotExampleCase extends PushBotHardware {
-    /**
+    */
+/**
      * This class member remembers which state is currently active.  When the
      * start method is called, the state will be initialized (0).  When the loop
      * starts, the state will change from initialize to state_1.  When state_1
      * actions are complete, the state will change to state_2.  This implements
      * a state machine for the loop method.
-     */
+ *//*
+
     private int v_state = 0;
 
-    /**
+    */
+/**
      * Perform any actions that are necessary when the OpMode is enabled.
      * <p>
      * The system calls this member once when the OpMode is enabled.
-     */
+ *//*
+
     @Override
     public void start() {
         // Call the PushBotHardware (super/base class) start method.
@@ -45,13 +50,15 @@ public class PushBotExampleCase extends PushBotHardware {
         reset_drive_encoders();
     } // start
 
-    /**
+    */
+/**
      * Implement a state machine that controls the robot during auto-operation.
      * The state machine uses a class member and encoder input to transition
      * between states.
      * <p>
      * The system calls this member repeatedly while the OpMode is running.
-     */
+ *//*
+
     @Override
     public void loop() {
         // StateNode: Initialize (i.e. state_0).
@@ -147,3 +154,4 @@ public class PushBotExampleCase extends PushBotHardware {
 
     } // loop
 }
+*/

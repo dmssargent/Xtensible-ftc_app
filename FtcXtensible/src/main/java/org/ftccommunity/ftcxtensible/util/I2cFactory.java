@@ -14,7 +14,8 @@
  *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+ *//*
+
 
 package org.ftccommunity.ftcxtensible.util;
 
@@ -23,14 +24,17 @@ import com.qualcomm.robotcore.hardware.I2cDevice;
 import org.ftcommunity.i2clibrary.Wire;
 import org.jetbrains.annotations.NotNull;
 
+*/
 /**
  * A factory designed to wrap an I2C device to any interface
  *
  * @since 0.3.1
  * @author David Sargent
- */
+ *//*
+
 public final class I2cFactory {
     public static Wire createWire(@NotNull I2cDevice device, byte address) {
         return new Wire(device, address);
     }
 }
+*/

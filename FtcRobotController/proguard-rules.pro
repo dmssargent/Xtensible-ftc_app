@@ -15,7 +15,17 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontoptimize
+-dontshrink
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-verbose
 
 -keppattributes EnclosingMethod
 -keep class com.google.android.gms.** { *; }
--dontwarn com.google.android.gms.
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes InnerClasses
+-keep class com.google.** { *; }
+-keep class io.netty.** { *; }

@@ -14,7 +14,8 @@
  *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+
+
 
 package org.ftc.opmodes;
 
@@ -67,9 +68,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-/**
+*
  * @author FTC Team 10182
- */
+
+
 @SuppressWarnings("deprecation")
 @Autonomous
 public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBase.CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
@@ -118,7 +120,6 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
         }
     };
 
-    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.i(TAG, "called onCreateOptionsMenu");
@@ -147,7 +148,8 @@ public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBa
             viewMode = TRAIN;
         return true;
     }
-    */
+
+
 
     public void onCameraViewStarted(int width, int height) {
         mIntermediateMat = new Mat();
@@ -574,3 +576,4 @@ class Utilities {
         return mediaStorageDir;
     }
 }
+*/

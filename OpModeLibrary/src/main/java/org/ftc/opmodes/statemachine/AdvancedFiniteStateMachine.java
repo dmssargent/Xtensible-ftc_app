@@ -15,7 +15,8 @@
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+ *//*
+
 
 package org.ftc.opmodes.statemachine;
 
@@ -45,21 +46,24 @@ public class AdvancedFiniteStateMachine<STATE extends Enum & AdvancedFiniteState
         this.opMode = checkNotNull(opMode);
     }
 
-    /**
+    */
+/**
      * Creates an Finite State Machine with the states described in the class declaration of the
      * <code>enum</code>. The OpMode is a reference to your OpMode to get the dependencies of state,
      * and inject them into the state
      *
      * @param enumeration the class of the enum containing the states
      * @param opMode the active {@link OpMode} to get dependencies from
-     */
+ *//*
+
     public AdvancedFiniteStateMachine(Class<? extends STATE> enumeration, T opMode) throws NullPointerException {
         this(opMode);
         states = new LinkedList<STATE>(EnumSet.allOf(checkNotNull(enumeration)));
         index = 0;
     }
 
-    /**
+    */
+/**
      * Creates a Finite State Machine with the given {@link State} array being the available states.
      * The OpMode is a reference to your OpMode to get the dependencies of state,
      * and inject them into the state
@@ -68,14 +72,16 @@ public class AdvancedFiniteStateMachine<STATE extends Enum & AdvancedFiniteState
      * @param opMode the active {@link OpMode} to get dependencies from
      * @throws NullPointerException when either the <code>states</code> or <code>opMode</code> parameter
      *                              is null
-     */
+ *//*
+
     public AdvancedFiniteStateMachine(STATE[] states, T opMode) throws NullPointerException {
         this(checkNotNull(opMode));
         this.states = getListFromEnum(checkNotNull(states));
         index = 0;
     }
 
-    /**
+    */
+/**
      * Creates a Finite State Machine with the given start {@link State}. The rest of the states are
      * then infered to be the other elements within the enum that the start state is. The OpMode is
      * a reference to your OpMode to get the dependencies of state, and inject them into the state
@@ -84,17 +90,20 @@ public class AdvancedFiniteStateMachine<STATE extends Enum & AdvancedFiniteState
      * @param opMode the active {@link OpMode} to get dependencies from
      * @throws NullPointerException when either the <code>states</code> or <code>opMode</code> parameter
      *                              is null
-     */
+ *//*
+
     public AdvancedFiniteStateMachine(STATE state, T opMode) throws NullPointerException {
         this(checkNotNull(state.getDeclaringClass()), opMode);
         index = state.ordinal();
     }
 
-    /**
+    */
+/**
      * Executes the current state once by running the {@link State#execute()}, then checks to see if
      * the state needs to be changed by running the {@link State#changeState(Enum)} method of the
      * currently running state
-     */
+ *//*
+
     public void execute() {
         if (index == -1) {
             return;
@@ -119,30 +128,36 @@ public class AdvancedFiniteStateMachine<STATE extends Enum & AdvancedFiniteState
 //        }
     }
 
-    /**
+    */
+/**
      * The index of the current {@link State} in the set of possible <code>State</code>s
      *
      * @return the index of the current states
-     */
+ *//*
+
     public int index() {
         return index;
     }
 
-    /**
+    */
+/**
      * Returns the currently running state
      *
      * @return the current state
-     */
+ *//*
+
     public STATE state() {
         return states.get(index);
     }
 
-    /**
+    */
+/**
      * Changes the state to specified {@link State}
      *
      * @param state the new state to switch to
      * @throws NullPointerException if the given state is <code>null</code>
-     */
+ *//*
+
     public void changeState(STATE state) throws NullPointerException {
         index = checkNotNull(state).ordinal();
     }
@@ -181,22 +196,28 @@ public class AdvancedFiniteStateMachine<STATE extends Enum & AdvancedFiniteState
         return ref;
     }
 
-    /**
+    */
+/**
      * The definition of a state for use by this FSM.
-     */
+ *//*
+
     public interface State {
-        /**
+        */
+/**
          * Returns whether or not to change the state to the next state, called once for every {@link AdvancedFiniteStateMachine#execute()}
          * that is called, and after the {@link #execute()} is called
          *
          * @return <code>true</code>, if the state should transition to the next state; <code>false</code> otherwise
-         */
+ *//*
+
         int stateChange();
 
-        /**
+        */
+/**
          * The main executing method, called once for each time {@link AdvancedFiniteStateMachine#execute()}
          * is called, and before {@link #stateChange()} is called.
-         */
+ *//*
+
         void execute();
     }
 
@@ -205,3 +226,4 @@ public class AdvancedFiniteStateMachine<STATE extends Enum & AdvancedFiniteState
     }
 }
 
+*/

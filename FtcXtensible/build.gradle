@@ -80,6 +80,6 @@ dependencies {
     compile project(':OpModeAnnotations')
     compile project(':XtensibleControllerBindings')
     //androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
-    compile project(':I2cLibrary')
+    //compile project(':I2cLibrary')
     compile project(':XtensibleCore')
 }
