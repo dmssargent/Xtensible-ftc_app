@@ -15,8 +15,10 @@
  *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 apply plugin: 'com.android.library'
+apply plugin: 'jacoco-android'
+apply plugin: "org.sonarqube"
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 22
@@ -24,7 +26,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
-        //noinspection OldTargetApi,OldTargetApi
+        //noinspection OldTargetApi
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -48,14 +50,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
         textReport true
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
+    }
+
+    dexOptions {
+        incremental true
     }
 }
 
@@ -79,7 +85,6 @@ dependencies {
     compile 'org.jetbrains:annotations:13.0'
     compile project(':OpModeAnnotations')
     compile project(':XtensibleControllerBindings')
-    //androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
     compile project(':I2cLibrary')
     compile project(':XtensibleCore')
 }

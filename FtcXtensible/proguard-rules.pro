@@ -22,3 +22,5 @@
 -keep class org.ftccommunity.ftcxtensible {
     public *;
 }
+
+-dontwarn java.lang.invoke.*

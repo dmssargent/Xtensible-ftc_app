@@ -54,6 +54,9 @@ android {
         textOutput 'stdout'
 
     }
+    dexOptions {
+        incremental true
+    }
 }
 
 repositories {
