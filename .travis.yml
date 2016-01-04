@@ -6,7 +6,7 @@ group: edge
 
 android:
   components:
-    - build-tools-23.0.1
+    - build-tools-23.0.2
     - android-22
     - platform-tools
     - tools
