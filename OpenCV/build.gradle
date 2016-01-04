@@ -1,8 +1,7 @@
 apply plugin: 'com.android.library'
-
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         minSdkVersion 19
@@ -27,4 +26,7 @@ android {
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
     }
+}
+
+dependencies {
 }
