@@ -40,6 +40,7 @@ import java.util.LinkedList;
 public class CameraOpMode extends ExtensibleOpMode {
     int red = 0;
     int blue = 0;
+
     @Override
     public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
         Bitmap image = ctx.cameraManager().getNextImage();

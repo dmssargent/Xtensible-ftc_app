@@ -23,9 +23,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * TeleOp Mode
- * <p/>
- * Enables control of the robot via the gamepad
+ * TeleOp Mode <p/> Enables control of the robot via the gamepad
  */
 public class K9TeleOp extends OpMode {
 
@@ -80,7 +78,7 @@ public class K9TeleOp extends OpMode {
 		 */
 
 		/*
-		 * For the demo Tetrix K9 bot we assume the following,
+         * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
 		 *   "motor_1" is on the right side of the bot.
 		 *   "motor_2" is on the left side of the bot and reversed.

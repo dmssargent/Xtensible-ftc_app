@@ -25,6 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 public @interface RobotSdkVersion {
     RobotSdkApiLevel value();
+
     RobotSdkApiLevel compatibleUpTo() default RobotSdkApiLevel.R1_2015;
+
     boolean strict() default false;
 }

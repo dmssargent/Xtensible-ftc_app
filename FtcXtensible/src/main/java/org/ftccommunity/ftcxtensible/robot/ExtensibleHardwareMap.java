@@ -19,6 +19,7 @@
 package org.ftccommunity.ftcxtensible.robot;
 
 import com.google.common.reflect.TypeToken;
+
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogOutput;
@@ -58,8 +59,8 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The new version of the hardware map that provides a safer use for the hardware map.
- * This prevents client code from unintentionally modifying the devices avialable for use
+ * The new version of the hardware map that provides a safer use for the hardware map. This prevents
+ * client code from unintentionally modifying the devices avialable for use
  *
  * @author David Sargent
  * @since 0.1
@@ -97,8 +98,8 @@ public class ExtensibleHardwareMap {
     private LinkedList<DeviceMap<? extends HardwareDevice>> allMaps;
 
     /**
-     * Builds the base ExtensibleHardwareMap; need to complete setup afterwards, specifically calling
-     * {@link ExtensibleHardwareMap#createDeviceMaps()}
+     * Builds the base ExtensibleHardwareMap; need to complete setup afterwards, specifically
+     * calling {@link ExtensibleHardwareMap#createDeviceMaps()}
      */
     private ExtensibleHardwareMap() {
         fullMap = new HashMap<>();
@@ -118,9 +119,9 @@ public class ExtensibleHardwareMap {
     }
 
     /**
-     * Rebuilds the Extensible HardwareMap from scacch based on a given {@link HardwareMap}. This modifies
-     * the reference to the maps within inside this HardwareMap, but not the reference to the HardwareMap
-     * itself.
+     * Rebuilds the Extensible HardwareMap from scacch based on a given {@link HardwareMap}. This
+     * modifies the reference to the maps within inside this HardwareMap, but not the reference to
+     * the HardwareMap itself.
      *
      * @param hwMap a valid non-null {@code HardwareMap} that contains what this needs to build on
      */
@@ -135,8 +136,7 @@ public class ExtensibleHardwareMap {
     }*/
 
     /**
-     * Move the propriety {@link HardwareMap.DeviceMapping} to our
-     * {@link DeviceMap} for our
+     * Move the propriety {@link HardwareMap.DeviceMapping} to our {@link DeviceMap} for our
      * internal use
      */
     private void createDeviceMaps() {

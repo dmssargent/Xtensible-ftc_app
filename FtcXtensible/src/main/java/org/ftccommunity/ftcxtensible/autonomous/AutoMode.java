@@ -28,7 +28,7 @@ public abstract class AutoMode extends ExtensibleOpMode {
 
     protected AutoMode() {
         super();
-        state = new AutonomousRobotState(getContext(), this);
+        state = new AutonomousRobotState(context(), this);
     }
 
     protected AutonomousRobotState autoState() {

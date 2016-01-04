@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Instances of MagneticFlux represent a three-dimensional magnetic strength vector. Units
- * are in tesla (NOT microtesla).
+ * Instances of MagneticFlux represent a three-dimensional magnetic strength vector. Units are in
+ * tesla (NOT microtesla).
  */
 public class MagneticFlux {
     //----------------------------------------------------------------------------------------------
@@ -45,8 +45,8 @@ public class MagneticFlux {
     public final double z;
 
     /**
-     * the time on the System.nanoTime() clock at which the data was acquired. If no
-     * timestamp is associated with this particular set of data, this value is zero
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
      */
     public long nanoTime;
 

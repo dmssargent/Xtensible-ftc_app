@@ -34,9 +34,9 @@ import java.util.List;
 
 public class CameraPreview2 extends ViewGroup implements SurfaceHolder.Callback {
     private final String TAG = "CameraSurfaceView";
+    private final Context mContext;
     private Camera.Size mPreviewSize;
     private List<Camera.Size> mSupportedPreviewSizes;
-    private final Context mContext;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder;
     private Camera mCamera;
@@ -204,12 +204,12 @@ public class CameraPreview2 extends ViewGroup implements SurfaceHolder.Callback 
         }
     }
 
-public void onPreviewFrame(byte[] data, Camera arg1) {
-    Log.d("CameraSurfaceView", "PREVIEW FRAME:");
+    public void onPreviewFrame(byte[] data, Camera arg1) {
+        Log.d("CameraSurfaceView", "PREVIEW FRAME:");
 //    byte[] pixels = new byte[use_size.width * use_size.height * 3]; ;
 //    decodeYUV420SP(pixels, data, use_size.width,  use_size.height);
 //    renderer.bindCameraTexture(pixels, use_size.width,  use_size.height);
-}
+    }
 
     void decodeYUV420SP(byte[] rgb, byte[] yuv420sp, int width, int height) {
 

@@ -17,14 +17,15 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
-import android.util.Log;
-
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multiset;
+
+import android.util.Log;
+
 import com.qualcomm.robotcore.robocol.Telemetry;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
@@ -46,11 +47,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Alpha
 @NotDocumentedWell
 public class ExtensibleTelemetry {
-    private static final String EMPTY = "";
-    private static final String SPACE = " ";
-    
     public static final int DEFAULT_DATA_MAX = 192;
     public static final int MAX_DATA_MAX = 255;
+    private static final String EMPTY = "";
+    private static final String SPACE = " ";
     private static final String TAG = "XTENSILBLE_TELEMETRY::";
     private final Telemetry parent;
     private final int dataPointsToSend;
@@ -79,8 +79,8 @@ public class ExtensibleTelemetry {
                 concurrencyLevel(4).
                 expireAfterAccess(250, TimeUnit.MILLISECONDS).
                 maximumSize(dataPointsToSend).build();
-        
-        dataCache = EvictingQueue.create((int)(dataPointsToSend * .75));
+
+        dataCache = EvictingQueue.create((int) (dataPointsToSend * .75));
         data = LinkedHashMultimap.create();
         log = new LinkedList<>();
 
@@ -95,7 +95,7 @@ public class ExtensibleTelemetry {
     public void data(String tag, String message) {
         checkArgument(!Strings.isNullOrEmpty(message), "Your message shouldn't be empty.");
         tag = Strings.nullToEmpty(tag);
-        
+
         synchronized (dataCache) {
             lastModificationTime = System.nanoTime();
             dataCache.add((!tag.equals(EMPTY) ? tag.toUpperCase(Locale.US) + SPACE : EMPTY) + message);
@@ -151,7 +151,7 @@ public class ExtensibleTelemetry {
             }
         }
     }
-    
+
     public void forceUpdateCache() {
         updateLog();
 

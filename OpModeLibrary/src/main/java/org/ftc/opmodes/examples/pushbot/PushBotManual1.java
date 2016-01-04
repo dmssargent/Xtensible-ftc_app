@@ -23,9 +23,8 @@ package org.ftc.opmodes.examples.pushbot;
 //
 
 /**
- * Provide a basic manual operational mode that uses the left and right
- * drive motors, left arm motor, servo motors and gamepad input from only one
- * gamepad for the Push Bot.
+ * Provide a basic manual operational mode that uses the left and right drive motors, left arm
+ * motor, servo motors and gamepad input from only one gamepad for the Push Bot.
  *
  * @author SSI Robotics
  * @version 2015-09-05-20-12
@@ -39,9 +38,7 @@ public class PushBotManual1 extends PushBotTelemetry
     //
 
     /**
-     * Construct the class.
-     * <p>
-     * The system calls this member when the class is instantiated.
+     * Construct the class. <p> The system calls this member when the class is instantiated.
      */
     public PushBotManual1() {
         //
@@ -62,11 +59,9 @@ public class PushBotManual1 extends PushBotTelemetry
     //
 
     /**
-     * Implement a state machine that controls the robot during
-     * manual-operation.  The state machine uses gamepad input to transition
-     * between states.
-     * <p>
-     * The system calls this member repeatedly while the OpMode is running.
+     * Implement a state machine that controls the robot during manual-operation.  The state machine
+     * uses gamepad input to transition between states. <p> The system calls this member repeatedly
+     * while the OpMode is running.
      */
     @Override
     public void loop() {

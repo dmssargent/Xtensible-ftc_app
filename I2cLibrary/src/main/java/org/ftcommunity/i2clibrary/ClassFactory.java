@@ -27,9 +27,7 @@ import org.ftcommunity.i2clibrary.interfaces.II2cDeviceClient;
 
 /**
  * ClassFactory provides static methods for instantiating objects within the Swerve Robotics
- * Library.
- * <p>
- * The point here is to separate clients from having to know the actual class names or
+ * Library. <p> The point here is to separate clients from having to know the actual class names or
  * package structures in which various object implementations are stored; these are often internal,
  * and thus should not be exposed to clients, as they are not stable from release to release.
  */
@@ -132,8 +130,8 @@ public final class ClassFactory {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Instantiates a driver object for a  AdaFruit BNO055 sensor which resides at the indicated I2cDevice using
-     * default values for configuration parameters.
+     * Instantiates a driver object for a  AdaFruit BNO055 sensor which resides at the indicated
+     * I2cDevice using default values for configuration parameters.
      *
      * @param context   the OpMode within which this creation is taking place
      * @param i2cDevice the robot controller runtime object representing the sensor
@@ -145,35 +143,30 @@ public final class ClassFactory {
     }
 
     /**
-     * Instantiates a driver object for an AdaFruit BNO055 sensor which resides at the indicated I2cDevice using
-     * the provided configuration parameters.
-     * <p>
-     * <p>Features of this sensor include a gyro that does rate integration in hardware to
-     * provide robust and accurate angular position indications, and a separation of the output of the
-     * accelerometer into gravity and linear-motion-induced components.</p>
-     * <p>
-     * <p>The driver builds on the linear-acceleration information to provide linear velocity
-     * and position measurements using integration in software. That said, the built-in accelerometer
-     * integration algorithm is quite naive. For a real robot, you'll want to do some investigation
-     * and reading and make a better one, whose use you can indicate using
-     * {@link IBNO055IMU.Parameters#accelerationIntegrationAlgorithm parameters.accelerationIntegrationAlgorithm}.</p>
-     * <p>
-     * <p>Also, while the out-of-box sensor BNO055 works remarkably well, Bosch
-     * <a href="https://github.com/SwerveRobotics/ftc_app/raw/master/SwerveRoboticsLibrary/doc/reference/BST_BNO055_DS000_13.pdf">describes</a>
-     * a one-time calibration process that will make it even better (see Section 3.11).
-     * Perform this calibration process in the lab. Once you've got the sensor fully
-     * calibrated (or at least the gyro and the accelerometer), extract the configuration
-     * state with {@link IBNO055IMU#readCalibrationData()}. We suggest that you then incorporate
-     * the results as constants in your code, and provide them during OpMode startup in
-     * {@link IBNO055IMU.Parameters#calibrationData parameters.calibrationData}
-     * where they will automatically be applied.</p>
+     * Instantiates a driver object for an AdaFruit BNO055 sensor which resides at the indicated
+     * I2cDevice using the provided configuration parameters. <p> <p>Features of this sensor include
+     * a gyro that does rate integration in hardware to provide robust and accurate angular position
+     * indications, and a separation of the output of the accelerometer into gravity and
+     * linear-motion-induced components.</p> <p> <p>The driver builds on the linear-acceleration
+     * information to provide linear velocity and position measurements using integration in
+     * software. That said, the built-in accelerometer integration algorithm is quite naive. For a
+     * real robot, you'll want to do some investigation and reading and make a better one, whose use
+     * you can indicate using {@link IBNO055IMU.Parameters#accelerationIntegrationAlgorithm
+     * parameters.accelerationIntegrationAlgorithm}.</p> <p> <p>Also, while the out-of-box sensor
+     * BNO055 works remarkably well, Bosch <a href="https://github.com/SwerveRobotics/ftc_app/raw/master/SwerveRoboticsLibrary/doc/reference/BST_BNO055_DS000_13.pdf">describes</a>
+     * a one-time calibration process that will make it even better (see Section 3.11). Perform this
+     * calibration process in the lab. Once you've got the sensor fully calibrated (or at least the
+     * gyro and the accelerometer), extract the configuration state with {@link
+     * IBNO055IMU#readCalibrationData()}. We suggest that you then incorporate the results as
+     * constants in your code, and provide them during OpMode startup in {@link
+     * IBNO055IMU.Parameters#calibrationData parameters.calibrationData} where they will
+     * automatically be applied.</p>
      *
      * @param context    the OpMode within which this creation is taking place
      * @param i2cDevice  the robot controller runtime object representing the sensor
      * @param parameters the parameters with which the sensor should be initialized
-     * @return the interface to the instantiated sensor object. This object also
-     * supports the II2cDeviceClientUser interface, which can be useful
-     * for debugging.
+     * @return the interface to the instantiated sensor object. This object also supports the
+     * II2cDeviceClientUser interface, which can be useful for debugging.
      * @see #createAdaFruitBNO055IMU(OpMode, I2cDevice)
      */
     public static IBNO055IMU createAdaFruitBNO055IMU(OpMode context, I2cDevice i2cDevice, IBNO055IMU.Parameters parameters) {
@@ -258,13 +251,14 @@ public final class ClassFactory {
     }
 
     /**
-     * Create a new II2cDeviceClient on an I2cDevice instance. The client is initially disarmed,
-     * and must be armed before use.
+     * Create a new II2cDeviceClient on an I2cDevice instance. The client is initially disarmed, and
+     * must be armed before use.
      *
      * @param context           the OpMode within which the creation is taking place
      * @param i2cDevice         the II2cDevice to wrap
      * @param i2cAddr8Bit       the I2C address at which the client is to communicate
-     * @param closeOnOpModeStop if true, then when the OpMode stops, the client will automatically close
+     * @param closeOnOpModeStop if true, then when the OpMode stops, the client will automatically
+     *                          close
      * @return the newly instantiated I2c device client
      * @see II2cDeviceClient#arm()
      */
@@ -274,13 +268,14 @@ public final class ClassFactory {
     }
 
     /**
-     * Create a new II2cDeviceClient on an II2cDevice instance. The client is initially
-     * disarmed, and must be armed before use.
+     * Create a new II2cDeviceClient on an II2cDevice instance. The client is initially disarmed,
+     * and must be armed before use.
      *
      * @param context           the OpMode within which the creation is taking place
      * @param i2cDevice         the II2cDevice to wrap
      * @param i2cAddr8Bit       the I2C address at which the client is to communicate
-     * @param closeOnOpModeStop if true, then when the OpMode stops, the client will automatically close
+     * @param closeOnOpModeStop if true, then when the OpMode stops, the client will automatically
+     *                          close
      * @return the newly instantiated I2c device client
      * @see II2cDeviceClient#arm()
      */

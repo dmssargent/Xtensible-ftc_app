@@ -20,17 +20,13 @@ package org.ftcommunity.i2clibrary;
 import org.ftcommunity.i2clibrary.interfaces.IHandshakeable;
 
 /**
- * A class that helps us start a thread and interlock with its actual starting up.
- * <p>
- * It's surprisingly often that in order to be able to correctly shut down a thread after
- * it has begun, or to give the thread the opportunity to acquire resources it needs to operate,
- * that one shouldn't return from the logic that 'starts' the thread until the thread has
- * begun execution and positively indicated that it's good to go.
- * <p>
- * This class helps to implement that handshake logic.
- * <p>
- * That all said, this class is probably less useful than we initially thought it would be.
- * And its implementation should be cleaned up to use ExecutorService's.
+ * A class that helps us start a thread and interlock with its actual starting up. <p> It's
+ * surprisingly often that in order to be able to correctly shut down a thread after it has begun,
+ * or to give the thread the opportunity to acquire resources it needs to operate, that one
+ * shouldn't return from the logic that 'starts' the thread until the thread has begun execution and
+ * positively indicated that it's good to go. <p> This class helps to implement that handshake
+ * logic. <p> That all said, this class is probably less useful than we initially thought it would
+ * be. And its implementation should be cleaned up to use ExecutorService's.
  */
 public class HandshakeThreadStarter {
     //----------------------------------------------------------------------------------------------
@@ -90,7 +86,8 @@ public class HandshakeThreadStarter {
     }
 
     /**
-     * Starts the thread going. Blocks until the thread actually runs and calls starter.handshake().
+     * Starts the thread going. Blocks until the thread actually runs and calls
+     * starter.handshake().
      */
     public synchronized void start() {
         try {

@@ -45,20 +45,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,7 +74,7 @@ public class Analytics extends BroadcastReceiver {
     public static final String EXTERNAL_STORAGE_DIRECTORY_PATH = Environment.getExternalStorageDirectory() + "/";
     public static final String LAST_UPLOAD_DATE = "last_upload_date";
     public static final String MAX_DEVICES = "max_usb_devices";
-//    static final HostnameVerifier l = new HostnameVerifier() {
+    //    static final HostnameVerifier l = new HostnameVerifier() {
 //        public boolean verify(String hostname, SSLSession session) {
 //            return true;
 //        }

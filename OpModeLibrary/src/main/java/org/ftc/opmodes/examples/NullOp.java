@@ -25,9 +25,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * TeleOp Mode
- * <p/>
- * Enables control of the robot via the gamepad
+ * TeleOp Mode <p/> Enables control of the robot via the gamepad
  */
 public class NullOp extends OpMode {
 

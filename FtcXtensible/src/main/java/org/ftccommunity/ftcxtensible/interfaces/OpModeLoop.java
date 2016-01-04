@@ -32,13 +32,12 @@ import java.util.LinkedList;
  */
 public interface OpModeLoop {
     /**
-     * An implementation of an Xtensible loop cycle, this is the loop to use for standard
-     * use cases where the Xtensible library is involved
+     * An implementation of an Xtensible loop cycle, this is the loop to use for standard use cases
+     * where the Xtensible library is involved
      *
      * @param ctx Robot Context
      * @param out Means to push your results out of this method, and hands off processing of this
      *            objects to the onSuccess method of the full OpMode
-     * @throws Exception
      */
     void loop(final RobotContext ctx,
               final LinkedList<Object> out) throws Exception;

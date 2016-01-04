@@ -34,38 +34,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The point of all this is to hook into the robot controller runtime in order to
- * get access to their motor controller shutdown and stop logic. The runtime expects *all*
- * the motors and motor controllers to live in the hardware map that it knows about,
- * and it runs over the collections of those at times in order to shutdown motors.
- * Ours motor controllers etc don't always do that, so we need to compensate.
- * <p>
- * Looked at more generally, what we're doing here is providing a general purpose
- * notification mechanism that any component can use to register for end-of-user-OpMode
- * callbacks.
- * <p>
- * The runtime runs down it's hardware map at two distinct times:
- * <p>
- * 1) when the OpModeManager.'StopRobot' OpMode starts up, which is the OpMode which is run
- * whenever there's not a user's OpMode running, it
- * a) runs through all the servo controllers and disables their PWM
- * b) runs through all the motor controllers and sets them to write mode
- * c) runs through all the motors and sets them to zero power and run w/o encoders
- * d) runs through all the light sensors and turns of the LED
- * <p>
- * 2) FtcEventLoopHandler.shutdownMotorControllers() runs through all the motor
- * controllers and calls 'close()'.
- * a) This is called from FtcEventLoop.teardown(), which also close()s the
- * servo controllers, legacy modules, and CDIMs.
- * b) This is called from EventLoopManager.stopEventLoopRunnable()
- * c) which is called from EventLoopManager.shutdown() (also from setEventLoop())
- * d) which is called from Robot.shutdown()
- * e) which is called from FtcRobotControllerService.shutdownRobot()
- * etc. It's part of robot restart / app closing sequence.
- * <p>
- * Our immediate goal here is to build a notification mechanism for both these situations.
- * So we build this weird beast that is both a motor and its own controller as that's the
- * most efficient way to accomplish the test.
+ * The point of all this is to hook into the robot controller runtime in order to get access to
+ * their motor controller shutdown and stop logic. The runtime expects *all* the motors and motor
+ * controllers to live in the hardware map that it knows about, and it runs over the collections of
+ * those at times in order to shutdown motors. Ours motor controllers etc don't always do that, so
+ * we need to compensate. <p> Looked at more generally, what we're doing here is providing a general
+ * purpose notification mechanism that any component can use to register for end-of-user-OpMode
+ * callbacks. <p> The runtime runs down it's hardware map at two distinct times: <p> 1) when the
+ * OpModeManager.'StopRobot' OpMode starts up, which is the OpMode which is run whenever there's not
+ * a user's OpMode running, it a) runs through all the servo controllers and disables their PWM b)
+ * runs through all the motor controllers and sets them to write mode c) runs through all the motors
+ * and sets them to zero power and run w/o encoders d) runs through all the light sensors and turns
+ * of the LED <p> 2) FtcEventLoopHandler.shutdownMotorControllers() runs through all the motor
+ * controllers and calls 'close()'. a) This is called from FtcEventLoop.teardown(), which also
+ * close()s the servo controllers, legacy modules, and CDIMs. b) This is called from
+ * EventLoopManager.stopEventLoopRunnable() c) which is called from EventLoopManager.shutdown()
+ * (also from setEventLoop()) d) which is called from Robot.shutdown() e) which is called from
+ * FtcRobotControllerService.shutdownRobot() etc. It's part of robot restart / app closing sequence.
+ * <p> Our immediate goal here is to build a notification mechanism for both these situations. So we
+ * build this weird beast that is both a motor and its own controller as that's the most efficient
+ * way to accomplish the test.
  */
 public class RobotStateTransitionNotifier extends DcMotor implements DcMotorController {
     //----------------------------------------------------------------------------------------------
@@ -136,8 +124,8 @@ public class RobotStateTransitionNotifier extends DcMotor implements DcMotorCont
     }
 
     /**
-     * Called by the FtcRobotControllerActivity hooking infrastructure when the event loop
-     * changes state.
+     * Called by the FtcRobotControllerActivity hooking infrastructure when the event loop changes
+     * state.
      *
      * @param newState the new state into which the event loop is transitioning.
      */

@@ -23,11 +23,10 @@ package org.ftc.opmodes.examples.pushbot;
 //
 
 /**
- * Provide a basic manual operational mode that uses the left and right
- * drive motors, left arm motor, servo motors and gamepad input from two
- * gamepads for the Push Bot.  This manual op-mode use the touch sensors and
- * gamepad controls to drive the arm to a predefined position (i.e. the location
- * of the touch sensor).
+ * Provide a basic manual operational mode that uses the left and right drive motors, left arm
+ * motor, servo motors and gamepad input from two gamepads for the Push Bot.  This manual op-mode
+ * use the touch sensors and gamepad controls to drive the arm to a predefined position (i.e. the
+ * location of the touch sensor).
  *
  * @author SSI Robotics
  * @version 2015-08-25-14-40
@@ -58,9 +57,7 @@ public class PushBotManualSensors extends PushBotTelemetrySensors
     //
 
     /**
-     * Construct the class.
-     * <p>
-     * The system calls this member when the class is instantiated.
+     * Construct the class. <p> The system calls this member when the class is instantiated.
      */
     public PushBotManualSensors() {
         //
@@ -76,11 +73,9 @@ public class PushBotManualSensors extends PushBotTelemetrySensors
     } // PushBotManualSensors
 
     /**
-     * Implement a state machine that controls the robot during
-     * manual-operation.  The state machine uses gamepad and sensor input to
-     * transition between states.
-     * <p>
-     * The system calls this member repeatedly while the OpMode is running.
+     * Implement a state machine that controls the robot during manual-operation.  The state machine
+     * uses gamepad and sensor input to transition between states. <p> The system calls this member
+     * repeatedly while the OpMode is running.
      */
     @Override
     public void loop() {

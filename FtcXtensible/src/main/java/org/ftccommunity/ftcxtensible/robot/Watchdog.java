@@ -45,11 +45,10 @@ public class Watchdog {
     }
 
     /**
-     * Locks the current Watchdog, if the lock cannot be acquired in 500 milliseconds the attempt
-     * to lock fails and the the function returns {@code false}, otherwise {@code true} is returned
+     * Locks the current Watchdog, if the lock cannot be acquired in 500 milliseconds the attempt to
+     * lock fails and the the function returns {@code false}, otherwise {@code true} is returned
      *
      * @return whether the lock was obtained or not
-     * @throws InterruptedException
      */
     public synchronized boolean lock() throws InterruptedException {
         boolean lockResult = lock.tryAcquire(500, TimeUnit.MILLISECONDS);
@@ -68,7 +67,8 @@ public class Watchdog {
     }
 
     /**
-     * Gets the current exception that should be processed, if none is present this returns {@code null}
+     * Gets the current exception that should be processed, if none is present this returns {@code
+     * null}
      *
      * @return the current exception or null
      */

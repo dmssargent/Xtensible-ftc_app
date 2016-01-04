@@ -17,13 +17,13 @@
  */
 package org.ftccommunity.ftcxtensible.hardware.camera;
 
+import com.google.common.collect.EvictingQueue;
+
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.util.Log;
 import android.widget.RelativeLayout;
-
-import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
 import org.ftccommunity.ftcxtensible.internal.Beta;
@@ -36,8 +36,8 @@ import java.util.Date;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Handles the camera behind the scenes, this is the recommended way to grab an camera for
- * further usage
+ * Handles the camera behind the scenes, this is the recommended way to grab an camera for further
+ * usage
  *
  * @author David Sargent
  * @since 0.2
@@ -48,14 +48,13 @@ public class ExtensibleCameraManager {
     private static final String TAG = "CAMERA_MGR::";
 
     private final EvictingQueue<SoftReference<Bitmap>> imageQueue;
+    private final RobotContext context;
     CameraPreview view;
     private Camera camera;
     private Camera.CameraInfo info;
     private int cameraId;
     private Date latestTimestamp;
     private Date prepTime;
-    private final RobotContext context;
-
     private CameraPreviewCallback previewCallback;
     private CameraImageCallback imageProcessingCallback;
 

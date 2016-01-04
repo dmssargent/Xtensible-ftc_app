@@ -32,9 +32,8 @@ import java.util.logging.LogRecord;
 @Alpha
 public class JsonFormatter extends Formatter {
     /**
-     * Converts stopMode {@link LogRecord} object into stopMode string representation. The
-     * resulted string is usually localized and includes the message field of
-     * the record.
+     * Converts stopMode {@link LogRecord} object into stopMode string representation. The resulted
+     * string is usually localized and includes the message field of the record.
      *
      * @param r the log record to be formatted into stopMode string.
      * @return the formatted string.

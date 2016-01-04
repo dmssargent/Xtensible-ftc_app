@@ -67,7 +67,7 @@ public class K9TankDrive extends ExtensibleOpMode {
 		 */
 
 		/*
-		 * For the demo Tetrix K9 bot we assume the following,
+         * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
 		 *   "motor_1" is on the right side of the bot.
 		 *   "motor_2" is on the left side of the bot.
@@ -223,9 +223,8 @@ public class K9TankDrive extends ExtensibleOpMode {
     }
 
     /**
-     * This method scales the joystick input so for low joystick values, the
-     * scaled value is less than linear.  This is to make it easier to drive
-     * the robot more precisely at slower speeds.
+     * This method scales the joystick input so for low joystick values, the scaled value is less
+     * than linear.  This is to make it easier to drive the robot more precisely at slower speeds.
      */
     private double scaleInput(double dVal) {
         double[] scaleArray = {0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,

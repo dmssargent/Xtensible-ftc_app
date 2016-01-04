@@ -46,9 +46,9 @@ import static org.ftcommunity.i2clibrary.navigation.NavUtil.plus;
 
 
 /**
- * Instances of AdaFruitBNO055IMU provide API access to an
- * <a href="http://www.adafruit.com/products/2472">AdaFruit Absolute Orientation Sensor</a> that
- * is attached to a Modern Robotics Core Device Interface module.
+ * Instances of AdaFruitBNO055IMU provide API access to an <a href="http://www.adafruit.com/products/2472">AdaFruit
+ * Absolute Orientation Sensor</a> that is attached to a Modern Robotics Core Device Interface
+ * module.
  */
 public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser, IOpModeStateTransitionEvents {
     //------------------------------------------------------------------------------------------
@@ -66,21 +66,18 @@ public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser
     // That's just a bit of contextual background for the magnitude here
     private static final int msAccelerationIntegrationDefaultPollInterval = 100;   // so far only a guess
     /**
-     * One of two primary register windows we use for reading from the BNO055.
-     * <p>
-     * Given the maximum allowable size of a register window, the set of registers on
-     * a BNO055 can be usefully divided into two windows, which we here call lowerWindow
-     * and upperWindow.
-     * <p>
-     * When we find the need to change register windows depending on what data is being requested
-     * from the sensor, we try to use these two windows so as to reduce the number of register
-     * window switching that might be required as other data is read in the future.
+     * One of two primary register windows we use for reading from the BNO055. <p> Given the maximum
+     * allowable size of a register window, the set of registers on a BNO055 can be usefully divided
+     * into two windows, which we here call lowerWindow and upperWindow. <p> When we find the need
+     * to change register windows depending on what data is being requested from the sensor, we try
+     * to use these two windows so as to reduce the number of register window switching that might
+     * be required as other data is read in the future.
      */
     private static final II2cDeviceClient.ReadWindow lowerWindow = newWindow(REGISTER.CHIP_ID, REGISTER.EULER_H_LSB);
     /**
-     * A second of two primary register windows we use for reading from the BNO055.
-     * We'd like to include the temperature register, too, but that would make a 27-byte window, and
-     * those don't (currently) work in the CDIM.
+     * A second of two primary register windows we use for reading from the BNO055. We'd like to
+     * include the temperature register, too, but that would make a 27-byte window, and those don't
+     * (currently) work in the CDIM.
      *
      * @see #lowerWindow
      */
@@ -104,7 +101,8 @@ public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser
     //------------------------------------------------------------------------------------------
 
     /**
-     * Instantiate an AdaFruitBNO055IMU on the indicated device whose I2C address is the one indicated.
+     * Instantiate an AdaFruitBNO055IMU on the indicated device whose I2C address is the one
+     * indicated.
      */
     public AdaFruitBNO055IMU(OpMode context, I2cDevice i2cDevice, int i2cAddr8Bit) {
         this.context = context;
@@ -127,7 +125,8 @@ public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser
     //------------------------------------------------------------------------------------------
 
     /**
-     * Instantiate an AdaFruitBNO055IMU and then initialize it with the indicated set of parameters.
+     * Instantiate an AdaFruitBNO055IMU and then initialize it with the indicated set of
+     * parameters.
      */
     public static IBNO055IMU create(OpMode context, I2cDevice i2cDevice, Parameters parameters) {
         // Create a sensor which is a client of i2cDevice
@@ -397,25 +396,25 @@ public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser
     }
 
     /**
-     * Return the number by which we need to divide a raw angle as read from the device in order
-     * to convert it to our current angular units. See Table 3-22 of the BNO055 spec
+     * Return the number by which we need to divide a raw angle as read from the device in order to
+     * convert it to our current angular units. See Table 3-22 of the BNO055 spec
      */
     private double getAngularScale() {
         return this.parameters.angleunit == ANGLEUNIT.DEGREES ? 16.0 : 900.0;
     }
 
     /**
-     * Return the number by which we need to divide a raw acceleration as read from the device in order
-     * to convert it to our current angular units. See Table 3-17 of the BNO055 spec.
+     * Return the number by which we need to divide a raw acceleration as read from the device in
+     * order to convert it to our current angular units. See Table 3-17 of the BNO055 spec.
      */
     private double getAccelerationScale() {
         return this.parameters.accelunit == ACCELUNIT.METERS_PERSEC_PERSEC ? 100.0 : 1.0;
     }
 
     /**
-     * Return the number by which we need to divide a raw acceleration as read from the device in order
-     * to convert it to our current angular units. See Table 3-19 of the BNO055 spec. Note that the
-     * BNO055 natively uses micro Teslas; we instead use Teslas.
+     * Return the number by which we need to divide a raw acceleration as read from the device in
+     * order to convert it to our current angular units. See Table 3-19 of the BNO055 spec. Note
+     * that the BNO055 natively uses micro Teslas; we instead use Teslas.
      */
     private double getFluxScale() {
         return 16.0 * 1000000.0;
@@ -587,7 +586,8 @@ public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser
     }
 
     /**
-     * delay() implements delays which are known to be necessary according to the BNO055 specification
+     * delay() implements delays which are known to be necessary according to the BNO055
+     * specification
      *
      * @see #delayLore(int)
      */
@@ -671,10 +671,9 @@ public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser
     }
 
     /**
-     * NaiveAccelerationIntegrator provides a very naive implementation of
-     * an acceleration integration algorithm. It just does the basic physics.
-     * One you would actually want to use in a robot would, for example, likely
-     * filter noise out the acceleration data.
+     * NaiveAccelerationIntegrator provides a very naive implementation of an acceleration
+     * integration algorithm. It just does the basic physics. One you would actually want to use in
+     * a robot would, for example, likely filter noise out the acceleration data.
      */
     class NaiveAccelerationIntegrator implements IAccelerationIntegrator {
         //------------------------------------------------------------------------------------------
@@ -787,20 +786,11 @@ public final class AdaFruitBNO055IMU implements IBNO055IMU, II2cDeviceClientUser
 // This code is in part modelled after https://github.com/adafruit/Adafruit_BNO055
 
 /***************************************************************************
- * This is a library for the BNO055 orientation sensor
- * <p>
- * Designed specifically to work with the Adafruit BNO055 Breakout.
- * <p>
- * Pick one up today in the adafruit shop!
- * ------> http://www.adafruit.com/products
- * <p>
- * These sensors use I2C to communicate, 2 pins are required to interface.
- * <p>
- * Adafruit invests time and resources providing this open source code,
- * please support Adafruit andopen-source hardware by purchasing products
- * from Adafruit!
- * <p>
- * Written by KTOWN for Adafruit Industries.
- * <p>
- * MIT license, all text above must be included in any redistribution
+ * This is a library for the BNO055 orientation sensor <p> Designed specifically to work with the
+ * Adafruit BNO055 Breakout. <p> Pick one up today in the adafruit shop! ------>
+ * http://www.adafruit.com/products <p> These sensors use I2C to communicate, 2 pins are required to
+ * interface. <p> Adafruit invests time and resources providing this open source code, please
+ * support Adafruit andopen-source hardware by purchasing products from Adafruit! <p> Written by
+ * KTOWN for Adafruit Industries. <p> MIT license, all text above must be included in any
+ * redistribution
  ***************************************************************************/

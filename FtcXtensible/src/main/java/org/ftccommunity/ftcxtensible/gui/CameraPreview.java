@@ -17,6 +17,8 @@
  */
 package org.ftccommunity.ftcxtensible.gui;
 
+import com.google.common.annotations.Beta;
+
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
@@ -24,8 +26,6 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import com.google.common.annotations.Beta;
 
 import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
@@ -41,7 +41,7 @@ import java.io.IOException;
  */
 @Beta
 @NotDocumentedWell
- public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "CAMERA_PREVIEW::";
     private final Context context;
     private RobotContext robotContext;

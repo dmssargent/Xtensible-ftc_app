@@ -25,8 +25,8 @@ import org.ftcommunity.i2clibrary.interfaces.II2cDevice;
 import java.util.concurrent.locks.Lock;
 
 /**
- * This is almost identical to I2cDevice, but it implements an the II2cDevice interface,
- * thus supporting polymorphism with NXT I2C devices
+ * This is almost identical to I2cDevice, but it implements an the II2cDevice interface, thus
+ * supporting polymorphism with NXT I2C devices
  */
 public final class I2cDeviceOnI2cDeviceController implements II2cDevice
 // Implementation note: 

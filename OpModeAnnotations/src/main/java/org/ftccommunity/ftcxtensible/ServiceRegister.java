@@ -24,8 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Manages {@link RobotService} annotated classes, future loading is only guaranteed if the class also
- * implements a {@code Service} interface from Guava.
+ * Manages {@link RobotService} annotated classes, future loading is only guaranteed if the class
+ * also implements a {@code Service} interface from Guava.
  *
  * @author David Sargent
  * @author 0.3.2
@@ -34,8 +34,8 @@ public class ServiceRegister {
     private static LinkedList<Class> services;
 
     /**
-     * The input class array, this will scan the list and remember the classes annonated with
-     * {@code RobotService} annotations
+     * The input class array, this will scan the list and remember the classes annonated with {@code
+     * RobotService} annotations
      *
      * @param classes an array of classes to check
      */

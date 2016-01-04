@@ -20,17 +20,17 @@ package org.ftccommunity.ftcxtensible.abstraction.services;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 /**
- * A {@link com.google.common.util.concurrent.Service} who needs to have a {@link} RobotContext at somepoint during execution for the service's
- * primary goal. The service needs to be able to function correctly until a {@code RobotContext} has
- * been binded to the service
+ * A {@link com.google.common.util.concurrent.Service} who needs to have a {@link} RobotContext at
+ * somepoint during execution for the service's primary goal. The service needs to be able to
+ * function correctly until a {@code RobotContext} has been binded to the service
  *
  * @author David Sargent
  * @since 0.3.2
  */
 public interface LatebindingContextService {
     /**
-     * This method is automatically called whenever the first {@link RobotContext} has been created by
-     * an {@link org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode}
+     * This method is automatically called whenever the first {@link RobotContext} has been created
+     * by an {@link org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode}
      *
      * @param ctx the Robot Context
      */

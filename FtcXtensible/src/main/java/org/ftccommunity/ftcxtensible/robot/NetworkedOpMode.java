@@ -20,8 +20,8 @@ package org.ftccommunity.ftcxtensible.robot;
 import org.ftccommunity.ftcxtensible.networking.http.RobotHttpServer;
 
 /**
- * The Networking components of the library; inherit this class to use the Networking components
- * in an {@link com.qualcomm.robotcore.eventloop.opmode.OpMode}
+ * The Networking components of the library; inherit this class to use the Networking components in
+ * an {@link com.qualcomm.robotcore.eventloop.opmode.OpMode}
  *
  * @author David Sargent
  * @since 0.1

@@ -40,7 +40,7 @@ public class PushBotSquare extends LinearOpMode {
 
         waitForStart();
 
-        for(int i=0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             leftMotor.setPower(1.0);
             rightMotor.setPower(1.0);
 

@@ -17,9 +17,9 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
-import android.util.Log;
-
 import com.google.common.collect.ImmutableMap;
+
+import android.util.Log;
 
 import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;

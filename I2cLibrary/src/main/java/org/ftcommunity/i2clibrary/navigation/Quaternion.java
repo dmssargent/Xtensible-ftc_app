@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * A Quaternion can indicate an orientation in three-space without the trouble of
- * possible gimbal-lock.
+ * A Quaternion can indicate an orientation in three-space without the trouble of possible
+ * gimbal-lock.
  *
  * @see <a href="https://en.wikipedia.org/wiki/Quaternion">https://en.wikipedia.org/wiki/Quaternion</a>
  * @see <a href="https://en.wikipedia.org/wiki/Gimbal_lock">https://en.wikipedia.org/wiki/Gimbal_lock</a>
@@ -43,8 +43,8 @@ public class Quaternion {
     public final double z;
 
     /**
-     * the time on the System.nanoTime() clock at which the data was acquired. If no
-     * timestamp is associated with this particular set of data, this value is zero
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
      */
     public final long nanoTime;
 

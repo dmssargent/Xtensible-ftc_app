@@ -31,9 +31,8 @@ public class PushBotAutoFSM extends PushBotHardware {
     private FiniteStateMachine<States, PushBotAutoFSM> fsm;
 
     /**
-     * Perform any actions that are necessary when the OpMode is enabled.
-     * <p>
-     * The system calls this member once when the OpMode is enabled.
+     * Perform any actions that are necessary when the OpMode is enabled. <p> The system calls this
+     * member once when the OpMode is enabled.
      */
     @Override
     public void start() {
@@ -48,11 +47,9 @@ public class PushBotAutoFSM extends PushBotHardware {
     } // start
 
     /**
-     * Implement a state machine that controls the robot during auto-operation.
-     * The state machine uses a class member and encoder input to transition
-     * between states.
-     * <p>
-     * The system calls this member repeatedly while the OpMode is running.
+     * Implement a state machine that controls the robot during auto-operation. The state machine
+     * uses a class member and encoder input to transition between states. <p> The system calls this
+     * member repeatedly while the OpMode is running.
      */
     @Override
     public void loop() {

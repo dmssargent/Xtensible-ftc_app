@@ -35,7 +35,6 @@ public interface RunAssistant {
      *
      * @param ctx Robot Context
      * @param out a Linked List to provide a means to return specific values
-     * @throws Exception
      */
     void onExecute(RobotContext ctx, LinkedList<Object> out) throws Exception;
 }

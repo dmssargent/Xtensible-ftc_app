@@ -22,15 +22,15 @@ import org.ftcommunity.i2clibrary.navigation.Position;
 import org.ftcommunity.i2clibrary.navigation.Velocity;
 
 /**
- * {@link IAccelerationIntegrator} encapsulates an algorithm for integrating
- * acceleration information over time to produce velocity and position.
+ * {@link IAccelerationIntegrator} encapsulates an algorithm for integrating acceleration
+ * information over time to produce velocity and position.
  *
  * @see IBNO055IMU
  */
 public interface IAccelerationIntegrator {
     /**
-     * Initializes the algorithm with a starting position and velocity. Any timestamps that
-     * are present in these data are not to be considered as significant. The initial acceleration
+     * Initializes the algorithm with a starting position and velocity. Any timestamps that are
+     * present in these data are not to be considered as significant. The initial acceleration
      * should be taken as undefined; you should set it to null when this method is called.
      *
      * @param initialPosition the starting position
@@ -54,8 +54,8 @@ public interface IAccelerationIntegrator {
     Velocity getVelocity();
 
     /**
-     * Returns the current acceleration as understood by the algorithm. This is typically
-     * just the value provided in the most recent call to {@link #update(Acceleration)}, if any.
+     * Returns the current acceleration as understood by the algorithm. This is typically just the
+     * value provided in the most recent call to {@link #update(Acceleration)}, if any.
      *
      * @return the current acceleration, or null if the current position is undefined
      */

@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Velocity represents a directed velocity in three-space.
- * Units are as the same as for Acceleration, but integrated for time.
+ * Velocity represents a directed velocity in three-space. Units are as the same as for
+ * Acceleration, but integrated for time.
  */
 public class Velocity {
     //----------------------------------------------------------------------------------------------
@@ -45,8 +45,8 @@ public class Velocity {
     public final double velocZ;
 
     /**
-     * the time on the System.nanoTime() clock at which the data was acquired. If no
-     * timestamp is associated with this particular set of data, this value is zero
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
      */
     public final long nanoTime;
 

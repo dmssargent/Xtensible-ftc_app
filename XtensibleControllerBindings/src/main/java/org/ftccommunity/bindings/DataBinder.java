@@ -22,8 +22,8 @@ import android.view.View;
 import java.util.HashMap;
 
 /**
- * A static class used to manage inter-library communication to avoid cyclic dependencies. This
- * may be a bit smelly, please submit a better idea if you have one
+ * A static class used to manage inter-library communication to avoid cyclic dependencies. This may
+ * be a bit smelly, please submit a better idea if you have one
  *
  * @author David Sargent
  * @since 0.2.2
@@ -37,7 +37,7 @@ public class DataBinder {
      */
     public static final String RC_VIEW = "ftcview";
 
-    public static final String RC_MANAGER ="ftcopmanager";
+    public static final String RC_MANAGER = "ftcopmanager";
 
     private static DataBinder instance;
     private static HashMap<String, Integer> integerBindings;
@@ -46,8 +46,8 @@ public class DataBinder {
     private static HashMap<String, Object> objectBindings;
 
     /**
-     * Creates new data binder instance, {@see #getInstance} if need to use this object
-     * for management
+     * Creates new data binder instance, {@see #getInstance} if need to use this object for
+     * management
      */
     private DataBinder() {
         integerBindings = new HashMap<>();

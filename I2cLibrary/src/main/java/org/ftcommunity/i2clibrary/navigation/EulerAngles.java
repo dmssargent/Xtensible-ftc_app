@@ -46,8 +46,8 @@ public class EulerAngles {
     public final double pitch;
 
     /**
-     * the time on the System.nanoTime() clock at which the data was acquired. If no
-     * timestamp is associated with this particular set of data, this value is zero
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
      */
     public final long nanoTime;
 

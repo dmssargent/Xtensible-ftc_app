@@ -17,14 +17,14 @@
  */
 package org.ftccommunity.ftcxtensible.math;
 
+import Jama.Matrix;
+
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 
-import Jama.Matrix;
-
 /**
- * This work is licensed under a Creative Commons Attribution 3.0 License,
- * the Creative Commons overrides the MIT
+ * This work is licensed under a Creative Commons Attribution 3.0 License, the Creative Commons
+ * overrides the MIT
  *
  * @author Ahmed Abdelkader, David Sargent
  */

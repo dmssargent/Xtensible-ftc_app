@@ -15,6 +15,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package org.ftccommunity.ftcxtensible.autonomous;
 
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
@@ -28,18 +29,18 @@ public abstract class LinearAutoModeAdapter extends AutoMode {
                 new SimpleRunLevel() {
                     @Override
                     public int execute() {
-                        return init(getContext(), autoState());
+                        return init(context(), autoState());
                     }
                 },
                 new SimpleRunLevel() {
                     @Override
                     public int execute() {
-                        return run(getContext(), autoState());
+                        return run(context(), autoState());
                     }
                 }, new SimpleRunLevel() {
             @Override
             public int execute() {
-                return stop(getContext(), autoState());
+                return stop(context(), autoState());
             }
         }
         }, 0, 2, 2);
@@ -86,17 +87,17 @@ public abstract class LinearAutoModeAdapter extends AutoMode {
     private abstract class SimpleRunLevel implements RunLevel {
         @Override
         public boolean safe() {
-            return onError(getContext(), autoState());
+            return onError(context(), autoState());
         }
 
         @Override
         public int safe(int errorlevel) {
-            return handleError(getContext(), autoState(), errorlevel);
+            return handleError(context(), autoState(), errorlevel);
         }
 
         @Override
         public void close() {
-            cleanup(getContext(), autoState());
+            cleanup(context(), autoState());
         }
     }
 }

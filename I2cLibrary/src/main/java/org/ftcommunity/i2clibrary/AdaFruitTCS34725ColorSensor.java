@@ -33,11 +33,7 @@ import java.nio.ByteOrder;
 import static org.ftcommunity.i2clibrary.Util.handleCapturedInterrupt;
 
 /**
- * Note: this is not yet used
- * <p>
- * <p>
- * http://adafru.it/1334
- * https://www.adafruit.com/products/1334?&main_page=product_info&products_id=1334
+ * Note: this is not yet used <p> <p> http://adafru.it/1334 https://www.adafruit.com/products/1334?&main_page=product_info&products_id=1334
  * https://github.com/adafruit/Adafruit_TCS34725
  */
 public class AdaFruitTCS34725ColorSensor extends ColorSensor implements IOpModeStateTransitionEvents {

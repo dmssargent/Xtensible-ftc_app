@@ -18,10 +18,8 @@
 package org.ftcommunity.i2clibrary.navigation;
 
 /**
- * NavUtil is a collection of utilities that provide useful manipulations of
- * objects related to navigation. It is typically most convenient to import these functions
- * statically using:
- * <p>
+ * NavUtil is a collection of utilities that provide useful manipulations of objects related to
+ * navigation. It is typically most convenient to import these functions statically using: <p>
  * <pre>import static org.swerverobotics.library.interfaces.NavUtil.*;</pre>
  */
 public final class NavUtil {
@@ -78,8 +76,8 @@ public final class NavUtil {
     }
 
     /**
-     * Integrate between two velocities to determine a change in position using an assumption
-     * that the mean of the velocities has been acting the entire interval.
+     * Integrate between two velocities to determine a change in position using an assumption that
+     * the mean of the velocities has been acting the entire interval.
      *
      * @param cur  the current velocity
      * @param prev the previous velocity

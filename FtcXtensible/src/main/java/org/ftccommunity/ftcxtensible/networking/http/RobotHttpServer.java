@@ -35,8 +35,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 /**
- * An HTTP server that sends back the content of the received HTTP request
- * in stopMode pretty plaintext form.
+ * An HTTP server that sends back the content of the received HTTP request in stopMode pretty
+ * plaintext form.
  *
  * @author David Sargent
  * @since 0.1.0

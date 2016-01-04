@@ -29,8 +29,8 @@ public interface IOpModeStateTransitionEvents {
     boolean onUserOpModeStop();
 
     /**
-     * The robot is in the process of shutting down. All hardware devices, for example,
-     * should close().
+     * The robot is in the process of shutting down. All hardware devices, for example, should
+     * close().
      *
      * @return if true, the receiver will not receive *any* more opmode state transitions
      * @see com.qualcomm.robotcore.hardware.HardwareDevice#close()

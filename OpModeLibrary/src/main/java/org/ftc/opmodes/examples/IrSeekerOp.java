@@ -23,14 +23,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 
 /**
- * Follow an IR Beacon
- * <p/>
- * How to use: <br>
- * Make sure the Modern Robotics IR beacon is off. <br>
- * Set it to 1200 at 180.  <br>
- * Make sure the side of the beacon with the LED on is facing the robot. <br>
- * Turn on the IR beacon. The robot will now follow the IR beacon. <br>
- * To gentleStop the robot, turn the IR beacon off. <br>
+ * Follow an IR Beacon <p/> How to use: <br> Make sure the Modern Robotics IR beacon is off. <br>
+ * Set it to 1200 at 180.  <br> Make sure the side of the beacon with the LED on is facing the
+ * robot. <br> Turn on the IR beacon. The robot will now follow the IR beacon. <br> To gentleStop
+ * the robot, turn the IR beacon off. <br>
  */
 public class IrSeekerOp extends OpMode {
 

@@ -16,12 +16,12 @@
   ~ FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.ftcommunity.i2clibrary">
+          package="org.ftcommunity.i2clibrary">
 
     <application
-        android:allowBackup="true"
-        android:label="@string/app_name"
-        android:supportsRtl="true">
+            android:allowBackup="true"
+            android:label="@string/app_name"
+            android:supportsRtl="true">
 
     </application>
 

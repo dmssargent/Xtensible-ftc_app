@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Position represents a coordinate position in three-space.
- * Units are as the same as for Velocity, but integrated for time.
+ * Position represents a coordinate position in three-space. Units are as the same as for Velocity,
+ * but integrated for time.
  */
 public class Position {
     //----------------------------------------------------------------------------------------------
@@ -45,8 +45,8 @@ public class Position {
     public final double z;
 
     /**
-     * the time on the System.nanoTime() clock at which the data was acquired. If no
-     * timestamp is associated with this particular set of data, this value is zero
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
      */
     public final long nanoTime;
 

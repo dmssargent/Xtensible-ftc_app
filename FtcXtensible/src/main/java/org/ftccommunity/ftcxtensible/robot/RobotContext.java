@@ -17,14 +17,15 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
+import com.google.common.annotations.Beta;
+import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.MoreExecutors;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
-import com.google.common.annotations.Beta;
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -162,7 +163,8 @@ public class RobotContext implements AbstractRobotContext {
 
     /**
      * Re-generates the {@link ExtensibleHardwareMap} form of a hardware map based on a given
-     * correct {@link HardwareMap}. This function has the same warning applied as {@link ExtensibleHardwareMap#rebuild(HardwareMap)}
+     * correct {@link HardwareMap}. This function has the same warning applied as {@link
+     * ExtensibleHardwareMap#rebuild(HardwareMap)}
      *
      * @param map a correct non-null {@code HardwareMap}
      */
@@ -316,7 +318,7 @@ public class RobotContext implements AbstractRobotContext {
         if (runnable != null) {
             asyncService.execute(runnable);
         } else {
-            throw new  NullPointerException();
+            throw new NullPointerException();
         }
     }
 

@@ -18,9 +18,9 @@
 package org.ftccommunity.ftcxtensible.services;
 
 
-import android.util.Log;
-
 import com.google.common.util.concurrent.Service;
+
+import android.util.Log;
 
 import org.ftccommunity.ftcxtensible.ServiceRegister;
 import org.ftccommunity.ftcxtensible.abstraction.services.LatebindingContextService;
@@ -37,10 +37,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Manages user-defined {@link Service}s. It handles any services defined by the {@link RobotService} annonation
- * and handles passing the {@link RobotContext} to the services who also implement {@link LatebindingContextService},
- * however if a {@code Service} only implements {@code LatebindingContextService} the {@code Service}
- * will not be handled
+ * Manages user-defined {@link Service}s. It handles any services defined by the {@link
+ * RobotService} annonation and handles passing the {@link RobotContext} to the services who also
+ * implement {@link LatebindingContextService}, however if a {@code Service} only implements {@code
+ * LatebindingContextService} the {@code Service} will not be handled
  *
  * @author David Sargent
  * @since 0.3.2
@@ -146,8 +146,8 @@ public class ServiceManager {
     }
 
     /**
-     * Gets a service based on the service name from either the name specified in the annotation
-     * or the simple name of the class
+     * Gets a service based on the service name from either the name specified in the annotation or
+     * the simple name of the class
      *
      * @param key the Service Name
      * @return the corresponding service to the given key

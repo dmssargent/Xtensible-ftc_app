@@ -29,13 +29,11 @@ import com.qualcomm.robotcore.util.Range;
 //
 
 /**
- * Provides a single sensor access point between custom op-modes and the
- * OpMode class for the Push Bot.  It does this by extending the original Push
- * Bot's hardware and telemetry classes.
- * <p>
- * This class prevents the custom op-mode from throwing an exception at runtime.
- * If any hardware fails to map, a warning will be shown via telemetry data,
- * calls to methods will fail, but will not cause the application to crash.
+ * Provides a single sensor access point between custom op-modes and the OpMode class for the Push
+ * Bot.  It does this by extending the original Push Bot's hardware and telemetry classes. <p> This
+ * class prevents the custom op-mode from throwing an exception at runtime. If any hardware fails to
+ * map, a warning will be shown via telemetry data, calls to methods will fail, but will not cause
+ * the application to crash.
  *
  * @author SSI Robotics
  * @version 2015-08-13-20-04
@@ -104,9 +102,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     //
 
     /**
-     * Construct the class.
-     * <p>
-     * The system calls this member when the class is instantiated.
+     * Construct the class. <p> The system calls this member when the class is instantiated.
      */
     public PushBotHardwareSensors() {
         //
@@ -122,9 +118,8 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     } // PushBotHardwareSensors
 
     /**
-     * Perform any actions that are necessary when the OpMode is enabled.
-     * <p>
-     * The system calls this member once when the OpMode is enabled.
+     * Perform any actions that are necessary when the OpMode is enabled. <p> The system calls this
+     * member once when the OpMode is enabled.
      */
     @Override
     public void init() {

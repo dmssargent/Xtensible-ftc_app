@@ -28,13 +28,13 @@ public class CompassCalibration extends OpMode {
 
     // wheel speed
     final static double MOTOR_POWER = 0.2; // scale from 0 to 1
+    // Turn around at least twice in 20 seconds.
+    private final double turnTime = 20.0;
     // when paused time as passed, we will switch back to measurement mode.
     double pauseTime = 2.0;
     CompassSensor compass;
     DcMotor motorRight;
     DcMotor motorLeft;
-    // Turn around at least twice in 20 seconds.
-    private final double turnTime = 20.0;
     private boolean keepTurning = true;
     private boolean returnToMeasurementMode = false;
     private boolean monitorCalibrationSuccess = false;

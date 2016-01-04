@@ -26,8 +26,8 @@ import com.qualcomm.robotcore.hardware.LegacyModule;
 import java.util.Map;
 
 /**
- * A helper object that assists in managing the creation of replacement
- * hardware implementations for I2C-based objects.
+ * A helper object that assists in managing the creation of replacement hardware implementations for
+ * I2C-based objects.
  */
 public class I2cDeviceReplacementHelper<TARGET> {
     //----------------------------------------------------------------------------------------------

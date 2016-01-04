@@ -39,8 +39,8 @@ import static org.ftcommunity.i2clibrary.Util.handleCapturedInterrupt;
 import static org.ftcommunity.i2clibrary.Util.milliseconds;
 
 /**
- * I2cDeviceClient is a utility class that makes it easy to read or write data to
- * an instance of I2cDevice. There's a really whole lot of hard stuff this does for you
+ * I2cDeviceClient is a utility class that makes it easy to read or write data to an instance of
+ * I2cDevice. There's a really whole lot of hard stuff this does for you
  */
 public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTransitionEvents {
     //----------------------------------------------------------------------------------------------
@@ -83,8 +83,8 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     private volatile int hardwareCycleCount;         // number of callbacks that we've received
 
     /**
-     * Instantiate an I2cDeviceClient instance in the indicated device with the indicated
-     * initial window of registers being read.
+     * Instantiate an I2cDeviceClient instance in the indicated device with the indicated initial
+     * window of registers being read.
      *
      * @param context     the OpMode within which the creation is taking place
      * @param i2cDevice   the device we are to be a client of
@@ -451,11 +451,11 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     }
 
     /**
-     * Write data to a set of registers, beginning with the one indicated. The data will be
-     * written to the I2C device as expeditiously as possible. This method will not return until
-     * the data has been written to the device controller; however, that does not necessarily
-     * indicate that the data has been issued in an I2C write transaction, though that ought
-     * to happen a short deterministic time later.
+     * Write data to a set of registers, beginning with the one indicated. The data will be written
+     * to the I2C device as expeditiously as possible. This method will not return until the data
+     * has been written to the device controller; however, that does not necessarily indicate that
+     * the data has been issued in an I2C write transaction, though that ought to happen a short
+     * deterministic time later.
      */
     @Override
     public void write(int ireg, byte[] data) {
@@ -706,8 +706,8 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     }
 
     /**
-     * Keeps track about what we know about the state of the first four bytes of the
-     * write cache, which are used for requesting a mode switch.
+     * Keeps track about what we know about the state of the first four bytes of the write cache,
+     * which are used for requesting a mode switch.
      */
     private enum MODE_CACHE_STATUS {
         IDLE,               // mode byte are quiesent
@@ -716,8 +716,8 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     }
 
     /**
-     * Flag to distinguish state machine updates that are caused by the callback vs state
-     * machine updates that are due to application-initiated writes
+     * Flag to distinguish state machine updates that are caused by the callback vs state machine
+     * updates that are due to application-initiated writes
      */
     private enum UPDATE_STATE_MACHINE {
         FROM_CALLBACK,

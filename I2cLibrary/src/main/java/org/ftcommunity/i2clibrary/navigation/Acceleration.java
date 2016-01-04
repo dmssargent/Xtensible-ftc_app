@@ -23,9 +23,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Acceleration represents a directed acceleration in three-space.
- * Units are as specified in sensor initialization. The time at which the data was
- * acquired is provided so as to facilitate integration of accelerations.
+ * Acceleration represents a directed acceleration in three-space. Units are as specified in sensor
+ * initialization. The time at which the data was acquired is provided so as to facilitate
+ * integration of accelerations.
  */
 public class Acceleration {
     //----------------------------------------------------------------------------------------------
@@ -46,8 +46,8 @@ public class Acceleration {
     public double accelZ;
 
     /**
-     * the time on the System.nanoTime() clock at which the data was acquired. If no
-     * timestamp is associated with this particular set of data, this value is zero
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
      */
     public long nanoTime;
 

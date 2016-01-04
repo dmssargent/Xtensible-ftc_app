@@ -65,10 +65,14 @@ public class ExampleOpMode extends OpMode {
             }
         };
 
-        private long waitTime;
         private final int WAIT = -1;
         private final int NEXT = -2;
         private final int REMAIN = -3;
+        private long waitTime;
+
+        public static int valueOf(States state) {
+            return state.ordinal();
+        }
 
         public void waitFor(long time) {
             if (time < 0) {
@@ -79,10 +83,6 @@ public class ExampleOpMode extends OpMode {
 
         public long waitFor() {
             return waitTime;
-        }
-
-        public static int valueOf(States state) {
-            return state.ordinal();
         }
 
         @Contract(pure = true)

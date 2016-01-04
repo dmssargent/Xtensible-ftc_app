@@ -40,8 +40,6 @@ public class Util {
     // Hardware mappings
     //----------------------------------------------------------------------------------------------
 
-    // The Field of the 'fieldDexIndex' field of class Field
-    static Field fieldDexIndexField = getFieldDexIndexField();
     static Comparator<Field> fieldComparator = new Comparator<Field>()
             // A comparator that sorts fields according to their declaration order
     {
@@ -50,6 +48,8 @@ public class Util {
             return getSortIndex(a) - getSortIndex(b);
         }
     };
+    // The Field of the 'fieldDexIndex' field of class Field
+    static Field fieldDexIndexField = getFieldDexIndexField();
 
     public static List<HardwareMap.DeviceMapping<?>> deviceMappings(HardwareMap map)
     // Returns all the device mappings within the map

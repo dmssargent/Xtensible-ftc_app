@@ -17,7 +17,8 @@ public interface LoaderCallbackInterface {
      */
     int INSTALL_CANCELED = 3;
     /**
-     * This version of OpenCV Manager Service is incompatible with the app. Possibly, a service update is required.
+     * This version of OpenCV Manager Service is incompatible with the app. Possibly, a service
+     * update is required.
      */
     int INCOMPATIBLE_MANAGER_VERSION = 4;
     /**

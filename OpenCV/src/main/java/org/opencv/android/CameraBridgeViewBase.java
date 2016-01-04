@@ -20,10 +20,9 @@ import org.opencv.core.Size;
 import java.util.List;
 
 /**
- * This is a basic class, implementing the interaction with Camera and OpenCV library.
- * The main responsibility of it - is to control when camera can be enabled, process the frame,
- * call external listener to make any adjustments to the frame and then draw the resulting
- * frame to the screen.
+ * This is a basic class, implementing the interaction with Camera and OpenCV library. The main
+ * responsibility of it - is to control when camera can be enabled, process the frame, call external
+ * listener to make any adjustments to the frame and then draw the resulting frame to the screen.
  * The clients shall implement CvCameraViewListener.
  */
 public abstract class CameraBridgeViewBase extends SurfaceView implements SurfaceHolder.Callback {
@@ -117,8 +116,9 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     }
 
     /**
-     * This method is provided for clients, so they can enable the camera connection.
-     * The actual onCameraViewStarted callback will be delivered only after both this method is called and surface is available
+     * This method is provided for clients, so they can enable the camera connection. The actual
+     * onCameraViewStarted callback will be delivered only after both this method is called and
+     * surface is available
      */
     public void enableView() {
         synchronized (mSyncObject) {
@@ -128,8 +128,9 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     }
 
     /**
-     * This method is provided for clients, so they can disable camera connection and stop
-     * the delivery of frames even though the surface view itself is not destroyed and still stays on the scren
+     * This method is provided for clients, so they can disable camera connection and stop the
+     * delivery of frames even though the surface view itself is not destroyed and still stays on
+     * the scren
      */
     public void disableView() {
         synchronized (mSyncObject) {
@@ -167,11 +168,11 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     }
 
     /**
-     * This method sets the maximum size that camera frame is allowed to be. When selecting
-     * size - the biggest size which less or equal the size set will be selected.
-     * As an example - we set setMaxFrameSize(200,200) and we have 176x152 and 320x240 sizes. The
-     * preview frame will be selected with 176x152 size.
-     * This method is useful when need to restrict the size of preview frame for some reason (for example for video recording)
+     * This method sets the maximum size that camera frame is allowed to be. When selecting size -
+     * the biggest size which less or equal the size set will be selected. As an example - we set
+     * setMaxFrameSize(200,200) and we have 176x152 and 320x240 sizes. The preview frame will be
+     * selected with 176x152 size. This method is useful when need to restrict the size of preview
+     * frame for some reason (for example for video recording)
      *
      * @param maxWidth  - the maximum width allowed for camera frame.
      * @param maxHeight - the maximum height allowed for camera frame
@@ -276,9 +277,8 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     }
 
     /**
-     * This method shall be called by the subclasses when they have valid
-     * object and want it to be delivered to external client (via callback) and
-     * then displayed on the screen.
+     * This method shall be called by the subclasses when they have valid object and want it to be
+     * delivered to external client (via callback) and then displayed on the screen.
      *
      * @param frame - the current frame to be delivered
      */
@@ -333,9 +333,9 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     }
 
     /**
-     * This method is invoked shall perform concrete operation to initialize the camera.
-     * CONTRACT: as a result of this method variables mFrameWidth and mFrameHeight MUST be
-     * initialized with the size of the Camera frames that will be delivered to external processor.
+     * This method is invoked shall perform concrete operation to initialize the camera. CONTRACT:
+     * as a result of this method variables mFrameWidth and mFrameHeight MUST be initialized with
+     * the size of the Camera frames that will be delivered to external processor.
      *
      * @param width  - the width of this SurfaceView
      * @param height - the height of this SurfaceView
@@ -354,13 +354,10 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     }
 
     /**
-     * This helper method can be called by subclasses to select camera preview size.
-     * It goes over the list of the supported preview sizes and selects the maximum one which
-     * fits both values set via setMaxFrameSize() and surface frame allocated for this view
+     * This helper method can be called by subclasses to select camera preview size. It goes over
+     * the list of the supported preview sizes and selects the maximum one which fits both values
+     * set via setMaxFrameSize() and surface frame allocated for this view
      *
-     * @param supportedSizes
-     * @param surfaceWidth
-     * @param surfaceHeight
      * @return optimal frame size
      */
     protected Size calculateCameraFrameSize(List<?> supportedSizes, ListItemAccessor accessor, int surfaceWidth, int surfaceHeight) {
@@ -387,8 +384,8 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
 
     public interface CvCameraViewListener {
         /**
-         * This method is invoked when camera preview has started. After this method is invoked
-         * the frames will start to be delivered to client via the onCameraFrame() callback.
+         * This method is invoked when camera preview has started. After this method is invoked the
+         * frames will start to be delivered to client via the onCameraFrame() callback.
          *
          * @param width  -  the width of the frames that will be delivered
          * @param height - the height of the frames that will be delivered
@@ -396,23 +393,23 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
         void onCameraViewStarted(int width, int height);
 
         /**
-         * This method is invoked when camera preview has been stopped for some reason.
-         * No frames will be delivered via onCameraFrame() callback after this method is called.
+         * This method is invoked when camera preview has been stopped for some reason. No frames
+         * will be delivered via onCameraFrame() callback after this method is called.
          */
         void onCameraViewStopped();
 
         /**
-         * This method is invoked when delivery of the frame needs to be done.
-         * The returned values - is a modified frame which needs to be displayed on the screen.
-         * TODO: pass the parameters specifying the format of the frame (BPP, YUV or RGB and etc)
+         * This method is invoked when delivery of the frame needs to be done. The returned values -
+         * is a modified frame which needs to be displayed on the screen. TODO: pass the parameters
+         * specifying the format of the frame (BPP, YUV or RGB and etc)
          */
         Mat onCameraFrame(Mat inputFrame);
     }
 
     public interface CvCameraViewListener2 {
         /**
-         * This method is invoked when camera preview has started. After this method is invoked
-         * the frames will start to be delivered to client via the onCameraFrame() callback.
+         * This method is invoked when camera preview has started. After this method is invoked the
+         * frames will start to be delivered to client via the onCameraFrame() callback.
          *
          * @param width  -  the width of the frames that will be delivered
          * @param height - the height of the frames that will be delivered
@@ -420,22 +417,23 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
         void onCameraViewStarted(int width, int height);
 
         /**
-         * This method is invoked when camera preview has been stopped for some reason.
-         * No frames will be delivered via onCameraFrame() callback after this method is called.
+         * This method is invoked when camera preview has been stopped for some reason. No frames
+         * will be delivered via onCameraFrame() callback after this method is called.
          */
         void onCameraViewStopped();
 
         /**
-         * This method is invoked when delivery of the frame needs to be done.
-         * The returned values - is a modified frame which needs to be displayed on the screen.
-         * TODO: pass the parameters specifying the format of the frame (BPP, YUV or RGB and etc)
+         * This method is invoked when delivery of the frame needs to be done. The returned values -
+         * is a modified frame which needs to be displayed on the screen. TODO: pass the parameters
+         * specifying the format of the frame (BPP, YUV or RGB and etc)
          */
         Mat onCameraFrame(CvCameraViewFrame inputFrame);
     }
 
     /**
-     * This class interface is abstract representation of single frame from camera for onCameraFrame callback
-     * Attention: Do not use objects, that represents this interface out of onCameraFrame callback!
+     * This class interface is abstract representation of single frame from camera for onCameraFrame
+     * callback Attention: Do not use objects, that represents this interface out of onCameraFrame
+     * callback!
      */
     public interface CvCameraViewFrame {
 

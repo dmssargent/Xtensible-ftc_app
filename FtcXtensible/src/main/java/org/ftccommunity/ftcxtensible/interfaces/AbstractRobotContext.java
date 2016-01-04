@@ -17,10 +17,11 @@
  */
 package org.ftccommunity.ftcxtensible.interfaces;
 
+import com.google.common.collect.ImmutableList;
+
 import android.content.Context;
 import android.view.View;
 
-import com.google.common.collect.ImmutableList;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -41,12 +42,12 @@ import java.util.Collection;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
 /**
- * Main Robot Context Interface, any class claiming to be a Robot Context compatible class
- * should inherit this interface
+ * Main Robot Context Interface, any class claiming to be a Robot Context compatible class should
+ * inherit this interface
  *
  * @author David
- * @since 0.2.2
  * @see RobotContext
+ * @since 0.2.2
  */
 public interface AbstractRobotContext {
     RobotContext enableNetworking();

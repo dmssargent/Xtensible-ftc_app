@@ -18,6 +18,7 @@
 package org.ftccommunity.ftcxtensible.autonomous;
 
 import com.google.common.base.Throwables;
+
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
@@ -65,7 +66,7 @@ public class Autonomous implements Runnable {
 
     public synchronized void setRunLevels(@NotNull RunLevel[] newLevels) {
         checkState(stopLevel == initLevel, "Stop and Init Levels are the same, please specify the " +
-                    "new levels.");
+                "new levels.");
 
         for (RunLevel level : newLevels) {
             checkNotNull(level);

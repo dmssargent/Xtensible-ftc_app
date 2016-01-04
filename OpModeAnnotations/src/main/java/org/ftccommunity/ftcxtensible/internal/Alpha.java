@@ -22,8 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * The class and its behavior could change at anytime. The behavior specified is what it may do,
- * but their is no guarantee that it will
+ * The class and its behavior could change at anytime. The behavior specified is what it may do, but
+ * their is no guarantee that it will
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)

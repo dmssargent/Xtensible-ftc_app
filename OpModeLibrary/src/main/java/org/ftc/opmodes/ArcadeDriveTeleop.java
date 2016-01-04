@@ -38,12 +38,11 @@ import java.util.LinkedList;
 @TeleOp
 @RobotSdkVersion(RobotSdkApiLevel.R3_2015)
 public class ArcadeDriveTeleop extends ExtensibleOpMode {
+    double lastTurnFactor;
     private DcMotor driveForwardLeft;
     private DcMotor driveForwardRight;
     private DcMotor driveRearLeft;
     private DcMotor driveRearRight;
-
-    double lastTurnFactor;
 
     @Override
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {

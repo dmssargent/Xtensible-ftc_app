@@ -25,23 +25,22 @@ package org.ftccommunity.ftcxtensible.collections;
  * @since 0.3.1
  */
 public class ArrayQueue<AnyType> {
+    private static final int DEFAULT_SIZE = 4;
     private AnyType[] queue;
     private int queueSize;
     private int head;
     private int tail;
-
-    private static final int DEFAULT_SIZE = 4;
-
-    @SuppressWarnings("unchecked") // The array casting is OK
-    private AnyType[] newQueue(int size) throws ClassCastException {
-        return (AnyType[]) new Object[size];
-    }
 
     public ArrayQueue() {
         queue = newQueue(DEFAULT_SIZE);
         queueSize = queue.length;
         head = 0;
         tail = 0;
+    }
+
+    @SuppressWarnings("unchecked") // The array casting is OK
+    private AnyType[] newQueue(int size) throws ClassCastException {
+        return (AnyType[]) new Object[size];
     }
 
     public void close() {

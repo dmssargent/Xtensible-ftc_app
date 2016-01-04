@@ -23,10 +23,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Linear Tele Op Mode
- * <p/>
- * Enables control of the robot via the gamepad.
- * NOTE: This op mode will not work with the NXT Motor Controllers. Use an Nxt op mode instead.
+ * Linear Tele Op Mode <p/> Enables control of the robot via the gamepad. NOTE: This op mode will
+ * not work with the NXT Motor Controllers. Use an Nxt op mode instead.
  */
 public class LinearK9TeleOp extends LinearOpMode {
 

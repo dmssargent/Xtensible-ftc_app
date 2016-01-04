@@ -23,9 +23,8 @@ import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Created by Jordan Burklund on 7/30/2015.
- * An example linear op mode where the pushbot
- * will track an IR beacon.
+ * Created by Jordan Burklund on 7/30/2015. An example linear op mode where the pushbot will track
+ * an IR beacon.
  */
 public class PushBotIrSeek extends LinearOpMode {
     final static double kBaseSpeed = 0.15;  // Higher values will cause the robot to move faster

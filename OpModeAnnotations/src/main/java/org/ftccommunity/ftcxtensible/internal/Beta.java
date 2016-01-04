@@ -23,8 +23,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Marks a class as subject to major changes, the API in the class is not stable,
- * and anything can change. The class should behave as defined.
+ * Marks a class as subject to major changes, the API in the class is not stable, and anything can
+ * change. The class should behave as defined.
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)

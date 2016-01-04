@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A factory designed to wrap an I2C device to any interface
  *
- * @since 0.3.1
  * @author David Sargent
+ * @since 0.3.1
  */
 public final class I2cFactory {
     public static Wire createWire(@NotNull I2cDevice device, byte address) {

@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * AngularVelocity represents a rotation rate in three-space. Units are as specified
- * in sensor initialization, either radians/second or degrees/second.
+ * AngularVelocity represents a rotation rate in three-space. Units are as specified in sensor
+ * initialization, either radians/second or degrees/second.
  */
 public class AngularVelocity {
     //----------------------------------------------------------------------------------------------
@@ -46,8 +46,8 @@ public class AngularVelocity {
     public final double rateZ;
 
     /**
-     * the time on the System.nanoTime() clock at which the data was acquired. If no
-     * timestamp is associated with this particular set of data, this value is zero
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
      */
     public final long nanoTime;
 

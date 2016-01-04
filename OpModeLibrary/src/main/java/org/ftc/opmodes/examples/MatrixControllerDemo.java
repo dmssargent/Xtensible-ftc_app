@@ -60,8 +60,7 @@ public class MatrixControllerDemo extends OpMode {
     private double servoPosition = 0.0;
 
     @Override
-    public void init()
-    {
+    public void init() {
         motor1 = hardwareMap.dcMotor.get("motor_1");
         motor2 = hardwareMap.dcMotor.get("motor_2");
         motor3 = hardwareMap.dcMotor.get("motor_3");
@@ -95,7 +94,7 @@ public class MatrixControllerDemo extends OpMode {
          * instance is "MatrixControllerMotor" and the servo controller
          * instance is "MatrixControllerServo".
          */
-        mc = (MatrixDcMotorController)hardwareMap.dcMotorController.get("MatrixController");
+        mc = (MatrixDcMotorController) hardwareMap.dcMotorController.get("MatrixController");
         motor1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         motor2.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         motor3.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
@@ -110,16 +109,14 @@ public class MatrixControllerDemo extends OpMode {
     }
 
     @Override
-    public void start()
-    {
+    public void start() {
         motorOscTimer.reset();
         servoOscTimer.reset();
         spamPrevention.reset();
     }
 
     @Override
-    public void stop()
-    {
+    public void stop() {
         /*
          * An example of setting power for individual motors as normal.
          *
@@ -148,8 +145,7 @@ public class MatrixControllerDemo extends OpMode {
      *
      * Oscillate the motors.
      */
-    protected void handleMotors()
-    {
+    protected void handleMotors() {
         if ((firstMotors) || (motorOscTimer.time() > MOTOR_OSC_FREQ)) {
             motorPower = -motorPower;
 
@@ -174,8 +170,7 @@ public class MatrixControllerDemo extends OpMode {
      *
      * Oscillate the servos.
      */
-    protected void handleServos()
-    {
+    protected void handleServos() {
         if ((firstServos) || (servoOscTimer.time() > SERVO_OSC_FREQ)) {
             if (servoPosition == 0.0) {
                 servoPosition = 1.0;
@@ -196,19 +191,17 @@ public class MatrixControllerDemo extends OpMode {
      *
      * The Matrix controller has a separate battery whose voltage can be read.
      */
-    protected void handleBattery()
-    {
+    protected void handleBattery() {
         if ((firstBattery) || (spamPrevention.time() > SPAM_PREVENTION_FREQ)) {
             battery = mc.getBattery();
             spamPrevention.reset();
             firstBattery = false;
         }
-        telemetry.addData("Battery: ", ((float)battery/1000));
+        telemetry.addData("Battery: ", ((float) battery / 1000));
     }
 
     @Override
-    public void loop()
-    {
+    public void loop() {
         handleMotors();
         handleServos();
         handleBattery();
