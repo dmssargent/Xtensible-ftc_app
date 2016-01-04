@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftcommunity.i2clibrary.interfaces;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -13,9 +30,9 @@ import org.ftcommunity.i2clibrary.navigation.Quaternion;
 import org.ftcommunity.i2clibrary.navigation.Velocity;
 
 /**
- * Interface API to the Adafruit 9-DOF Absolute Orientation IMU Fusion Breakout - BNO055 sensor.
- * You can create an implementation of this interface for a given sensor using
- * {@link ClassFactory#createAdaFruitBNO055IMU(OpMode, I2cDevice) ClassFactory.createAdaFruitBNO055IMU()}.
+ * Interface API to the Adafruit 9-DOF Absolute Orientation IMU Fusion Breakout - BNO055 sensor. You
+ * can create an implementation of this interface for a given sensor using {@link
+ * ClassFactory#createAdaFruitBNO055IMU(OpMode, I2cDevice) ClassFactory.createAdaFruitBNO055IMU()}.
  *
  * @see IAccelerationIntegrator
  * @see ClassFactory#createAdaFruitBNO055IMU(OpMode, I2cDevice)
@@ -33,8 +50,8 @@ public interface IBNO055IMU {
     int cbCalibrationData = 22;
 
     /**
-     * Initialize the sensor using the indicated set of parameters. Note that the execution of
-     * this method can take a fairly long while, possibly several tens of milliseconds.
+     * Initialize the sensor using the indicated set of parameters. Note that the execution of this
+     * method can take a fairly long while, possibly several tens of milliseconds.
      *
      * @param parameters the parameters with which to initialize the IMU
      */
@@ -58,8 +75,8 @@ public interface IBNO055IMU {
     double getTemperature();
 
     /**
-     * Returns the magnetic field strength experienced by the sensor. See Section 3.6.5.2 of
-     * the BNO055 specification.
+     * Returns the magnetic field strength experienced by the sensor. See Section 3.6.5.2 of the
+     * BNO055 specification.
      *
      * @return the magnetic field strength experienced by the sensor, in units of tesla
      * @see <a href="https://en.wikipedia.org/wiki/Tesla_(unit)">https://en.wikipedia.org/wiki/Tesla_(unit)</a>
@@ -67,8 +84,8 @@ public interface IBNO055IMU {
     MagneticFlux getMagneticFieldStrength();
 
     /**
-     * Returns the overall acceleration experienced by the sensor. This is composed of
-     * a component due to the movement of the sensor and a component due to the force of gravity.
+     * Returns the overall acceleration experienced by the sensor. This is composed of a component
+     * due to the movement of the sensor and a component due to the force of gravity.
      *
      * @return the overall acceleration vector experienced by the sensor
      */
@@ -125,8 +142,8 @@ public interface IBNO055IMU {
     Position getPosition();
 
     /**
-     * Returns the current velocity of the sensor as calculated by integrating the observed
-     * sensor accelerations.
+     * Returns the current velocity of the sensor as calculated by integrating the observed sensor
+     * accelerations.
      *
      * @return the current velocity of the sensor
      */
@@ -142,9 +159,9 @@ public interface IBNO055IMU {
     Acceleration getAcceleration();
 
     /**
-     * Start (or re-start) a thread that continuously at intervals polls the current linear acceleration
-     * of the sensor and integrates it to provide velocity and position information. A default polling
-     * interval of 100ms is used.
+     * Start (or re-start) a thread that continuously at intervals polls the current linear
+     * acceleration of the sensor and integrates it to provide velocity and position information. A
+     * default polling interval of 100ms is used.
      *
      * @param initalPosition  If non-null, the current sensor position is set to this value. If
      *                        null, the current sensor position is unchanged.
@@ -163,7 +180,8 @@ public interface IBNO055IMU {
      *                        null, the current sensor position is unchanged.
      * @param initialVelocity If non-null, the current sensor velocity is set to this value. If
      *                        null, the current sensor velocity is unchanged.
-     * @param msPollInterval  the interval to use, in milliseconds, between successive calls to {@link #getLinearAcceleration()}
+     * @param msPollInterval  the interval to use, in milliseconds, between successive calls to
+     *                        {@link #getLinearAcceleration()}
      * @see #startAccelerationIntegration(Position, Velocity, int)
      */
     void startAccelerationIntegration(Position initalPosition, Velocity initialVelocity, int msPollInterval);
@@ -180,46 +198,30 @@ public interface IBNO055IMU {
     /**
      * Returns the current status of the system.
      *
-     * @return the current status of the system
-     * <p>
-     * See section 4.3.58 of the BNO055 specification.
-     * @see #getSystemError()
-     * <p>
-     * <table summary="System Status Codes">
-     * <tr><td>Result</td><td>Meaning</td></tr>
-     * <tr><td>0</td><td>idle</td></tr>
-     * <tr><td>1</td><td>system error</td></tr>
-     * <tr><td>2</td><td>initializing peripherals</td></tr>
-     * <tr><td>3</td><td>system initialization</td></tr>
-     * <tr><td>4</td><td>executing self-test</td></tr>
-     * <tr><td>5</td><td>sensor fusion algorithm running</td></tr>
-     * <tr><td>6</td><td>system running without fusion algorithms</td></tr>
-     * </table>
+     * @return the current status of the system <p> See section 4.3.58 of the BNO055 specification.
+     * @see #getSystemError() <p> <table summary="System Status Codes">
+     * <tr><td>Result</td><td>Meaning</td></tr> <tr><td>0</td><td>idle</td></tr>
+     * <tr><td>1</td><td>system error</td></tr> <tr><td>2</td><td>initializing peripherals</td></tr>
+     * <tr><td>3</td><td>system initialization</td></tr> <tr><td>4</td><td>executing
+     * self-test</td></tr> <tr><td>5</td><td>sensor fusion algorithm running</td></tr>
+     * <tr><td>6</td><td>system running without fusion algorithms</td></tr> </table>
      */
     byte getSystemStatus();
 
     /**
-     * If {@link #getSystemStatus()} is 'system error' (1), returns particulars
-     * regarding that error.
-     * <p>
-     * See section 4.3.58 of the BNO055 specification.
+     * If {@link #getSystemStatus()} is 'system error' (1), returns particulars regarding that
+     * error. <p> See section 4.3.58 of the BNO055 specification.
      *
      * @return the current error status
-     * @see #getSystemStatus()
-     * <p>
-     * <table summary="System Error Codes">
-     * <tr><td>Result</td><td>Meaning</td></tr>
-     * <tr><td>0</td><td>no error</td></tr>
-     * <tr><td>1</td><td>peripheral initialization error</td></tr>
-     * <tr><td>2</td><td>system initialization error</td></tr>
-     * <tr><td>3</td><td>self test result failed</td></tr>
-     * <tr><td>4</td><td>register map value out of range</td></tr>
-     * <tr><td>5</td><td>register map address out of range</td></tr>
-     * <tr><td>6</td><td>register map write error</td></tr>
+     * @see #getSystemStatus() <p> <table summary="System Error Codes">
+     * <tr><td>Result</td><td>Meaning</td></tr> <tr><td>0</td><td>no error</td></tr>
+     * <tr><td>1</td><td>peripheral initialization error</td></tr> <tr><td>2</td><td>system
+     * initialization error</td></tr> <tr><td>3</td><td>self test result failed</td></tr>
+     * <tr><td>4</td><td>register map value out of range</td></tr> <tr><td>5</td><td>register map
+     * address out of range</td></tr> <tr><td>6</td><td>register map write error</td></tr>
      * <tr><td>7</td><td>BNO low power mode not available for selected operation mode</td></tr>
-     * <tr><td>8</td><td>acceleromoeter power mode not available</td></tr>
-     * <tr><td>9</td><td>fusion algorithm configuration error</td></tr>
-     * <tr><td>A</td><td>sensor configuraton error</td></tr>
+     * <tr><td>8</td><td>acceleromoeter power mode not available</td></tr> <tr><td>9</td><td>fusion
+     * algorithm configuration error</td></tr> <tr><td>A</td><td>sensor configuraton error</td></tr>
      * </table>
      */
     byte getSystemError();
@@ -234,10 +236,8 @@ public interface IBNO055IMU {
 
     /**
      * Read calibration data from the IMU which later can be restored with writeCalibrationData().
-     * This might be persistently stored, and reapplied at a later power-on.
-     * <p>
-     * For greatest utility, full calibration should be achieved before reading
-     * the calibration data
+     * This might be persistently stored, and reapplied at a later power-on. <p> For greatest
+     * utility, full calibration should be achieved before reading the calibration data
      *
      * @return the calibration data
      * @see #writeCalibrationData(byte[])
@@ -339,8 +339,8 @@ public interface IBNO055IMU {
     }
 
     /**
-     * Sensor modes are described in Table 3-5 (p21) of the BNO055 specification,
-     * where they are termed "operation modes".
+     * Sensor modes are described in Table 3-5 (p21) of the BNO055 specification, where they are
+     * termed "operation modes".
      */
     enum SENSOR_MODE {
         CONFIG(0X00), ACCONLY(0X01), MAGONLY(0X02),
@@ -550,8 +550,8 @@ public interface IBNO055IMU {
     }
 
     /**
-     * Instances of Parameters contain data indicating how a BNO055 absolute orientation
-     * sensor is to be initialized.
+     * Instances of Parameters contain data indicating how a BNO055 absolute orientation sensor is
+     * to be initialized.
      *
      * @see #initialize(Parameters)
      */
@@ -567,25 +567,29 @@ public interface IBNO055IMU {
         public SENSOR_MODE mode = SENSOR_MODE.IMU;
 
         /**
-         * whether to use the external or internal 32.768khz crystal. External crystal
-         * use is recommended by the BNO055 specification.
+         * whether to use the external or internal 32.768khz crystal. External crystal use is
+         * recommended by the BNO055 specification.
          */
         public boolean useExternalCrystal = true;
 
         /**
-         * units in which temperature are measured. See Section 3.6.1 (p31) of the BNO055 specification
+         * units in which temperature are measured. See Section 3.6.1 (p31) of the BNO055
+         * specification
          */
         public TEMPUNIT temperatureUnit = TEMPUNIT.CELSIUS;
         /**
-         * units in which angles and angular rates are measured. See Section 3.6.1 (p31) of the BNO055 specification
+         * units in which angles and angular rates are measured. See Section 3.6.1 (p31) of the
+         * BNO055 specification
          */
         public ANGLEUNIT angleunit = ANGLEUNIT.RADIANS;
         /**
-         * units in which accelerations are measured. See Section 3.6.1 (p31) of the BNO055 specification
+         * units in which accelerations are measured. See Section 3.6.1 (p31) of the BNO055
+         * specification
          */
         public ACCELUNIT accelunit = ACCELUNIT.METERS_PERSEC_PERSEC;
         /**
-         * directional convention for measureing pitch angles. See Section 3.6.1 (p31) of the BNO055 specification
+         * directional convention for measureing pitch angles. See Section 3.6.1 (p31) of the BNO055
+         * specification
          */
         public PITCHMODE pitchmode = PITCHMODE.ANDROID;    // Section 3.6.2
 
@@ -595,15 +599,15 @@ public interface IBNO055IMU {
         public byte[] calibrationData = null;
 
         /**
-         * the algorithm to use for integrating acceleration to produce velocity and position.
-         * If not specified, a simple but not especially effective internal algorithm will be used.
+         * the algorithm to use for integrating acceleration to produce velocity and position. If
+         * not specified, a simple but not especially effective internal algorithm will be used.
          */
         public IAccelerationIntegrator accelerationIntegrationAlgorithm = null;
 
         /**
-         * the boost in thread priority to use for data acquisition. A small increase in the
-         * thread priority can help reduce timestamping jitter and improve acceleration integration
-         * at only a small detriment to other parts of the system.
+         * the boost in thread priority to use for data acquisition. A small increase in the thread
+         * priority can help reduce timestamping jitter and improve acceleration integration at only
+         * a small detriment to other parts of the system.
          */
         public int threadPriorityBoost = 0;
 

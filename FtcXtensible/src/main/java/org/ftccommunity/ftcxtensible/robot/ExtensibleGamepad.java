@@ -1,21 +1,20 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftccommunity.ftcxtensible.robot;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -57,8 +56,8 @@ public class ExtensibleGamepad {
     private JoystickScaler rightScaler;
 
     /**
-     * Setup a basic gamepad; be sure to call {@link ExtensibleGamepad#updateGamepad}
-     * to make this safe to use
+     * Setup a basic gamepad; be sure to call {@link ExtensibleGamepad#updateGamepad} to make this
+     * safe to use
      */
     public ExtensibleGamepad() {
         leftJoystick = new Joystick();
@@ -77,10 +76,9 @@ public class ExtensibleGamepad {
     /**
      * Add scaler algorithms to modify the joystick input
      *
-     * @param left  a <code>{@link JoystickScaler}</code> with a custom scaler to use
-     *              on the left Joystick
-     * @param right a <code>JoystickScaler</code> with a custom scaler to use on the
-     *              right Joystick
+     * @param left  a <code>{@link JoystickScaler}</code> with a custom scaler to use on the left
+     *              Joystick
+     * @param right a <code>JoystickScaler</code> with a custom scaler to use on the right Joystick
      * @return this object to continue work on
      */
     public ExtensibleGamepad setupJoystickScalers(JoystickScaler left, JoystickScaler right) {
@@ -93,9 +91,11 @@ public class ExtensibleGamepad {
     }
 
     /**
-     * Updates this to the status of the provided Gamepad (recast this from a <code>{@link Gamepad}</code>)
+     * Updates this to the status of the provided Gamepad (recast this from a <code>{@link
+     * Gamepad}</code>)
      *
-     * @param ctx the Robot Context (nullable, depending on the given <code>{@link JoystickScaler}</code>)
+     * @param ctx the Robot Context (nullable, depending on the given <code>{@link
+     *            JoystickScaler}</code>)
      * @param gp  the <code>Gamepad</code> to cast into
      */
     public void updateGamepad(final RobotContext ctx, Gamepad gp) {
@@ -227,7 +227,8 @@ public class ExtensibleGamepad {
     }
 
     /**
-     * Gets the value of the Right Trigger (again no idea what the value means; we are just exposing it)
+     * Gets the value of the Right Trigger (again no idea what the value means; we are just exposing
+     * it)
      *
      * @return the value of the Right Trigger
      */
@@ -245,7 +246,8 @@ public class ExtensibleGamepad {
     }
 
     /**
-     * Gets the custom value of <code>{@link JoystickScaler#userDefinedRight(RobotContext, ExtensibleGamepad)}</code>
+     * Gets the custom value of <code>{@link JoystickScaler#userDefinedRight(RobotContext,
+     * ExtensibleGamepad)}</code>
      *
      * @return the value that the code returned
      */
@@ -254,7 +256,8 @@ public class ExtensibleGamepad {
     }
 
     /**
-     * Gets the custom value of <code>{@link JoystickScaler#userDefinedLeft(RobotContext, ExtensibleGamepad)}</code>
+     * Gets the custom value of <code>{@link JoystickScaler#userDefinedLeft(RobotContext,
+     * ExtensibleGamepad)}</code>
      *
      * @return the value that the code returned
      */
@@ -265,9 +268,7 @@ public class ExtensibleGamepad {
     /**
      * Gets the left joystick
      *
-     * @return the left <code>
-     * {@link ExtensibleGamepad.Joystick}
-     * </code> of this controller
+     * @return the left <code> {@link ExtensibleGamepad.Joystick} </code> of this controller
      */
     public Joystick leftJoystick() {
         return leftJoystick;
@@ -310,10 +311,9 @@ public class ExtensibleGamepad {
     }
 
 
-
     /**
-     * The Joystick for use in {@link ExtensibleGamepad}. This is an object representative of the data
-     * present in the joysticks, and the data that the FTC SDK can give
+     * The Joystick for use in {@link ExtensibleGamepad}. This is an object representative of the
+     * data present in the joysticks, and the data that the FTC SDK can give
      *
      * @author David Sargent
      * @since 0.1

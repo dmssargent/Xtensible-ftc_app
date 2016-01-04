@@ -1,24 +1,25 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.ftccommunity.ftcxtensible.robot;
 
 import com.google.common.reflect.TypeToken;
+
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogOutput;
@@ -58,8 +59,8 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The new version of the hardware map that provides a safer use for the hardware map.
- * This prevents client code from unintentionally modifying the devices avialable for use
+ * The new version of the hardware map that provides a safer use for the hardware map. This prevents
+ * client code from unintentionally modifying the devices avialable for use
  *
  * @author David Sargent
  * @since 0.1
@@ -69,36 +70,36 @@ public class ExtensibleHardwareMap {
     private HardwareMap basicMap;
 
     // Conversions to our DeviceMap
-    private DeviceMap<String, DcMotorController> dcMotorControllers;
-    private DeviceMap<String, DcMotor> dcMotors;
-    private DeviceMap<String, ServoController> servoControllers;
-    private DeviceMap<String, Servo> servos;
-    private DeviceMap<String, LegacyModule> legacyModules;
-    private DeviceMap<String, DeviceInterfaceModule> deviceInterfaceModules;
-    private DeviceMap<String, AnalogInput> analogInputs;
-    private DeviceMap<String, DigitalChannel> digitalChannels;
-    private DeviceMap<String, OpticalDistanceSensor> opticalDistanceSensors;
-    private DeviceMap<String, TouchSensor> touchSensors;
-    private DeviceMap<String, PWMOutput> pwmOutputs;
-    private DeviceMap<String, I2cDevice> i2cDevices;
-    private DeviceMap<String, AnalogOutput> analogOutputs;
-    private DeviceMap<String, AccelerationSensor> accelerationSensors;
-    private DeviceMap<String, CompassSensor> compassSensors;
-    private DeviceMap<String, GyroSensor> gyroSensors;
-    private DeviceMap<String, IrSeekerSensor> irSeekerSensors;
-    private DeviceMap<String, LightSensor> lightSensors;
-    private DeviceMap<String, UltrasonicSensor> ultrasonicSensors;
-    private DeviceMap<String, VoltageSensor> voltageSensors;
-    private DeviceMap<String, LED> leds;
-    private DeviceMap<String, TouchSensorMultiplexer> touchSensorMultiplexers;
-    private DeviceMap<String, ColorSensor> colorSensors;
+    private DeviceMap<DcMotorController> dcMotorControllers;
+    private DeviceMap<DcMotor> dcMotors;
+    private DeviceMap<ServoController> servoControllers;
+    private DeviceMap<Servo> servos;
+    private DeviceMap<LegacyModule> legacyModules;
+    private DeviceMap<DeviceInterfaceModule> deviceInterfaceModules;
+    private DeviceMap<AnalogInput> analogInputs;
+    private DeviceMap<DigitalChannel> digitalChannels;
+    private DeviceMap<OpticalDistanceSensor> opticalDistanceSensors;
+    private DeviceMap<TouchSensor> touchSensors;
+    private DeviceMap<PWMOutput> pwmOutputs;
+    private DeviceMap<I2cDevice> i2cDevices;
+    private DeviceMap<AnalogOutput> analogOutputs;
+    private DeviceMap<AccelerationSensor> accelerationSensors;
+    private DeviceMap<CompassSensor> compassSensors;
+    private DeviceMap<GyroSensor> gyroSensors;
+    private DeviceMap<IrSeekerSensor> irSeekerSensors;
+    private DeviceMap<LightSensor> lightSensors;
+    private DeviceMap<UltrasonicSensor> ultrasonicSensors;
+    private DeviceMap<VoltageSensor> voltageSensors;
+    private DeviceMap<LED> leds;
+    private DeviceMap<TouchSensorMultiplexer> touchSensorMultiplexers;
+    private DeviceMap<ColorSensor> colorSensors;
 
-    private HashMap<Class<? extends HardwareDevice>, DeviceMap<String, ? extends HardwareDevice>> fullMap;
-    private LinkedList<DeviceMap<String, ? extends HardwareDevice>> allMaps;
+    private HashMap<Class<? extends HardwareDevice>, DeviceMap<? extends HardwareDevice>> fullMap;
+    private LinkedList<DeviceMap<? extends HardwareDevice>> allMaps;
 
     /**
-     * Builds the base ExtensibleHardwareMap; need to complete setup afterwards, specifically calling
-     * {@link ExtensibleHardwareMap#createDeviceMaps()}
+     * Builds the base ExtensibleHardwareMap; need to complete setup afterwards, specifically
+     * calling {@link ExtensibleHardwareMap#createDeviceMaps()}
      */
     private ExtensibleHardwareMap() {
         fullMap = new HashMap<>();
@@ -118,9 +119,9 @@ public class ExtensibleHardwareMap {
     }
 
     /**
-     * Rebuilds the Extensible HardwareMap from scacch based on a given {@link HardwareMap}. This modifies
-     * the reference to the maps within inside this HardwareMap, but not the reference to the HardwareMap
-     * itself.
+     * Rebuilds the Extensible HardwareMap from scacch based on a given {@link HardwareMap}. This
+     * modifies the reference to the maps within inside this HardwareMap, but not the reference to
+     * the HardwareMap itself.
      *
      * @param hwMap a valid non-null {@code HardwareMap} that contains what this needs to build on
      */
@@ -135,8 +136,7 @@ public class ExtensibleHardwareMap {
     }*/
 
     /**
-     * Move the propriety {@link HardwareMap.DeviceMapping} to our
-     * {@link DeviceMap} for our
+     * Move the propriety {@link HardwareMap.DeviceMapping} to our {@link DeviceMap} for our
      * internal use
      */
     private void createDeviceMaps() {
@@ -201,51 +201,51 @@ public class ExtensibleHardwareMap {
         return null;
     }
 
-    public DeviceMap<String, DcMotorController> dcMotorControllers() {
+    public DeviceMap<DcMotorController> dcMotorControllers() {
         return dcMotorControllers;
     }
 
-    public DeviceMap<String, DcMotor> dcMotors() {
+    public DeviceMap<DcMotor> dcMotors() {
         return dcMotors;
     }
 
-    public DeviceMap<String, ServoController> servoControllers() {
+    public DeviceMap<ServoController> servoControllers() {
         return servoControllers;
     }
 
-    public DeviceMap<String, Servo> servos() {
+    public DeviceMap<Servo> servos() {
         return servos;
     }
 
-    public DeviceMap<String, LegacyModule> legacyModules() {
+    public DeviceMap<LegacyModule> legacyModules() {
         return legacyModules;
     }
 
-    public DeviceMap<String, DeviceInterfaceModule> deviceInterfaceModules() {
+    public DeviceMap<DeviceInterfaceModule> deviceInterfaceModules() {
         return deviceInterfaceModules;
     }
 
-    public DeviceMap<String, AnalogInput> analogInputs() {
+    public DeviceMap<AnalogInput> analogInputs() {
         return analogInputs;
     }
 
-    public DeviceMap<String, DigitalChannel> digitalChannels() {
+    public DeviceMap<DigitalChannel> digitalChannels() {
         return digitalChannels;
     }
 
-    public DeviceMap<String, OpticalDistanceSensor> opticalDistanceSensors() {
+    public DeviceMap<OpticalDistanceSensor> opticalDistanceSensors() {
         return opticalDistanceSensors;
     }
 
-    public DeviceMap<String, TouchSensor> touchSensors() {
+    public DeviceMap<TouchSensor> touchSensors() {
         return touchSensors;
     }
 
-    public DeviceMap<String, PWMOutput> pwmOutputs() {
+    public DeviceMap<PWMOutput> pwmOutputs() {
         return pwmOutputs;
     }
 
-    public DeviceMap<String, I2cDevice> i2cDevices() {
+    public DeviceMap<I2cDevice> i2cDevices() {
         return i2cDevices;
     }
 
@@ -257,39 +257,39 @@ public class ExtensibleHardwareMap {
         return I2cFactory.createWire(i2cDevice, address);
     }
 
-    public DeviceMap<String, AnalogOutput> analogOutputs() {
+    public DeviceMap<AnalogOutput> analogOutputs() {
         return analogOutputs;
     }
 
-    public DeviceMap<String, AccelerationSensor> accelerationSensors() {
+    public DeviceMap<AccelerationSensor> accelerationSensors() {
         return accelerationSensors;
     }
 
-    public DeviceMap<String, CompassSensor> compassSensors() {
+    public DeviceMap<CompassSensor> compassSensors() {
         return compassSensors;
     }
 
-    public DeviceMap<String, GyroSensor> gyroSensors() {
+    public DeviceMap<GyroSensor> gyroSensors() {
         return gyroSensors;
     }
 
-    public DeviceMap<String, IrSeekerSensor> irSeekerSensors() {
+    public DeviceMap<IrSeekerSensor> irSeekerSensors() {
         return irSeekerSensors;
     }
 
-    public DeviceMap<String, LightSensor> lightSensors() {
+    public DeviceMap<LightSensor> lightSensors() {
         return lightSensors;
     }
 
-    public DeviceMap<String, UltrasonicSensor> ultrasonicSensors() {
+    public DeviceMap<UltrasonicSensor> ultrasonicSensors() {
         return ultrasonicSensors;
     }
 
-    public DeviceMap<String, VoltageSensor> voltageSensors() {
+    public DeviceMap<VoltageSensor> voltageSensors() {
         return voltageSensors;
     }
 
-    public class DeviceMap<K, T extends HardwareDevice> extends HashMap<String, T> {
+    public class DeviceMap<T extends HardwareDevice> extends HashMap<String, T> {
         private TypeToken<T> type = new TypeToken<T>(getClass()) {
         };
         private boolean mock;
@@ -313,7 +313,7 @@ public class ExtensibleHardwareMap {
             mock = false;
         }*/
 
-        public DeviceMap<K, T> buildFromDeviceMapping(HardwareMap.DeviceMapping<T> deviceMapping) {
+        public DeviceMap<T> buildFromDeviceMapping(HardwareMap.DeviceMapping<T> deviceMapping) {
             Set<Entry<String, T>> entries = deviceMapping.entrySet();
             for (Entry<String, T> device : entries) {
                 super.put(device.getKey(), device.getValue());
@@ -344,8 +344,8 @@ public class ExtensibleHardwareMap {
         }
     }
 
-    public class DeviceMultiMap<K> extends HashMap<Class<K>, DeviceMap<String, ? extends K>> {
-        public DeviceMap<String, ? extends K> get(Class<K> object) {
+    public class DeviceMultiMap<K extends HardwareDevice> extends HashMap<Class<K>, DeviceMap<K>> {
+        public DeviceMap<K> get(Class<K> object) {
             if (!super.containsKey(object)) {
                 throw new IllegalArgumentException(String.format("Map doesn't contain %s", object.getSimpleName()));
             }

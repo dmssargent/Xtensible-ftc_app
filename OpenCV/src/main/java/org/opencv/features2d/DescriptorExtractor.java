@@ -1,4 +1,3 @@
-
 //
 // This file is auto-generated. Please don't modify it!
 //
@@ -14,9 +13,6 @@ import java.util.List;
 // C++: class javaDescriptorExtractor
 //javadoc: javaDescriptorExtractor
 public class DescriptorExtractor {
-    private static final int
-            OPPONENTEXTRACTOR = 1000;
-
     public static final int
             SIFT = 1,
             SURF = 2,
@@ -32,7 +28,8 @@ public class DescriptorExtractor {
             OPPONENT_BRISK = OPPONENTEXTRACTOR + BRISK,
             OPPONENT_FREAK = OPPONENTEXTRACTOR + FREAK,
             OPPONENT_AKAZE = OPPONENTEXTRACTOR + AKAZE;
-
+    private static final int
+            OPPONENTEXTRACTOR = 1000;
     protected final long nativeObj;
 
 
