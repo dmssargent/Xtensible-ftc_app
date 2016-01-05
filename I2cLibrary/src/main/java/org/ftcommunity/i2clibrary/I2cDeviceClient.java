@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftcommunity.i2clibrary;
 
 import android.util.Log;
@@ -22,8 +39,8 @@ import static org.ftcommunity.i2clibrary.Util.handleCapturedInterrupt;
 import static org.ftcommunity.i2clibrary.Util.milliseconds;
 
 /**
- * I2cDeviceClient is a utility class that makes it easy to read or write data to
- * an instance of I2cDevice. There's a really whole lot of hard stuff this does for you
+ * I2cDeviceClient is a utility class that makes it easy to read or write data to an instance of
+ * I2cDevice. There's a really whole lot of hard stuff this does for you
  */
 public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTransitionEvents {
     //----------------------------------------------------------------------------------------------
@@ -66,8 +83,8 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     private volatile int hardwareCycleCount;         // number of callbacks that we've received
 
     /**
-     * Instantiate an I2cDeviceClient instance in the indicated device with the indicated
-     * initial window of registers being read.
+     * Instantiate an I2cDeviceClient instance in the indicated device with the indicated initial
+     * window of registers being read.
      *
      * @param context     the OpMode within which the creation is taking place
      * @param i2cDevice   the device we are to be a client of
@@ -434,11 +451,11 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     }
 
     /**
-     * Write data to a set of registers, beginning with the one indicated. The data will be
-     * written to the I2C device as expeditiously as possible. This method will not return until
-     * the data has been written to the device controller; however, that does not necessarily
-     * indicate that the data has been issued in an I2C write transaction, though that ought
-     * to happen a short deterministic time later.
+     * Write data to a set of registers, beginning with the one indicated. The data will be written
+     * to the I2C device as expeditiously as possible. This method will not return until the data
+     * has been written to the device controller; however, that does not necessarily indicate that
+     * the data has been issued in an I2C write transaction, though that ought to happen a short
+     * deterministic time later.
      */
     @Override
     public void write(int ireg, byte[] data) {
@@ -689,8 +706,8 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     }
 
     /**
-     * Keeps track about what we know about the state of the first four bytes of the
-     * write cache, which are used for requesting a mode switch.
+     * Keeps track about what we know about the state of the first four bytes of the write cache,
+     * which are used for requesting a mode switch.
      */
     private enum MODE_CACHE_STATUS {
         IDLE,               // mode byte are quiesent
@@ -699,8 +716,8 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
     }
 
     /**
-     * Flag to distinguish state machine updates that are caused by the callback vs state
-     * machine updates that are due to application-initiated writes
+     * Flag to distinguish state machine updates that are caused by the callback vs state machine
+     * updates that are due to application-initiated writes
      */
     private enum UPDATE_STATE_MACHINE {
         FROM_CALLBACK,

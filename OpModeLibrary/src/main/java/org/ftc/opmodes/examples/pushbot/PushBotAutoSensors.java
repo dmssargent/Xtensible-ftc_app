@@ -1,14 +1,31 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftc.opmodes.examples.pushbot;
 
 //------------------------------------------------------------------------------
 //
 // PushBotAutoSensors
 //
+
 /**
- * Provide a basic autonomous operational mode that uses the left and right
- * drive motors and associated encoders, the left arm motor and associated touch
- * sensor, IR seeker V3 and optical distance sensor implemented using a state
- * machine for the Push Bot.
+ * Provide a basic autonomous operational mode that uses the left and right drive motors and
+ * associated encoders, the left arm motor and associated touch sensor, IR seeker V3 and optical
+ * distance sensor implemented using a state machine for the Push Bot.
  *
  * @author SSI Robotics
  * @version 2015-08-13-19-48
@@ -21,11 +38,10 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
     // PushBotAutoSensors
     //
     /**
-     * This class member remembers which state is currently active.  When the
-     * start method is called, the state will be initialize (0).  During the
-     * first iteration of the loop method, the state will change from initialize
-     * to state_1.  When state_1 actions are complete, the state will change to
-     * state_2.  This implements a state machine for the loop method.
+     * This class member remembers which state is currently active.  When the start method is
+     * called, the state will be initialize (0).  During the first iteration of the loop method, the
+     * state will change from initialize to state_1.  When state_1 actions are complete, the state
+     * will change to state_2.  This implements a state machine for the loop method.
      */
     private int v_state = 0;
 
@@ -34,11 +50,10 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
     // start
     //
     /**
-     * This class member remembers which state is currently active.  When the
-     * start method is called, the state will be initialize (0).  During the
-     * first iteration of the loop method, the state will change from initialize
-     * to state_1.  When state_1 actions are complete, the state will change to
-     * state_2.  This implements a state machine for the loop method.
+     * This class member remembers which state is currently active.  When the start method is
+     * called, the state will be initialize (0).  During the first iteration of the loop method, the
+     * state will change from initialize to state_1.  When state_1 actions are complete, the state
+     * will change to state_2.  This implements a state machine for the loop method.
      */
     private int v_arm_state = 0;
 
@@ -52,7 +67,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
      *
      * The system calls this member when the class is instantiated.
      */
-    public PushBotAutoSensors ()
+    public PushBotAutoSensors()
 
     {
         //
@@ -77,18 +92,19 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
      *
      * The system calls this member once when the OpMode is enabled.
      */
-    @Override public void start ()
+    @Override
+    public void start()
 
     {
         //
         // Call the PushBotHardware (super/base class) start method.
         //
-        super.start ();
+        super.start();
 
         //
         // Reset the motor encoders on the drive wheels.
         //
-        reset_drive_encoders ();
+        reset_drive_encoders();
 
     } // start
 
@@ -98,219 +114,208 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
     //
 
     /**
-     * Implement a state machine that controls the robot during auto-operation.
-     * The state machine uses a class member and sensor input to transition
-     * between states.
+     * Implement a state machine that controls the robot during auto-operation. The state machine
+     * uses a class member and sensor input to transition between states.
      *
      * The system calls this member repeatedly while the OpMode is running.
      */
-    @Override public void loop ()
+    @Override
+    public void loop()
 
     {
         //
         // Update the state machines
         //
-        switch (v_state)
-        {
-        //
+        switch (v_state) {
+            //
             // StateNode 0.
-        //
-        case 0:
             //
-            // Wait for the encoders to reset.  This might take multiple cycles.
+            case 0:
+                //
+                // Wait for the encoders to reset.  This might take multiple cycles.
+                //
+                if (have_drive_encoders_reset()) {
+                    //
+                    // Begin the next state.  Drive forward.
+                    //
+                    drive_using_encoders(-1.0f, 1.0f, -2880, 2880);
+
+                    //
+                    // Transition to the next state.
+                    //
+                    v_state++;
+                }
+
+                break;
             //
-            if (have_drive_encoders_reset ())
-            {
-                //
-                // Begin the next state.  Drive forward.
-                //
-                drive_using_encoders (-1.0f, 1.0f, -2880, 2880);
-
-                //
-                // Transition to the next state.
-                //
-                v_state++;
-            }
-
-            break;
-        //
             // StateNode 1.
-        //
-        case 1:
             //
-            // Drive forward at full power until the encoders trip.
-            //
-            // Forward motion is achieved when the first and second parameters
-            // are the same and positive.
-            //
-            // The magnitude of the first and second parameters determine the
-            // speed (0.0 is stopped and 1.0 is full).
-            //
-            // The third and fourth parameters determine how long the wheels
-            // turn.
-            //
-            // When the encoder values have been reached the call resets the
-            // encoders, halts the motors, and returns true.
-            //
-            if (drive_using_encoders (1.0f, 1.0f, 2880, 2880))
-            {
+            case 1:
                 //
-                // The drive wheels have reached the specified encoder values,
-                // so transition to the next state when this method is called
-                // again.
+                // Drive forward at full power until the encoders trip.
                 //
-                v_state++;
-            }
-            break;
-        //
+                // Forward motion is achieved when the first and second parameters
+                // are the same and positive.
+                //
+                // The magnitude of the first and second parameters determine the
+                // speed (0.0 is stopped and 1.0 is full).
+                //
+                // The third and fourth parameters determine how long the wheels
+                // turn.
+                //
+                // When the encoder values have been reached the call resets the
+                // encoders, halts the motors, and returns true.
+                //
+                if (drive_using_encoders(1.0f, 1.0f, 2880, 2880)) {
+                    //
+                    // The drive wheels have reached the specified encoder values,
+                    // so transition to the next state when this method is called
+                    // again.
+                    //
+                    v_state++;
+                }
+                break;
+            //
             // StateNode 2.
-        //
-        case 2:
             //
-            // Wait for the encoders to reset.  This might take multiple cycles.
+            case 2:
+                //
+                // Wait for the encoders to reset.  This might take multiple cycles.
+                //
+                if (have_drive_encoders_reset()) {
+                    //
+                    // Begin the next state.  Turn left.
+                    //
+                    // There is no conditional (if statement) here, because the
+                    // encoders can't be read until the next cycle
+                    // (drive_using_encoders makes the run_using_encoders call,
+                    // which won't be processed until this method exits).
+                    //
+                    drive_using_encoders(-1.0f, 1.0f, -2880, 2880);
+
+                    //
+                    // Start the arm state machine.
+                    //
+                    v_arm_state = 1;
+
+                    //
+                    // The drive wheels have reached the specified encoder values,
+                    // so transition to the next state when this method is called
+                    // again.
+                    //
+                    v_state++;
+                }
+                break;
             //
-            if (have_drive_encoders_reset ())
-            {
-                //
-                // Begin the next state.  Turn left.
-                //
-                // There is no conditional (if statement) here, because the
-                // encoders can't be read until the next cycle
-                // (drive_using_encoders makes the run_using_encoders call,
-                // which won't be processed until this method exits).
-                //
-                drive_using_encoders (-1.0f, 1.0f, -2880, 2880);
-
-                //
-                // Start the arm state machine.
-                //
-                v_arm_state = 1;
-
-                //
-                // The drive wheels have reached the specified encoder values,
-                // so transition to the next state when this method is called
-                // again.
-                //
-                v_state++;
-            }
-            break;
-        //
             // StateNode 3.
-        //
-        case 3:
             //
-            // Continue turning left, if necessary.
+            case 3:
+                //
+                // Continue turning left, if necessary.
+                //
+                if (drive_using_encoders(-1.0f, 1.0f, -2880, 2880)) {
+                    v_state++;
+                }
+                break;
             //
-            if (drive_using_encoders (-1.0f, 1.0f, -2880, 2880))
-            {
-                v_state++;
-            }
-            break;
-        //
             // StateNode 4.
-        //
-        case 4:
             //
-            // As soon as the drive encoders reset, begin the next state.
-            //
-            if (have_drive_encoders_reset ())
-            {
+            case 4:
                 //
-                // Begin the next state.
+                // As soon as the drive encoders reset, begin the next state.
                 //
-                // There is no conditional (if statement) here, because the
-                // motor power won't be applied until this method exits.
-                //
-                run_without_drive_encoders ();
+                if (have_drive_encoders_reset()) {
+                    //
+                    // Begin the next state.
+                    //
+                    // There is no conditional (if statement) here, because the
+                    // motor power won't be applied until this method exits.
+                    //
+                    run_without_drive_encoders();
 
-                //
-                // Transition to the next state.
-                //
-                v_state++;
-            }
-            break;
-        //
+                    //
+                    // Transition to the next state.
+                    //
+                    v_state++;
+                }
+                break;
+            //
             // StateNode 5.
-        //
-        case 5:
             //
-            // Drive forward until a white line is detected.
-            //
-            //
-            // If a white line has been detected, then set the power level to
-            // zero.
-            //
-            if (a_ods_white_tape_detected ())
-            {
-                set_drive_power (0.0, 0.0);
+            case 5:
+                //
+                // Drive forward until a white line is detected.
+                //
+                //
+                // If a white line has been detected, then set the power level to
+                // zero.
+                //
+                if (a_ods_white_tape_detected()) {
+                    set_drive_power(0.0, 0.0);
 
-                //
-                // Begin the next state.
-                //
-                drive_to_ir_beacon ();
+                    //
+                    // Begin the next state.
+                    //
+                    drive_to_ir_beacon();
 
+                    //
+                    // Transition.
+                    //
+                    v_state++;
+                }
                 //
-                // Transition.
+                // Else a white line has not been detected, so set the power level
+                // to full forward.
                 //
-                v_state++;
-            }
+                else {
+                    set_drive_power(1.0, 1.0);
+                }
+                break;
             //
-            // Else a white line has not been detected, so set the power level
-            // to full forward.
-            //
-            else
-            {
-                set_drive_power (1.0, 1.0);
-            }
-            break;
-        //
             // StateNode 6.
-        //
-        case 6:
             //
-            // When the robot is close to the IR beacon, open the hand.
-            //
-            int l_status = drive_to_ir_beacon ();
-            if (l_status == drive_to_ir_beacon_done)
-            {
+            case 6:
                 //
-                // Begin the next state.  Open the claw.
+                // When the robot is close to the IR beacon, open the hand.
                 //
-                open_hand ();
+                int l_status = drive_to_ir_beacon();
+                if (l_status == drive_to_ir_beacon_done) {
+                    //
+                    // Begin the next state.  Open the claw.
+                    //
+                    open_hand();
 
-                //
-                // Transition.
-                //
-                v_state++;
-            }
-            else if (l_status == drive_to_ir_beacon_not_detected)
-            {
-                set_error_message ("IR beacon not detected!");
-            }
-            break;
-        //
-        // Perform no action - stay in this case until the OpMode is stopped.
-        // This method will still be called regardless of the state machine.
-        //
-        default:
+                    //
+                    // Transition.
+                    //
+                    v_state++;
+                } else if (l_status == drive_to_ir_beacon_not_detected) {
+                    set_error_message("IR beacon not detected!");
+                }
+                break;
             //
-            // The autonomous actions have been accomplished (i.e. the state has
-            // transitioned into its final state.
+            // Perform no action - stay in this case until the OpMode is stopped.
+            // This method will still be called regardless of the state machine.
             //
-            break;
+            default:
+                //
+                // The autonomous actions have been accomplished (i.e. the state has
+                // transitioned into its final state.
+                //
+                break;
         }
 
         //
         // Update the arm state machine.
         //
-        update_arm_state ();
+        update_arm_state();
 
         //
         // Send telemetry data to the driver station.
         //
-        update_telemetry (); // Update common telemetry
-        telemetry.addData ("11", "Drive State: " + v_state);
-        telemetry.addData ("12", "Arm State: " + v_arm_state);
+        update_telemetry(); // Update common telemetry
+        telemetry.addData("11", "Drive State: " + v_state);
+        telemetry.addData("12", "Arm State: " + v_arm_state);
 
     } // loop
 
@@ -322,14 +327,13 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
     /**
      * Implement a state machine that controls the arm during auto-operation.
      */
-    public void update_arm_state ()
+    public void update_arm_state()
 
     {
         //
         // Update the arm state machine.
         //
-        switch (v_arm_state)
-        {
+        switch (v_arm_state) {
             //
             // StateNode 0.
             //
@@ -348,8 +352,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
                 // no action.  If the touch sensor has not been triggered, then
                 // motor power will still be applied.
                 //
-                if (move_arm_upward_until_touch ())
-                {
+                if (move_arm_upward_until_touch()) {
                     //
                     // Transition to the stop state.
                     //

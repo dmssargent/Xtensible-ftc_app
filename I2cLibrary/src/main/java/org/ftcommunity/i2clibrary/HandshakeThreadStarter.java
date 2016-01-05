@@ -1,19 +1,32 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftcommunity.i2clibrary;
 
 import org.ftcommunity.i2clibrary.interfaces.IHandshakeable;
 
 /**
- * A class that helps us start a thread and interlock with its actual starting up.
- * <p>
- * It's surprisingly often that in order to be able to correctly shut down a thread after
- * it has begun, or to give the thread the opportunity to acquire resources it needs to operate,
- * that one shouldn't return from the logic that 'starts' the thread until the thread has
- * begun execution and positively indicated that it's good to go.
- * <p>
- * This class helps to implement that handshake logic.
- * <p>
- * That all said, this class is probably less useful than we initially thought it would be.
- * And its implementation should be cleaned up to use ExecutorService's.
+ * A class that helps us start a thread and interlock with its actual starting up. <p> It's
+ * surprisingly often that in order to be able to correctly shut down a thread after it has begun,
+ * or to give the thread the opportunity to acquire resources it needs to operate, that one
+ * shouldn't return from the logic that 'starts' the thread until the thread has begun execution and
+ * positively indicated that it's good to go. <p> This class helps to implement that handshake
+ * logic. <p> That all said, this class is probably less useful than we initially thought it would
+ * be. And its implementation should be cleaned up to use ExecutorService's.
  */
 public class HandshakeThreadStarter {
     //----------------------------------------------------------------------------------------------
@@ -73,7 +86,8 @@ public class HandshakeThreadStarter {
     }
 
     /**
-     * Starts the thread going. Blocks until the thread actually runs and calls starter.handshake().
+     * Starts the thread going. Blocks until the thread actually runs and calls
+     * starter.handshake().
      */
     public synchronized void start() {
         try {

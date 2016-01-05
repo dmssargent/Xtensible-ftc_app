@@ -12,7 +12,8 @@ public class TermCriteria {
      */
     public static final int MAX_ITER = COUNT;
     /**
-     * The desired accuracy threshold or change in parameters at which the iterative algorithm is terminated.
+     * The desired accuracy threshold or change in parameters at which the iterative algorithm is
+     * terminated.
      */
     public static final int EPS = 2;
 

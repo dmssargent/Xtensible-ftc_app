@@ -10,7 +10,7 @@ android {
         multiDexEnabled true
     }
     compileSdkVersion 22
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '23.0.2'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7

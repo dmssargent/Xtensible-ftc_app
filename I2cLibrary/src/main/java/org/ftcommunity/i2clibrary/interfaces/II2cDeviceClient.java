@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftcommunity.i2clibrary.interfaces;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -7,35 +24,28 @@ import com.qualcomm.robotcore.hardware.I2cDevice;
 import org.ftcommunity.i2clibrary.ClassFactory;
 
 /**
- * II2cDeviceClient is the public interface to a utility class that makes it easier to
- * use I2cDevice instances.
- * <p>
- * <p>Having created an II2cDeviceClient instance, reads and writes are performed by calling
- * {@link #read8(int) read8()} and {@link #write8(int, int) write8()} or
- * {@link #read(int, int) read()} and {@link #write(int, byte[]) write()} respectively. These
- * calls are synchronous; they block until their action is semantically complete. No attention
- * to 'read mode' or 'write mode' is required. Simply call reads and writes as you need them, and
- * the right thing happens.</p>
- * <p>
- * <p>A word about optimizing reads. In I2cDevice, reads are accomplished by calling
- * {@link I2cDevice#enableI2cReadMode(int, int, int) enableI2cReadMode()} to indicate a set of
- * registers which are to be read from the I2C device. <em>Changing</em> that set of registers
- * is a relatively time consuming operation, on the order of several tens of milliseconds. If your
- * code wishes to read some registers at some times and then others at another, it behooves you to
- * set up a {@link II2cDeviceClient.ReadWindow ReadWindow} that
- * covers them all (if it can): the read window will be read all at once, then subsequent read()
- * operations will return various parts of that already retrieved data (if still valid) without
- * the need to invoke another enableI2cReadMode() expense. Note that this is purely an optimization:
- * if you don't specify an explicit read window, one will be automatically created for you. But
- * it's usually worth thinking about.</p>
- * <p>
- * <p>Three different flavors of read window are available that differ in whether they
- * read only one time or perform repeated reads, and whether they aggressively return to reading
- * when there's no writing to do or just read when it's opportune to do so but don't on their
- * own cause underlying mode switches.</p>
- * <p>
- * <p>For devices that automatically shutdown if no communication is received in a certain
- * duration, a heartbeat facility is optionally provided.</p>
+ * II2cDeviceClient is the public interface to a utility class that makes it easier to use I2cDevice
+ * instances. <p> <p>Having created an II2cDeviceClient instance, reads and writes are performed by
+ * calling {@link #read8(int) read8()} and {@link #write8(int, int) write8()} or {@link #read(int,
+ * int) read()} and {@link #write(int, byte[]) write()} respectively. These calls are synchronous;
+ * they block until their action is semantically complete. No attention to 'read mode' or 'write
+ * mode' is required. Simply call reads and writes as you need them, and the right thing
+ * happens.</p> <p> <p>A word about optimizing reads. In I2cDevice, reads are accomplished by
+ * calling {@link I2cDevice#enableI2cReadMode(int, int, int) enableI2cReadMode()} to indicate a set
+ * of registers which are to be read from the I2C device. <em>Changing</em> that set of registers is
+ * a relatively time consuming operation, on the order of several tens of milliseconds. If your code
+ * wishes to read some registers at some times and then others at another, it behooves you to set up
+ * a {@link II2cDeviceClient.ReadWindow ReadWindow} that covers them all (if it can): the read
+ * window will be read all at once, then subsequent read() operations will return various parts of
+ * that already retrieved data (if still valid) without the need to invoke another
+ * enableI2cReadMode() expense. Note that this is purely an optimization: if you don't specify an
+ * explicit read window, one will be automatically created for you. But it's usually worth thinking
+ * about.</p> <p> <p>Three different flavors of read window are available that differ in whether
+ * they read only one time or perform repeated reads, and whether they aggressively return to
+ * reading when there's no writing to do or just read when it's opportune to do so but don't on
+ * their own cause underlying mode switches.</p> <p> <p>For devices that automatically shutdown if
+ * no communication is received in a certain duration, a heartbeat facility is optionally
+ * provided.</p>
  *
  * @see ClassFactory#createI2cDeviceClient(OpMode, I2cDevice, int, boolean)
  * @see II2cDeviceClient.ReadWindow
@@ -58,24 +68,24 @@ public interface II2cDeviceClient extends HardwareDevice {
     /**
      * Set the set of registers that we will read and read and read again on every hardware cycle
      *
-     * @param window the register window to read. May be null, indicating that no reads are to occur.
+     * @param window the register window to read. May be null, indicating that no reads are to
+     *               occur.
      * @see #getReadWindow()
      */
     void setReadWindow(ReadWindow window);
 
     /**
-     * Ensure that the current register window covers the indicated set of registers.
-     * <p>
-     * If there is currently a non-null register window, and windowNeeded is non-null,
-     * and the current register window entirely contains windowNeeded, then do nothing.
-     * Otherwise, set the current register window to windowToSet.
+     * Ensure that the current register window covers the indicated set of registers. <p> If there
+     * is currently a non-null register window, and windowNeeded is non-null, and the current
+     * register window entirely contains windowNeeded, then do nothing. Otherwise, set the current
+     * register window to windowToSet.
      *
-     * @param windowNeeded Test the current register window, if any, against this window
-     *                     to see if an update to the current register window is needed in
-     *                     order to cover it. May be null, indicating that an update to the
-     *                     current register window is <I>always</I> needed
-     * @param windowToSet  If an update to the current register window is needed, then this
-     *                     is the window to which it will be set. May be null.
+     * @param windowNeeded Test the current register window, if any, against this window to see if
+     *                     an update to the current register window is needed in order to cover it.
+     *                     May be null, indicating that an update to the current register window is
+     *                     <I>always</I> needed
+     * @param windowToSet  If an update to the current register window is needed, then this is the
+     *                     window to which it will be set. May be null.
      * @see #setReadWindow(ReadWindow)
      * @see #read8(int)
      */
@@ -113,28 +123,21 @@ public interface II2cDeviceClient extends HardwareDevice {
     /**
      * Reads and returns a contiguous set of device I2C registers, together with a best-available
      * timestamp of when the actual I2C read occurred. Note that this can take many tens of
-     * milliseconds to execute, and thus should not be called from the loop() thread.
-     * <p>
-     * <p>You can always just call this method without worrying at all about
-     * {@link II2cDeviceClient.ReadWindow read windows},
-     * that will work, but usually it is more efficient to take some thought and care as to what set
-     * of registers the I2C device controller is being set up to read, as adjusting that window
-     * of registers incurs significant extra time.</p>
-     * <p>
-     * <p>If the current read window can't be used to read the requested registers, then
-     * a new read window will automatically be created as follows. If the current read window is non
-     * null and wholly contains the registers to read but can't be read because it is a used-up
-     * {@link II2cDeviceClient.READ_MODE#ONLY_ONCE} window,
-     * a new read fresh window will be created with the same set of registers. Otherwise, a
-     * window that exactly covers the requested set of registers will be created.</p>
-     * <p>
-     * <p>If one is trying to optimize the the register window by calling
-     * {@link #ensureReadWindow(ReadWindow, ReadWindow) ensureReadWindow()}, this auto-window
-     * creation can cause difficulties if any concurrent access is present. In such situations,
-     * {@link #executeFunctionWhileLocked(IFunc)} can be used to allow you to atomically both
-     * set the read window and execute a read without the possibility of the read window being
-     * re-adjusted in the middle.
-     * </p>
+     * milliseconds to execute, and thus should not be called from the loop() thread. <p> <p>You can
+     * always just call this method without worrying at all about {@link II2cDeviceClient.ReadWindow
+     * read windows}, that will work, but usually it is more efficient to take some thought and care
+     * as to what set of registers the I2C device controller is being set up to read, as adjusting
+     * that window of registers incurs significant extra time.</p> <p> <p>If the current read window
+     * can't be used to read the requested registers, then a new read window will automatically be
+     * created as follows. If the current read window is non null and wholly contains the registers
+     * to read but can't be read because it is a used-up {@link II2cDeviceClient.READ_MODE#ONLY_ONCE}
+     * window, a new read fresh window will be created with the same set of registers. Otherwise, a
+     * window that exactly covers the requested set of registers will be created.</p> <p> <p>If one
+     * is trying to optimize the the register window by calling {@link #ensureReadWindow(ReadWindow,
+     * ReadWindow) ensureReadWindow()}, this auto-window creation can cause difficulties if any
+     * concurrent access is present. In such situations, {@link #executeFunctionWhileLocked(IFunc)}
+     * can be used to allow you to atomically both set the read window and execute a read without
+     * the possibility of the read window being re-adjusted in the middle. </p>
      *
      * @param ireg the register number of the first byte register to read
      * @param creg the number of bytes / registers to read
@@ -163,8 +166,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     TimestampedData readTimeStamped(int ireg, int creg, ReadWindow readWindowNeeded, ReadWindow readWindowSet);
 
     /**
-     * Writes a byte to the indicated register. The call does not return until the write has
-     * been queued to the device controller.
+     * Writes a byte to the indicated register. The call does not return until the write has been
+     * queued to the device controller.
      *
      * @param ireg the register number that is to be written
      * @param bVal the byte which is to be written to that register
@@ -177,11 +180,11 @@ public interface II2cDeviceClient extends HardwareDevice {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Writes data to a set of registers, beginning with the one indicated. The data will be
-     * written to the I2C device as expeditiously as possible. This method will not return until
-     * the data has been written to the device controller; however, that does not necessarily
-     * indicate that the data has been issued in an I2C write transaction, though that ought
-     * to happen a short deterministic time later.
+     * Writes data to a set of registers, beginning with the one indicated. The data will be written
+     * to the I2C device as expeditiously as possible. This method will not return until the data
+     * has been written to the device controller; however, that does not necessarily indicate that
+     * the data has been issued in an I2C write transaction, though that ought to happen a short
+     * deterministic time later.
      *
      * @param ireg the first of the registers which is to be written
      * @param data the data which is to be written to the registers
@@ -191,38 +194,38 @@ public interface II2cDeviceClient extends HardwareDevice {
     void write(int ireg, byte[] data);
 
     /**
-     * Writes a byte to the indicated register. The call may or may block until the write
-     * has been issued to the device controller
+     * Writes a byte to the indicated register. The call may or may block until the write has been
+     * issued to the device controller
      *
      * @param ireg              the register number that is to be written
      * @param bVal              the byte which is to be written to that register
-     * @param waitForCompletion whether or not to wait until the write has been sent to the controller
+     * @param waitForCompletion whether or not to wait until the write has been sent to the
+     *                          controller
      * @see #write(int, byte[], boolean)
      */
     void write8(int ireg, int bVal, boolean waitForCompletion);
 
     /**
-     * Writes data to a set of registers, beginning with the one indicated. The data will be
-     * written to the I2C device as expeditiously as possible. The call may or may block until the write
-     * has been issued to the device controller.
+     * Writes data to a set of registers, beginning with the one indicated. The data will be written
+     * to the I2C device as expeditiously as possible. The call may or may block until the write has
+     * been issued to the device controller.
      *
      * @param ireg              the first of the registers which is to be written
      * @param data              the data which is to be written to the registers
-     * @param waitForCompletion whether or not to wait until the write has been sent to the controller
+     * @param waitForCompletion whether or not to wait until the write has been sent to the
+     *                          controller
      * @see #write8(int, int, boolean)
      */
     void write(int ireg, byte[] data, boolean waitForCompletion);
 
     /**
      * Waits for any previously issued writes to complete.
-     *
-     * @throws InterruptedException
      */
     void waitForWriteCompletions();
 
     /**
-     * Executes the indicated action while holding the concurrency lock on the object
-     * so as to prevent other threads from interleaving.
+     * Executes the indicated action while holding the concurrency lock on the object so as to
+     * prevent other threads from interleaving.
      *
      * @param action the action to execute
      * @see #executeFunctionWhileLocked(IFunc)
@@ -234,8 +237,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Executes the indicated function while holding the concurrency lock on the object
-     * so as to prevent other threads from interleaving. Returns the value of the function.
+     * Executes the indicated function while holding the concurrency lock on the object so as to
+     * prevent other threads from interleaving. Returns the value of the function.
      *
      * @param function the function to execute
      * @param <T>      the type of the data returned from the function
@@ -245,8 +248,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     <T> T executeFunctionWhileLocked(IFunc<T> function);
 
     /**
-     * Returns the interval within which communication must be received by the I2C device lest
-     * a timeout occur.
+     * Returns the interval within which communication must be received by the I2C device lest a
+     * timeout occur.
      *
      * @return the current heartbeat interval, in milliseconds
      * @see #setHeartbeatInterval(int)
@@ -258,9 +261,9 @@ public interface II2cDeviceClient extends HardwareDevice {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Sets the interval within which communication must be received by the I2C device list
-     * a timeout may occur. The default heartbeat interval is zero, signifying that no heartbeat
-     * is maintained.
+     * Sets the interval within which communication must be received by the I2C device list a
+     * timeout may occur. The default heartbeat interval is zero, signifying that no heartbeat is
+     * maintained.
      *
      * @param ms the new hearbeat interval, in milliseconds
      * @see #getHeartbeatInterval()
@@ -276,9 +279,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     HeartbeatAction getHeartbeatAction();
 
     /**
-     * Sets the action to take when the current heartbeat interval expires.
-     * The default action is null; thus, to be useful, an action must always
-     * be explicitly specified.
+     * Sets the action to take when the current heartbeat interval expires. The default action is
+     * null; thus, to be useful, an action must always be explicitly specified.
      *
      * @param action the action to take at each heartbeat.
      * @see #getHeartbeatAction()
@@ -289,8 +291,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     /**
      * Returns the thread on which it is observed that portIsReady callbacks occur
      *
-     * @return the thread on which callbacks occur. If null, then no callback has yet been made
-     * so the identity of this thread is not yet known.
+     * @return the thread on which callbacks occur. If null, then no callback has yet been made so
+     * the identity of this thread is not yet known.
      */
     Thread getCallbackThread();
 
@@ -306,8 +308,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Sets the boost in thread priority we use for data acquisition. Judiciously applied,
-     * this boost can help reduce jitter in data timestamps.
+     * Sets the boost in thread priority we use for data acquisition. Judiciously applied, this
+     * boost can help reduce jitter in data timestamps.
      *
      * @param boost the boost in thread priority to apply
      * @see #getThreadPriorityBoost()
@@ -315,8 +317,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     void setThreadPriorityBoost(int boost);
 
     /**
-     * Returns the number of I2C cycles that we've seen for this device. This at times
-     * can be a useful debugging aid, but probably isn't useful for much more.
+     * Returns the number of I2C cycles that we've seen for this device. This at times can be a
+     * useful debugging aid, but probably isn't useful for much more.
      *
      * @return the current I2C cycle count
      */
@@ -337,10 +339,10 @@ public interface II2cDeviceClient extends HardwareDevice {
     void setLoggingTag(String loggingTag);
 
     /**
-     * Arms the client for operation. This involves registering for callbacks with
-     * the underlying I2cDevice. Only one client of an I2cDevice may register for callbacks
-     * at any given time; if multiple clients exist, they must be coordinated so as to use
-     * the I2cDevice sequentially. This method is idempotent.
+     * Arms the client for operation. This involves registering for callbacks with the underlying
+     * I2cDevice. Only one client of an I2cDevice may register for callbacks at any given time; if
+     * multiple clients exist, they must be coordinated so as to use the I2cDevice sequentially.
+     * This method is idempotent.
      *
      * @see #disarm()
      * @see #isArmed()
@@ -363,11 +365,11 @@ public interface II2cDeviceClient extends HardwareDevice {
     void disarm();
 
     /**
-     * Close down and disable this device. Once this is done, the object instance cannot
-     * support further read() or write() calls. Note that calling close() here does NOT
-     * also close() the underlying I2cDevice: we here are a *client* of the I2cDevice, not
-     * its owner. If your I2cDevice has a non-trivial close() semantic, you are yourself
-     * responsible for calling that method at an appropriate time.
+     * Close down and disable this device. Once this is done, the object instance cannot support
+     * further read() or write() calls. Note that calling close() here does NOT also close() the
+     * underlying I2cDevice: we here are a *client* of the I2cDevice, not its owner. If your
+     * I2cDevice has a non-trivial close() semantic, you are yourself responsible for calling that
+     * method at an appropriate time.
      */
     void close();
 
@@ -379,26 +381,25 @@ public interface II2cDeviceClient extends HardwareDevice {
     int getI2cAddr();
 
     /**
-     * Sets the I2C address of the underlying client. If necessary, the client is briefly
-     * disarmed and automatically rearmed in the process.
+     * Sets the I2C address of the underlying client. If necessary, the client is briefly disarmed
+     * and automatically rearmed in the process.
      *
      * @param i2cAddr8Bit the new I2C address
      */
     void setI2cAddr(int i2cAddr8Bit);
 
     /**
-     * READ_MODE controls whether when asked to read we read only once or read multiple times.
-     * <p>
-     * In all modes, it is guaranteed that a read() which follows a write() operation will
-     * see the state of the device <em>after</em> the write has had effect.
+     * READ_MODE controls whether when asked to read we read only once or read multiple times. <p>
+     * In all modes, it is guaranteed that a read() which follows a write() operation will see the
+     * state of the device <em>after</em> the write has had effect.
      */
     enum READ_MODE {
         /**
-         * Continuously issue I2C reads whenever there's nothing else needing to be done.
-         * In this mode, {@link #read(int, int) read()} will not necessarily execute an I2C transaction
-         * for every call but might instead return data previously read from the I2C device.
-         * This mode is most useful in a device that spends most of its time doing read operations
-         * and only very infrequently writes, if ever.
+         * Continuously issue I2C reads whenever there's nothing else needing to be done. In this
+         * mode, {@link #read(int, int) read()} will not necessarily execute an I2C transaction for
+         * every call but might instead return data previously read from the I2C device. This mode
+         * is most useful in a device that spends most of its time doing read operations and only
+         * very infrequently writes, if ever.
          *
          * @see #read(int, int)
          */
@@ -415,15 +416,15 @@ public interface II2cDeviceClient extends HardwareDevice {
 
         /**
          * Only issue a single I2C read, then set the read window to null to disable further reads.
-         * Executing a {@link #read(int, int) read()} in this mode will always get fresh data
-         * from the I2C device.
+         * Executing a {@link #read(int, int) read()} in this mode will always get fresh data from
+         * the I2C device.
          */
         ONLY_ONCE
     }
 
     /**
-     * TimestampedData pairs together data which has been read with the timestamp at which
-     * the read occurred, as best that can be determined
+     * TimestampedData pairs together data which has been read with the timestamp at which the read
+     * occurred, as best that can be determined
      */
     class TimestampedData {
         /**
@@ -441,11 +442,10 @@ public interface II2cDeviceClient extends HardwareDevice {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Instances of HeartBeatAction indicate what action to carry out to perform
-     * a heartbeat should that become necessary. The actual action to take is indicated
-     * by one of several prioritized possibilities. When a heartbeat is needed, these
-     * are considered in order, and the first one applicable given the state of the
-     * I2C device at the time will be applied.
+     * Instances of HeartBeatAction indicate what action to carry out to perform a heartbeat should
+     * that become necessary. The actual action to take is indicated by one of several prioritized
+     * possibilities. When a heartbeat is needed, these are considered in order, and the first one
+     * applicable given the state of the I2C device at the time will be applied.
      */
     class HeartbeatAction {
         /**
@@ -459,10 +459,9 @@ public interface II2cDeviceClient extends HardwareDevice {
         public boolean rewriteLastWritten = false;
 
         /**
-         * Priority #3: explicitly read a given register window. Note that using
-         * this form of heartbeat may cause the I2C device to experience concurrency it
-         * otherwise might not support for this heartbeat form may make use of
-         * worker threads.
+         * Priority #3: explicitly read a given register window. Note that using this form of
+         * heartbeat may cause the I2C device to experience concurrency it otherwise might not
+         * support for this heartbeat form may make use of worker threads.
          *
          * @see #executeFunctionWhileLocked(IFunc)
          */
@@ -470,8 +469,8 @@ public interface II2cDeviceClient extends HardwareDevice {
     }
 
     /**
-     * RegWindow is a utility class for managing the window of I2C register bytes that
-     * are read from our I2C device on every hardware cycle
+     * RegWindow is a utility class for managing the window of I2C register bytes that are read from
+     * our I2C device on every hardware cycle
      */
     class ReadWindow {
         //------------------------------------------------------------------------------------------
@@ -479,9 +478,9 @@ public interface II2cDeviceClient extends HardwareDevice {
         //------------------------------------------------------------------------------------------
 
         /**
-         * enableI2cReadMode and enableI2cWriteMode both impose a maximum length
-         * on the size of data that can be read or written at one time. cregReadMax
-         * and cregWriteMax indicate those maximum sizes.
+         * enableI2cReadMode and enableI2cWriteMode both impose a maximum length on the size of data
+         * that can be read or written at one time. cregReadMax and cregWriteMax indicate those
+         * maximum sizes.
          *
          * @see #cregWriteMax
          */
@@ -578,8 +577,8 @@ public interface II2cDeviceClient extends HardwareDevice {
         }
 
         /**
-         * Answers as to whether we're allowed to read using this window. This will return
-         * false for ONLY_ONCE windows after {@link #setReadIssued()} has been called on them.
+         * Answers as to whether we're allowed to read using this window. This will return false for
+         * ONLY_ONCE windows after {@link #setReadIssued()} has been called on them.
          *
          * @return whether it is permitted to perform a read for this window.
          */
@@ -592,8 +591,8 @@ public interface II2cDeviceClient extends HardwareDevice {
         //------------------------------------------------------------------------------------------
 
         /**
-         * Answers as to whether this window in its present state ought to cause a transition
-         * to read-mode when there's nothing else for the device to be doing.
+         * Answers as to whether this window in its present state ought to cause a transition to
+         * read-mode when there's nothing else for the device to be doing.
          *
          * @return whether this device should cause a read mode transition
          */
@@ -615,8 +614,8 @@ public interface II2cDeviceClient extends HardwareDevice {
         //------------------------------------------------------------------------------------------
 
         /**
-         * Do the receiver and the indicated register window cover exactly the
-         * same set of registers and have the same modality?
+         * Do the receiver and the indicated register window cover exactly the same set of registers
+         * and have the same modality?
          *
          * @param him the other window to compare to
          * @return the result of the comparison
@@ -645,8 +644,8 @@ public interface II2cDeviceClient extends HardwareDevice {
         }
 
         /**
-         * Answers as to whether the receiver wholly contains the indicated window
-         * and also has the same modality.
+         * Answers as to whether the receiver wholly contains the indicated window and also has the
+         * same modality.
          *
          * @param him the window we wish to see whether we contain
          * @return whether or not we contain the window

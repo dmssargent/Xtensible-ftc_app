@@ -1,24 +1,21 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftccommunity.ftcxtensible.robot;
-
-import android.util.Log;
 
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
@@ -26,6 +23,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multiset;
+
+import android.util.Log;
+
 import com.qualcomm.robotcore.robocol.Telemetry;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
@@ -47,11 +47,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Alpha
 @NotDocumentedWell
 public class ExtensibleTelemetry {
-    private static final String EMPTY = "";
-    private static final String SPACE = " ";
-    
     public static final int DEFAULT_DATA_MAX = 192;
     public static final int MAX_DATA_MAX = 255;
+    private static final String EMPTY = "";
+    private static final String SPACE = " ";
     private static final String TAG = "XTENSILBLE_TELEMETRY::";
     private final Telemetry parent;
     private final int dataPointsToSend;
@@ -80,8 +79,8 @@ public class ExtensibleTelemetry {
                 concurrencyLevel(4).
                 expireAfterAccess(250, TimeUnit.MILLISECONDS).
                 maximumSize(dataPointsToSend).build();
-        
-        dataCache = EvictingQueue.create((int)(dataPointsToSend * .75));
+
+        dataCache = EvictingQueue.create((int) (dataPointsToSend * .75));
         data = LinkedHashMultimap.create();
         log = new LinkedList<>();
 
@@ -96,7 +95,7 @@ public class ExtensibleTelemetry {
     public void data(String tag, String message) {
         checkArgument(!Strings.isNullOrEmpty(message), "Your message shouldn't be empty.");
         tag = Strings.nullToEmpty(tag);
-        
+
         synchronized (dataCache) {
             lastModificationTime = System.nanoTime();
             dataCache.add((!tag.equals(EMPTY) ? tag.toUpperCase(Locale.US) + SPACE : EMPTY) + message);
@@ -152,7 +151,7 @@ public class ExtensibleTelemetry {
             }
         }
     }
-    
+
     public void forceUpdateCache() {
         updateLog();
 

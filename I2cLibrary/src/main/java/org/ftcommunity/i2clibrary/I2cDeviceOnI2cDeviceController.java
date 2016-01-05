@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftcommunity.i2clibrary;
 
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -8,8 +25,8 @@ import org.ftcommunity.i2clibrary.interfaces.II2cDevice;
 import java.util.concurrent.locks.Lock;
 
 /**
- * This is almost identical to I2cDevice, but it implements an the II2cDevice interface,
- * thus supporting polymorphism with NXT I2C devices
+ * This is almost identical to I2cDevice, but it implements an the II2cDevice interface, thus
+ * supporting polymorphism with NXT I2C devices
  */
 public final class I2cDeviceOnI2cDeviceController implements II2cDevice
 // Implementation note: 
