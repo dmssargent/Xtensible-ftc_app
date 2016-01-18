@@ -21,6 +21,7 @@ import com.google.common.base.Throwables;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +30,7 @@ import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-
+@NotDocumentedWell
 public class Autonomous implements Runnable {
     private static final String TAG = "AUTONOMOUS_RUNNER::";
     private final RobotContext robotContext;

@@ -20,6 +20,7 @@ package org.ftc.opmodes;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.robot.RobotLogger;
 import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
 
 import java.util.Date;
@@ -42,7 +43,7 @@ public class HelloWorld extends SimpleOpMode {
 
     @Override
     public void loop(RobotContext ctx) {
-        log().i(MESS, "Current loop count: " + String.valueOf(getLoopCount()));
+        RobotLogger.i(MESS, "Current loop count: " + String.valueOf(getLoopCount()));
         telemetry.data(MESS, "Hello, World!");
         telemetry.data(MESS, "How are you doing?");
 
@@ -51,7 +52,7 @@ public class HelloWorld extends SimpleOpMode {
 
     @Override
     public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        log().w(MESS, "End Date: " +
+        RobotLogger.w(MESS, "End Date: " +
                 (new Date(System.nanoTime() / 1000)).toString() + ". This ran for " + getRuntime());
     }
 }

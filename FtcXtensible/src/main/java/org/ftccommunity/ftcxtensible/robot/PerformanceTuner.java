@@ -17,7 +17,11 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A serializable class that describes key info in how a loop performs in operation
@@ -32,8 +36,12 @@ public class PerformanceTuner implements Serializable {
     private double average;
     private double stdDev;
 
-    public PerformanceTuner(Integer[] times) {
-        this.times = times;
+    /**
+     * Creates a new {@link PerformanceTuner}
+     * @param times an array of loop times to use
+     */
+    public PerformanceTuner(@NotNull final Integer[] times) {
+        this.times = checkNotNull(times).clone();
         average = 0;
         for (int time :
                 times) {

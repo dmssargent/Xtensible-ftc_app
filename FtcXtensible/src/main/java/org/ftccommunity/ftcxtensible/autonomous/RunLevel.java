@@ -17,13 +17,15 @@
  */
 package org.ftccommunity.ftcxtensible.autonomous;
 
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 
+@NotDocumentedWell
 public interface RunLevel {
     int execute();
 
     boolean safe();
 
-    int safe(int errorlevel);
+    int safe(int errorLevel);
 
     void close();
 }

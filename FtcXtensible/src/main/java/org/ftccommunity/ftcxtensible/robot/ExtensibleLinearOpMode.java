@@ -38,6 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author David Sargent
  * @since 0.3.1
+ * @see org.ftccommunity.ftcxtensible.autonomous.LinearAutoModeAdapter
  */
 public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
     private EvictingQueue<Object> queue;

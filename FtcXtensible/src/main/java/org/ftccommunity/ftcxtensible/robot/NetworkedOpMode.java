@@ -18,6 +18,9 @@
 package org.ftccommunity.ftcxtensible.robot;
 
 import org.ftccommunity.ftcxtensible.networking.http.RobotHttpServer;
+import org.jetbrains.annotations.NotNull;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The Networking components of the library; inherit this class to use the Networking components in
@@ -31,24 +34,40 @@ public class NetworkedOpMode {
 
     /**
      * Create the networked version of an OpMode
+     *
+     * @param ctx a non-null {@link RobotContext}
      */
-    protected NetworkedOpMode(RobotContext ctx) {
+    protected NetworkedOpMode(@NotNull RobotContext ctx) {
         super();
-        RobotHttpServer server = new RobotHttpServer(ctx);
+        RobotHttpServer server = new RobotHttpServer(checkNotNull(ctx));
         serverThread = new Thread(server);
     }
 
     /**
-     * Handles the server bootstrap, starts the HTTP server in a new thread
+     * Handles the server bootstrap and starts the HTTP server in a new thread, if the server hasn't
+     * already been started
      */
     public void startServer() {
-        serverThread.start();
+        if (!isAlive()) {
+            serverThread.start();
+        }
     }
 
     /**
-     * Kills the HTTP server
+     * Kills the HTTP server, if the server is alive
      */
     public void stopServer() {
-        serverThread.interrupt();
+        if (isAlive()) {
+            serverThread.interrupt();
+        }
+    }
+
+    /**
+     * Checks if the server is running
+     *
+     * @return {@code true} if the server is running; otherwise {@code false}
+     */
+    public boolean isAlive() {
+        return serverThread.isAlive();
     }
 }

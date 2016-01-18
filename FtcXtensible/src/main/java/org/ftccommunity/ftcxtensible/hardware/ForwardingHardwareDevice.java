@@ -15,31 +15,34 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.ftccommunity.ftcxtensible.autonomous;
 
-import org.ftccommunity.ftcxtensible.internal.Alpha;
-import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
-import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
-import org.ftccommunity.ftcxtensible.robot.RobotContext;
+package org.ftccommunity.ftcxtensible.hardware;
 
-import java.util.LinkedList;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 
-@NotDocumentedWell
-@Alpha
-public abstract class AutoMode extends ExtensibleOpMode {
-    protected AutonomousRobotState state;
-
-    protected AutoMode() {
-        super();
-        state = new AutonomousRobotState(context(), this);
-    }
-
-    protected AutonomousRobotState autoState() {
-        return state;
+/**
+ * Created by David on 1/4/2016.
+ */
+public abstract class ForwardingHardwareDevice<T extends HardwareDevice> implements HardwareDevice {
+    @Override
+    public String getDeviceName() {
+        return delegate().getDeviceName();
     }
 
     @Override
-    public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-
+    public String getConnectionInfo() {
+        return delegate().getConnectionInfo();
     }
+
+    @Override
+    public int getVersion() {
+        return delegate().getVersion();
+    }
+
+    @Override
+    public void close() {
+        delegate().close();
+    }
+
+    protected abstract T delegate();
 }

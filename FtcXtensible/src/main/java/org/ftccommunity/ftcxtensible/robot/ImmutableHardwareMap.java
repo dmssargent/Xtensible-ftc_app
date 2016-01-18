@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 import com.qualcomm.robotcore.hardware.LegacyModule;
@@ -40,45 +41,48 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.ftccommunity.ftcxtensible.collections.DeviceMap;
+import org.ftccommunity.ftcxtensible.collections.DeviceMultiMap;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 
-@NotDocumentedWell
-@Alpha
+/**
+ * An unmodifiable version of a {@link ExtensibleHardwareMap}. To get this most functionality
+ * out of this, recreate the the {@code ExtensibleHardwareMap} using the special
+ * {@link ExtensibleHardwareMap(ImmutableHardwareMap)} constructor.
+ *
+ * To access this map, use {@link #getUnderlyingMap()}
+ *
+ * @author David Sargent
+ * @since 0.1.0
+ * @see ImmutableMap
+ */
 public class ImmutableHardwareMap {
-    private final HashMap<String, ImmutableMap> deviceMap;
+    private final ImmutableMap<Class<? extends HardwareDevice>,
+            DeviceMap<? extends HardwareDevice>> deviceMap;
 
-    public ImmutableHardwareMap(ExtensibleHardwareMap hardwareMap) {
-        deviceMap = new HashMap<>();
-        deviceMap.put(DcMotorController.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.dcMotorControllers()));
-        deviceMap.put(DcMotor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.dcMotors()));
-        deviceMap.put(ServoController.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.servoControllers()));
-        deviceMap.put(Servo.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.servos()));
-        deviceMap.put(LegacyModule.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.legacyModules()));
-        deviceMap.put(DeviceInterfaceModule.class.getSimpleName(),
-                ImmutableMap.copyOf(hardwareMap.deviceInterfaceModules()));
-
-        deviceMap.put(AnalogInput.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.analogInputs()));
-        deviceMap.put(DigitalChannel.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.digitalChannels()));
-        deviceMap.put(OpticalDistanceSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.opticalDistanceSensors()));
-        deviceMap.put(TouchSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.touchSensors()));
-        deviceMap.put(PWMOutput.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.pwmOutputs()));
-        deviceMap.put(I2cDevice.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.i2cDevices()));
-        deviceMap.put(AnalogOutput.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.analogOutputs()));
-        deviceMap.put(AnalogOutput.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.analogInputs()));
-        deviceMap.put(AccelerationSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.accelerationSensors()));
-        deviceMap.put(CompassSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.compassSensors()));
-        deviceMap.put(GyroSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.gyroSensors()));
-        deviceMap.put(IrSeekerSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.irSeekerSensors()));
-        deviceMap.put(LightSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.lightSensors()));
-        deviceMap.put(UltrasonicSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.ultrasonicSensors()));
-        deviceMap.put(VoltageSensor.class.getSimpleName(), ImmutableMap.copyOf(hardwareMap.voltageSensors()));
+    /**
+     * Creates an {@link ImmutableMap} based off of a {@link ExtensibleHardwareMap}
+     * @param hardwareMap a {@code ExtensibleHardwareMap} to create a {@code ImmutableMap off of}
+     */
+    public ImmutableHardwareMap(@NotNull ExtensibleHardwareMap hardwareMap) {
+        DeviceMultiMap map = checkNotNull(hardwareMap).delegate();
+        deviceMap = ImmutableMap.copyOf(map);
     }
 
-    public HashMap<String, ImmutableMap> getUnderlyingMap() {
+    /**
+     * Gets the {@link ImmutableMap} based off of a {@link ExtensibleHardwareMap}
+     *
+     * @return the {@code ImmutableMap} for the {@code ExtensibleHardwareMap}
+     */
+    @NotNull
+    public ImmutableMap<Class<? extends HardwareDevice>,
+                DeviceMap<? extends HardwareDevice>> getUnderlyingMap() {
         return deviceMap;
     }
 }

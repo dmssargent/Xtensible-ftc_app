@@ -32,6 +32,7 @@ import java.util.Map;
 @Alpha
 @NotDocumentedWell
 public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
+    // TODO: 1/4/2016 throw out this design, and start from scratch
     private final DcMotorController[] controllers;
     private boolean skipReadMode;
     private boolean isInReadyMode;
@@ -39,13 +40,12 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
     private int readOnlyPos;
     private int writeOnlyPos;
 
-    public ReadWriteExtensibleOpMode(int howOften, final DcMotorController[] ctrls) {
+    public ReadWriteExtensibleOpMode(int howOften, final DcMotorController... ctrls) {
         if (howOften < 1) {
             throw new IllegalArgumentException("howOften is less than 1");
         }
 
-        controllers = ctrls;
-
+        controllers = ctrls.clone();
         modifyLoopChangeoverNumber(howOften);
     }
 
@@ -53,7 +53,7 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
         skipReadMode = true;
     }
 
-    public final boolean getIsInReadMode() {
+    public final boolean isInReadMode() {
         return isInReadyMode;
     }
 
@@ -69,11 +69,11 @@ public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
         if (everyX.get(loopCount + 1).get(writeOnlyPos) instanceof WriteOnlyAssistant) {
             loopManager().unregisterAfterEveryX(loopCount + 1, writeOnlyPos);
         } else { // We need to find our registration
-            List<Integer> canditates = loopManager().getPossibleCandidatesForAfterEveryX(
+            List<Integer> candidates = loopManager().getPossibleCandidatesForAfterEveryX(
                     loopCount, WriteOnlyAssistant.class.getSimpleName());
-            for (Integer canditate : canditates) {
-                if (everyX.get(loopCount).get(canditate) instanceof WriteOnlyAssistant) {
-                    loopManager().unregisterAfterEveryX(loopCount, canditate);
+            for (Integer candidate : candidates) {
+                if (everyX.get(loopCount).get(candidate) instanceof WriteOnlyAssistant) {
+                    loopManager().unregisterAfterEveryX(loopCount, candidate);
                 }
             }
         }

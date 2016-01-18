@@ -17,6 +17,11 @@
  */
 package org.ftccommunity.ftcxtensible.autonomous;
 
+import org.ftccommunity.ftcxtensible.internal.Alpha;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
+
+@Alpha
+@NotDocumentedWell
 public interface BasicHardware {
     String GetHWName();
 

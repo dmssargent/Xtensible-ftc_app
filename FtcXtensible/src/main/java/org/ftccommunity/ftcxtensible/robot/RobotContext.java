@@ -93,7 +93,7 @@ public class RobotContext implements AbstractRobotContext {
         asyncService = MoreExecutors.listeningDecorator(
                 Executors.newCachedThreadPool());
         extensibleCameraManager = new ExtensibleCameraManager(this, 100);
-        logger = new RobotLogger(this);
+        logger = RobotLogger.createInstance(this);
 
         bindings = DataBinder.getInstance();
     }

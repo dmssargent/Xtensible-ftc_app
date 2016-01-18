@@ -23,6 +23,11 @@ import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 
 import java.util.LinkedList;
 
+/**
+ * @author David Sargent
+ * @since 0.0.5
+ * @see org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode
+ */
 public abstract class LinearAutoModeAdapter extends AutoMode {
     protected LinearAutoModeAdapter() {
         autoState().autonomous().setRunLevels(new SimpleRunLevel[]{

@@ -111,7 +111,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
             robotContext = parent.robotContext;
         }
 
-        loopManager = new ExtensibleLoopManager(this);
+        loopManager = new ExtensibleLoopManager();
         loopTimes = EvictingQueue.create(50);
     }
 
@@ -157,7 +157,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         }
 
         postProcess(list, RobotStatus.MainStates.START);
-        telemetry().sendData();
+        // telemetry().sendData();
     }
 
 

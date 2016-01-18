@@ -29,6 +29,14 @@ import com.qualcomm.robotcore.robocol.Command;
 
 import java.util.concurrent.Semaphore;
 
+/**
+ * Override for {@link FtcEventLoop}. This fixes some issues present in the standard OpMode
+ *
+ * @since 0.3.0
+ * @version 1
+ * @author David Sargent
+ * @author Bob Atkinson
+ */
 public class XtensibleEventLoop extends FtcEventLoop {
     private Semaphore semaphore;
 
