@@ -12,10 +12,8 @@ Use Android Studio to import the folder ("Import project (Eclipse ADT, Gradle, e
 This is the main "OpMode" class for this library. You can extend this class for use
 within the FTC SDK. It also bootstraps our library for use.
 
-### Bugs:
+### Known Issues:
 - Lack of unit testing
-- Dashboard somewhat works, we are catching an IndexOutOfBounds for whatever reason
-- @Alpha annotated classes need to be stabilized
 
 ### Core syntactical changes:
 #### Getting references to robot hardware
