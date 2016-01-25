@@ -18,7 +18,6 @@
 
 package org.ftccommunity.xtensible.xsimplify;
 
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.ftccommunity.ftcxtensible.collections.DeviceMap;

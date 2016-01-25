@@ -15,49 +15,23 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-apply plugin: 'com.android.library'
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion '23.0.2'
+package org.ftcommunity.ftcxtensible.core.exceptions;
 
-    defaultConfig {
-        minSdkVersion 19
-        //noinspection OldTargetApi
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+public class RuntimeInterruptedException extends RuntimeException {
+    public RuntimeInterruptedException(String ex) {
+        super(ex, new InterruptedException(ex));
     }
 
-    lintOptions {
-        textReport true
-        // location to write the output; can be a file or 'stdout'
-        textOutput 'stdout'
+    public RuntimeInterruptedException(String message, Throwable throwable) {
+        super(message, throwable);
     }
-}
 
-repositories {
-    flatDir {
-        dirs '../libs'
+    public RuntimeInterruptedException(Throwable throwable) {
+        super(throwable);
     }
-}
 
-dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'ModernRobotics-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
-    compile 'org.jetbrains:annotations:13.0'
+    public RuntimeInterruptedException() {
+        super(new InterruptedException());
+    }
 }

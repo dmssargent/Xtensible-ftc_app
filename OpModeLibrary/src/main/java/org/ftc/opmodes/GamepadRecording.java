@@ -15,49 +15,40 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-apply plugin: 'com.android.library'
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion '23.0.2'
+package org.ftc.opmodes;
 
-    defaultConfig {
-        minSdkVersion 19
-        //noinspection OldTargetApi
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
 
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+import java.util.LinkedList;
+
+/**
+ * A demo GamePad recording OpMode
+ */
+@TeleOp
+public class GamepadRecording extends SimpleOpMode {
+    @Override
+    public void init(RobotContext ctx) throws Exception {
+        if (gamepad1.hasRecord("test")) {
+            gamepad1.startPlayback("test");
+        } else {
+            gamepad1.startRecording("test");
         }
     }
 
-    lintOptions {
-        textReport true
-        // location to write the output; can be a file or 'stdout'
-        textOutput 'stdout'
-    }
-}
+    @Override
+    public void loop(RobotContext ctx) throws Exception {
 
-repositories {
-    flatDir {
-        dirs '../libs'
     }
-}
 
-dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'ModernRobotics-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
-    compile 'org.jetbrains:annotations:13.0'
+    @Override
+    public void stop(RobotContext ctx, LinkedList<Object> objects) throws Exception {
+        if (gamepad1.isRecording()) {
+            gamepad1.stopRecording();
+        } else if (gamepad1.isPlayingBack()) {
+            gamepad1.stopPlayback();
+        }
+    }
 }

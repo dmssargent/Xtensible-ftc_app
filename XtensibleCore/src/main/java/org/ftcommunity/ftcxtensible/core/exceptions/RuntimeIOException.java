@@ -3,7 +3,7 @@
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished todo so, subject to
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
@@ -16,16 +16,27 @@
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.peoplepluscomputers.xanalytics;
+package org.ftcommunity.ftcxtensible.core.exceptions;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
+import java.io.IOException;
 
 /**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ * Created by David on 1/24/2016.
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
-    public ApplicationTest() {
-        super(Application.class);
+public class RuntimeIOException extends RuntimeException {
+    public RuntimeIOException(String ex) {
+        super(ex, new IOException(ex));
+    }
+
+    public RuntimeIOException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
+
+    public RuntimeIOException() {
+        super(new IOException());
+    }
+
+    public RuntimeIOException(Throwable throwable) {
+        super(throwable);
     }
 }

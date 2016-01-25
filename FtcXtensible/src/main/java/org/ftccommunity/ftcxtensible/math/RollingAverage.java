@@ -15,48 +15,11 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-apply plugin: 'com.android.library'
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion '23.0.2'
+package org.ftccommunity.ftcxtensible.math;
 
-    defaultConfig {
-        minSdkVersion 19
-        //noinspection OldTargetApi
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    lintOptions {
-        textReport true
-        // location to write the output; can be a file or 'stdout'
-        textOutput 'stdout'
-    }
-}
-
-repositories {
-    flatDir {
-        dirs "../libs"
-    }
-}
-
-dependencies {
-    testCompile 'junit:junit:4.12'
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'ModernRobotics-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
-    compile 'org.jetbrains:annotations:13.0'
+/**
+ * Created by David on 1/23/2016.
+ */
+public class RollingAverage {
 }

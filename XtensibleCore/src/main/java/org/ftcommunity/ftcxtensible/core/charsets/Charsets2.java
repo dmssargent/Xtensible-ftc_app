@@ -15,49 +15,41 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-apply plugin: 'com.android.library'
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion '23.0.2'
+package org.ftcommunity.ftcxtensible.core.charsets;
 
-    defaultConfig {
-        minSdkVersion 19
-        //noinspection OldTargetApi
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+import android.util.Base64;
 
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+import java.nio.charset.Charset;
+
+/**
+ * Created by David on 1/24/2016.
+ */
+public class Charsets2 {
+    private static final Charset utf8 = Charset.forName("UTF-8");
+    private static final Charset ascii = Charset.forName("ASCII");
+
+    public Charset defaultCharset() {
+        return utf8();
     }
 
-    lintOptions {
-        textReport true
-        // location to write the output; can be a file or 'stdout'
-        textOutput 'stdout'
+    public Charset utf8() {
+        return utf8;
     }
-}
 
-repositories {
-    flatDir {
-        dirs '../libs'
+    public Charset ascii() {
+        return ascii;
     }
-}
 
-dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'ModernRobotics-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
-    compile 'org.jetbrains:annotations:13.0'
+    public String base64encode(String data) {
+        return Base64.encodeToString(data.getBytes(defaultCharset()), Base64.DEFAULT);
+    }
+
+    public byte[] base64EncodeToByteArray(byte[] bytes) {
+        return Base64.encode(bytes, Base64.DEFAULT);
+    }
+
+    public byte[] base64decode(String data) {
+        return Base64.decode(data, Base64.DEFAULT);
+    }
 }
