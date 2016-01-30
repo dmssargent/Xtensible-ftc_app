@@ -75,7 +75,7 @@ public class NetworkAnalyzer extends OpMode {
         hardwareMap.appContext.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                LinkedList<ScanResult> results = new LinkedList<ScanResult>(wifi.getScanResults());
+                LinkedList<ScanResult> results = new LinkedList<>(wifi.getScanResults());
                 scanResults(results);
             }
         }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
@@ -116,7 +116,7 @@ public class NetworkAnalyzer extends OpMode {
 
     private void scanResults(LinkedList<ScanResult> results) {
         @SuppressLint("UseSparseArrays")
-        HashMap<Integer, Integer> frequencyCount = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> frequencyCount = new HashMap<>();
 
         for (ScanResult result : results) {
             WifiManager.calculateSignalLevel(result.level, 100);
@@ -132,7 +132,7 @@ public class NetworkAnalyzer extends OpMode {
         }
         RobotLog.d("Done displaying networks!");
 
-        LinkedList<Map.Entry<Integer, Integer>> frequencies = new LinkedList<Map.Entry<Integer, Integer>>(frequencyCount.entrySet());
+        LinkedList<Map.Entry<Integer, Integer>> frequencies = new LinkedList<>(frequencyCount.entrySet());
         Collections.sort(frequencies, new Comparator<Map.Entry<Integer, Integer>>() {
             @Override
             public int compare(Map.Entry<Integer, Integer> lhs, Map.Entry<Integer, Integer> rhs) {

@@ -1,4 +1,4 @@
-package org.ftcommunity.i2clibrary;
+package org.ftccommunity.i2clibrary;
 
 import org.junit.Test;
 

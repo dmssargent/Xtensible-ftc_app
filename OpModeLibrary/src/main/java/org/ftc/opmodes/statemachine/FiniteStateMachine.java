@@ -49,7 +49,7 @@ public class FiniteStateMachine<STATE extends Enum & FiniteStateMachine.State, T
      */
     public FiniteStateMachine(Class<? extends STATE> enumeration, T opMode) throws NullPointerException {
         this(opMode);
-        states = new LinkedList<STATE>(EnumSet.allOf(checkNotNull(enumeration)));
+        states = new LinkedList<>(EnumSet.allOf(checkNotNull(enumeration)));
         index = 0;
     }
 
@@ -173,7 +173,7 @@ public class FiniteStateMachine<STATE extends Enum & FiniteStateMachine.State, T
     }
 
     private LinkedList<STATE> getListFromEnum(STATE[] states) {
-        return new LinkedList<STATE>(Arrays.asList(states));
+        return new LinkedList<>(Arrays.asList(states));
     }
 
     /**

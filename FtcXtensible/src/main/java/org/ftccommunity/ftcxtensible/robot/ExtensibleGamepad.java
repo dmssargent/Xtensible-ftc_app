@@ -27,13 +27,13 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.ftccommunity.ftcxtensible.core.exceptions.RuntimeIOException;
+import org.ftccommunity.ftcxtensible.core.internal.HashUtil;
+import org.ftccommunity.ftcxtensible.core.io.Files2;
 import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.math.CartesianCoordinates;
 import org.ftccommunity.ftcxtensible.math.PolarCoordinates;
-import org.ftcommunity.ftcxtensible.core.exceptions.RuntimeIOException;
-import org.ftcommunity.ftcxtensible.core.internal.HashUtil;
-import org.ftcommunity.ftcxtensible.core.io.Files2;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Closeable;
@@ -531,29 +531,9 @@ public class ExtensibleGamepad implements Closeable {
                 rightTrigger == s.rightTrigger;
     }
 
-    @Override
-    public int hashCode() {
-        HashUtil hash = new HashUtil(65);
-        hash.addFieldToHash(leftJoystick)
-                .addFieldToHash(rightJoystick)
-                .addFieldToHash(dpad)
-                .addFieldToHash(a)
-                .addFieldToHash(b)
-                .addFieldToHash(x)
-                .addFieldToHash(y)
-                .addFieldToHash(guide)
-                .addFieldToHash(start)
-                .addFieldToHash(back)
-                .addFieldToHash(leftBumper)
-                .addFieldToHash(rightBumper)
-                .addFieldToHash(leftTrigger)
-                .addFieldToHash(rightTrigger);
-        return hash.get();
-    }
-
     /**
      * Closes the gamepad and release any system resources it holds.
-     * <p/>
+     * <p>
      * <p>Although only the first call has any effect, it is safe to call close multiple times on
      * the same object. This is more lenient than the overridden {@code AutoCloseable.close()},
      * which may be called at most once.
@@ -667,17 +647,23 @@ public class ExtensibleGamepad implements Closeable {
     }
 
     @Override
-    public String toString() {
-        return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
-                        " dpad: %s" +
-                        " a: %s b: %s x: %s y: %s" +
-                        " guide: %s back: %s" +
-                        " left bumper: %s right bumper: %s" +
-                        " left trigger: %s right trigger: %s",
-                leftJoystick, rightJoystick, dpad,
-                a, b, x, y, guide, back,
-                leftBumper, rightBumper,
-                leftTrigger, rightTrigger);
+    public int hashCode() {
+        HashUtil hash = new HashUtil(65);
+        hash.addFieldToHash(leftJoystick)
+                .addFieldToHash(rightJoystick)
+                .addFieldToHash(dpad)
+                .addFieldToHash(a)
+                .addFieldToHash(b)
+                .addFieldToHash(x)
+                .addFieldToHash(y)
+                .addFieldToHash(guide)
+                .addFieldToHash(start)
+                .addFieldToHash(back)
+                .addFieldToHash(leftBumper)
+                .addFieldToHash(rightBumper)
+                .addFieldToHash(leftTrigger)
+                .addFieldToHash(rightTrigger);
+        return hash.get();
     }
 
     /**
@@ -1003,6 +989,14 @@ public class ExtensibleGamepad implements Closeable {
             return nextRecordId(RECORDS);
         }
 
+        public void save() throws IOException {
+            Gson gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().disableHtmlEscaping().create();
+            Writer writer = Files2.writer(RECORD_DIR + name + ".gsr.json");
+            gson.toJson(this, writer);
+            writer.flush();
+            writer.close();
+        }
+
         @Override
         public int hashCode() {
             int hashcode = 43657;
@@ -1017,13 +1011,7 @@ public class ExtensibleGamepad implements Closeable {
             return hashcode;
         }
 
-        public void save() throws IOException {
-            Gson gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().disableHtmlEscaping().create();
-            Writer writer = Files2.writer(RECORD_DIR + name + ".gsr.json");
-            gson.toJson(this, writer);
-            writer.flush();
-            writer.close();
-        }
+
 
         @Override
         public boolean equals(Object other) {
@@ -1070,6 +1058,20 @@ public class ExtensibleGamepad implements Closeable {
         public int userDefinedRight(RobotContext ctx, ExtensibleGamepad gamepad) {
             return 0;
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
+                        " dpad: %s" +
+                        " a: %s b: %s x: %s y: %s" +
+                        " guide: %s back: %s" +
+                        " left bumper: %s right bumper: %s" +
+                        " left trigger: %s right trigger: %s",
+                leftJoystick, rightJoystick, dpad,
+                a, b, x, y, guide, back,
+                leftBumper, rightBumper,
+                leftTrigger, rightTrigger);
     }
 
 }

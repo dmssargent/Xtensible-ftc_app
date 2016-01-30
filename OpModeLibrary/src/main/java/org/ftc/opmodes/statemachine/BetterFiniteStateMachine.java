@@ -43,10 +43,11 @@ public class BetterFiniteStateMachine<SYMBOL extends BetterFiniteStateMachine.St
 
     private BetterFiniteStateMachine(T opMode) {
         this.opMode = checkNotNull(opMode);
-        states = new LinkedHashMap<SYMBOL, State>();
+        states = new LinkedHashMap<>();
 
     }
 
+    @SafeVarargs
     private BetterFiniteStateMachine(T opMode, SYMBOL... symbols) {
         this(opMode);
         for (SYMBOL entry :
@@ -129,7 +130,7 @@ public class BetterFiniteStateMachine<SYMBOL extends BetterFiniteStateMachine.St
     }
 
     private LinkedList<SYMBOL> getListFromEnum(SYMBOL[] SYMBOLs) {
-        return new LinkedList<SYMBOL>(Arrays.asList(SYMBOLs));
+        return new LinkedList<>(Arrays.asList(SYMBOLs));
     }
 
     public enum State {
@@ -151,7 +152,7 @@ public class BetterFiniteStateMachine<SYMBOL extends BetterFiniteStateMachine.St
         private OP_MODE opMode;
 
         public Builder() {
-            states = new LinkedList<SYMBOL>();
+            states = new LinkedList<>();
         }
 
         public Builder<SYMBOL, OP_MODE> setActiveOpMode(OP_MODE opMode) {

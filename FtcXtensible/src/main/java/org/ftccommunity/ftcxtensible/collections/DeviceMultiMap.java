@@ -17,10 +17,7 @@
  */
 
 package org.ftccommunity.ftcxtensible.collections;
-
 import com.google.common.collect.ForwardingMap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 
@@ -36,16 +33,6 @@ public class DeviceMultiMap extends ForwardingMap<Class<? extends HardwareDevice
 
     public DeviceMultiMap() {
         this.delegate = new HashMap<>();
-    }
-
-    @Override
-    public DeviceMap<? extends HardwareDevice> get(@Nullable Object object) {
-        throw new UnsupportedOperationException("Attempted to use get(); use checkedGet()");
-    }
-
-    @Override
-    public DeviceMap<? extends HardwareDevice> put(@NotNull Class kClass, @NotNull DeviceMap value) {
-        throw new UnsupportedOperationException("Attempted to use put(); use checkedPut()");
     }
 
     public <T extends HardwareDevice> DeviceMap<T> checkedGet(@NotNull Class<T> type) {
@@ -67,6 +54,16 @@ public class DeviceMultiMap extends ForwardingMap<Class<? extends HardwareDevice
     @Override
     protected Map<Class<? extends HardwareDevice>, DeviceMap<? extends HardwareDevice>> delegate() {
         return delegate;
+    }
+
+    @Override
+    public DeviceMap<? extends HardwareDevice> get(@Nullable Object object) {
+        throw new UnsupportedOperationException("Attempted to use get(); use checkedGet()");
+    }
+
+    @Override
+    public DeviceMap<? extends HardwareDevice> put(@NotNull Class kClass, @NotNull DeviceMap value) {
+        throw new UnsupportedOperationException("Attempted to use put(); use checkedPut()");
     }
 
     /**

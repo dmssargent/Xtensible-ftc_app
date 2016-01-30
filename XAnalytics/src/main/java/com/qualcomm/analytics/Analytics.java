@@ -146,8 +146,7 @@ public class Analytics extends BroadcastReceiver {
     }
 
     public static String ping(URL baseUrl, String data) {
-        String var2 = call(baseUrl, data);
-        return var2;
+        return call(baseUrl, data);
     }
 
     public static String call(URL url, String data) {
@@ -187,25 +186,6 @@ public class Analytics extends BroadcastReceiver {
     }
 
     private static void c() {
-//        TrustManager[] var0 = new TrustManager[]{new X509TrustManager() {
-//            public X509Certificate[] getAcceptedIssuers() {
-//                return new X509Certificate[0];
-//            }
-//
-//            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-//            }
-//
-//            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-//            }
-//        }
-
-//        try {
-//            SSLContext var1 = SSLContext.getInstance("TLS");
-//            var1.init(null, var0, new SecureRandom());
-//            HttpsURLConnection.setDefaultSSLSocketFactory(var1.getSocketFactory());
-//        } catch (Exception var2) {
-//            var2.printStackTrace();
-//        }
 
     }
 
@@ -213,11 +193,15 @@ public class Analytics extends BroadcastReceiver {
         Bundle var3 = intent.getExtras();
         if (var3 != null && var3.containsKey("networkInfo")) {
             NetworkInfo var4 = (NetworkInfo) var3.get("networkInfo");
-            NetworkInfo.State var5 = var4.getState();
-            if (var5.equals(NetworkInfo.State.CONNECTED)) {
-                RobotLog.i("Analytics detected NetworkInfo.State.CONNECTED");
-                this.communicateWithServer();
+            NetworkInfo.State var5;
+            if (var4 != null) {
+                var5 = var4.getState();
+                if (var5.equals(NetworkInfo.State.CONNECTED)) {
+                    RobotLog.i("Analytics detected NetworkInfo.State.CONNECTED");
+                    this.communicateWithServer();
+                }
             }
+
         }
 
     }
@@ -460,11 +444,10 @@ public class Analytics extends BroadcastReceiver {
 
             var5.close();
             String var14 = "";
-            String[] var8 = var3;
             int var9 = var3.length;
 
             for (int var10 = 0; var10 < var9; ++var10) {
-                String var11 = var8[var10];
+                String var11 = var3[var10];
                 var14 = var14 + var4.get(var11.toLowerCase()) + " ";
             }
 

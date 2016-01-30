@@ -18,7 +18,7 @@
 
 package org.ftc.opmodes.examples;
 
-import com.qualcomm.hardware.MatrixDcMotorController;
+import com.qualcomm.hardware.matrix.MatrixDcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -44,7 +44,7 @@ public class MatrixControllerDemo extends OpMode {
     private DcMotor motor2;
     private DcMotor motor3;
     private DcMotor motor4;
-    private Set<DcMotor> motorSet = new HashSet<DcMotor>();
+    private Set<DcMotor> motorSet = new HashSet<>();
     private Servo servo1;
     private Servo servo2;
     private Servo servo3;
@@ -113,6 +113,13 @@ public class MatrixControllerDemo extends OpMode {
         motorOscTimer.reset();
         servoOscTimer.reset();
         spamPrevention.reset();
+    }
+
+    @Override
+    public void loop() {
+        handleMotors();
+        handleServos();
+        handleBattery();
     }
 
     @Override
@@ -198,12 +205,5 @@ public class MatrixControllerDemo extends OpMode {
             firstBattery = false;
         }
         telemetry.addData("Battery: ", ((float) battery / 1000));
-    }
-
-    @Override
-    public void loop() {
-        handleMotors();
-        handleServos();
-        handleBattery();
     }
 }

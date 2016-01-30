@@ -48,11 +48,10 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.ftccommunity.ftcxtensible.collections.DeviceMap;
 import org.ftccommunity.ftcxtensible.collections.DeviceMultiMap;
-import org.ftccommunity.ftcxtensible.hardware.ForwardingI2cDevice;
 import org.ftccommunity.ftcxtensible.hardware.QualcommForwardingI2cDevice;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.util.I2cFactory;
-import org.ftcommunity.i2clibrary.Wire;
+import org.ftccommunity.i2clibrary.Wire;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

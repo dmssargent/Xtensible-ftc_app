@@ -31,7 +31,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -41,6 +40,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.usb.UsbManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -55,7 +55,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.ftccommon.FtcEventLoop;
 import com.qualcomm.ftccommon.FtcRobotControllerService;
+import com.qualcomm.ftccommon.FtcRobotControllerService.FtcRobotControllerBinder;
 import com.qualcomm.ftccommon.LaunchActivityConstantsList;
 import com.qualcomm.ftccommon.Restarter;
 import com.qualcomm.ftccommon.UpdateUI;
@@ -79,6 +81,7 @@ public class FtcRobotControllerActivity extends Activity {
   private static final int REQUEST_CONFIG_WIFI_CHANNEL = 1;
   private static final boolean USE_DEVICE_EMULATION = false;
   private static final int NUM_GAMEPADS = 2;
+  protected WifiManager.WifiLock wifiLock;
   protected SharedPreferences preferences;
 
   protected UpdateUI.Callback callback;
@@ -95,12 +98,12 @@ public class FtcRobotControllerActivity extends Activity {
   protected Dimmer dimmer;
   protected LinearLayout entireScreenLayout;
   protected FtcRobotControllerService controllerService;
-  protected XtensibleEventLoop eventLoop;
+  protected FtcEventLoop eventLoop;
   private Utility utility;
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-      FtcRobotControllerService.FtcRobotControllerBinder binder = (FtcRobotControllerService.FtcRobotControllerBinder) service;
+      FtcRobotControllerBinder binder = (FtcRobotControllerBinder) service;
       onServiceBind(binder.getService());
     }
 
@@ -109,15 +112,6 @@ public class FtcRobotControllerActivity extends Activity {
       controllerService = null;
     }
   };
-
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-    if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(intent.getAction())) {
-      // a new USB device has been attached
-      DbgLog.msg("USB Device attached; app restart may be needed");
-    }
-  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -157,12 +151,10 @@ public class FtcRobotControllerActivity extends Activity {
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+    WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "");
+
     hittingMenuButtonBrightensScreen();
-    try {
-      Thread.sleep(0);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
     if (USE_DEVICE_EMULATION) {
       HardwareFactory.enableDeviceEmulation();
@@ -191,11 +183,21 @@ public class FtcRobotControllerActivity extends Activity {
       }
     });
 
+    wifiLock.acquire();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(intent.getAction())) {
+      // a new USB device has been attached
+      DbgLog.msg("USB Device attached; app restart may be needed");
+    }
   }
 
   @Override
@@ -210,6 +212,14 @@ public class FtcRobotControllerActivity extends Activity {
     if (controllerService != null) unbindService(connection);
 
     RobotLog.cancelWriteLogcatToDisk(this);
+
+    wifiLock.release();
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    // don't destroy assets on screen rotation
   }
 
   @Override
@@ -227,6 +237,7 @@ public class FtcRobotControllerActivity extends Activity {
       immersion.cancelSystemUIHide();
     }
   }
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -267,16 +278,9 @@ public class FtcRobotControllerActivity extends Activity {
   }
 
   @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    // don't destroy assets on screen rotation
-  }
-
-  @Override
   protected void onActivityResult(int request, int result, Intent intent) {
     if (request == REQUEST_CONFIG_WIFI_CHANNEL) {
       if (result == RESULT_OK) {
-        @SuppressLint("ShowToast")
         Toast toast = Toast.makeText(context, "Configuration Complete", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         showToast(toast);
@@ -310,10 +314,12 @@ public class FtcRobotControllerActivity extends Activity {
     // if we can't find the file, don't try and build the robot.
     if (fis == null) { return; }
 
+    HardwareFactory factory;
+
     // Modern Robotics Factory for use with Modern Robotics hardware
     HardwareFactory modernRoboticsFactory = new HardwareFactory(context);
     modernRoboticsFactory.setXmlInputStream(fis);
-    HardwareFactory factory = modernRoboticsFactory;
+    factory = modernRoboticsFactory;
 
     eventLoop = new XtensibleEventLoop(factory, new FtcOpModeRegister(), callback, this);
 

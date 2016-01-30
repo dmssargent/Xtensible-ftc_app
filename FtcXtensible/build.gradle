@@ -16,21 +16,19 @@
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
 apply plugin: 'org.sonarqube'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '23.0.2'
 
     defaultConfig {
         minSdkVersion 19
         //noinspection OldTargetApi
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -62,16 +60,6 @@ android {
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
     }
-
-    dexOptions {
-        incremental true
-    }
-}
-
-jacocoAndroidUnitTestReport {
-    csv.enabled false
-    html.enabled true
-    xml.enabled true
 }
 
 repositories {
@@ -82,10 +70,7 @@ repositories {
 }
 
 dependencies {
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'ModernRobotics-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
-    compile(name: 'Hardware-release', ext: 'aar')
+    compile project(':FtcSdk')
     compile files('libs/netty-all-4.0.30.Final.jar')
     compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.4'
@@ -96,4 +81,5 @@ dependencies {
     compile project(':XtensibleControllerBindings')
     compile project(':I2cLibrary')
     compile project(':XtensibleCore')
+    androidTestCompile 'junit:junit:4.12'
 }
