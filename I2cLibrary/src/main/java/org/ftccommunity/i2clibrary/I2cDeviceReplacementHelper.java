@@ -74,11 +74,11 @@ public class I2cDeviceReplacementHelper<TARGET> {
     // Operations
     //----------------------------------------------------------------------------------------------
 
-    boolean isArmed() {
+    public boolean isArmed() {
         return this.isArmed;
     }
 
-    void arm() {
+    public void arm() {
         if (!this.isArmed) {
             // Have the existing controller stop using the callback
             this.controller.deregisterForPortReadyCallback(this.targetPort);
@@ -89,7 +89,7 @@ public class I2cDeviceReplacementHelper<TARGET> {
         }
     }
 
-    void disarm() {
+    public void disarm() {
         if (this.isArmed) {
             this.isArmed = false;
 

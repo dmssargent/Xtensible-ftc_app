@@ -26,6 +26,7 @@ import org.ftccommunity.ftcxtensible.hardware.camera.CameraImageCallback;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.robot.RobotLogger;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,16 +43,6 @@ public class CameraOpMode extends ExtensibleOpMode {
     int blue = 0;
 
     @Override
-    public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        Bitmap image = ctx.cameraManager().getNextImage();
-        if (image != null) {
-            ctx.log().i(TAG, image.toString());
-        }
-
-        telemetry().data(TAG, "hello red: " + red / 255 + "%");
-    }
-
-    @Override
     public void init(final RobotContext ctx, LinkedList<Object> out) throws Exception {
         ctx.cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
         ctx.cameraManager().prepareForCapture();
@@ -64,12 +55,22 @@ public class CameraOpMode extends ExtensibleOpMode {
 
     @Override
     public void init_loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        hardwareMap().get("test");
+
     }
 
     @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
 
+    }
+
+    @Override
+    public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+        Bitmap image = ctx.cameraManager().getNextImage();
+        if (image != null) {
+            RobotLogger.i(TAG, image.toString());
+        }
+
+        telemetry().data(TAG, "red: " + red / 255 + "%");
     }
 
     @Override
@@ -113,7 +114,7 @@ public class CameraOpMode extends ExtensibleOpMode {
                     File imageFile = new File(folder, path);
                     FileOutputStream file = new FileOutputStream(imageFile);
                     orig.get().compress(Bitmap.CompressFormat.PNG, 100, file);
-                    ctx.log().i(TAG, "Saving updateGamepads data picture: " + path);
+                    RobotLogger.i(TAG, "Saving updateGamepads data picture: " + path);
                 }
 
                 orig.get().getPixels(pixels, 0, orig.get().getWidth(), 0, 0, orig.get().getWidth(), orig.get().getHeight());
@@ -130,10 +131,10 @@ public class CameraOpMode extends ExtensibleOpMode {
                 blue = Color.blue(averageColor);
                 return null;
             } catch (NullPointerException ex) {
-                ctx.log().i(TAG, ex.getLocalizedMessage());
+                RobotLogger.i(TAG, ex.getLocalizedMessage());
                 return null;
             } catch (IOException e) {
-                ctx.log().e(TAG, e.getLocalizedMessage());
+                RobotLogger.e(TAG, e.getLocalizedMessage());
             }
 
             return null;

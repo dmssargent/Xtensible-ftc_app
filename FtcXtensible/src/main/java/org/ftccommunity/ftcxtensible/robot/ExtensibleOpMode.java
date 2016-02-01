@@ -43,9 +43,9 @@ import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
 import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;
 import org.ftccommunity.ftcxtensible.interfaces.FullOpMode;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
-import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
+import org.ftccommunity.ftcxtensible.opmodes.RobotsDontQuit;
 import org.ftccommunity.ftcxtensible.robot.handlers.RobotUncaughtExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,7 +67,6 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData;
  * @author David Sargent - FTC5395
  * @since 0.1
  */
-@Alpha
 @NotDocumentedWell
 public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, AbstractRobotContext {
     public static final String TAG = "XTENSIBLE_OP_MODE::";
@@ -77,16 +76,16 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     private final Gamepad gamepad2;
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
-
+    private final RobotContext robotContext;
     private ExtensibleLoopManager loopManager;
-
-    private RobotContext robotContext;
     private int loopCount;
     private volatile int skipNextLoop;
 
     private boolean logTimes;
     private EvictingQueue<Integer> loopTimes;
     private VariableTracer tracer;
+
+    private boolean isStopped = false;
 
     /**
      * Bootstraps the Extensible OpMode to the Xtensible library
@@ -105,7 +104,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         skipNextLoop = 0;
 
         if (parent == null) {
-            robotContext = new RobotContext(gamepad1, gamepad2, hardwareMap, telemetry);
+            robotContext = new RobotContext(hardwareMap, telemetry);
             parent = this;
         } else {
             robotContext = parent.robotContext;
@@ -113,6 +112,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
 
         loopManager = new ExtensibleLoopManager();
         loopTimes = EvictingQueue.create(50);
+
+        Log.i(TAG, "OpMode: " + this.getClass().getSimpleName());
     }
 
     /**
@@ -131,7 +132,15 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
      */
     @Override
     public final void init() {
-        prepare(super.hardwareMap.appContext, super.hardwareMap);
+        if (super.gamepad1 == null) {
+            super.gamepad1 = new Gamepad();
+        }
+
+        if (super.gamepad2 == null) {
+            super.gamepad2 = new Gamepad();
+        }
+
+        prepare(super.hardwareMap.appContext, super.hardwareMap, super.gamepad1, super.gamepad2);
 
         // Upgrade thread priority
         Thread.currentThread().setPriority(7);
@@ -157,7 +166,6 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         }
 
         postProcess(list, RobotStatus.MainStates.START);
-        // telemetry().sendData();
     }
 
 
@@ -259,32 +267,34 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
      */
     @Override
     public final void stop() {
-        LinkedList<Object> list = new LinkedList<>();
-        try {
-            stop(robotContext, list);
-        } catch (InterruptedException ex) {
-            return;
-        } catch (Exception e) {
-            handleException(list, e);
-        }
-
-        postProcess(list, RobotStatus.MainStates.STOP);
-
-        if (logTimes) {
-            File perfFile = new File(Environment.getExternalStorageDirectory() + "/perf_" + System.currentTimeMillis() + ".json");
-            Log.i(TAG, "Saving Loop Performance File at " + perfFile);
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        if (!isStopped) {
+            LinkedList<Object> list = new LinkedList<>();
             try {
-                FileWriter outputStream = new FileWriter(perfFile);
-                outputStream.write(gson.toJson(new PerformanceTuner((Integer[]) loopTimes.toArray())));
-            } catch (IOException ex) {
-                Log.e(TAG, ex.getMessage(), ex);
+                stop(robotContext, list);
+            } catch (InterruptedException ex) {
+                return;
+            } catch (Exception e) {
+                handleException(list, e);
             }
-        }
 
-        parent = null;
-        robotContext.release();
-        robotContext = null;
+            postProcess(list, RobotStatus.MainStates.STOP);
+
+            if (logTimes) {
+                File perfFile = new File(Environment.getExternalStorageDirectory() + "/perf_" + System.currentTimeMillis() + ".json");
+                Log.i(TAG, "Saving Loop Performance File at " + perfFile);
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                try {
+                    FileWriter outputStream = new FileWriter(perfFile);
+                    outputStream.write(gson.toJson(new PerformanceTuner((Integer[]) loopTimes.toArray())));
+                } catch (IOException ex) {
+                    Log.e(TAG, ex.getMessage(), ex);
+                }
+            }
+
+            parent = null;
+            release();
+            isStopped = true;
+        }
     }
 
     /**
@@ -371,9 +381,65 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
                 onFailure(robotContext, failure, RobotStatus.MainStates.EXCEPTION, o);
             }
         } else {
-            robotContext.status().setCurrentStateType(RobotStatus.Type.FAILURE);
-            RobotLog.setGlobalErrorMsg(e.toString());
-            Throwables.propagate(e);
+            if (this.getClass().isAnnotationPresent(RobotsDontQuit.class)) {
+                final Exception ex = e;
+                Thread codeRestarter = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        skipNextLoop = Integer.MAX_VALUE;
+                        final Gamepad gamepad1 = ExtensibleOpMode.super.gamepad1;
+                        final Gamepad gamepad2 = ExtensibleOpMode.super.gamepad2;
+                        RobotLog.setGlobalErrorMsg(ex.toString() + "\n Robot Code will restart automatically in 5 seconds");
+                        final OpModeManager mgr = robotContext.opModeManager();
+                        final String currentName = mgr.getActiveOpModeName();
+                        mgr.stopActiveOpMode();
+                        try {
+                            for (int i = 5; i >= 0; i--) {
+                                RobotLog.clearGlobalErrorMsg();
+                                RobotLog.setGlobalErrorMsg(ex.toString() + "\n Robot Code will restart automatically in " + i + " seconds");
+                                Thread.sleep(1000);
+                            }
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                        RobotLog.clearGlobalErrorMsg();
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                        final RobotContext context = robotContext;
+//                        try {
+//                            Method robotRestart = context.appContext().getClass().getMethod("requestRobotRestart");
+//                            robotRestart.setAccessible(true);
+//                            robotRestart.invoke(context.appContext());
+//                            Thread.sleep(10000);
+//                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InterruptedException e1) {
+//                            e1.printStackTrace();
+//                        }
+                        try {
+                            do {
+                                Log.i(TAG, "Attempted to start " + currentName);
+                                RobotLog.setGlobalErrorMsg("Attempting to start " + currentName);
+                                Thread.sleep(20);
+                                RobotLog.clearGlobalErrorMsg();
+                                Thread.sleep(20);
+                                mgr.initActiveOpMode(currentName);
+                                mgr.startActiveOpMode();
+                                mgr.runActiveOpMode(new Gamepad[]{gamepad1, gamepad2});
+                            } while (!mgr.getActiveOpModeName().equals(currentName));
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
+                codeRestarter.setName(robotContext.opModeManager().getActiveOpModeName() + " Restarter");
+                codeRestarter.start();
+            } else {
+                robotContext.status().setCurrentStateType(RobotStatus.Type.FAILURE);
+                RobotLog.setGlobalErrorMsg(e.toString());
+                Throwables.propagate(e);
+            }
         }
     }
 
@@ -403,65 +469,30 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         return loopManager;
     }
 
-    public ExtensibleGamepad gamepad1() {
-        return robotContext.gamepad1();
-    }
-
-    public ExtensibleGamepad gamepad2() {
-        return robotContext.gamepad2();
-    }
-
-    @Override
-    public ExtensibleCameraManager cameraManager() {
-        return robotContext.cameraManager();
-    }
-
-    @Override
-    public void release() {
-        robotContext.release();
-    }
-
-    @NotNull
-    @Override
-    public DataBinder controllerBindings() {
-        return robotContext.controllerBindings();
-    }
-
-    @NotNull
-    @Override
-    public View robotControllerView() {
-        return robotContext.robotControllerView();
-    }
-
     @Override
     public RobotContext enableNetworking() {
         return robotContext.enableNetworking();
     }
 
-    private void runAssistant(RunAssistant assistant) {
-        LinkedList<Object> list = new LinkedList<>();
-        try {
-            assistant.onExecute(robotContext, list);
-        } catch (InterruptedException ex) {
-            handleInterrupt(ex);
-            return;
-        } catch (Exception e) {
-            handleException(list, e);
-        }
-
-        postProcess(list, robotContext.status().getMainRobotState());
-    }
-
-    private void handleInterrupt(InterruptedException ex) {
-        if (!Thread.currentThread().isInterrupted()) {
-            Thread.currentThread().interrupt();
-        }
-        Throwables.propagate(ex);
-    }
-
     @Override
     public RobotContext disableNetworking() {
         return robotContext.disableNetworking();
+    }
+
+    @Override
+    public void bindHardwareMap(@NotNull HardwareMap hwMap) {
+        context().bindHardwareMap(hwMap);
+    }
+
+    @Override
+    public void rebuildHardwareMap() {
+        context().rebuildHardwareMap();
+    }
+
+    @Override
+    @Deprecated
+    public HardwareMap legacyHardwareMap() {
+        return robotContext.legacyHardwareMap();
     }
 
     @Override
@@ -484,8 +515,8 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
     }
 
     @Override
-    public void prepare(Context ctx, HardwareMap hwMap) {
-        robotContext.prepare(ctx, hwMap);
+    public void prepare(Context ctx, HardwareMap hwMap, Gamepad gamepad1, Gamepad gamepad2) {
+        robotContext.prepare(ctx, hwMap, gamepad1, gamepad2);
     }
 
     @Override
@@ -544,15 +575,34 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         return robotContext.telemetry();
     }
 
+    public ExtensibleGamepad gamepad1() {
+        return robotContext.gamepad1();
+    }
 
-    @Override
-    public void bindHardwareMap(@NotNull HardwareMap hwMap) {
-        context().bindHardwareMap(hwMap);
+    public ExtensibleGamepad gamepad2() {
+        return robotContext.gamepad2();
     }
 
     @Override
-    public void rebuildHardwareMap() {
-        context().rebuildHardwareMap();
+    public ExtensibleCameraManager cameraManager() {
+        return robotContext.cameraManager();
+    }
+
+    @Override
+    public void release() {
+        robotContext.release();
+    }
+
+    @NotNull
+    @Override
+    public DataBinder controllerBindings() {
+        return robotContext.controllerBindings();
+    }
+
+    @NotNull
+    @Override
+    public View robotControllerView() {
+        return robotContext.robotControllerView();
     }
 
     @Override
@@ -561,10 +611,25 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
         return robotContext.opModeManager();
     }
 
-    @Override
-    @Deprecated
-    public HardwareMap legacyHardwareMap() {
-        return robotContext.legacyHardwareMap();
+    private void runAssistant(RunAssistant assistant) {
+        LinkedList<Object> list = new LinkedList<>();
+        try {
+            assistant.onExecute(robotContext, list);
+        } catch (InterruptedException ex) {
+            handleInterrupt(ex);
+            return;
+        } catch (Exception e) {
+            handleException(list, e);
+        }
+
+        postProcess(list, robotContext.status().getMainRobotState());
+    }
+
+    private void handleInterrupt(InterruptedException ex) {
+        if (!Thread.currentThread().isInterrupted()) {
+            Thread.currentThread().interrupt();
+        }
+        Throwables.propagate(ex);
     }
 
     private class VariableTrace {

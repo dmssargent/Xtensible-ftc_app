@@ -27,41 +27,55 @@ import android.util.Log;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 
 import java.io.ByteArrayOutputStream;
+import java.util.concurrent.TimeUnit;
 
 public class CameraPreviewCallback implements Camera.PreviewCallback {
     private static final String TAG = CameraPreviewCallback.class.getSimpleName();
     private final ByteArrayOutputStream outputStream;
-    private int delay = 100;
+    private long delay;
     private RobotContext context;
     private long timestamp;
+    private ExtensibleCameraManager extensibleCameraManager;
+    private byte[] jpeg;
 
     public CameraPreviewCallback(RobotContext ctx, int captureDelay) {
         context = ctx;
         setDelay(captureDelay);
         outputStream = new ByteArrayOutputStream();
+        extensibleCameraManager = context.cameraManager();
     }
 
     @Override
     public void onPreviewFrame(final byte[] data, Camera camera) {
-        if (timestamp + getDelay() * 1E6 > System.nanoTime()) {
+        if (timestamp == 0) {
+            timestamp = System.nanoTime();
+        }
+        if (timestamp + delay >= System.nanoTime()) {
             return;
         }
 
-        if (context.cameraManager() != null && context.cameraManager().getCamera() != null) {
+        if (extensibleCameraManager != null && context.cameraManager().getCamera() != null) {
             Camera.Parameters parameters = context.cameraManager().getCamera().getParameters();
             Camera.Size previewSize = parameters.getPreviewSize();
             YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
                     previewSize.width,
                     parameters.getPreviewSize().height, null);
-            byte[] jpeg;
+
             synchronized (outputStream) {
-                image.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 100, outputStream);
-                jpeg = outputStream.toByteArray();
+                image.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 55, outputStream);
+
+                if (jpeg == null) {
+                    jpeg = outputStream.toByteArray();
+                } else {
+                    System.arraycopy(outputStream.toByteArray(), 0, jpeg, 0, jpeg.length);
+                }
                 outputStream.reset();
             }
             try {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
-                context.cameraManager().addImage(bitmap);
+                if (bitmap != null) {
+                    extensibleCameraManager.addImage(bitmap);
+                }
                 timestamp = System.nanoTime();
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
@@ -70,12 +84,12 @@ public class CameraPreviewCallback implements Camera.PreviewCallback {
         }
     }
 
-    public int getDelay() {
+    public long getDelay() {
         return delay;
     }
 
     public void setDelay(int milliseconds) {
-        this.delay = milliseconds;
+        this.delay = TimeUnit.NANOSECONDS.convert(milliseconds, TimeUnit.MILLISECONDS);
     }
 }
 

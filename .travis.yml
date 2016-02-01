@@ -8,6 +8,7 @@ android:
     - build-tools-23.0.2
     - android-23
     - platform-tools
+    - extra-android-m2repository
 
 
 env:

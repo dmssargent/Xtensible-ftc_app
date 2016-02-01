@@ -21,7 +21,7 @@ android {
 
     productFlavors {
         standard {
-            applicationId 'org.ftccommunity.ftcxtensible'
+            applicationId 'com.qualcomm.ftcrobotcontroller'
         }
     }
 
@@ -37,7 +37,6 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             testCoverageEnabled true
         }

@@ -39,6 +39,7 @@ import java.io.IOException;
  * @author David Sargent
  * @since 0.2.0
  */
+@SuppressWarnings("deprecation")
 @Beta
 @NotDocumentedWell
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
@@ -80,7 +81,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera = Camera.open(mgr.getCameraId());
             mgr.setCamera(mCamera);
         } catch (Exception ex) {
-            Log.e(TAG, ex.getLocalizedMessage());
+            Log.e(TAG, ex.getLocalizedMessage(), ex);
         }
 
         // Install a SurfaceHolder.Callback so we get notified when the
@@ -114,13 +115,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        // empty. Take care of releasing the Camera preview in your activity.
-        mCamera.setPreviewCallback(null);
-        mCamera.release();
-        mCamera = null;
-    }
-
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         // If your preview can change or rotate, take care of those events here.
         // Make sure to gentleStop the preview before resizing or reformatting it.
@@ -152,6 +146,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         } catch (Exception e) {
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        // empty. Take care of releasing the Camera preview in your activity.
+        mCamera.setPreviewCallback(null);
+        mCamera.release();
+        mCamera = null;
     }
 
     private void setCameraDisplayOrientation() {

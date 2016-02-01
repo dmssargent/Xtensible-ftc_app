@@ -19,25 +19,21 @@
 package org.ftccommunity.ftcxtensible.collections;
 
 import com.google.common.collect.ForwardingMap;
-import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.ftccommunity.ftcxtensible.hardware.I2cDevice;
-import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class DeviceMap<T extends HardwareDevice> extends ForwardingMap<String, T> {
+public class DeviceMap<T extends HardwareDevice> extends ForwardingMap<String, T> implements Iterable<T> {
     private final TypeToken<T> type = new TypeToken<T>(getClass()) {
     };
     private final ImmutableMap<String, T> delegate;
@@ -62,6 +58,21 @@ public class DeviceMap<T extends HardwareDevice> extends ForwardingMap<String, T
     }
 
     @Override
+    protected Map<String, T> delegate() {
+        return delegate;
+    }
+
+    @Override
+    public T remove(@NotNull Object value) {
+        throw new UnsupportedOperationException("Attempted to use remove()");
+    }
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException("Attempted to clear the map");
+    }
+
+    @Override
     public T get(Object key) {
         T o = super.get(checkNotNull(key, "Parameter key is null"));
         if (o == null) {
@@ -72,19 +83,9 @@ public class DeviceMap<T extends HardwareDevice> extends ForwardingMap<String, T
     }
 
     @Override
-    protected Map<String, T> delegate() {
-        return delegate;
-    }
-
-    @Override
     public T put(@NotNull String key, @NotNull T object) {
         throw new AssertionError("Attempted to put \"" + key +
                 "\" into a DeviceMap");
-    }
-
-    @Override
-    public void clear() {
-        throw new UnsupportedOperationException("Attempted to clear the map");
     }
 
     @Override
@@ -92,8 +93,13 @@ public class DeviceMap<T extends HardwareDevice> extends ForwardingMap<String, T
         throw new UnsupportedOperationException("Attempted to use putAll(map)");
     }
 
+    /**
+     * Returns an {@link Iterator} for the elements in this object.
+     *
+     * @return An {@code Iterator} instance.
+     */
     @Override
-    public T remove(@NotNull Object value) {
-        throw new UnsupportedOperationException("Attempted to use remove()");
+    public Iterator<T> iterator() {
+        return delegate.values().iterator();
     }
 }

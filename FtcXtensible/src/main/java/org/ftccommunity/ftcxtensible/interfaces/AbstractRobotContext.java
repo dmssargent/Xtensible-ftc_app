@@ -80,7 +80,7 @@ public interface AbstractRobotContext {
      */
     void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException;
 
-    void prepare(Context ctx, HardwareMap hwMap);
+    void prepare(Context ctx, HardwareMap basicHardwareMap, Gamepad gamepad1, Gamepad gamepad2);
 
     /**
      * Returns an App Context

@@ -36,7 +36,7 @@ public class DeviceMultiMap extends ForwardingMap<Class<? extends HardwareDevice
     }
 
     public <T extends HardwareDevice> DeviceMap<T> checkedGet(@NotNull Class<T> type) {
-        if (super.containsKey(type)) {
+        if (!super.containsKey(type)) {
             throw new IllegalArgumentException("Map doesn't contain " + type.getSimpleName());
         }
 

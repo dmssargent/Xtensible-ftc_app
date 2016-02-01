@@ -28,6 +28,7 @@ import org.ftccommunity.i2clibrary.interfaces.IFunc;
 import org.ftccommunity.i2clibrary.interfaces.II2cDevice;
 import org.ftccommunity.i2clibrary.interfaces.II2cDeviceClient;
 import org.ftccommunity.i2clibrary.interfaces.IOpModeStateTransitionEvents;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
@@ -91,7 +92,7 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
      * @param i2cDevice   the device we are to be a client of
      * @param i2cAddr8Bit its 8 bit i2cAddress
      */
-    public I2cDeviceClient(OpMode context, II2cDevice i2cDevice, int i2cAddr8Bit, boolean closeOnOpModeStop) {
+    public I2cDeviceClient(@Nullable OpMode context, II2cDevice i2cDevice, int i2cAddr8Bit, boolean closeOnOpModeStop) {
         i2cDevice.setI2cAddr(i2cAddr8Bit);
 
         this.i2cDevice = i2cDevice;

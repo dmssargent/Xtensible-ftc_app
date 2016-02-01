@@ -101,18 +101,11 @@ public class RobotContext implements AbstractRobotContext {
     /**
      * Generates OpMode Robot Context item bonded to the normal items in an OpMode
      *
-     * @param gp1   opMode reference to Gamepad 1
-     * @param gp2   opMode reference to Gamepad 2
      * @param hwMap opMode reference to the Hardware Map
      */
-    public RobotContext(Gamepad gp1, Gamepad gp2, HardwareMap hwMap, Telemetry tlmtry) {
+    public RobotContext(HardwareMap hwMap, Telemetry tlmtry) {
         this();
-        if (gp1 == null || gp2 == null || hwMap == null) {
-            throw new NullPointerException();
-        }
-
-        gamepad1 = gp1;
-        gamepad2 = gp2;
+        checkNotNull(hwMap, "XTENSIBLE: The hardware map is null");
 
         hardwareMap = new ExtensibleHardwareMap(hwMap);
         basicHardwareMap = hwMap;
@@ -245,10 +238,12 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     @Override
-    public void prepare(Context ctx, HardwareMap basicHardwareMap) {
+    public void prepare(Context ctx, HardwareMap basicHardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         checkArgument(ctx instanceof Activity, "Invalid context; it must be of an activity context type");
         bindAppContext(ctx);
-        bindHardwareMap(basicHardwareMap);
+        bindHardwareMap(checkNotNull(basicHardwareMap));
+        this.gamepad1 = checkNotNull(gamepad1, "Gamepad 1 is null");
+        this.gamepad2 = checkNotNull(gamepad2, "Gamepad 2 is null");
 
         layout = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.RC_VIEW));
         opModeManager = ((OpModeManager) controllerBindings().objects().get(DataBinder.RC_MANAGER));

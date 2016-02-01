@@ -19,6 +19,7 @@
 package org.ftc.opmodes;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.opmodes.RobotsDontQuit;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotLogger;
 import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
@@ -27,6 +28,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 @Autonomous(name = "Hello World Example")
+@RobotsDontQuit
 public class HelloWorld extends SimpleOpMode {
     private final String MESS = "MESS";
 
@@ -36,18 +38,17 @@ public class HelloWorld extends SimpleOpMode {
     }
 
     @Override
-    public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        telemetry.data(MESS, "Start Date: " +
-                (new Date((long) (System.nanoTime() / 1E3))).toString());
-    }
-
-    @Override
     public void loop(RobotContext ctx) {
         RobotLogger.i(MESS, "Current loop count: " + String.valueOf(getLoopCount()));
         telemetry.data(MESS, "Hello, World!");
         telemetry.data(MESS, "How are you doing?");
-
         //opModeManager().
+    }
+
+    @Override
+    public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
+        telemetry.data(MESS, "Start Date: " +
+                (new Date((long) (System.nanoTime() / 1E3))).toString());
     }
 
     @Override

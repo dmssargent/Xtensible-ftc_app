@@ -34,6 +34,9 @@
     android:name="android.permission.WRITE_SETTINGS"
     android:required="true" />
 
+  <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-feature android:name="android.hardware.Camera" />
+
   <uses-feature android:name="android.hardware.usb.accessory" />
 
   <application

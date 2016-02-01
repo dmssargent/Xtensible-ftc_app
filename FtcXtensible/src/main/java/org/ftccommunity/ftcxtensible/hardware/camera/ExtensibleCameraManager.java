@@ -23,6 +23,8 @@ import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
@@ -49,7 +51,7 @@ public class ExtensibleCameraManager {
 
     private final EvictingQueue<SoftReference<Bitmap>> imageQueue;
     private final RobotContext context;
-    CameraPreview view;
+    private CameraPreview view;
     private Camera camera;
     private Camera.CameraInfo info;
     private int cameraId;
@@ -94,8 +96,7 @@ public class ExtensibleCameraManager {
             throw e;
         }
 
-
-        return this; // returns null if camera is unavailable
+        return this;
     }
 
     /**
@@ -236,19 +237,22 @@ public class ExtensibleCameraManager {
 
         @Override
         public void run() {
-            view = new CameraPreview(ctx);
+            try {
+                view = new CameraPreview(ctx);
+                view.setLayoutParams(context.robotControllerView().getLayoutParams());
 
-            RelativeLayout relativeLayout = new RelativeLayout(context.appContext());
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(view.getLayoutParams());
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            layoutParams.width /= 2;
-            layoutParams.height /= 2;
+                RelativeLayout relativeLayout = new RelativeLayout(context.appContext());
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-            relativeLayout.addView(view, layoutParams);
-            ((RelativeLayout) ctx.robotControllerView()).addView(relativeLayout);
+                relativeLayout.addView(view, layoutParams);
+                ((RelativeLayout) ctx.robotControllerView()).addView(relativeLayout);
 
-            finishPrep();
+                finishPrep();
+            } catch (Exception ex) {
+                Log.e("CAMERA_MGR", "Prep Capture Failed", ex);
+            }
         }
     }
 
@@ -263,8 +267,11 @@ public class ExtensibleCameraManager {
         @Override
         public void run() {
             try {
-                ((RelativeLayout) ctx.robotControllerView()).removeView(view);
-                view = null;
+                if (view != null) {
+                    view.setVisibility(View.GONE);
+                    ((RelativeLayout) ctx.robotControllerView()).removeView(view);
+                    view = null;
+                }
             } catch (Exception ex) {
                 Log.wtf(TAG, ex);
             }
