@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftc.opmodes.examples.pushbot;
 
 import com.qualcomm.ftccommon.DbgLog;
@@ -12,13 +29,11 @@ import com.qualcomm.robotcore.util.Range;
 //
 
 /**
- * Provides a single sensor access point between custom op-modes and the
- * OpMode class for the Push Bot.  It does this by extending the original Push
- * Bot's hardware and telemetry classes.
- * <p>
- * This class prevents the custom op-mode from throwing an exception at runtime.
- * If any hardware fails to map, a warning will be shown via telemetry data,
- * calls to methods will fail, but will not cause the application to crash.
+ * Provides a single sensor access point between custom op-modes and the OpMode class for the Push
+ * Bot.  It does this by extending the original Push Bot's hardware and telemetry classes. <p> This
+ * class prevents the custom op-mode from throwing an exception at runtime. If any hardware fails to
+ * map, a warning will be shown via telemetry data, calls to methods will fail, but will not cause
+ * the application to crash.
  *
  * @author SSI Robotics
  * @version 2015-08-13-20-04
@@ -87,9 +102,7 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     //
 
     /**
-     * Construct the class.
-     * <p>
-     * The system calls this member when the class is instantiated.
+     * Construct the class. <p> The system calls this member when the class is instantiated.
      */
     public PushBotHardwareSensors() {
         //
@@ -105,9 +118,8 @@ public class PushBotHardwareSensors extends PushBotTelemetry
     } // PushBotHardwareSensors
 
     /**
-     * Perform any actions that are necessary when the OpMode is enabled.
-     * <p>
-     * The system calls this member once when the OpMode is enabled.
+     * Perform any actions that are necessary when the OpMode is enabled. <p> The system calls this
+     * member once when the OpMode is enabled.
      */
     @Override
     public void init() {

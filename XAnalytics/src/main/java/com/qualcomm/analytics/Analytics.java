@@ -1,21 +1,20 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package com.qualcomm.analytics;
 
 import android.content.BroadcastReceiver;
@@ -46,20 +45,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +74,7 @@ public class Analytics extends BroadcastReceiver {
     public static final String EXTERNAL_STORAGE_DIRECTORY_PATH = Environment.getExternalStorageDirectory() + "/";
     public static final String LAST_UPLOAD_DATE = "last_upload_date";
     public static final String MAX_DEVICES = "max_usb_devices";
-//    static final HostnameVerifier l = new HostnameVerifier() {
+    //    static final HostnameVerifier l = new HostnameVerifier() {
 //        public boolean verify(String hostname, SSLSession session) {
 //            return true;
 //        }
@@ -152,8 +146,7 @@ public class Analytics extends BroadcastReceiver {
     }
 
     public static String ping(URL baseUrl, String data) {
-        String var2 = call(baseUrl, data);
-        return var2;
+        return call(baseUrl, data);
     }
 
     public static String call(URL url, String data) {
@@ -193,25 +186,6 @@ public class Analytics extends BroadcastReceiver {
     }
 
     private static void c() {
-//        TrustManager[] var0 = new TrustManager[]{new X509TrustManager() {
-//            public X509Certificate[] getAcceptedIssuers() {
-//                return new X509Certificate[0];
-//            }
-//
-//            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-//            }
-//
-//            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-//            }
-//        }
-
-//        try {
-//            SSLContext var1 = SSLContext.getInstance("TLS");
-//            var1.init(null, var0, new SecureRandom());
-//            HttpsURLConnection.setDefaultSSLSocketFactory(var1.getSocketFactory());
-//        } catch (Exception var2) {
-//            var2.printStackTrace();
-//        }
 
     }
 
@@ -219,11 +193,15 @@ public class Analytics extends BroadcastReceiver {
         Bundle var3 = intent.getExtras();
         if (var3 != null && var3.containsKey("networkInfo")) {
             NetworkInfo var4 = (NetworkInfo) var3.get("networkInfo");
-            NetworkInfo.State var5 = var4.getState();
-            if (var5.equals(NetworkInfo.State.CONNECTED)) {
-                RobotLog.i("Analytics detected NetworkInfo.State.CONNECTED");
-                this.communicateWithServer();
+            NetworkInfo.State var5;
+            if (var4 != null) {
+                var5 = var4.getState();
+                if (var5.equals(NetworkInfo.State.CONNECTED)) {
+                    RobotLog.i("Analytics detected NetworkInfo.State.CONNECTED");
+                    this.communicateWithServer();
+                }
             }
+
         }
 
     }
@@ -466,11 +444,10 @@ public class Analytics extends BroadcastReceiver {
 
             var5.close();
             String var14 = "";
-            String[] var8 = var3;
             int var9 = var3.length;
 
             for (int var10 = 0; var10 < var9; ++var10) {
-                String var11 = var8[var10];
+                String var11 = var3[var10];
                 var14 = var14 + var4.get(var11.toLowerCase()) + " ";
             }
 

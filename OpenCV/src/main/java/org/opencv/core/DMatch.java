@@ -3,8 +3,8 @@ package org.opencv.core;
 //C++: class DMatch
 
 /**
- * Structure for matching: query descriptor index, train descriptor index, train
- * image index and distance between descriptors.
+ * Structure for matching: query descriptor index, train descriptor index, train image index and
+ * distance between descriptors.
  */
 public class DMatch {
 

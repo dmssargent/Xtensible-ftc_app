@@ -1,20 +1,28 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco-android'
 
 android {
     defaultConfig {
         minSdkVersion 19
         //noinspection OldTargetApi
-        targetSdkVersion 22
-        multiDexEnabled = true
+        targetSdkVersion 23
 
        // useJack = true
+        //testInstrumentationRunner 'android.support.test.InstrumentationTestRunner'
+        // testApplicationId 'org.ftccommunity.ftcxtensible.test'
     }
-    compileSdkVersion 22
-    buildToolsVersion '23.0.1'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    productFlavors {
+        standard {
+            applicationId 'com.qualcomm.ftcrobotcontroller'
+        }
     }
 
     lintOptions {
@@ -23,8 +31,22 @@ android {
         textOutput 'stdout'
     }
 
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
 
+    buildTypes {
+        debug {
+            versionNameSuffix '-debug'
+            testCoverageEnabled true
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
 }
+
 
 repositories {
     flatDir {
@@ -43,17 +65,19 @@ allprojects {
 }
 
 dependencies {
-    compile files('libs/android-support-v4.jar')
-    compile(name: 'RobotCore-release', ext: 'aar')
-    compile(name: 'Hardware-release', ext: 'aar')
-    compile(name: 'FtcCommon-release', ext: 'aar')
-    compile(name: 'ModernRobotics-release', ext: 'aar')
-    compile(name: 'WirelessP2p-release', ext: 'aar')
+    compile project(':FtcSdk')
     compile project(':XAnalytics')
     compile project(':FtcXtensible')
     compile project(':OpModeAnnotations')
     compile project(':OpModeLibrary')
     compile project(':XSimplify')
     compile project(':XtensibleControllerBindings')
-    //androidTestCompile 'org.jacoco:jacoco-maven-plugin:0.7.5.201505241946'
+
+    //noinspection GradleDependency
+    compile 'com.android.support:support-annotations:23.0.1'
+    testCompile 'org.assertj:assertj-core:3.3.0'
+    testCompile 'junit:junit:4.12'
+
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support.test:rules:0.4.1'
 }

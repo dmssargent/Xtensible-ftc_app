@@ -16,8 +16,8 @@ public class KeyPoint {
      */
     public float angle;
     /**
-     * The response, by which the strongest keypoints have been selected. Can
-     * be used for further sorting or subsampling.
+     * The response, by which the strongest keypoints have been selected. Can be used for further
+     * sorting or subsampling.
      */
     public float response;
     /**
@@ -25,8 +25,7 @@ public class KeyPoint {
      */
     public int octave;
     /**
-     * Object ID, that can be used to cluster keypoints by an object they
-     * belong to.
+     * Object ID, that can be used to cluster keypoints by an object they belong to.
      */
     public int class_id;
 

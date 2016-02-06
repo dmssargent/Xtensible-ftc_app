@@ -1,30 +1,31 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftccommunity.ftcxtensible.hardware.camera;
+
+import com.google.common.collect.EvictingQueue;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-
-import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
 import org.ftccommunity.ftcxtensible.internal.Beta;
@@ -37,8 +38,8 @@ import java.util.Date;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Handles the camera behind the scenes, this is the recommended way to grab an camera for
- * further usage
+ * Handles the camera behind the scenes, this is the recommended way to grab an camera for further
+ * usage
  *
  * @author David Sargent
  * @since 0.2
@@ -49,14 +50,13 @@ public class ExtensibleCameraManager {
     private static final String TAG = "CAMERA_MGR::";
 
     private final EvictingQueue<SoftReference<Bitmap>> imageQueue;
-    CameraPreview view;
+    private final RobotContext context;
+    private CameraPreview view;
     private Camera camera;
     private Camera.CameraInfo info;
     private int cameraId;
     private Date latestTimestamp;
     private Date prepTime;
-    private final RobotContext context;
-
     private CameraPreviewCallback previewCallback;
     private CameraImageCallback imageProcessingCallback;
 
@@ -96,8 +96,7 @@ public class ExtensibleCameraManager {
             throw e;
         }
 
-
-        return this; // returns null if camera is unavailable
+        return this;
     }
 
     /**
@@ -238,19 +237,22 @@ public class ExtensibleCameraManager {
 
         @Override
         public void run() {
-            view = new CameraPreview(ctx);
+            try {
+                view = new CameraPreview(ctx);
+                view.setLayoutParams(context.robotControllerView().getLayoutParams());
 
-            RelativeLayout relativeLayout = new RelativeLayout(context.appContext());
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(view.getLayoutParams());
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            layoutParams.width /= 2;
-            layoutParams.height /= 2;
+                RelativeLayout relativeLayout = new RelativeLayout(context.appContext());
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-            relativeLayout.addView(view, layoutParams);
-            ((RelativeLayout) ctx.robotControllerView()).addView(relativeLayout);
+                relativeLayout.addView(view, layoutParams);
+                ((RelativeLayout) ctx.robotControllerView()).addView(relativeLayout);
 
-            finishPrep();
+                finishPrep();
+            } catch (Exception ex) {
+                Log.e("CAMERA_MGR", "Prep Capture Failed", ex);
+            }
         }
     }
 
@@ -265,8 +267,11 @@ public class ExtensibleCameraManager {
         @Override
         public void run() {
             try {
-                ((RelativeLayout) ctx.robotControllerView()).removeView(view);
-                view = null;
+                if (view != null) {
+                    view.setVisibility(View.GONE);
+                    ((RelativeLayout) ctx.robotControllerView()).removeView(view);
+                    view = null;
+                }
             } catch (Exception ex) {
                 Log.wtf(TAG, ex);
             }

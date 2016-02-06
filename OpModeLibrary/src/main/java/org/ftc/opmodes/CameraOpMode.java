@@ -1,21 +1,20 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftc.opmodes;
 
 import android.graphics.Bitmap;
@@ -27,6 +26,7 @@ import org.ftccommunity.ftcxtensible.hardware.camera.CameraImageCallback;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.robot.RobotLogger;
 import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,15 +41,6 @@ import java.util.LinkedList;
 public class CameraOpMode extends ExtensibleOpMode {
     int red = 0;
     int blue = 0;
-    @Override
-    public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        Bitmap image = ctx.cameraManager().getNextImage();
-        if (image != null) {
-            ctx.log().i(TAG, image.toString());
-        }
-
-        telemetry().data(TAG, "hello red: " + red / 255 + "%");
-    }
 
     @Override
     public void init(final RobotContext ctx, LinkedList<Object> out) throws Exception {
@@ -64,12 +55,22 @@ public class CameraOpMode extends ExtensibleOpMode {
 
     @Override
     public void init_loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        hardwareMap().get("test");
+
     }
 
     @Override
     public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
 
+    }
+
+    @Override
+    public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+        Bitmap image = ctx.cameraManager().getNextImage();
+        if (image != null) {
+            RobotLogger.i(TAG, image.toString());
+        }
+
+        telemetry().data(TAG, "red: " + red / 255 + "%");
     }
 
     @Override
@@ -113,7 +114,7 @@ public class CameraOpMode extends ExtensibleOpMode {
                     File imageFile = new File(folder, path);
                     FileOutputStream file = new FileOutputStream(imageFile);
                     orig.get().compress(Bitmap.CompressFormat.PNG, 100, file);
-                    ctx.log().i(TAG, "Saving updateGamepads data picture: " + path);
+                    RobotLogger.i(TAG, "Saving updateGamepads data picture: " + path);
                 }
 
                 orig.get().getPixels(pixels, 0, orig.get().getWidth(), 0, 0, orig.get().getWidth(), orig.get().getHeight());
@@ -130,10 +131,10 @@ public class CameraOpMode extends ExtensibleOpMode {
                 blue = Color.blue(averageColor);
                 return null;
             } catch (NullPointerException ex) {
-                ctx.log().i(TAG, ex.getLocalizedMessage());
+                RobotLogger.i(TAG, ex.getLocalizedMessage());
                 return null;
             } catch (IOException e) {
-                ctx.log().e(TAG, e.getLocalizedMessage());
+                RobotLogger.e(TAG, e.getLocalizedMessage());
             }
 
             return null;

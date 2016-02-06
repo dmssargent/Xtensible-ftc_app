@@ -1,4 +1,4 @@
-package com.example.xtensiblecontrollerbindings;
+package com.ftccommunity.xtensiblecontrollerbindings;
 
 import org.junit.Test;
 

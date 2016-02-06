@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftc.opmodes.examples.pushbot;
 
 //------------------------------------------------------------------------------
@@ -6,9 +23,8 @@ package org.ftc.opmodes.examples.pushbot;
 //
 
 /**
- * Provide a basic manual operational mode that uses the left and right
- * drive motors, left arm motor, servo motors and gamepad input from two
- * gamepads for the Push Bot.
+ * Provide a basic manual operational mode that uses the left and right drive motors, left arm
+ * motor, servo motors and gamepad input from two gamepads for the Push Bot.
  *
  * @author SSI Robotics
  * @version 2015-08-01-06-01
@@ -22,9 +38,7 @@ public class PushBotManual extends PushBotTelemetry
     //
 
     /**
-     * Construct the class.
-     * <p>
-     * The system calls this member when the class is instantiated.
+     * Construct the class. <p> The system calls this member when the class is instantiated.
      */
     public PushBotManual() {
         //
@@ -45,11 +59,9 @@ public class PushBotManual extends PushBotTelemetry
     //
 
     /**
-     * Implement a state machine that controls the robot during
-     * manual-operation.  The state machine uses gamepad input to transition
-     * between states.
-     * <p>
-     * The system calls this member repeatedly while the OpMode is running.
+     * Implement a state machine that controls the robot during manual-operation.  The state machine
+     * uses gamepad input to transition between states. <p> The system calls this member repeatedly
+     * while the OpMode is running.
      */
     @Override
     public void loop() {

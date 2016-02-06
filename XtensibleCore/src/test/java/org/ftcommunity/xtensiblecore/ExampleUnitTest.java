@@ -1,4 +1,4 @@
-package org.ftcommunity.ftcxtensible;
+package org.ftccommunity.ftcxtensible;
 
 import org.junit.Test;
 

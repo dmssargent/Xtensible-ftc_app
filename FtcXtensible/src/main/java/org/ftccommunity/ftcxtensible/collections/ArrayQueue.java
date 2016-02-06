@@ -1,21 +1,20 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftccommunity.ftcxtensible.collections;
 
 /**
@@ -26,23 +25,22 @@ package org.ftccommunity.ftcxtensible.collections;
  * @since 0.3.1
  */
 public class ArrayQueue<AnyType> {
+    private static final int DEFAULT_SIZE = 4;
     private AnyType[] queue;
     private int queueSize;
     private int head;
     private int tail;
-
-    private static final int DEFAULT_SIZE = 4;
-
-    @SuppressWarnings("unchecked") // The array casting is OK
-    private AnyType[] newQueue(int size) throws ClassCastException {
-        return (AnyType[]) new Object[size];
-    }
 
     public ArrayQueue() {
         queue = newQueue(DEFAULT_SIZE);
         queueSize = queue.length;
         head = 0;
         tail = 0;
+    }
+
+    @SuppressWarnings("unchecked") // The array casting is OK
+    private AnyType[] newQueue(int size) throws ClassCastException {
+        return (AnyType[]) new Object[size];
     }
 
     public void close() {

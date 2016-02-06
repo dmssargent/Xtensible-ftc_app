@@ -1,21 +1,20 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftc.opmodes;
 
 import com.qualcomm.ftccommon.DbgLog;
@@ -29,13 +28,13 @@ public class CompassCalibration extends OpMode {
 
     // wheel speed
     final static double MOTOR_POWER = 0.2; // scale from 0 to 1
+    // Turn around at least twice in 20 seconds.
+    private final double turnTime = 20.0;
     // when paused time as passed, we will switch back to measurement mode.
     double pauseTime = 2.0;
     CompassSensor compass;
     DcMotor motorRight;
     DcMotor motorLeft;
-    // Turn around at least twice in 20 seconds.
-    private final double turnTime = 20.0;
     private boolean keepTurning = true;
     private boolean returnToMeasurementMode = false;
     private boolean monitorCalibrationSuccess = false;

@@ -1,22 +1,20 @@
 /*
- * Copyright © 2015 David Sargent
- *
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the “Software”), to deal in the Software without restriction,
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- * do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
  * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftc.opmodes.statemachine;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -47,23 +45,23 @@ public class FiniteStateMachine<STATE extends Enum & FiniteStateMachine.State, T
      * and inject them into the state
      *
      * @param enumeration the class of the enum containing the states
-     * @param opMode the active {@link OpMode} to get dependencies from
+     * @param opMode      the active {@link OpMode} to get dependencies from
      */
     public FiniteStateMachine(Class<? extends STATE> enumeration, T opMode) throws NullPointerException {
         this(opMode);
-        states = new LinkedList<STATE>(EnumSet.allOf(checkNotNull(enumeration)));
+        states = new LinkedList<>(EnumSet.allOf(checkNotNull(enumeration)));
         index = 0;
     }
 
     /**
      * Creates a Finite State Machine with the given {@link State} array being the available states.
-     * The OpMode is a reference to your OpMode to get the dependencies of state,
-     * and inject them into the state
+     * The OpMode is a reference to your OpMode to get the dependencies of state, and inject them
+     * into the state
      *
      * @param states an array of states
      * @param opMode the active {@link OpMode} to get dependencies from
-     * @throws NullPointerException when either the <code>states</code> or <code>opMode</code> parameter
-     *                              is null
+     * @throws NullPointerException when either the <code>states</code> or <code>opMode</code>
+     *                              parameter is null
      */
     public FiniteStateMachine(STATE[] states, T opMode) throws NullPointerException {
         this(checkNotNull(opMode));
@@ -76,14 +74,22 @@ public class FiniteStateMachine<STATE extends Enum & FiniteStateMachine.State, T
      * then infered to be the other elements within the enum that the start state is. The OpMode is
      * a reference to your OpMode to get the dependencies of state, and inject them into the state
      *
-     * @param state the start state of the Finite State Machine
+     * @param state  the start state of the Finite State Machine
      * @param opMode the active {@link OpMode} to get dependencies from
-     * @throws NullPointerException when either the <code>states</code> or <code>opMode</code> parameter
-     *                              is null
+     * @throws NullPointerException when either the <code>states</code> or <code>opMode</code>
+     *                              parameter is null
      */
     public FiniteStateMachine(STATE state, T opMode) throws NullPointerException {
         this(checkNotNull(state.getDeclaringClass()), opMode);
         index = state.ordinal();
+    }
+
+    private static <T> T checkNotNull(T ref) {
+        if (ref == null) {
+            throw new NullPointerException();
+        }
+
+        return ref;
     }
 
     /**
@@ -99,8 +105,8 @@ public class FiniteStateMachine<STATE extends Enum & FiniteStateMachine.State, T
         STATE state = states.get(index);
         if (state.name().equalsIgnoreCase("NOTHING"))
 
-        // Inject requested variables
-        inject(state, "hardwareMap", HardwareMap.class, opMode.hardwareMap);
+            // Inject requested variables
+            inject(state, "hardwareMap", HardwareMap.class, opMode.hardwareMap);
         inject(state, "gamepad1", Gamepad.class, opMode.gamepad1);
         inject(state, "gamepad2", Gamepad.class, opMode.gamepad2);
         inject(state, "telemetry", Telemetry.class, opMode.telemetry);
@@ -162,19 +168,12 @@ public class FiniteStateMachine<STATE extends Enum & FiniteStateMachine.State, T
             if (!wasAccessible) {
                 field.setAccessible(false);
             }
-        } catch (IllegalAccessException|NoSuchFieldException ignored) {}
+        } catch (IllegalAccessException | NoSuchFieldException ignored) {
+        }
     }
 
     private LinkedList<STATE> getListFromEnum(STATE[] states) {
-        return new LinkedList<STATE>(Arrays.asList(states));
-    }
-
-    private static <T>  T checkNotNull(T ref) {
-        if (ref == null) {
-            throw new NullPointerException();
-        }
-
-        return ref;
+        return new LinkedList<>(Arrays.asList(states));
     }
 
     /**
@@ -182,10 +181,12 @@ public class FiniteStateMachine<STATE extends Enum & FiniteStateMachine.State, T
      */
     public interface State {
         /**
-         * Returns whether or not to change the state to the next state, called once for every {@link FiniteStateMachine#execute()}
-         * that is called, and after the {@link #execute()} is called
+         * Returns whether or not to change the state to the next state, called once for every
+         * {@link FiniteStateMachine#execute()} that is called, and after the {@link #execute()} is
+         * called
          *
-         * @return <code>true</code>, if the state should transition to the next state; <code>false</code> otherwise
+         * @return <code>true</code>, if the state should transition to the next state;
+         * <code>false</code> otherwise
          */
         boolean stateChange();
 

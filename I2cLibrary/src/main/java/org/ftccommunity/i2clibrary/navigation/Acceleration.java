@@ -1,0 +1,78 @@
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+package org.ftccommunity.i2clibrary.navigation;
+
+import org.ftccommunity.i2clibrary.interfaces.II2cDeviceClient;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+/**
+ * Acceleration represents a directed acceleration in three-space. Units are as specified in sensor
+ * initialization. The time at which the data was acquired is provided so as to facilitate
+ * integration of accelerations.
+ */
+public class Acceleration {
+    //----------------------------------------------------------------------------------------------
+    // State
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * the acceleration in the X direction
+     */
+    public double accelX;
+    /**
+     * the acceleration in the Y direction
+     */
+    public double accelY;
+    /**
+     * the acceleration in the Z direction
+     */
+    public double accelZ;
+
+    /**
+     * the time on the System.nanoTime() clock at which the data was acquired. If no timestamp is
+     * associated with this particular set of data, this value is zero
+     */
+    public long nanoTime;
+
+    //----------------------------------------------------------------------------------------------
+    // Construction
+    //----------------------------------------------------------------------------------------------
+
+    public Acceleration() {
+        this(0, 0, 0, 0);
+    }
+
+    public Acceleration(double accelX, double accelY, double accelZ, long nanoTime) {
+        this.accelX = accelX;
+        this.accelY = accelY;
+        this.accelZ = accelZ;
+        this.nanoTime = nanoTime;
+    }
+
+    public Acceleration(II2cDeviceClient.TimestampedData ts, double scale) {
+        ByteBuffer buffer = ByteBuffer.wrap(ts.data).order(ByteOrder.LITTLE_ENDIAN);
+        this.accelX = buffer.getShort() / scale;
+        this.accelY = buffer.getShort() / scale;
+        this.accelZ = buffer.getShort() / scale;
+        this.nanoTime = ts.nanoTime;
+    }
+
+}

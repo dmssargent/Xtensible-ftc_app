@@ -1,37 +1,24 @@
-/* Copyright (c) 2015 Craig MacFarlane
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Craig MacFarlane nor the names of its contributors
-may be used to endorse or promote products derived from this software without
-specific prior written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 package org.ftc.opmodes.examples;
 
-import com.qualcomm.hardware.MatrixDcMotorController;
+import com.qualcomm.hardware.matrix.MatrixDcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -57,7 +44,7 @@ public class MatrixControllerDemo extends OpMode {
     private DcMotor motor2;
     private DcMotor motor3;
     private DcMotor motor4;
-    private Set<DcMotor> motorSet = new HashSet<DcMotor>();
+    private Set<DcMotor> motorSet = new HashSet<>();
     private Servo servo1;
     private Servo servo2;
     private Servo servo3;
@@ -73,8 +60,7 @@ public class MatrixControllerDemo extends OpMode {
     private double servoPosition = 0.0;
 
     @Override
-    public void init()
-    {
+    public void init() {
         motor1 = hardwareMap.dcMotor.get("motor_1");
         motor2 = hardwareMap.dcMotor.get("motor_2");
         motor3 = hardwareMap.dcMotor.get("motor_3");
@@ -108,7 +94,7 @@ public class MatrixControllerDemo extends OpMode {
          * instance is "MatrixControllerMotor" and the servo controller
          * instance is "MatrixControllerServo".
          */
-        mc = (MatrixDcMotorController)hardwareMap.dcMotorController.get("MatrixController");
+        mc = (MatrixDcMotorController) hardwareMap.dcMotorController.get("MatrixController");
         motor1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         motor2.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         motor3.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
@@ -123,16 +109,21 @@ public class MatrixControllerDemo extends OpMode {
     }
 
     @Override
-    public void start()
-    {
+    public void start() {
         motorOscTimer.reset();
         servoOscTimer.reset();
         spamPrevention.reset();
     }
 
     @Override
-    public void stop()
-    {
+    public void loop() {
+        handleMotors();
+        handleServos();
+        handleBattery();
+    }
+
+    @Override
+    public void stop() {
         /*
          * An example of setting power for individual motors as normal.
          *
@@ -161,8 +152,7 @@ public class MatrixControllerDemo extends OpMode {
      *
      * Oscillate the motors.
      */
-    protected void handleMotors()
-    {
+    protected void handleMotors() {
         if ((firstMotors) || (motorOscTimer.time() > MOTOR_OSC_FREQ)) {
             motorPower = -motorPower;
 
@@ -187,8 +177,7 @@ public class MatrixControllerDemo extends OpMode {
      *
      * Oscillate the servos.
      */
-    protected void handleServos()
-    {
+    protected void handleServos() {
         if ((firstServos) || (servoOscTimer.time() > SERVO_OSC_FREQ)) {
             if (servoPosition == 0.0) {
                 servoPosition = 1.0;
@@ -209,21 +198,12 @@ public class MatrixControllerDemo extends OpMode {
      *
      * The Matrix controller has a separate battery whose voltage can be read.
      */
-    protected void handleBattery()
-    {
+    protected void handleBattery() {
         if ((firstBattery) || (spamPrevention.time() > SPAM_PREVENTION_FREQ)) {
             battery = mc.getBattery();
             spamPrevention.reset();
             firstBattery = false;
         }
-        telemetry.addData("Battery: ", ((float)battery/1000));
-    }
-
-    @Override
-    public void loop()
-    {
-        handleMotors();
-        handleServos();
-        handleBattery();
+        telemetry.addData("Battery: ", ((float) battery / 1000));
     }
 }

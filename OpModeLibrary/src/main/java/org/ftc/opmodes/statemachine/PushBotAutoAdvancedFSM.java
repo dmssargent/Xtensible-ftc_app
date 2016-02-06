@@ -1,21 +1,20 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftc.opmodes.statemachine;
 
 import org.ftc.opmodes.examples.pushbot.PushBotHardware;
@@ -24,19 +23,30 @@ import org.ftccommunity.ftcxtensible.internal.Alpha;
 @Alpha
 public class PushBotAutoAdvancedFSM extends PushBotHardware {
     /**
+     * A workaround to access this outer class from the state machine
+     */
+    private static PushBotAutoAdvancedFSM me;
+    private static States nextStateAfterWait;
+    /**
      * This class member remembers which state is currently active.  \
      */
     private FiniteStateMachine2<States, PushBotAutoAdvancedFSM> fsm;
 
     /**
-     * A workaround to access this outer class from the state machine
+     * Configures what the {@link States#WAIT} will return after the wait has finished
+     *
+     * @param stateAfterWait the state to go to after wait
+     * @return the <code>States.WAIT</code> object
      */
-    private static PushBotAutoAdvancedFSM me;
+    protected static States configureWait(States stateAfterWait) {
+        nextStateAfterWait = stateAfterWait;
+
+        return States.WAIT;
+    }
 
     /**
-     * Perform any actions that are necessary when the OpMode is enabled.
-     * <p/>
-     * The system calls this member once when the OpMode is enabled.
+     * Perform any actions that are necessary when the OpMode is enabled. <p/> The system calls this
+     * member once when the OpMode is enabled.
      */
     @Override
     public void start() {
@@ -51,11 +61,9 @@ public class PushBotAutoAdvancedFSM extends PushBotHardware {
     } // start
 
     /**
-     * Implement a state machine that controls the robot during auto-operation.
-     * The state machine uses a class member and encoder input to transition
-     * between states.
-     * <p/>
-     * The system calls this member repeatedly while the OpMode is running.
+     * Implement a state machine that controls the robot during auto-operation. The state machine
+     * uses a class member and encoder input to transition between states. <p/> The system calls
+     * this member repeatedly while the OpMode is running.
      */
     @Override
     public void loop() {
@@ -178,7 +186,8 @@ public class PushBotAutoAdvancedFSM extends PushBotHardware {
             }
 
             @Override
-            public void execute() {}
+            public void execute() {
+            }
         },
         DONE {
             @Override
@@ -189,19 +198,5 @@ public class PushBotAutoAdvancedFSM extends PushBotHardware {
             @Override
             public void execute() { /* Do nothing */ }
         }
-    }
-
-    private static States nextStateAfterWait;
-
-    /**
-     * Configures what the {@link States#WAIT} will return after the wait has finished
-     *
-     * @param stateAfterWait the state to go to after wait
-     * @return the <code>States.WAIT</code> object
-     */
-    protected static States configureWait(States stateAfterWait) {
-        nextStateAfterWait = stateAfterWait;
-
-        return States.WAIT;
     }
 }

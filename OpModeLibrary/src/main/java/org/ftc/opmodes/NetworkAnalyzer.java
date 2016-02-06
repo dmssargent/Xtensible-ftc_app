@@ -1,22 +1,24 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftc.opmodes;
+
+import com.google.common.collect.HashBiMap;
+import com.google.common.io.Files;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -26,8 +28,6 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 
-import com.google.common.collect.HashBiMap;
-import com.google.common.io.Files;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.RunShellCommand;
@@ -75,7 +75,7 @@ public class NetworkAnalyzer extends OpMode {
         hardwareMap.appContext.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                LinkedList<ScanResult> results = new LinkedList<ScanResult>(wifi.getScanResults());
+                LinkedList<ScanResult> results = new LinkedList<>(wifi.getScanResults());
                 scanResults(results);
             }
         }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
@@ -116,7 +116,7 @@ public class NetworkAnalyzer extends OpMode {
 
     private void scanResults(LinkedList<ScanResult> results) {
         @SuppressLint("UseSparseArrays")
-        HashMap<Integer, Integer> frequencyCount = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> frequencyCount = new HashMap<>();
 
         for (ScanResult result : results) {
             WifiManager.calculateSignalLevel(result.level, 100);
@@ -132,7 +132,7 @@ public class NetworkAnalyzer extends OpMode {
         }
         RobotLog.d("Done displaying networks!");
 
-        LinkedList<Map.Entry<Integer, Integer>> frequencies = new LinkedList<Map.Entry<Integer, Integer>>(frequencyCount.entrySet());
+        LinkedList<Map.Entry<Integer, Integer>> frequencies = new LinkedList<>(frequencyCount.entrySet());
         Collections.sort(frequencies, new Comparator<Map.Entry<Integer, Integer>>() {
             @Override
             public int compare(Map.Entry<Integer, Integer> lhs, Map.Entry<Integer, Integer> rhs) {

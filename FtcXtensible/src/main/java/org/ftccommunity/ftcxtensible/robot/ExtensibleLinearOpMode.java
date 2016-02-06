@@ -1,19 +1,19 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.ftccommunity.ftcxtensible.robot;
@@ -30,14 +30,15 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * An extensible version of a linear OpMode, designed for higher levels of synchronisation as well as
- * better access to the underlying loop. This locks/unlocks a {@link Watchdog} object to a allow
- * synchronisation, if need be. This notifies all threads waiting on this object when a new loop cycle
- * is being executed. An {@link org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode.EventWatcher}
+ * An extensible version of a linear OpMode, designed for higher levels of synchronisation as well
+ * as better access to the underlying loop. This locks/unlocks a {@link Watchdog} object to a allow
+ * synchronisation, if need be. This notifies all threads waiting on this object when a new loop
+ * cycle is being executed. An {@link org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode.EventWatcher}
  * can be registered on this to allow for the receiving of Event notifications.
  *
  * @author David Sargent
  * @since 0.3.1
+ * @see org.ftccommunity.ftcxtensible.autonomous.LinearAutoModeAdapter
  */
 public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
     private EvictingQueue<Object> queue;
@@ -162,8 +163,8 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
      * Blocks until a given OpMode state is achevied
      *
      * @param waitTillState the state to block until the OpMode achieves
-     * @throws InterruptedException     the current thread gets interrupted while waiting on the state
-     *                                  change
+     * @throws InterruptedException     the current thread gets interrupted while waiting on the
+     *                                  state change
      * @throws IllegalArgumentException the state has already been achieved in the OpMode
      */
     protected final void waitUntil(@NotNull OpModeState waitTillState) throws
@@ -215,9 +216,9 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
 
     /**
      * Sleeps the calling thread for the given duration. The duration is then recalculated into
-     * milliseconds in a process that truncates the given duration, for example if this was
-     * called with {@value 45} for the duration and {@code NANOSECONDS} for the unit, the current
-     * thread would sleep for 0 milliseconds.
+     * milliseconds in a process that truncates the given duration, for example if this was called
+     * with {@value 45} for the duration and {@code NANOSECONDS} for the unit, the current thread
+     * would sleep for 0 milliseconds.
      *
      * @param duration the number of units to sleep for
      * @param unit     what unit the duration is in
@@ -244,8 +245,8 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
 
     /**
      * Waits for one loop cycle to happen. This returns at the very next loop after the original
-     * calling one loop  has returned back to the SDK. If you need more please use
-     * {@link ExtensibleLinearOpMode#waitForLoops(int)}
+     * calling one loop  has returned back to the SDK. If you need more please use {@link
+     * ExtensibleLinearOpMode#waitForLoops(int)}
      *
      * @throws InterruptedException the calling thread was interrupted while sleeping
      */
@@ -254,8 +255,8 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
     }
 
     /**
-     * Returns the current object queue. This queue will only store up to 50 objects, afterwards
-     * the oldest object will be removed, and the new object inserted.
+     * Returns the current object queue. This queue will only store up to 50 objects, afterwards the
+     * oldest object will be removed, and the new object inserted.
      *
      * @return an {@link EvictingQueue<Object>} that stores elements
      */
@@ -275,9 +276,9 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
     }
 
     /**
-     * Sets a {@link org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode.EventWatcher} to monitor
-     * events generated by the current OpMode, this replaces any given {@code EventWatcher} already
-     * set.
+     * Sets a {@link org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode.EventWatcher} to
+     * monitor events generated by the current OpMode, this replaces any given {@code EventWatcher}
+     * already set.
      *
      * @param watcher a new Event Watcher
      * @throws NullPointerException the watcher is null
@@ -306,8 +307,8 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
     }
 
     /**
-     * The Event Watcher for the Linear OpMode execution system. Various events generated
-     * by the Xtensible SDK will be forwarded to user supplied definitions of the event handler
+     * The Event Watcher for the Linear OpMode execution system. Various events generated by the
+     * Xtensible SDK will be forwarded to user supplied definitions of the event handler
      *
      * @author David Sargent
      * @since 0.3.1
@@ -337,9 +338,8 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
     private class LinearRunner implements Runnable {
 
         /**
-         * Starts executing the active part of the class' code. This method is
-         * called when a thread is started that has been created with a class which
-         * implements {@code Runnable}.
+         * Starts executing the active part of the class' code. This method is called when a thread
+         * is started that has been created with a class which implements {@code Runnable}.
          */
         @Override
         public void run() {
@@ -367,9 +367,9 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
         }
 
         /**
-         * The thread is being terminated by an uncaught exception. Further
-         * exceptions thrown in this method are prevent the remainder of the
-         * method from executing, but are otherwise ignored.
+         * The thread is being terminated by an uncaught exception. Further exceptions thrown in
+         * this method are prevent the remainder of the method from executing, but are otherwise
+         * ignored.
          *
          * @param thread the thread that has an uncaught exception
          * @param ex     the exception that was thrown

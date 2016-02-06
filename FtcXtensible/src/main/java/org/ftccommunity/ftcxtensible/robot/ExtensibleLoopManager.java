@@ -1,29 +1,29 @@
 /*
- * Copyright © 2015 David Sargent
+ * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
- *  and/or sell copies of the Software, and  to permit persons to whom the Software is furnished to
- *  do so, subject to the following conditions:
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or
  * substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- *  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- *  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.ftccommunity.ftcxtensible.robot;
-
-import android.util.Log;
 
 import com.google.common.collect.ImmutableMap;
 
+import android.util.Log;
+
 import org.ftccommunity.ftcxtensible.interfaces.OpModeLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
+import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -36,17 +36,27 @@ import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
+/**
+ * This is the configuration manager for how {@link ExtensibleOpMode} loops. You can use to change
+ * how the loops behave, whether to skip loops, set a different recurring loop as a replacement,
+ * and so forth
+ *
+ * @author David Sargent
+ * @since 0.2.0
+ */
+@NotDocumentedWell
 public class ExtensibleLoopManager {
-    private static final String TAG = "";
+    private static final String TAG = "LOOP_MANAGER";
     private final LinkedHashMap<Integer, LinkedList<RunAssistant>> beforeXLoop;
     private final TreeMap<Integer, OpModeLoop> loops;
-    private final ExtensibleOpMode robotOp;
     private TreeMap<Integer, LinkedList<RunAssistant>> beforeEveryXLoop;
     private TreeMap<Integer, LinkedList<RunAssistant>> afterEveryXLoop;
     private LinkedHashMap<Integer, LinkedList<RunAssistant>> afterXLoop;
 
-    public ExtensibleLoopManager(ExtensibleOpMode extensibleOpMode) {
-        robotOp = extensibleOpMode;
+    /**
+     * Creates a new ExtensibleLoopManager
+     */
+    ExtensibleLoopManager() {
         loops = new TreeMap<>();
         beforeXLoop = new LinkedHashMap<>();
         beforeEveryXLoop = new TreeMap<>();
@@ -54,6 +64,16 @@ public class ExtensibleLoopManager {
         afterXLoop = new LinkedHashMap<>();
     }
 
+    /**
+     * Requests to have a different loop run if the loop number is a multiple of the <code>loopX</code>
+     * parameter. This replaces the previous loop, if there was a previous loop associated with
+     * the value for loopX. The replacement only runs when <code>{@link ExtensibleOpMode#getLoopCount()} % loopX == 0</code> is
+     * <code>true</code>
+     *
+     * @param loopX how many loops should occur prior to this loop
+     * @param loop the replacement loop
+     * @return the current {@code ExtensibleLoopManager}
+     */
     protected ExtensibleLoopManager registerNewLoopOnEveryX(int loopX, OpModeLoop loop) {
         if (loops.containsKey(loopX)) {
             Log.w(TAG, "Loop already exists; replacing");
@@ -64,7 +84,15 @@ public class ExtensibleLoopManager {
         return this;
     }
 
-    protected ExtensibleLoopManager unregisterNewLoopOnEveryX(int loopX, OpModeLoop loop)
+    /**
+     * Removes the alternative loop to use when <code>{@link ExtensibleOpMode#getLoopCount()} % loopX == 0</code>
+     * is <code>true</code>
+     *
+     * @param loopX how many loops should be in between the execution of the alternative loops
+     * @return the current instance of {@code ExtensibleLoopManager}
+     * @throws IllegalStateException if there if no registered replacement for the loop
+     */
+    protected ExtensibleLoopManager unregisterNewLoopOnEveryX(int loopX)
             throws IllegalStateException {
         checkState(loops.containsKey(loopX), "Loop has not registered replacement for " + loopX);
         loops.remove(loopX);
@@ -72,6 +100,13 @@ public class ExtensibleLoopManager {
         return this;
     }
 
+    /**
+     * Registers a {@link RunAssistant} to run on the loop specified by <code>loop</code> parameter
+     *
+     * @param loop the loop number to run on
+     * @param assistant the {@code RunAssistant} to run on the specified loop number
+     * @return the current {@code ExtensibleLoopManager}
+     */
     protected ExtensibleLoopManager registerBeforeXLoop(int loop, RunAssistant assistant) {
         checkNotNull(assistant);
 

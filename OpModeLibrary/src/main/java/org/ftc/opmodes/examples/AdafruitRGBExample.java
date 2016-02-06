@@ -1,34 +1,20 @@
-/* Copyright (c) 2015 Qualcomm Technologies Inc
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Qualcomm Technologies Inc nor the names of its contributors
-may be used to endorse or promote products derived from this software without
-specific prior written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
-
+/*
+ * Copyright © 2016 David Sargent
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package org.ftc.opmodes.examples;
 
 import android.app.Activity;
@@ -70,116 +56,116 @@ import org.ftccommunity.bindings.DataBinder;
  */
 public class AdafruitRGBExample extends LinearOpMode {
 
-  // we assume that the LED pin of the RGB sensor is connected to
-  // digital port 5 (zero indexed).
-  static final int LED_CHANNEL = 5;
-  ColorSensor sensorRGB;
-  DeviceInterfaceModule cdim;
+    // we assume that the LED pin of the RGB sensor is connected to
+    // digital port 5 (zero indexed).
+    static final int LED_CHANNEL = 5;
+    ColorSensor sensorRGB;
+    DeviceInterfaceModule cdim;
 
-  @Override
-  public void runOpMode() throws InterruptedException {
+    @Override
+    public void runOpMode() throws InterruptedException {
 
-    // write some device information (connection info, name and type)
-    // to the log file.
-    hardwareMap.logDevices();
+        // write some device information (connection info, name and type)
+        // to the log file.
+        hardwareMap.logDevices();
 
-    // get a reference to our DeviceInterfaceModule object.
-    cdim = hardwareMap.deviceInterfaceModule.get("dim");
+        // get a reference to our DeviceInterfaceModule object.
+        cdim = hardwareMap.deviceInterfaceModule.get("dim");
 
-    // set the digital channel to output mode.
-    // remember, the Adafruit sensor is actually two devices.
-    // It's an I2C sensor and it's also an LED that can be turned on or off.
-    cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
+        // set the digital channel to output mode.
+        // remember, the Adafruit sensor is actually two devices.
+        // It's an I2C sensor and it's also an LED that can be turned on or off.
+        cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
 
-    // get a reference to our ColorSensor object.
-    sensorRGB = hardwareMap.colorSensor.get("color");
+        // get a reference to our ColorSensor object.
+        sensorRGB = hardwareMap.colorSensor.get("color");
 
-    // bEnabled represents the state of the LED.
-    boolean bEnabled = true;
+        // bEnabled represents the state of the LED.
+        boolean bEnabled = true;
 
-    // turn the LED on in the beginning, just so user will know that the sensor is active.
-    cdim.setDigitalChannelState(LED_CHANNEL, bEnabled);
-
-    // wait one cycle.
-    waitOneFullHardwareCycle();
-
-    // wait for the start button to be pressed.
-    waitForStart();
-
-    // hsvValues is an array that will hold the hue, saturation, and value information.
-    float hsvValues[] = {0F,0F,0F};
-
-    // values is a reference to the hsvValues array.
-    final float values[] = hsvValues;
-
-    // get a reference to the RelativeLayout so we can change the background
-    // color of the Robot Controller app to match the hue detected by the RGB sensor.
-    int relativeLayoutId = DataBinder.getInstance().integers().get("ftcview");
-    final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-
-    // bPrevState and bCurrState represent the previous and current state of the button.
-    boolean bPrevState = false;
-    boolean bCurrState = false;
-
-    // while the op mode is active, loop and read the RGB data.
-    // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-    while (opModeIsActive()) {
-      // check the status of the x button on either gamepad.
-      bCurrState = gamepad1.x || gamepad2.x;
-
-      // check for button state transitions.
-      if (bCurrState && bCurrState != bPrevState) {
-        // button is transitioning to a pressed state.
-
-        // print a debug statement.
-        DbgLog.msg("MY_DEBUG - x button was pressed!");
-
-        // update previous state variable.
-        bPrevState = bCurrState;
-
-        // on button press, enable the LED.
-        bEnabled = true;
-
-        // turn on the LED.
+        // turn the LED on in the beginning, just so user will know that the sensor is active.
         cdim.setDigitalChannelState(LED_CHANNEL, bEnabled);
 
-      } else if (bCurrState == false && bCurrState != bPrevState)  {
-        // button is transitioning to a released state.
+        // wait one cycle.
+        waitOneFullHardwareCycle();
 
-        // print a debug statement.
-        DbgLog.msg("MY_DEBUG - x button was released!");
+        // wait for the start button to be pressed.
+        waitForStart();
 
-        // update previous state variable.
-        bPrevState = bCurrState;
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
 
-        // on button press, enable the LED.
-        bEnabled = false;
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
 
-        // turn off the LED.
-        cdim.setDigitalChannelState(LED_CHANNEL, bEnabled);
-      }
+        // get a reference to the RelativeLayout so we can change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = DataBinder.getInstance().integers().get("ftcview");
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
-      // convert the RGB values to HSV values.
-      Color.RGBToHSV((sensorRGB.red() * 255) / 800, (sensorRGB.green() * 255) / 800, (sensorRGB.blue() * 255) / 800, hsvValues);
+        // bPrevState and bCurrState represent the previous and current state of the button.
+        boolean bPrevState = false;
+        boolean bCurrState = false;
 
-      // send the info back to driver station using telemetry function.
-      telemetry.addData("Clear", sensorRGB.alpha());
-      telemetry.addData("Red  ", sensorRGB.red());
-      telemetry.addData("Green", sensorRGB.green());
-      telemetry.addData("Blue ", sensorRGB.blue());
-      telemetry.addData("Hue", hsvValues[0]);
+        // while the op mode is active, loop and read the RGB data.
+        // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
+        while (opModeIsActive()) {
+            // check the status of the x button on either gamepad.
+            bCurrState = gamepad1.x || gamepad2.x;
 
-      // change the background color to match the color detected by the RGB sensor.
-      // pass a reference to the hue, saturation, and value array as an argument
-      // to the HSVToColor method.
-      relativeLayout.post(new Runnable() {
-        public void run() {
-          relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+            // check for button state transitions.
+            if (bCurrState && bCurrState != bPrevState) {
+                // button is transitioning to a pressed state.
+
+                // print a debug statement.
+                DbgLog.msg("MY_DEBUG - x button was pressed!");
+
+                // update previous state variable.
+                bPrevState = bCurrState;
+
+                // on button press, enable the LED.
+                bEnabled = true;
+
+                // turn on the LED.
+                cdim.setDigitalChannelState(LED_CHANNEL, bEnabled);
+
+            } else if (bCurrState == false && bCurrState != bPrevState) {
+                // button is transitioning to a released state.
+
+                // print a debug statement.
+                DbgLog.msg("MY_DEBUG - x button was released!");
+
+                // update previous state variable.
+                bPrevState = bCurrState;
+
+                // on button press, enable the LED.
+                bEnabled = false;
+
+                // turn off the LED.
+                cdim.setDigitalChannelState(LED_CHANNEL, bEnabled);
+            }
+
+            // convert the RGB values to HSV values.
+            Color.RGBToHSV((sensorRGB.red() * 255) / 800, (sensorRGB.green() * 255) / 800, (sensorRGB.blue() * 255) / 800, hsvValues);
+
+            // send the info back to driver station using telemetry function.
+            telemetry.addData("Clear", sensorRGB.alpha());
+            telemetry.addData("Red  ", sensorRGB.red());
+            telemetry.addData("Green", sensorRGB.green());
+            telemetry.addData("Blue ", sensorRGB.blue());
+            telemetry.addData("Hue", hsvValues[0]);
+
+            // change the background color to match the color detected by the RGB sensor.
+            // pass a reference to the hue, saturation, and value array as an argument
+            // to the HSVToColor method.
+            relativeLayout.post(new Runnable() {
+                public void run() {
+                    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+                }
+            });
+
+            // wait a hardware cycle before iterating.
+            waitOneFullHardwareCycle();
         }
-      });
-
-      // wait a hardware cycle before iterating.
-      waitOneFullHardwareCycle();
     }
-  }
 }
