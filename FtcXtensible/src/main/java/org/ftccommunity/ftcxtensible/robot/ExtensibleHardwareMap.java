@@ -181,18 +181,20 @@ public class ExtensibleHardwareMap {
             DcMotor[] motors = value.toArray(new DcMotor[value.size()]);
 
             final DcMotorController dcMotorController = entry.getKey();
-            VoltageSensor voltageSensor = null;
+            final VoltageSensor voltageSensor;
             if (HiTechnicDcMotorController.isValidMotorController(dcMotorController)) {
                 if (motors.length == 0) {
-                    voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, null, null);
+                    DcMotor motor0 = new DcMotor(dcMotorController, 1);
+                    DcMotor motor1 = new DcMotor(dcMotorController, 2);
+                    voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor0, motor1);
                 } else if (motors.length == 1) {
                     final DcMotor motor1;
                     final DcMotor motor2;
                     if (motors[0].getPortNumber() == 1) {
                         motor1 = motors[0];
-                        motor2 = null;
+                        motor2 = new DcMotor(dcMotorController, 2);
                     } else {
-                        motor1 = null;
+                        motor1 = new DcMotor(dcMotorController, 1);
                         motor2 = motors[0];
                     }
                     voltageSensor = ((HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor1, motor2)).voltageSensor();

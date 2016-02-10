@@ -107,7 +107,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     public final String LOGGING_TAG = this.getClass().getSimpleName();
     private final II2cDeviceClient i2cDeviceClient;
     private final DcMotorController target;
-    I2cDeviceReplacementHelper<DcMotorController> helper;
+    //I2cDeviceReplacementHelper<DcMotorController> helper;
 
     //----------------------------------------------------------------------------------------------
     // Construction
@@ -122,7 +122,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     private HiTechnicDcMotorController(II2cDeviceClient ii2cDeviceClient, DcMotorController target) {
         LegacyModule legacyModule = MemberUtil.legacyModuleOfLegacyMotorController(target);
         int targetPort = MemberUtil.portOfLegacyMotorController(target);
-        this.helper = new I2cDeviceReplacementHelper<>(null, this, target, legacyModule, targetPort);
+        //this.helper = new I2cDeviceReplacementHelper<>(null, this, target, legacyModule, targetPort);
 
         this.i2cDeviceClient = ii2cDeviceClient;
         this.target = target;
@@ -151,7 +151,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
         this.i2cDeviceClient.setReadWindow(new II2cDeviceClient.ReadWindow(iRegWindowFirst, iRegWindowMax - iRegWindowFirst, II2cDeviceClient.READ_MODE.BALANCED));
     }
 
-    public static DcMotorController create(DcMotorController target, DcMotor motor1, DcMotor motor2) {
+    public static DcMotorController create(@NotNull DcMotorController target, @NotNull DcMotor motor1, @NotNull DcMotor motor2) {
         if (MemberUtil.isLegacyMotorController(target)) {
             LegacyModule legacyModule = MemberUtil.legacyModuleOfLegacyMotorController(target);
             int port = MemberUtil.portOfLegacyMotorController(target);
@@ -163,7 +163,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
             HiTechnicDcMotorController controller = new HiTechnicDcMotorController(i2cDeviceClient, target);
 
             controller.setMotors(motor1, motor2);
-            controller.arm();
+            //controller.arm();
 
             return controller;
         } else {
@@ -208,7 +208,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     }
 
     private void setMotors(DcMotor motor1, DcMotor motor2) {
-        assertTrue(!this.isArmed());
+        //assertTrue(!this.isArmed());
 
         if ((motor1 != null && motor1.getController() != this.target)
                 || (motor2 != null && motor2.getController() != this.target)) {
@@ -241,39 +241,39 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     // VoltageSensor
     //----------------------------------------------------------------------------------------------
 
-    private void arm()
-    // Disarm the existing controller and arm us
-    {
-        if (!this.isArmed()) {
-            this.usurpDevices();
-
-            this.helper.arm();
-
-            this.i2cDeviceClient.arm();
-            this.initPID();
-            this.floatMotors();
-        }
-    }
+//    private void arm()
+//    // Disarm the existing controller and arm us
+//    {
+//        if (!this.isArmed()) {
+//            this.usurpDevices();
+//
+//            //this.helper.arm();
+//
+//            this.i2cDeviceClient.arm();
+//            this.initPID();
+//            this.floatMotors();
+//        }
+//    }
 
     //----------------------------------------------------------------------------------------------
     // HardwareDevice
     //----------------------------------------------------------------------------------------------
 
-    private boolean isArmed() {
-        return this.helper.isArmed();
-    }
+//    private boolean isArmed() {
+//        //return this.helper.isArmed();
+//    }
 
-    private void disarm()
-    // Disarm us and re-arm the target
-    {
-        if (this.isArmed()) {
-            this.i2cDeviceClient.disarm();
-
-            this.helper.disarm();
-
-            this.deusurpDevices();
-        }
-    }
+//    private void disarm()
+//    // Disarm us and re-arm the target
+//    {
+//        if (this.isArmed()) {
+//            this.i2cDeviceClient.disarm();
+//
+//            //this.helper.disarm();
+//
+//            this.deusurpDevices();
+//        }
+//    }
 
     public DcMotorController getWrappedTarget() {
         return target;
@@ -325,19 +325,20 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
 
     @Override
     public synchronized void close() {
-        if (this.isArmed()) {
-            this.stopMotors(); // mirrors robot controller runtime behavior
-            this.disarm();
-        }
+//        if (this.isArmed()) {
+//            this.stopMotors(); // mirrors robot controller runtime behavior
+//            this.disarm();
+//        }
+        this.stopMotors();
     }
 
     private void write8(int ireg, byte data) {
-        if (this.isArmed())
+        //if (this.isArmed())
             this.i2cDeviceClient.write8(ireg, data, false);
     }
 
     private void write(int ireg, byte[] data) {
-        if (this.isArmed())
+        //if (this.isArmed())
             this.i2cDeviceClient.write(ireg, data, false);
     }
 

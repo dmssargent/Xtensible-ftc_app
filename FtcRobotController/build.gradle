@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-android'
+//apply plugin: 'jacoco-android'
 
 android {
     defaultConfig {
@@ -35,16 +35,16 @@ android {
         javaMaxHeapSize "2g"
     }
 
-    buildTypes {
-        debug {
-            versionNameSuffix '-debug'
-            testCoverageEnabled true
-        }
-    }
-
-    dataBinding {
-        enabled = true
-    }
+//    buildTypes {
+//        debug {
+//            versionNameSuffix '-debug'
+//            testCoverageEnabled true
+//        }
+//    }
+//
+//    dataBinding {
+//        enabled = true
+//    }
 }
 
 
