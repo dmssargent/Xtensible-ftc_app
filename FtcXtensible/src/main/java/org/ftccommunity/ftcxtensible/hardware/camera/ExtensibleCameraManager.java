@@ -17,8 +17,6 @@
  */
 package org.ftccommunity.ftcxtensible.hardware.camera;
 
-import com.google.common.collect.EvictingQueue;
-
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
@@ -26,6 +24,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
+import com.google.common.collect.EvictingQueue;
 
 import org.ftccommunity.ftcxtensible.gui.CameraPreview;
 import org.ftccommunity.ftcxtensible.internal.Beta;

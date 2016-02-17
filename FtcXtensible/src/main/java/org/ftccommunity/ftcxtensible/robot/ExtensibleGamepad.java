@@ -17,14 +17,13 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
+import android.util.Log;
+
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-
-import android.util.Log;
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.ftccommunity.ftcxtensible.core.exceptions.RuntimeIOException;
@@ -66,6 +65,7 @@ public class ExtensibleGamepad implements Closeable {
     private final Joystick leftJoystick;
     private final Joystick rightJoystick;
     private final Dpad dpad;
+    private final long millisecondDelay = 2;
     private boolean a;
     private boolean b;
     private boolean x;
@@ -82,12 +82,12 @@ public class ExtensibleGamepad implements Closeable {
     private int userDefinedLeft;
     private JoystickScaler leftScaler;
     private JoystickScaler rightScaler;
-
     private transient boolean recording;
     private transient boolean playingBack;
     private transient GamepadRecord gamepadRecord;
-
     private boolean hasBeenClosed = false;
+    private boolean paused;
+    private long lastLoopTime;
 
     /**
      * Setup a basic gamepad; be sure to call {@link ExtensibleGamepad#updateGamepad} to make this
@@ -103,6 +103,7 @@ public class ExtensibleGamepad implements Closeable {
 
         recording = false;
         playingBack = false;
+        lastLoopTime = System.currentTimeMillis();
     }
 
     public ExtensibleGamepad(final RobotContext ctx, Gamepad gp) {
@@ -137,7 +138,12 @@ public class ExtensibleGamepad implements Closeable {
      */
     public synchronized void updateGamepad(final RobotContext ctx, Gamepad gp) {
         if (playingBack) {
-            GamepadState state = gamepadRecord.nextRecord();
+            GamepadState state;
+            if (!paused) {
+                state = gamepadRecord.nextRecord();
+            } else {
+                state = gamepadRecord.currentRecord();
+            }
             if (state == null) {
                 Log.w("GAMEPAD", "Stopping playback due to end-of-record");
                 stopPlayback();
@@ -179,7 +185,7 @@ public class ExtensibleGamepad implements Closeable {
             rightY = getRightScaler().scaleY(this, rightY);
             rightJoystick().update(rightX, rightY, state.rightJoystick.pressed);
 
-            timestamp = System.nanoTime();
+            timestamp = System.currentTimeMillis();
         } else {
             a = gp.a;
             b = gp.b;
@@ -219,10 +225,34 @@ public class ExtensibleGamepad implements Closeable {
         }
 
         if (recording) {
-            gamepadRecord.addRecord(new GamepadState(leftJoystick, rightJoystick, dpad,
+            gamepadRecord.addRecord(new GamepadState(leftJoystick.copy(), rightJoystick.copy(), dpad.copy(),
                     a, b, x, y,
                     guide, start, back,
                     leftBumper, rightBumper, leftTrigger, rightTrigger));
+        }
+
+        if (recording || playingBack) {
+            try {
+                //long delay = TimeUnit.MILLISECONDS.convert(millisecondDelay - (System.nanoTime() - lastLoopTime), TimeUnit.NANOSECONDS);
+                long delay = millisecondDelay - (System.currentTimeMillis() - lastLoopTime);
+                lastLoopTime = System.currentTimeMillis();
+                boolean inferTiming = true;
+                if (lastLoopTime > 0) {
+                    try {
+                        Thread.sleep(delay);
+                    } catch (Exception ex) {
+                        inferTiming = false;
+                        Thread.sleep(2, (int) 5E4);
+                    }
+
+                }
+                //Thread.sleep(2, (int) 5E4);
+
+                ctx.telemetry().data("AUTO_DELAY", delay);
+                ctx.telemetry().data("INFER TIMING", inferTiming ? "true" : "false");
+            } catch (InterruptedException e) {
+                return;
+            }
         }
     }
 
@@ -549,6 +579,48 @@ public class ExtensibleGamepad implements Closeable {
         hasBeenClosed = true;
     }
 
+    public void resumePlayback() {
+        paused = false;
+    }
+
+    public void pausePlayback() {
+        paused = true;
+    }
+
+    @Override
+    public int hashCode() {
+        HashUtil hash = new HashUtil(65);
+        hash.addFieldToHash(leftJoystick)
+                .addFieldToHash(rightJoystick)
+                .addFieldToHash(dpad)
+                .addFieldToHash(a)
+                .addFieldToHash(b)
+                .addFieldToHash(x)
+                .addFieldToHash(y)
+                .addFieldToHash(guide)
+                .addFieldToHash(start)
+                .addFieldToHash(back)
+                .addFieldToHash(leftBumper)
+                .addFieldToHash(rightBumper)
+                .addFieldToHash(leftTrigger)
+                .addFieldToHash(rightTrigger);
+        return hash.get();
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
+                        " dpad: %s" +
+                        " a: %s b: %s x: %s y: %s" +
+                        " guide: %s back: %s" +
+                        " left bumper: %s right bumper: %s" +
+                        " left trigger: %s right trigger: %s",
+                leftJoystick, rightJoystick, dpad,
+                a, b, x, y, guide, back,
+                leftBumper, rightBumper,
+                leftTrigger, rightTrigger);
+    }
+
     /**
      * The Joystick for use in {@link ExtensibleGamepad}. This is an object representative of the
      * data present in the joysticks, and the data that the FTC SDK can give
@@ -560,6 +632,18 @@ public class ExtensibleGamepad implements Closeable {
         private double x;
         private double y;
         private boolean pressed;
+
+        private Joystick() {
+            x = 0;
+            y = 0;
+            pressed = false;
+        }
+
+        public Joystick(double x, double y, boolean pressed) {
+            this.x = x;
+            this.y = y;
+            this.pressed = pressed;
+        }
 
         /**
          * Update the joystick to match the parameters given
@@ -640,30 +724,14 @@ public class ExtensibleGamepad implements Closeable {
             return x == joystick.x && y == joystick.y && pressed == joystick.pressed;
         }
 
+        public Joystick copy() {
+            return new Joystick(x, y, pressed);
+        }
+
         @Override
         public String toString() {
             return " x: " + x + " y:" + y + " pressed: " + pressed;
         }
-    }
-
-    @Override
-    public int hashCode() {
-        HashUtil hash = new HashUtil(65);
-        hash.addFieldToHash(leftJoystick)
-                .addFieldToHash(rightJoystick)
-                .addFieldToHash(dpad)
-                .addFieldToHash(a)
-                .addFieldToHash(b)
-                .addFieldToHash(x)
-                .addFieldToHash(y)
-                .addFieldToHash(guide)
-                .addFieldToHash(start)
-                .addFieldToHash(back)
-                .addFieldToHash(leftBumper)
-                .addFieldToHash(rightBumper)
-                .addFieldToHash(leftTrigger)
-                .addFieldToHash(rightTrigger);
-        return hash.get();
     }
 
     /**
@@ -677,6 +745,21 @@ public class ExtensibleGamepad implements Closeable {
         private boolean down;
         private boolean right;
         private boolean left;
+
+        private Dpad() {
+            up = false;
+            down = false;
+            left = false;
+            right = false;
+        }
+
+        public Dpad(boolean upPressed, boolean downPressed,
+                    boolean rightPressed, boolean leftPressed) {
+            up = upPressed;
+            down = downPressed;
+            right = rightPressed;
+            left = leftPressed;
+        }
 
         /**
          * Updates the D-Pad based on the Gamepad's current status
@@ -752,6 +835,10 @@ public class ExtensibleGamepad implements Closeable {
             Dpad joystick = (Dpad) o;
             return up == joystick.up && down == joystick.down &&
                     left == joystick.left && right == joystick.right;
+        }
+
+        public Dpad copy() {
+            return new Dpad(up, down, right, left);
         }
 
         @Override
@@ -991,7 +1078,12 @@ public class ExtensibleGamepad implements Closeable {
 
         public void save() throws IOException {
             Gson gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().disableHtmlEscaping().create();
-            Writer writer = Files2.writer(RECORD_DIR + name + ".gsr.json");
+            String name = RECORD_DIR + this.name + ".gsr.json";
+            File file = new File(name);
+            if (file.exists()) {
+                file.delete();
+            }
+            Writer writer = Files2.writer(name);
             gson.toJson(this, writer);
             writer.flush();
             writer.close();
@@ -1034,8 +1126,9 @@ public class ExtensibleGamepad implements Closeable {
         }
 
 
-
-
+        public GamepadState currentRecord() {
+            return states.get(index);
+        }
     }
 
     public class PlainJoystickScaler implements JoystickScaler {
@@ -1058,20 +1151,6 @@ public class ExtensibleGamepad implements Closeable {
         public int userDefinedRight(RobotContext ctx, ExtensibleGamepad gamepad) {
             return 0;
         }
-    }
-
-    @Override
-    public String toString() {
-        return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
-                        " dpad: %s" +
-                        " a: %s b: %s x: %s y: %s" +
-                        " guide: %s back: %s" +
-                        " left bumper: %s right bumper: %s" +
-                        " left trigger: %s right trigger: %s",
-                leftJoystick, rightJoystick, dpad,
-                a, b, x, y, guide, back,
-                leftBumper, rightBumper,
-                leftTrigger, rightTrigger);
     }
 
 }

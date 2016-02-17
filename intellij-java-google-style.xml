@@ -16,239 +16,239 @@
     <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99"/>
     <option name="IMPORT_LAYOUT_TABLE">
         <value>
-            <package name="com.google" withSubpackages="true" static="false"/>
+            <package name="com.google" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="android" withSubpackages="true" static="false"/>
+            <package name="android" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="antenna" withSubpackages="true" static="false"/>
+            <package name="antenna" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="antlr" withSubpackages="true" static="false"/>
+            <package name="antlr" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="ar" withSubpackages="true" static="false"/>
+            <package name="ar" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="asposewobfuscated" withSubpackages="true" static="false"/>
+            <package name="asposewobfuscated" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="asquare" withSubpackages="true" static="false"/>
+            <package name="asquare" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="atg" withSubpackages="true" static="false"/>
+            <package name="atg" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="au" withSubpackages="true" static="false"/>
+            <package name="au" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="beaver" withSubpackages="true" static="false"/>
+            <package name="beaver" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="bibtex" withSubpackages="true" static="false"/>
+            <package name="bibtex" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="bmsi" withSubpackages="true" static="false"/>
+            <package name="bmsi" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="bsh" withSubpackages="true" static="false"/>
+            <package name="bsh" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="ccl" withSubpackages="true" static="false"/>
+            <package name="ccl" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="cern" withSubpackages="true" static="false"/>
+            <package name="cern" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="ChartDirector" withSubpackages="true" static="false"/>
+            <package name="ChartDirector" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="checkers" withSubpackages="true" static="false"/>
+            <package name="checkers" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="com" withSubpackages="true" static="false"/>
+            <package name="com" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="COM" withSubpackages="true" static="false"/>
+            <package name="COM" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="common" withSubpackages="true" static="false"/>
+            <package name="common" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="contribs" withSubpackages="true" static="false"/>
+            <package name="contribs" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="corejava" withSubpackages="true" static="false"/>
+            <package name="corejava" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="cryptix" withSubpackages="true" static="false"/>
+            <package name="cryptix" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="cybervillains" withSubpackages="true" static="false"/>
+            <package name="cybervillains" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="dalvik" withSubpackages="true" static="false"/>
+            <package name="dalvik" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="danbikel" withSubpackages="true" static="false"/>
+            <package name="danbikel" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="de" withSubpackages="true" static="false"/>
+            <package name="de" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="EDU" withSubpackages="true" static="false"/>
+            <package name="EDU" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="eg" withSubpackages="true" static="false"/>
+            <package name="eg" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="eu" withSubpackages="true" static="false"/>
+            <package name="eu" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="examples" withSubpackages="true" static="false"/>
+            <package name="examples" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="fat" withSubpackages="true" static="false"/>
+            <package name="fat" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="fit" withSubpackages="true" static="false"/>
+            <package name="fit" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="fitlibrary" withSubpackages="true" static="false"/>
+            <package name="fitlibrary" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="fmpp" withSubpackages="true" static="false"/>
+            <package name="fmpp" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="freemarker" withSubpackages="true" static="false"/>
+            <package name="freemarker" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="gnu" withSubpackages="true" static="false"/>
+            <package name="gnu" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="groovy" withSubpackages="true" static="false"/>
+            <package name="groovy" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="groovyjarjarantlr" withSubpackages="true" static="false"/>
+            <package name="groovyjarjarantlr" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="groovyjarjarasm" withSubpackages="true" static="false"/>
+            <package name="groovyjarjarasm" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="hak" withSubpackages="true" static="false"/>
+            <package name="hak" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="hep" withSubpackages="true" static="false"/>
+            <package name="hep" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="ie" withSubpackages="true" static="false"/>
+            <package name="ie" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="imageinfo" withSubpackages="true" static="false"/>
+            <package name="imageinfo" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="info" withSubpackages="true" static="false"/>
+            <package name="info" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="it" withSubpackages="true" static="false"/>
+            <package name="it" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jal" withSubpackages="true" static="false"/>
+            <package name="jal" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="Jama" withSubpackages="true" static="false"/>
+            <package name="Jama" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="japa" withSubpackages="true" static="false"/>
+            <package name="japa" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="japacheckers" withSubpackages="true" static="false"/>
+            <package name="japacheckers" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jas" withSubpackages="true" static="false"/>
+            <package name="jas" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jasmin" withSubpackages="true" static="false"/>
+            <package name="jasmin" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="javancss" withSubpackages="true" static="false"/>
+            <package name="javancss" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="javanet" withSubpackages="true" static="false"/>
+            <package name="javanet" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="javassist" withSubpackages="true" static="false"/>
+            <package name="javassist" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="javazoom" withSubpackages="true" static="false"/>
+            <package name="javazoom" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="java_cup" withSubpackages="true" static="false"/>
+            <package name="java_cup" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jcifs" withSubpackages="true" static="false"/>
+            <package name="jcifs" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jetty" withSubpackages="true" static="false"/>
+            <package name="jetty" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="JFlex" withSubpackages="true" static="false"/>
+            <package name="JFlex" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jj2000" withSubpackages="true" static="false"/>
+            <package name="jj2000" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jline" withSubpackages="true" static="false"/>
+            <package name="jline" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jp" withSubpackages="true" static="false"/>
+            <package name="jp" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="JSci" withSubpackages="true" static="false"/>
+            <package name="JSci" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jsr166y" withSubpackages="true" static="false"/>
+            <package name="jsr166y" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="junit" withSubpackages="true" static="false"/>
+            <package name="junit" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jxl" withSubpackages="true" static="false"/>
+            <package name="jxl" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="jxxload_help" withSubpackages="true" static="false"/>
+            <package name="jxxload_help" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="kawa" withSubpackages="true" static="false"/>
+            <package name="kawa" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="kea" withSubpackages="true" static="false"/>
+            <package name="kea" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="libcore" withSubpackages="true" static="false"/>
+            <package name="libcore" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="libsvm" withSubpackages="true" static="false"/>
+            <package name="libsvm" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="lti" withSubpackages="true" static="false"/>
+            <package name="lti" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="memetic" withSubpackages="true" static="false"/>
+            <package name="memetic" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="mt" withSubpackages="true" static="false"/>
+            <package name="mt" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="mx4j" withSubpackages="true" static="false"/>
+            <package name="mx4j" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="net" withSubpackages="true" static="false"/>
+            <package name="net" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="netscape" withSubpackages="true" static="false"/>
+            <package name="netscape" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="nl" withSubpackages="true" static="false"/>
+            <package name="nl" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="nu" withSubpackages="true" static="false"/>
+            <package name="nu" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="oauth" withSubpackages="true" static="false"/>
+            <package name="oauth" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="ognl" withSubpackages="true" static="false"/>
+            <package name="ognl" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="opennlp" withSubpackages="true" static="false"/>
+            <package name="opennlp" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="oracle" withSubpackages="true" static="false"/>
+            <package name="oracle" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="org" withSubpackages="true" static="false"/>
+            <package name="org" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="penn2dg" withSubpackages="true" static="false"/>
+            <package name="penn2dg" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="pennconverter" withSubpackages="true" static="false"/>
+            <package name="pennconverter" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="pl" withSubpackages="true" static="false"/>
+            <package name="pl" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="prefuse" withSubpackages="true" static="false"/>
+            <package name="prefuse" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="proguard" withSubpackages="true" static="false"/>
+            <package name="proguard" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="repackage" withSubpackages="true" static="false"/>
+            <package name="repackage" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="scm" withSubpackages="true" static="false"/>
+            <package name="scm" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="se" withSubpackages="true" static="false"/>
+            <package name="se" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="serp" withSubpackages="true" static="false"/>
+            <package name="serp" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="simple" withSubpackages="true" static="false"/>
+            <package name="simple" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="soot" withSubpackages="true" static="false"/>
+            <package name="soot" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="sqlj" withSubpackages="true" static="false"/>
+            <package name="sqlj" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="src" withSubpackages="true" static="false"/>
+            <package name="src" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="ssa" withSubpackages="true" static="false"/>
+            <package name="ssa" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="sun" withSubpackages="true" static="false"/>
+            <package name="sun" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="sunlabs" withSubpackages="true" static="false"/>
+            <package name="sunlabs" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="tcl" withSubpackages="true" static="false"/>
+            <package name="tcl" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="testdata" withSubpackages="true" static="false"/>
+            <package name="testdata" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="testshell" withSubpackages="true" static="false"/>
+            <package name="testshell" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="testsuite" withSubpackages="true" static="false"/>
+            <package name="testsuite" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="twitter4j" withSubpackages="true" static="false"/>
+            <package name="twitter4j" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="uk" withSubpackages="true" static="false"/>
+            <package name="uk" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="ViolinStrings" withSubpackages="true" static="false"/>
+            <package name="ViolinStrings" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="weka" withSubpackages="true" static="false"/>
+            <package name="weka" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="wet" withSubpackages="true" static="false"/>
+            <package name="wet" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="winstone" withSubpackages="true" static="false"/>
+            <package name="winstone" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="woolfel" withSubpackages="true" static="false"/>
+            <package name="woolfel" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="wowza" withSubpackages="true" static="false"/>
+            <package name="wowza" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="java" withSubpackages="true" static="false"/>
+            <package name="java" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="javax" withSubpackages="true" static="false"/>
+            <package name="javax" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="" withSubpackages="true" static="false"/>
+            <package name="" static="false" withSubpackages="true" />
             <emptyLine/>
-            <package name="" withSubpackages="true" static="true"/>
+            <package name="" static="true" withSubpackages="true" />
         </value>
     </option>
     <option name="RIGHT_MARGIN" value="100"/>

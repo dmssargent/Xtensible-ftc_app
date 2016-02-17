@@ -18,7 +18,6 @@
 
 package org.ftccommunity.ftcxtensible.hardware.internal;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.I2cController;
 
 import org.ftccommunity.ftcxtensible.hardware.I2cDevice;

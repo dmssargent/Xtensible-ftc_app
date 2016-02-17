@@ -18,13 +18,13 @@
 
 package org.ftccommunity.ftcxtensible.math;
 
+import android.util.Log;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
-
-import android.util.Log;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;

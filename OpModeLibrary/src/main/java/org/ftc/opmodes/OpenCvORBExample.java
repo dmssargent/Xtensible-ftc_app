@@ -28,7 +28,7 @@
 //import android.widget.TextView;
 //import android.widget.Toast;
 //
-//import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+//import org.ftccommunity.ftcxtensible.opmodes.TeamClutchAutonomous;
 //import org.ftccommunity.ftcxtensible.robot.RobotContext;
 //import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
 //import org.opencv.android.BaseLoaderCallback;
@@ -70,7 +70,7 @@
 // * @author FTC Team 10182
 // */
 //@SuppressWarnings("deprecation")
-//@Autonomous
+//@TeamClutchAutonomous
 //public class OpenCvORBExample extends SimpleOpMode implements CameraBridgeViewBase.CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
 //    public static final int VIEW_MODE_RGBA = 0;
 //    public static final int TRAIN = 8;

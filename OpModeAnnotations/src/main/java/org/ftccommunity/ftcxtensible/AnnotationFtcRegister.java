@@ -27,8 +27,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.Util;
 
-import dalvik.system.DexFile;
-
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
@@ -48,6 +46,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeMap;
+
+import dalvik.system.DexFile;
 
 /**
  * An manager that reads in the OpMode classes

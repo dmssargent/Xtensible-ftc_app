@@ -17,8 +17,8 @@
  */
 
 package org.ftccommunity.ftcxtensible.collections;
-import com.google.common.collect.ForwardingMap;
 
+import com.google.common.collect.ForwardingMap;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 import org.jetbrains.annotations.NotNull;

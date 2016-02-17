@@ -18,7 +18,6 @@
 package org.ftccommunity.ftcxtensible.autonomous;
 
 import com.google.common.base.Throwables;
-
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;

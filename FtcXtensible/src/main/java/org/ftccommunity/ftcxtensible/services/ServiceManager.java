@@ -18,9 +18,9 @@
 package org.ftccommunity.ftcxtensible.services;
 
 
-import com.google.common.util.concurrent.Service;
-
 import android.util.Log;
+
+import com.google.common.util.concurrent.Service;
 
 import org.ftccommunity.ftcxtensible.ServiceRegister;
 import org.ftccommunity.ftcxtensible.abstraction.services.LatebindingContextService;

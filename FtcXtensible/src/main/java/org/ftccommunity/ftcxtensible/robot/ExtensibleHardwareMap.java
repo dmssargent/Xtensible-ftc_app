@@ -20,7 +20,6 @@ package org.ftccommunity.ftcxtensible.robot;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.LinkedHashMultimap;
-
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogOutput;
@@ -57,10 +56,7 @@ import org.ftccommunity.i2clibrary.Wire;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -174,51 +170,55 @@ public class ExtensibleHardwareMap {
             multimap.put(motor.getController(), motor);
 
         }
-
-        List<VoltageSensor> voltageSensors = new LinkedList<>();
-        for (Map.Entry<DcMotorController, Collection<DcMotor>> entry : multimap.asMap().entrySet()) {
-            Collection<DcMotor> value = entry.getValue();
-            DcMotor[] motors = value.toArray(new DcMotor[value.size()]);
-
-            final DcMotorController dcMotorController = entry.getKey();
-            VoltageSensor voltageSensor = null;
-            if (HiTechnicDcMotorController.isValidMotorController(dcMotorController)) {
-                if (motors.length == 0) {
-                    voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, null, null);
-                } else if (motors.length == 1) {
-                    final DcMotor motor1;
-                    final DcMotor motor2;
-                    if (motors[0].getPortNumber() == 1) {
-                        motor1 = motors[0];
-                        motor2 = null;
-                    } else {
-                        motor1 = null;
-                        motor2 = motors[0];
-                    }
-                    voltageSensor = ((HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor1, motor2)).voltageSensor();
-                } else {
-                    final DcMotor motor1;
-                    final DcMotor motor2;
-                    if (motors[0].getPortNumber() == 1) {
-                        motor1 = motors[0];
-                        motor2 = motors[1];
-                    } else {
-                        motor1 = motors[1];
-                        motor2 = motors[0];
-                    }
-
-                    voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor1, motor2);
-                }
-
-                if (voltageSensor != null) {
-                    voltageSensors.add(voltageSensor);
-                }
-            }
-        }
-
-        if (!voltageSensors.isEmpty()) {
-            basicMap.voltageSensor.put("MAIN_VOLTAGE_SENSOR", new ExtensibleRobotVoltage(voltageSensors));
-        }
+//        try {
+//            List<VoltageSensor> voltageSensors = new LinkedList<>();
+//            for (Map.Entry<DcMotorController, Collection<DcMotor>> entry : multimap.asMap().entrySet()) {
+//                Collection<DcMotor> value = entry.getValue();
+//                DcMotor[] motors = value.toArray(new DcMotor[value.size()]);
+//
+//                final DcMotorController dcMotorController = entry.getKey();
+//                VoltageSensor voltageSensor = null;
+//                if (HiTechnicDcMotorController.isValidMotorController(dcMotorController)) {
+//                    if (motors.length == 0) {
+//                        voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, new DcMotor(dcMotorController, 1), new DcMotor(dcMotorController, 2));
+//                    } else if (motors.length == 1) {
+//                        final DcMotor motor1;
+//                        final DcMotor motor2;
+//                        if (motors[0].getPortNumber() == 1) {
+//                            motor1 = motors[0];
+//                            motor2 = new DcMotor(dcMotorController, 2);
+//                        } else {
+//                            motor1 = new DcMotor(dcMotorController, 1);
+//                            motor2 = motors[0];
+//                        }
+//                        voltageSensor = ((HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor1, motor2)).voltageSensor();
+//                    } else {
+//                        final DcMotor motor1;
+//                        final DcMotor motor2;
+//                        if (motors[0].getPortNumber() == 1) {
+//                            motor1 = motors[0];
+//                            motor2 = motors[1];
+//                        } else {
+//                            motor1 = motors[1];
+//                            motor2 = motors[0];
+//                        }
+//
+//                        voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor1, motor2);
+//                    }
+//
+//                    if (voltageSensor != null) {
+//                        voltageSensors.add(voltageSensor);
+//                    }
+//                }
+//            }
+//
+//
+//            if (!voltageSensors.isEmpty()) {
+//                basicMap.voltageSensor.put("MAIN_VOLTAGE_SENSOR", new ExtensibleRobotVoltage(voltageSensors));
+//            }
+//        } catch (Throwable ex) {
+//            Log.e("HARDWARE_MAP", "Cannot infer voltage sensor", ex);
+//        }
     }
 
     /**

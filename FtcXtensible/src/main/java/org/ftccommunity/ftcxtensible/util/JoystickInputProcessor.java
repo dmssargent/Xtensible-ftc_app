@@ -17,13 +17,13 @@
  */
 package org.ftccommunity.ftcxtensible.util;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
-import android.util.Log;
 
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.jetbrains.annotations.NotNull;

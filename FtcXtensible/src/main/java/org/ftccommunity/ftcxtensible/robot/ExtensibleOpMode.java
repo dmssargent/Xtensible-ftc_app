@@ -17,12 +17,6 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.EvictingQueue;
-import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -31,6 +25,11 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
+import com.google.common.base.Throwables;
+import com.google.common.collect.EvictingQueue;
+import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;

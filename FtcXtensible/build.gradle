@@ -17,9 +17,6 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'org.sonarqube'
-apply plugin: 'findbugs'
-apply plugin: 'checkstyle'
 
 android {
     compileSdkVersion 23

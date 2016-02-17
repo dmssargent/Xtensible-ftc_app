@@ -18,7 +18,6 @@
 
 package org.ftccommunity.ftcxtensible.hardware;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.I2cController;
 
 import java.util.concurrent.locks.Lock;

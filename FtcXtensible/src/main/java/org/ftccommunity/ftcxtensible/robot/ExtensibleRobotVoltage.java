@@ -19,7 +19,6 @@
 package org.ftccommunity.ftcxtensible.robot;
 
 import com.google.common.collect.ImmutableList;
-
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.ftccommunity.ftcxtensible.math.Numericalize;

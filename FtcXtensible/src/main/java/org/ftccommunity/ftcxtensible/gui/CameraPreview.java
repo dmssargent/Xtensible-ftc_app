@@ -17,8 +17,6 @@
  */
 package org.ftccommunity.ftcxtensible.gui;
 
-import com.google.common.annotations.Beta;
-
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
@@ -26,6 +24,8 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.google.common.annotations.Beta;
 
 import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;

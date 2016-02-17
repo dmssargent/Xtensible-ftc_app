@@ -22,13 +22,13 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 
 public abstract class ForwardingDcMotorController extends ForwardingHardwareDevice<DcMotorController> implements DcMotorController {
     @Override
-    public void setMotorControllerDeviceMode(DeviceMode deviceMode) {
-        delegate().setMotorControllerDeviceMode(deviceMode);
+    public DeviceMode getMotorControllerDeviceMode() {
+        return delegate().getMotorControllerDeviceMode();
     }
 
     @Override
-    public DeviceMode getMotorControllerDeviceMode() {
-        return delegate().getMotorControllerDeviceMode();
+    public void setMotorControllerDeviceMode(DeviceMode deviceMode) {
+        delegate().setMotorControllerDeviceMode(deviceMode);
     }
 
     @Override

@@ -17,9 +17,6 @@
  */
 package org.ftc.opmodes;
 
-import com.google.common.collect.HashBiMap;
-import com.google.common.io.Files;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +24,8 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 
+import com.google.common.collect.HashBiMap;
+import com.google.common.io.Files;
 import com.qualcomm.robotcore.util.RunShellCommand;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;

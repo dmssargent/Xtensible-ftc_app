@@ -18,6 +18,7 @@
 
 package org.ftc.opmodes;
 
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
@@ -27,6 +28,7 @@ import java.util.LinkedList;
 /**
  * A demo GamePad recording OpMode
  */
+@Disabled
 @TeleOp
 public class GamepadRecording extends SimpleOpMode {
     @Override

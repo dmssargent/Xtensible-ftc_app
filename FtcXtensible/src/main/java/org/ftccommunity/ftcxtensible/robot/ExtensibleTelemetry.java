@@ -17,15 +17,14 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
+import android.util.Log;
+
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multiset;
-
-import android.util.Log;
-
 import com.qualcomm.robotcore.robocol.Telemetry;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
@@ -40,7 +39,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

@@ -17,11 +17,10 @@
  */
 package org.ftccommunity.ftcxtensible.interfaces;
 
-import com.google.common.collect.ImmutableList;
-
 import android.content.Context;
 import android.view.View;
 
+import com.google.common.collect.ImmutableList;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;

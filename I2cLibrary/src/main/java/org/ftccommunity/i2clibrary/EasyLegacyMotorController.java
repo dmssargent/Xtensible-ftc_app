@@ -392,6 +392,11 @@ public final class EasyLegacyMotorController implements DcMotorController, Volta
     //
     // Our task here is to work around that 50ms issue
 
+    @Override
+    public synchronized void setMotorControllerDeviceMode(DcMotorController.DeviceMode port) {
+        // ignored
+    }
+
     private void initPID() {
         // nothing to do here, it seems
     }
@@ -401,11 +406,6 @@ public final class EasyLegacyMotorController implements DcMotorController, Volta
         this.setMotorPowerFloat(1);
         this.setMotorPowerFloat(2);
         i2cDeviceClient.waitForWriteCompletions();  // paranoia about safety
-    }
-
-    @Override
-    public synchronized void setMotorControllerDeviceMode(DcMotorController.DeviceMode port) {
-        // ignored
     }
 
     private void stopMotors() {

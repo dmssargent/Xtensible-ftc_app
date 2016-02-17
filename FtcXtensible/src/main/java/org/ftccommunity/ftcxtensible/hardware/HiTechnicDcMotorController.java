@@ -18,10 +18,9 @@
 
 package org.ftccommunity.ftcxtensible.hardware;
 
-import com.google.common.base.Throwables;
-
 import android.util.Log;
 
+import com.google.common.base.Throwables;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtDcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -32,7 +31,6 @@ import com.qualcomm.robotcore.util.TypeConversion;
 
 import org.ftccommunity.i2clibrary.I2cDeviceClient;
 import org.ftccommunity.i2clibrary.I2cDeviceOnI2cDeviceController;
-import org.ftccommunity.i2clibrary.I2cDeviceReplacementHelper;
 import org.ftccommunity.i2clibrary.MemberUtil;
 import org.ftccommunity.i2clibrary.interfaces.II2cDevice;
 import org.ftccommunity.i2clibrary.interfaces.II2cDeviceClient;
@@ -42,8 +40,6 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Locale;
-
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Better DC Motor Controller for Legacy Devices for use in Xtensible
@@ -107,7 +103,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     public final String LOGGING_TAG = this.getClass().getSimpleName();
     private final II2cDeviceClient i2cDeviceClient;
     private final DcMotorController target;
-    I2cDeviceReplacementHelper<DcMotorController> helper;
+    //I2cDeviceReplacementHelper<DcMotorController> helper;
 
     //----------------------------------------------------------------------------------------------
     // Construction
@@ -122,7 +118,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     private HiTechnicDcMotorController(II2cDeviceClient ii2cDeviceClient, DcMotorController target) {
         LegacyModule legacyModule = MemberUtil.legacyModuleOfLegacyMotorController(target);
         int targetPort = MemberUtil.portOfLegacyMotorController(target);
-        this.helper = new I2cDeviceReplacementHelper<>(null, this, target, legacyModule, targetPort);
+        //this.helper = new I2cDeviceReplacementHelper<>(null, this, target, legacyModule, targetPort);
 
         this.i2cDeviceClient = ii2cDeviceClient;
         this.target = target;
@@ -208,7 +204,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     }
 
     private void setMotors(DcMotor motor1, DcMotor motor2) {
-        assertTrue(!this.isArmed());
+        //assertTrue(!this.isArmed());
 
         if ((motor1 != null && motor1.getController() != this.target)
                 || (motor2 != null && motor2.getController() != this.target)) {
@@ -247,7 +243,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
         if (!this.isArmed()) {
             this.usurpDevices();
 
-            this.helper.arm();
+            //this.helper.arm();
 
             this.i2cDeviceClient.arm();
             this.initPID();
@@ -260,7 +256,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     //----------------------------------------------------------------------------------------------
 
     private boolean isArmed() {
-        return this.helper.isArmed();
+        return true; //this.helper.isArmed();
     }
 
     private void disarm()
@@ -269,7 +265,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
         if (this.isArmed()) {
             this.i2cDeviceClient.disarm();
 
-            this.helper.disarm();
+            //this.helper.disarm();
 
             this.deusurpDevices();
         }
@@ -358,6 +354,11 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     //
     // Our task here is to work around that 50ms issue
 
+    @Override
+    public synchronized void setMotorControllerDeviceMode(DcMotorController.DeviceMode port) {
+        // ignored
+    }
+
     private void initPID() {
         // nothing to do here, it seems
     }
@@ -374,11 +375,6 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
         this.setMotorPower(1, 0);
         this.setMotorPower(2, 0);
         i2cDeviceClient.waitForWriteCompletions();  // paranoia about safety
-    }
-
-    @Override
-    public synchronized void setMotorControllerDeviceMode(DcMotorController.DeviceMode port) {
-        // ignored
     }
 
     private void validateMotor(int motor) {

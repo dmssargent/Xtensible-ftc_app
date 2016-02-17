@@ -17,13 +17,13 @@
  */
 package org.ftccommunity.ftcxtensible.networking.http;
 
+import android.util.Log;
+import android.webkit.MimeTypeMap;
+
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;

@@ -303,6 +303,16 @@ public class AdaFruitTCS34725ColorSensor extends ColorSensor implements IOpModeS
         }
     }
 
+    @Override
+    public synchronized int getI2cAddress() {
+        return this.i2cDeviceClient.getI2cAddr();
+    }
+
+    @Override
+    public synchronized void setI2cAddress(int i2cAddr8Bit) {
+        this.i2cDeviceClient.setI2cAddr(i2cAddr8Bit);
+    }
+
     public enum INTEGRATION_TIME {
         MS_2_4(0xFF), MS_24(0xF6), MS_50(0xEB), MS_101(0xD5), MS_154(0xC0), MS_700(0x00);
         public final byte byteVal;
@@ -321,19 +331,9 @@ public class AdaFruitTCS34725ColorSensor extends ColorSensor implements IOpModeS
         }
     }
 
-    @Override
-    public synchronized int getI2cAddress() {
-        return this.i2cDeviceClient.getI2cAddr();
-    }
-
     public static class Parameters {
         public INTEGRATION_TIME integrationTime = INTEGRATION_TIME.MS_2_4;
         public GAIN gain = GAIN.X4;
-    }
-
-    @Override
-    public synchronized void setI2cAddress(int i2cAddr8Bit) {
-        this.i2cDeviceClient.setI2cAddr(i2cAddr8Bit);
     }
 
 }
