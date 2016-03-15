@@ -28,6 +28,7 @@ import java.util.LinkedList;
  * @since 0.0.5
  * @see org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode
  */
+@Deprecated
 public abstract class LinearAutoModeAdapter extends AutoMode {
     protected LinearAutoModeAdapter() {
         autoState().autonomous().setRunLevels(new SimpleRunLevel[]{

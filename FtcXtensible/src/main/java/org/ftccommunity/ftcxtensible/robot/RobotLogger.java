@@ -37,7 +37,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public final class RobotLogger {
     private static RobotLogger logger;
-    private RobotContext context;
+    private final RobotContext context;
 
     private RobotLogger(RobotContext ctx) {
         context = ctx;

@@ -17,15 +17,15 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
-import com.google.common.annotations.Beta;
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.MoreExecutors;
-
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
+import com.google.common.annotations.Beta;
+import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -53,32 +53,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Beta
 @NotDocumentedWell
 public class RobotContext implements AbstractRobotContext {
+    private final ServerSettings serverSettings;
+    private final RobotStatus status;
+    private final LinkedList<InterfaceHttpData> postedData;
+    private final ExecutorService asyncService;
+    private final RobotLogger logger;
+    private final DataBinder bindings;
     private ExtensibleHardwareMap hardwareMap;
     private HardwareMap basicHardwareMap;
-
     private Context appContext;
-
     private Telemetry telemetry;
     private ExtensibleTelemetry extensibleTelemetry;
-
     private Gamepad gamepad1;
     private ExtensibleGamepad extensibleGamepad1;
     private Gamepad gamepad2;
     private ExtensibleGamepad extensibleGamepad2;
-
-    private ServerSettings serverSettings;
-    private RobotStatus status;
     private ExtensibleCameraManager extensibleCameraManager;
-
     private NetworkedOpMode networkedOpMode;
     private boolean networkingEnabled;
-
-    private LinkedList<InterfaceHttpData> postedData;
-
-    private ExecutorService asyncService;
-    private RobotLogger logger;
-
-    private DataBinder bindings;
     private View layout;
     private OpModeManager opModeManager;
 
@@ -105,7 +97,7 @@ public class RobotContext implements AbstractRobotContext {
      */
     public RobotContext(HardwareMap hwMap, Telemetry tlmtry) {
         this();
-        checkNotNull(hwMap, "XTENSIBLE: The hardware map is null");
+        checkNotNull(tlmtry, "XTENSIBLE: The telemetry handler is null");
 
         hardwareMap = new ExtensibleHardwareMap(hwMap);
         basicHardwareMap = hwMap;
@@ -118,6 +110,7 @@ public class RobotContext implements AbstractRobotContext {
         extensibleTelemetry = new ExtensibleTelemetry(tlmtry);
     }
 
+    @Nullable
     public static Context buildApplicationContext() {
         try {
             final Class<?> activityThreadClass =
@@ -209,7 +202,7 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     /**
-     * Returns the Hardware Map     *
+     * Returns the Hardware Map
      *
      * @return the <code>ExtensibleHardwareMap</code> currently in use
      */

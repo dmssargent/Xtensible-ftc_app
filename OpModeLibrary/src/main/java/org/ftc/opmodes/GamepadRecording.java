@@ -20,7 +20,7 @@ package org.ftc.opmodes;
 
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
-import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
+import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.util.LinkedList;
 

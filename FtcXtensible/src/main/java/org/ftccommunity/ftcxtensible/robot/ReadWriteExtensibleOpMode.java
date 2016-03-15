@@ -29,7 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-@Alpha
+@Deprecated
 @NotDocumentedWell
 public abstract class ReadWriteExtensibleOpMode extends ExtensibleOpMode {
     // TODO: 1/4/2016 throw out this design, and start from scratch

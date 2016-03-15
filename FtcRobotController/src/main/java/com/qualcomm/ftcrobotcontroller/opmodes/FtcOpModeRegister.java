@@ -35,5 +35,6 @@ public class FtcOpModeRegister implements OpModeRegister {
 
         FallbackOpModeRegister.register(mgr);
         AnnotationFtcRegister.loadOpModes(mgr);
+
     }
 }

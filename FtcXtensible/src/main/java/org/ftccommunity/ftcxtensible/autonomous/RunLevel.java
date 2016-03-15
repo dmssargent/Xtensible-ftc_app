@@ -19,7 +19,7 @@ package org.ftccommunity.ftcxtensible.autonomous;
 
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 
-@NotDocumentedWell
+@Deprecated
 public interface RunLevel {
     int execute();
 

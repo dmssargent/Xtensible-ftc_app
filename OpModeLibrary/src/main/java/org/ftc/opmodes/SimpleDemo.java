@@ -20,7 +20,7 @@ package org.ftc.opmodes;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
-import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
+import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 
 public class SimpleDemo extends SimpleOpMode {

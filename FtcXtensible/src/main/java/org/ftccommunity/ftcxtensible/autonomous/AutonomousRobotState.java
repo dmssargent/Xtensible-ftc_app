@@ -19,7 +19,6 @@
 package org.ftccommunity.ftcxtensible.autonomous;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
-import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.2.0
  */
 @Alpha
-@NotDocumentedWell
+@Deprecated
 public class AutonomousRobotState {
     private RobotContext context;
     private Autonomous auto;

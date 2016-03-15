@@ -20,4 +20,5 @@
  * Xtensible's functionality for Autonomous OpModes. These are level based rather than linear based
  */
 
+@Deprecated
 package org.ftccommunity.ftcxtensible.autonomous;

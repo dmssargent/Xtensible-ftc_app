@@ -28,6 +28,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author David Sargent
  * @since 0.1
+ * @deprecated see {@link RobotContext#enableNetworking()} instead
+ * @see RobotContext#enableNetworking()
  */
 public class NetworkedOpMode {
     private final Thread serverThread;

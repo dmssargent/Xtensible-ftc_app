@@ -22,7 +22,7 @@ import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.RobotsDontQuit;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.robot.RobotLogger;
-import org.ftccommunity.xtensible.xsimplify.SimpleOpMode;
+import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.util.Date;
 import java.util.LinkedList;

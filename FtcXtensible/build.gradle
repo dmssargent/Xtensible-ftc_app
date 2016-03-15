@@ -75,10 +75,5 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.4'
     testCompile 'junit:junit:4.12'
-    compile 'gov.nist.math:jama:1.0.3'
     compile 'org.jetbrains:annotations:13.0'
-    compile project(':OpModeAnnotations')
-    compile project(':XtensibleControllerBindings')
-    compile project(':I2cLibrary')
-    compile project(':XtensibleCore')
 }

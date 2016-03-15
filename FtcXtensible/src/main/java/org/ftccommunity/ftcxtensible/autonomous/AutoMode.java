@@ -25,7 +25,7 @@ import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import java.util.LinkedList;
 
 @NotDocumentedWell
-@Alpha
+@Deprecated
 public abstract class AutoMode extends ExtensibleOpMode {
     protected AutonomousRobotState state;
 

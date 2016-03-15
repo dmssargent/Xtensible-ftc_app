@@ -56,7 +56,7 @@ repositories {
 
 dependencies {
     compile name: 'FtcCommon-release', ext: 'aar'
-    //compile name:'Analytics-release', ext:'aar'
+    compile name: 'Analytics-release', ext: 'aar'
     compile name: 'Hardware-release', ext: 'aar'
     compile name: 'ModernRobotics-release', ext: 'aar'
     compile name: 'RobotCore-release', ext: 'aar'

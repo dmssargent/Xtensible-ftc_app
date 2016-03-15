@@ -21,6 +21,8 @@ package org.ftccommunity.ftcxtensible.robot;
 import com.google.common.base.Throwables;
 import com.google.common.collect.EvictingQueue;
 
+import org.ftccommunity.ftcxtensible.core.exceptions.RuntimeInterruptedException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -38,22 +40,26 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author David Sargent
  * @since 0.3.1
- * @see org.ftccommunity.ftcxtensible.autonomous.LinearAutoModeAdapter
  */
 public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
-    private EvictingQueue<Object> queue;
+    private final EvictingQueue<Object> queue;
+    private final Thread linearThread;
+    private final Watchdog watchdog;
     private EventWatcher eventWatcher;
-    private Thread linearThread;
-    private Watchdog watchdog;
     private OpModeState state;
+
+    protected ExtensibleLinearOpMode() {
+        watchdog = new Watchdog();
+        linearThread = new Thread(new LinearRunner());
+        queue = EvictingQueue.create(50);
+    }
 
     @Override
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {
-        watchdog = new Watchdog();
         watchdog().unlock();
         changeState(OpModeState.INIT);
 
-        linearThread = new Thread(new LinearRunner());
+
         linearThread.setUncaughtExceptionHandler(new LinearThreadExceptionHandler(watchdog()));
         linearThread.setPriority(8);
         linearThread.setName("OpMode Runner");
@@ -155,6 +161,7 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
      * @see org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode.OpModeState
      */
     @NotNull
+    @Contract(pure = true)
     protected final OpModeState state() {
         return state;
     }
@@ -208,23 +215,27 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
      * Sleeps the calling thread for the given number of milliseconds
      *
      * @param milliseconds the number of milliseconds to sleep
-     * @throws InterruptedException the calling thread was interrupted while sleeping
+     * @throws RuntimeInterruptedException the calling thread was interrupted while sleeping
      */
-    protected void sleep(long milliseconds) throws InterruptedException {
-        Thread.sleep(milliseconds);
+    protected void sleep(long milliseconds) throws RuntimeInterruptedException {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException ex) {
+            throw new RuntimeInterruptedException(ex);
+        }
     }
 
     /**
      * Sleeps the calling thread for the given duration. The duration is then recalculated into
      * milliseconds in a process that truncates the given duration, for example if this was called
-     * with {@value 45} for the duration and {@code NANOSECONDS} for the unit, the current thread
+     * with 45 for the duration and {@code NANOSECONDS} for the unit, the current thread
      * would sleep for 0 milliseconds.
      *
      * @param duration the number of units to sleep for
      * @param unit     what unit the duration is in
-     * @throws InterruptedException the calling thread was interrupted while sleeping
+     * @throws RuntimeInterruptedException the calling thread was interrupted while sleeping
      */
-    protected void sleep(long duration, TimeUnit unit) throws InterruptedException {
+    protected final void sleep(long duration, TimeUnit unit) throws RuntimeInterruptedException {
         sleep(TimeUnit.MILLISECONDS.convert(duration, unit));
     }
 
@@ -292,6 +303,7 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
      *
      * @return the current {@code Watchdog} for the given OpMode
      */
+    @NotNull
     public Watchdog watchdog() {
         return watchdog;
     }

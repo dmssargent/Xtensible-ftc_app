@@ -1,12 +1,6 @@
 include ':FtcRobotController',
-        ':XSimplify',
-        ':XAnalytics',
-        ':XtensibleCore',
-        ':I2cLibrary',
-        ':OpModeAnnotations',
         ':FtcXtensible',
         ':OpModeLibrary',
-        ':XtensibleControllerBindings',
         ':FtcSdk'
 /*
  * Copyright © 2016 David Sargent

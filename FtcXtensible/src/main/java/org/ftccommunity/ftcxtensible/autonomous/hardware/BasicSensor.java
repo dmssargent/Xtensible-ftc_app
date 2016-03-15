@@ -19,7 +19,7 @@ package org.ftccommunity.ftcxtensible.autonomous.hardware;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 
-@Alpha
+@Deprecated
 public interface BasicSensor {
     /**
      * The Hardware Name for the sensor, as-is from the Robot Configuration

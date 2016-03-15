@@ -18,10 +18,9 @@
 
 package org.ftccommunity.ftcxtensible.hardware;
 
-import com.google.common.base.Throwables;
-
 import android.util.Log;
 
+import com.google.common.base.Throwables;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtDcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -107,7 +106,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     public final String LOGGING_TAG = this.getClass().getSimpleName();
     private final II2cDeviceClient i2cDeviceClient;
     private final DcMotorController target;
-    //I2cDeviceReplacementHelper<DcMotorController> helper;
+    I2cDeviceReplacementHelper<DcMotorController> helper;
 
     //----------------------------------------------------------------------------------------------
     // Construction
@@ -163,7 +162,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
             HiTechnicDcMotorController controller = new HiTechnicDcMotorController(i2cDeviceClient, target);
 
             controller.setMotors(motor1, motor2);
-            //controller.arm();
+            controller.arm();
 
             return controller;
         } else {
@@ -208,7 +207,7 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     }
 
     private void setMotors(DcMotor motor1, DcMotor motor2) {
-        //assertTrue(!this.isArmed());
+        assertTrue(!this.isArmed());
 
         if ((motor1 != null && motor1.getController() != this.target)
                 || (motor2 != null && motor2.getController() != this.target)) {
@@ -241,39 +240,39 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     // VoltageSensor
     //----------------------------------------------------------------------------------------------
 
-//    private void arm()
-//    // Disarm the existing controller and arm us
-//    {
-//        if (!this.isArmed()) {
-//            this.usurpDevices();
-//
-//            //this.helper.arm();
-//
-//            this.i2cDeviceClient.arm();
-//            this.initPID();
-//            this.floatMotors();
-//        }
-//    }
+    private void arm()
+    // Disarm the existing controller and arm us
+    {
+        if (!this.isArmed()) {
+            this.usurpDevices();
+
+            //this.helper.arm();
+
+            this.i2cDeviceClient.arm();
+            this.initPID();
+            this.floatMotors();
+        }
+    }
 
     //----------------------------------------------------------------------------------------------
     // HardwareDevice
     //----------------------------------------------------------------------------------------------
 
-//    private boolean isArmed() {
-//        //return this.helper.isArmed();
-//    }
+    private boolean isArmed() {
+        return this.helper.isArmed();
+    }
 
-//    private void disarm()
-//    // Disarm us and re-arm the target
-//    {
-//        if (this.isArmed()) {
-//            this.i2cDeviceClient.disarm();
-//
-//            //this.helper.disarm();
-//
-//            this.deusurpDevices();
-//        }
-//    }
+    private void disarm()
+    // Disarm us and re-arm the target
+    {
+        if (this.isArmed()) {
+            this.i2cDeviceClient.disarm();
+
+            //this.helper.disarm();
+
+            this.deusurpDevices();
+        }
+    }
 
     public DcMotorController getWrappedTarget() {
         return target;
@@ -325,20 +324,20 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
 
     @Override
     public synchronized void close() {
-//        if (this.isArmed()) {
-//            this.stopMotors(); // mirrors robot controller runtime behavior
-//            this.disarm();
-//        }
+        if (this.isArmed()) {
+            this.stopMotors(); // mirrors robot controller runtime behavior
+            this.disarm();
+        }
         this.stopMotors();
     }
 
     private void write8(int ireg, byte data) {
-        //if (this.isArmed())
+        if (this.isArmed())
             this.i2cDeviceClient.write8(ireg, data, false);
     }
 
     private void write(int ireg, byte[] data) {
-        //if (this.isArmed())
+        if (this.isArmed())
             this.i2cDeviceClient.write(ireg, data, false);
     }
 
@@ -359,6 +358,12 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
     //
     // Our task here is to work around that 50ms issue
 
+    @Override
+    @Deprecated
+    public synchronized void setMotorControllerDeviceMode(DcMotorController.DeviceMode port) {
+        // ignored
+    }
+
     private void initPID() {
         // nothing to do here, it seems
     }
@@ -375,11 +380,6 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
         this.setMotorPower(1, 0);
         this.setMotorPower(2, 0);
         i2cDeviceClient.waitForWriteCompletions();  // paranoia about safety
-    }
-
-    @Override
-    public synchronized void setMotorControllerDeviceMode(DcMotorController.DeviceMode port) {
-        // ignored
     }
 
     private void validateMotor(int motor) {
@@ -558,5 +558,4 @@ public class HiTechnicDcMotorController implements DcMotorController, VoltageSen
         byte[] bytes = this.i2cDeviceClient.read(mpMotorRegCurrentEncoderValue[motor], cbEncoder);
         return TypeConversion.byteArrayToInt(bytes, ByteOrder.BIG_ENDIAN);
     }
-
 }

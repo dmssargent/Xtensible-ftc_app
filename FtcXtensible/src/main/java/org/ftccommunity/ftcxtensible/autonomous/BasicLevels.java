@@ -17,6 +17,7 @@
  */
 package org.ftccommunity.ftcxtensible.autonomous;
 
+@Deprecated
 public interface BasicLevels {
     class InitLevel implements RunLevel {
         public int execute() {

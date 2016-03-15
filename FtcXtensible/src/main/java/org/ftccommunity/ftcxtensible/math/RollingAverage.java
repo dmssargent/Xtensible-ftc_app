@@ -18,8 +18,21 @@
 
 package org.ftccommunity.ftcxtensible.math;
 
+import org.jetbrains.annotations.Contract;
+
 /**
  * Created by David on 1/23/2016.
  */
+@Deprecated
 public class RollingAverage {
+    /**
+     * Creates a new rolling average
+     *
+     * @throws Exception because it will throw an assertion error
+     * @deprecated not implemented do not use
+     */
+    @Deprecated
+    public RollingAverage() throws Exception {
+        throw new AssertionError("Not yet implemented");
+    }
 }
