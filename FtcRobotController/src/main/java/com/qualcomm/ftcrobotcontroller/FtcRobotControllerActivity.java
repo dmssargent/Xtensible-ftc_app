@@ -103,7 +103,15 @@ public class FtcRobotControllerActivity extends Activity {
   protected FtcRobotControllerService controllerService;
   protected FtcEventLoop eventLoop;
   protected Queue<UsbDevice> receivedUsbAttachmentNotifications;
-  private Utility utility;
+
+  protected class RobotRestarter implements Restarter {
+
+    public void requestRestart() {
+      requestRobotRestart();
+    }
+
+  }
+
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -186,7 +194,7 @@ public class FtcRobotControllerActivity extends Activity {
     updateUI = new UpdateUI(this, dimmer);
     updateUI.setRestarter(restarter);
     updateUI.setTextViews(textWifiDirectStatus, textRobotStatus,
-            textGamepad, textOpMode, textErrorMessage, textDeviceName);
+        textGamepad, textOpMode, textErrorMessage, textDeviceName);
     callback = updateUI.new Callback();
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -197,9 +205,7 @@ public class FtcRobotControllerActivity extends Activity {
 
     hittingMenuButtonBrightensScreen();
 
-    if (USE_DEVICE_EMULATION) {
-      HardwareFactory.enableDeviceEmulation();
-    }
+    if (USE_DEVICE_EMULATION) { HardwareFactory.enableDeviceEmulation(); }
   }
 
   @Override
@@ -249,13 +255,13 @@ public class FtcRobotControllerActivity extends Activity {
   }
 
   @Override
-  public void onWindowFocusChanged(boolean hasFocus) {
+  public void onWindowFocusChanged(boolean hasFocus){
     super.onWindowFocusChanged(hasFocus);
     // When the window loses focus (e.g., the action overflow is shown),
     // cancel any pending hide action. When the window gains focus,
     // hide the system UI.
     if (hasFocus) {
-      if (ImmersiveMode.apiOver19()) {
+      if (ImmersiveMode.apiOver19()){
         // Immersive flag only works on API 19 and above.
         immersion.hideSystemUI();
       }
