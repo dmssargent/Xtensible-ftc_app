@@ -93,21 +93,15 @@ public class RobotContext implements AbstractRobotContext {
     /**
      * Generates OpMode Robot Context item bonded to the normal items in an OpMode
      *
-     * @param hwMap opMode reference to the Hardware Map
+     * @param telemetry the Telemetry reference
      */
-    public RobotContext(HardwareMap hwMap, Telemetry tlmtry) {
+    public RobotContext(Telemetry telemetry) {
         this();
-        checkNotNull(tlmtry, "XTENSIBLE: The telemetry handler is null");
+        checkNotNull(telemetry, "XTENSIBLE: The telemetry handler is null");
 
-        hardwareMap = new ExtensibleHardwareMap(hwMap);
-        basicHardwareMap = hwMap;
-
-        appContext = hwMap.appContext;
-        if (appContext == null) {
-            appContext = buildApplicationContext();
-        }
-        telemetry = tlmtry;
-        extensibleTelemetry = new ExtensibleTelemetry(tlmtry);
+        appContext = buildApplicationContext();
+        this.telemetry = telemetry;
+        extensibleTelemetry = new ExtensibleTelemetry(telemetry);
     }
 
     @Nullable
@@ -156,8 +150,12 @@ public class RobotContext implements AbstractRobotContext {
      */
     @Override
     public void bindHardwareMap(@NotNull HardwareMap map) {
-        this.basicHardwareMap = checkNotNull(map);
-        rebuildHardwareMap();
+        this.basicHardwareMap = checkNotNull(map, "XTENSIBLE: the init-phase hardware map is null");
+        if (hardwareMap == null) {
+            hardwareMap = new ExtensibleHardwareMap(basicHardwareMap);
+        } else {
+            hardwareMap.rebuild(basicHardwareMap);
+        }
     }
 
     /**
@@ -166,7 +164,7 @@ public class RobotContext implements AbstractRobotContext {
      */
     @Override
     public void rebuildHardwareMap() {
-        hardwareMap().rebuild(basicHardwareMap);
+        hardwareMap.rebuild(basicHardwareMap);
     }
 
     /**

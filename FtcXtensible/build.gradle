@@ -76,4 +76,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations:13.0'
+    compile 'com.android.support:support-annotations:23.1.1'
 }

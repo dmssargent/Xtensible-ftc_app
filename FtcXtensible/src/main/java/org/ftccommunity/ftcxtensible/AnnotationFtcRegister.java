@@ -25,7 +25,6 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.util.RobotLog;
-import com.qualcomm.robotcore.util.Util;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.Disabled;
@@ -38,7 +37,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -83,10 +81,10 @@ public class AnnotationFtcRegister {
                 // todo: move this to the appropriate section
                 if (opMode.isAnnotationPresent(RobotSdkVersion.class)) {
                     RobotSdkVersion annotation = opMode.getAnnotation(RobotSdkVersion.class);
-                    if (annotation.value() != RobotSdkApiLevel.currentVerison()) {
+                    if (annotation.value() != RobotSdkApiLevel.currentVersion()) {
                         if (annotation.strict() ||
                                 annotation.compatibleUpTo()
-                                        .compareTo(RobotSdkApiLevel.currentVerison()) < 0) {
+                                        .compareTo(RobotSdkApiLevel.currentVersion()) < 0) {
                             Log.w(TAG, "Skipping OpMode " + getOpModeName(opMode) +
                                     " because of incompatibility");
                             continue;
@@ -105,23 +103,11 @@ public class AnnotationFtcRegister {
             }
         }
 
-        // check OpModes name length
-        StringBuilder nameBuilder = new StringBuilder();
-        for (Class<OpMode> opMode : opModesToRegister) {
-            nameBuilder.append(getOpModeName(opMode)).append(Util.ASCII_RECORD_SEPARATOR);
+        for (Class<OpMode> opMode :
+                opModesToRegister) {
+            register.register(getOpModeName(opMode), opMode);
         }
 
-        int length = nameBuilder.toString().getBytes(Charset.defaultCharset()).length;
-        if (length > 255) {
-            RobotLog.setGlobalErrorMsg("OpMode names are " + (length - 255) +
-                    " too long, please rename them or shorten them");
-            register.register("Too Many OpMode Names", TooManyOpModes.class);
-        } else {
-            for (Class<OpMode> opMode :
-                    opModesToRegister) {
-                register.register(getOpModeName(opMode), opMode);
-            }
-        }
     }
 
     /**
@@ -371,24 +357,6 @@ public class AnnotationFtcRegister {
             }
 
             return -1;
-        }
-    }
-
-    /**
-     * An OpMode injected whenever too many OpModes have been declared, or the size of the
-     * characters in the names is greater than the allowable number within the FIRST SDK
-     */
-    public class TooManyOpModes extends OpMode {
-        @Override
-        public void init() {
-            telemetry.addData("", "Too Many OpModes have been found, taking up too many" +
-                    "bytes");
-        }
-
-        @Override
-        public void loop() {
-            telemetry.addData("", "Too Many OpModes have been found, taking up too many" +
-                    "bytes");
         }
     }
 }

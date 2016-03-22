@@ -59,6 +59,5 @@ dependencies {
     compile project(':FtcSdk')
     compile project(':FtcXtensible')
     compile project(':OpModeLibrary')
-    //noinspection GradleDependency
-    compile 'com.android.support:support-annotations:23.0.1'
+    compile 'com.android.support:support-annotations:23.1.1'
 }

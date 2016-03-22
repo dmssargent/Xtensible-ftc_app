@@ -17,20 +17,20 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.EvictingQueue;
-import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
+import com.google.common.base.Throwables;
+import com.google.common.collect.EvictingQueue;
+import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -91,29 +91,7 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
      * Bootstraps the Extensible OpMode to the Xtensible library
      */
     protected ExtensibleOpMode() {
-        this.gamepad1 = super.gamepad1;
-        this.gamepad2 = super.gamepad2;
-        this.hardwareMap = super.hardwareMap;
-
-//        if (super.hardwareMap.appContext == null) {
-//            RobotLog.w("App Context is null during construction.");
-//        }
-
-        this.telemetry = super.telemetry;
-        loopCount = 0;
-        skipNextLoop = 0;
-
-        if (parent == null) {
-            robotContext = new RobotContext(hardwareMap, telemetry);
-            parent = this;
-        } else {
-            robotContext = parent.robotContext;
-        }
-
-        loopManager = new ExtensibleLoopManager();
-        loopTimes = EvictingQueue.create(50);
-
-        Log.i(TAG, "OpMode: " + this.getClass().getSimpleName());
+        this(null);
     }
 
     /**
@@ -121,9 +99,28 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
      *
      * @param prt the parent Extensible OpMode
      */
-    protected ExtensibleOpMode(ExtensibleOpMode prt) {
-        this();
-        parent = prt;
+    protected ExtensibleOpMode(@Nullable ExtensibleOpMode prt) {
+        this.gamepad1 = super.gamepad1;
+        this.gamepad2 = super.gamepad2;
+        this.hardwareMap = super.hardwareMap;
+        this.telemetry = super.telemetry;
+
+        loopCount = 0;
+        skipNextLoop = 0;
+
+        if (parent == null && prt == null) {
+            robotContext = new RobotContext(telemetry);
+            parent = this;
+        } else if (parent != null) {
+            robotContext = parent.robotContext;
+        } else {
+            robotContext = prt.robotContext;
+        }
+
+        loopManager = new ExtensibleLoopManager();
+        loopTimes = EvictingQueue.create(50);
+
+        Log.i(TAG, "Starting OpMode: " + this.getClass().getSimpleName());
     }
 
     /**
@@ -408,15 +405,6 @@ public abstract class ExtensibleOpMode extends OpMode implements FullOpMode, Abs
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
-                        final RobotContext context = robotContext;
-//                        try {
-//                            Method robotRestart = context.appContext().getClass().getMethod("requestRobotRestart");
-//                            robotRestart.setAccessible(true);
-//                            robotRestart.invoke(context.appContext());
-//                            Thread.sleep(10000);
-//                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InterruptedException e1) {
-//                            e1.printStackTrace();
-//                        }
                         try {
                             do {
                                 Log.i(TAG, "Attempted to start " + currentName);

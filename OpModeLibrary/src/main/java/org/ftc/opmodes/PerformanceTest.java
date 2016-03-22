@@ -34,12 +34,19 @@ import java.util.concurrent.TimeUnit;
 
 @Autonomous
 public class PerformanceTest extends SimpleOpMode {
-    private long lastTime;
-    private Queue<Long> timeQueue = EvictingQueue.create(1000000 / 50);
-    private String result;
+    private static final int REDUCE_BY_FACTOR = 50;
     private final static String test = "TEST";
-    private final static String warmUp = "Warming up...";;
+    private final static String warmUp = "Warming up...";
     private final static String performTest = "Performing test...";
+    private long lastTime;
+    private Queue<Long> timeQueue = EvictingQueue.create(1000000 / REDUCE_BY_FACTOR);
+    ;
+    private String result;
+
+    private static long convert(long nano) {
+        return TimeUnit.NANOSECONDS.toMillis(nano);
+    }
+
     @Override
     public void init(RobotContext ctx) throws Exception {
 
@@ -52,16 +59,16 @@ public class PerformanceTest extends SimpleOpMode {
 
     @Override
     public void loop(RobotContext ctx) throws Exception {
-        final long delta =  System.nanoTime() - lastTime;
-        if (getLoopCount() < 20000 / 50) {
+        final long delta = System.nanoTime() - lastTime;
+        if (getLoopCount() < 20000 / REDUCE_BY_FACTOR) {
             timeQueue.add(delta);
             telemetry.data(test, warmUp);
-        } else if (getLoopCount() >= 20000 / 50 && getLoopCount() < 1.02E6 / 50) {
+        } else if (getLoopCount() >= 20000 / REDUCE_BY_FACTOR && getLoopCount() < 1.02E6 / REDUCE_BY_FACTOR) {
             timeQueue.add(delta);
             telemetry.data(test, performTest);
         }
 
-        if (getLoopCount() > 1.2E6) {
+        if (getLoopCount() > 1.2E6 / REDUCE_BY_FACTOR) {
             if (result == null) {
                 List<Long> list = Arrays.asList(timeQueue.toArray(new Long[timeQueue.size()]));
                 Collections.sort(list);
@@ -76,9 +83,5 @@ public class PerformanceTest extends SimpleOpMode {
         }
 
         lastTime = System.nanoTime();
-    }
-
-    private static long convert(long nano) {
-        return TimeUnit.NANOSECONDS.toMillis(nano);
     }
 }

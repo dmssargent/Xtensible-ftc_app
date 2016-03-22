@@ -17,9 +17,13 @@
  */
 package org.ftccommunity.bindings;
 
+import android.util.Log;
 import android.view.View;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * A static class used to manage inter-library communication to avoid cyclic dependencies. This may
@@ -44,6 +48,7 @@ public class DataBinder {
     private static HashMap<String, View> viewBindings;
     private static HashMap<String, String> stringBindings;
     private static HashMap<String, Object> objectBindings;
+    private static HashMap<String, Object> RC;
 
     /**
      * Creates new data binder instance, {@see #getInstance} if need to use this object for
@@ -107,5 +112,45 @@ public class DataBinder {
      */
     public HashMap<String, Object> objects() {
         return objectBindings;
+    }
+
+    public int id(String name) {
+        String key = "R.id." + name;
+        if (RC.containsKey(key)) {
+            return (int) RC.get(key);
+        } else {
+            throw new IllegalArgumentException("ID Not Found");
+        }
+    }
+
+    public void bindTo(Class<?> R) {
+        Stack<String> currentStack = new Stack<>();
+        currentStack.add(R.getSimpleName());
+        RC = new HashMap<>();
+        addInners(currentStack, RC, R);
+    }
+
+    private void addInners(Stack<String> stack, HashMap<String, Object> map, Class<?> klazz) {
+        for (Class<?> innerClass : klazz.getClasses()) {
+            stack.add("." + innerClass.getSimpleName().replace('$', '\0'));
+            String currentLocation = "";
+            for (String element : stack) {
+                currentLocation += element;
+            }
+            for (Field o : innerClass.getFields()) {
+                boolean wasAccessible = o.isAccessible();
+                if (Modifier.isStatic(o.getModifiers())) {
+                    try {
+                        map.put(currentLocation + "." + o.getName(), o.get(null));
+                    } catch (IllegalAccessException | NullPointerException e) {
+                        Log.w("BINDINGS", "The field \"" + o.getName() + "\" failed to be accessed", e);
+                    }
+                }
+                o.setAccessible(wasAccessible);
+            }
+
+            addInners(stack, map, innerClass);
+            stack.pop();
+        }
     }
 }

@@ -32,6 +32,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
         binding.integers().put(DataBinder.RC_VIEW, R.id.RelativeLayout);
         binding.objects().put(DataBinder.RC_MANAGER, mgr);
+        binding.bindTo(R.class);
 
         FallbackOpModeRegister.register(mgr);
         AnnotationFtcRegister.loadOpModes(mgr);
