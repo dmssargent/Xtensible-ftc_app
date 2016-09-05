@@ -18,10 +18,8 @@
 
 package org.ftccommunity.ftcxtensible.hardware.internal;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.I2cController;
-
-import org.ftccommunity.ftcxtensible.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 
 import java.util.concurrent.locks.Lock;
 
@@ -70,6 +68,11 @@ public class AbstractI2cDevice implements I2cDevice {
     }
 
     @Override
+    public void clearI2cPortActionFlag() {
+        this.i2cController.isI2cPortActionFlagSet(this.port);
+    }
+
+    @Override
     public void readI2cCacheFromController() {
         this.i2cController.readI2cCacheFromController(this.port);
     }
@@ -100,6 +103,31 @@ public class AbstractI2cDevice implements I2cDevice {
     }
 
     @Override
+    public void registerForPortReadyBeginEndCallback(I2cController.I2cPortReadyBeginEndNotifications i2cPortReadyBeginEndNotifications) {
+        this.i2cController.registerForPortReadyBeginEndCallback(i2cPortReadyBeginEndNotifications, this.port);
+    }
+
+    @Override
+    public I2cController.I2cPortReadyBeginEndNotifications getPortReadyBeginEndCallback() {
+        return this.i2cController.getPortReadyBeginEndCallback(this.port);
+    }
+
+    @Override
+    public void deregisterForPortReadyBeginEndCallback() {
+        this.i2cController.deregisterForPortReadyBeginEndCallback(this.port);
+    }
+
+    @Override
+    public boolean isArmed() {
+        return this.i2cController.isArmed();
+    }
+
+    @Override
+    public I2cController getController() {
+        return this.i2cController;
+    }
+
+    @Override
     public Lock getI2cReadCacheLock() {
         return this.i2cController.getI2cReadCacheLock(this.port);
     }
@@ -125,8 +153,19 @@ public class AbstractI2cDevice implements I2cDevice {
     }
 
     @Override
+    public I2cController.I2cPortReadyCallback getI2cPortReadyCallback() {
+        return this.i2cController.getI2cPortReadyCallback(this.port);
+    }
+
+    @Override
     public void deregisterForPortReadyCallback() {
         this.i2cController.deregisterForPortReadyCallback(this.port);
+    }
+
+    @Deprecated
+    @Override
+    public int getCallbackCount() {
+        return 0;
     }
 
     /**
@@ -166,6 +205,12 @@ public class AbstractI2cDevice implements I2cDevice {
 
     public I2cController getI2cController() {
         return i2cController;
+    }
+
+    @Deprecated
+    @Override
+    public int getPort() {
+        return 0;
     }
 
     public int getVersion() {

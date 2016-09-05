@@ -17,13 +17,13 @@
  */
 package org.ftccommunity.ftcxtensible.util;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
-import android.util.Log;
 
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.jetbrains.annotations.NotNull;
@@ -137,9 +137,9 @@ public class JoystickInputProcessor {
             index = 2;
         } else if (context.gamepad1().isYPressed()) {
             index = 3;
-        } else if (context.gamepad1().getDpad().isUpPressed()) {
+        } else if (context.gamepad1().dpad.isUpPressed()) {
             index = 4;
-        } else if (context.gamepad1().getDpad().isDownPressed()) {
+        } else if (context.gamepad1().dpad.isDownPressed()) {
             index = 5;
         }
 
@@ -147,9 +147,9 @@ public class JoystickInputProcessor {
             joystickQuestion.handleResponse(answers.get(index));
         }
 
-        if (context.gamepad1().getDpad().isLeftPressed()) {
+        if (context.gamepad1().dpad.isLeftPressed()) {
             this.index = --this.index % questions.size();
-        } else if (context.gamepad1().getDpad().isRightPressed()) {
+        } else if (context.gamepad1().dpad.isRightPressed()) {
             this.index %= ++this.index % questions.size();
         }
     }

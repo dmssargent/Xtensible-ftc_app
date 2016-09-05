@@ -197,6 +197,24 @@ public enum RobotSdkApiLevel implements Comparator<RobotSdkApiLevel> {
         public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
             return comparator(lhs, rhs);
         }
+    },
+    /**
+     *
+     */
+    R16_03_30 {
+        @Override
+        public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+            return comparator(lhs, rhs);
+        }
+    },
+    /**
+     *
+     */
+    R16_07_08 {
+        @Override
+        public int compare(RobotSdkApiLevel lhs, RobotSdkApiLevel rhs) {
+            return comparator(lhs, rhs);
+        }
     };
 
 

@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.common.annotations.Beta;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
@@ -34,14 +35,18 @@ import com.qualcomm.robotcore.robocol.Telemetry;
 import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
 import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;
+import org.ftccommunity.ftcxtensible.interfaces.RobotAction;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -59,10 +64,10 @@ public class RobotContext implements AbstractRobotContext {
     private final ExecutorService asyncService;
     private final RobotLogger logger;
     private final DataBinder bindings;
+    private final RobotEventManager eventManager;
     private ExtensibleHardwareMap hardwareMap;
     private HardwareMap basicHardwareMap;
     private Context appContext;
-    private Telemetry telemetry;
     private ExtensibleTelemetry extensibleTelemetry;
     private Gamepad gamepad1;
     private ExtensibleGamepad extensibleGamepad1;
@@ -73,8 +78,9 @@ public class RobotContext implements AbstractRobotContext {
     private boolean networkingEnabled;
     private View layout;
     private OpModeManager opModeManager;
+    private List<RobotEvent> events = new LinkedList<>();
 
-    private RobotContext() {
+    RobotContext() {
         serverSettings = ServerSettings.createServerSettings();
         status = new RobotStatus(this, RobotStatus.LogTypes.HTML);
         postedData = new LinkedList<>();
@@ -84,25 +90,24 @@ public class RobotContext implements AbstractRobotContext {
 
         asyncService = MoreExecutors.listeningDecorator(
                 Executors.newCachedThreadPool());
+
         extensibleCameraManager = new ExtensibleCameraManager(this, 100);
         logger = RobotLogger.createInstance(this);
 
         bindings = DataBinder.getInstance();
-    }
-
-    /**
-     * Generates OpMode Robot Context item bonded to the normal items in an OpMode
-     *
-     * @param telemetry the Telemetry reference
-     */
-    public RobotContext(Telemetry telemetry) {
-        this();
-        checkNotNull(telemetry, "XTENSIBLE: The telemetry handler is null");
-
         appContext = buildApplicationContext();
-        this.telemetry = telemetry;
-        extensibleTelemetry = new ExtensibleTelemetry(telemetry);
+        eventManager = new RobotEventManager(this);
+
+        List<Runnable> asyncs = findAsyncMethods(this.getClass(), null);
+        Log.i("ASYNC_RUNNER", "Discovered " + asyncs.size() + " asyncs");
+        for (Runnable runnable : asyncs) {
+            Log.i("ASYNC_RUNNER", "Starting " + runnable.getClass().getSimpleName());
+            asyncService.submit(runnable);
+        }
     }
+
+
+
 
     @Nullable
     public static Context buildApplicationContext() {
@@ -229,15 +234,17 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     @Override
-    public void prepare(Context ctx, HardwareMap basicHardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
+    public void prepare(Context ctx, HardwareMap basicHardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         checkArgument(ctx instanceof Activity, "Invalid context; it must be of an activity context type");
         bindAppContext(ctx);
         bindHardwareMap(checkNotNull(basicHardwareMap));
         this.gamepad1 = checkNotNull(gamepad1, "Gamepad 1 is null");
         this.gamepad2 = checkNotNull(gamepad2, "Gamepad 2 is null");
-
+        extensibleTelemetry = new ExtensibleTelemetry(checkNotNull(telemetry, "telemetry is null"));
         layout = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.RC_VIEW));
         opModeManager = ((OpModeManager) controllerBindings().objects().get(DataBinder.RC_MANAGER));
+
+        eventManager.run();
     }
 
     /**
@@ -306,6 +313,43 @@ public class RobotContext implements AbstractRobotContext {
         } else {
             throw new NullPointerException();
         }
+    }
+
+    private List<Runnable> findAsyncMethods(Class klazz, HashMap<String, Runnable> runnables) {
+        if (runnables == null) {
+            runnables = new HashMap<>();
+        }
+
+        if (klazz.equals(Object.class)) {
+            return new LinkedList<>(runnables.values());
+        }
+
+        for (final Method method : klazz.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(Async.class)) {
+                Log.i("ASYNC_RUNNER", "Discovered async " + method.getName());
+                if (!runnables.containsKey(method.getName())) {
+                    method.setAccessible(true);
+                    runnables.put(method.getName(), new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                final String name = method.getDeclaringClass() + "#" + method.getName();
+                                Thread.currentThread().setName(name);
+                                Log.i("ASYNC_RUNNER", "Begin " + name);
+                                method.invoke(RobotContext.this);
+                                Log.i("ASYNC_RUNNER", "End " + method.getDeclaringClass() + "#" + method.getName());
+                            } catch (IllegalAccessException e) {
+                                Log.e("ASYNC_RUNNER", "Failed to start method", e);
+                            } catch (InvocationTargetException e) {
+                                Throwables.propagate(e.getTargetException());
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        return findAsyncMethods(klazz.getSuperclass(), runnables);
     }
 
     /**
@@ -410,6 +454,10 @@ public class RobotContext implements AbstractRobotContext {
             }
             extensibleTelemetry = null;
         }
+
+        if (eventManager != null) {
+            eventManager.shutdown();
+        }
     }
 
     /**
@@ -447,25 +495,32 @@ public class RobotContext implements AbstractRobotContext {
         return opModeManager;
     }
 
-   /* public LinkedList upstreamPipeline(HardwareDevice device) {
-        if (!deviceUpstreamPipeline.containsKey(device)) {
-            deviceUpstreamPipeline.put(device, new LinkedList<UpstreamHardwareUpdate>());
-        }
-        return deviceUpstreamPipeline.get(device);
+    public List<RobotEvent> events() {
+        return events;
     }
 
-    public LinkedList upstreamPipeline(Collection<HardwareDevice> devices) {
-        if (!genericUpstreamPipeline.containsKey(devices)) {
-            genericUpstreamPipeline.put(devices, new LinkedList<UpstreamHardwareUpdate>());
+    public RobotContext registerEvent(@NotNull Object value, @NotNull Object goalValue, RobotAction... actions) {
+        for (RobotAction action : actions) {
+            registerEvent(new RobotEvent(value, goalValue, action));
         }
-        return genericUpstreamPipeline.get(devices);
+
+        return this;
     }
 
-    public void processDevice(HardwareDevice device) {
-        if (deviceUpstreamPipeline.containsKey(device)) {
-            for (UpstreamHardwareUpdate<HardwareDevice> upstreamHardwareUpdate : deviceUpstreamPipeline.get(device)) {
-                upstreamHardwareUpdate.processRead(device, );
-            }
+    public RobotContext registerEvent(@NotNull RobotEvent event) {
+        events.add(event);
+        return this;
+    }
+
+    public void handleEvents() {
+        final List<RobotEvent> events = events();
+        for (RobotEvent event : events) {
+            event.run();
         }
-    }*/
+    }
+
+    @NotNull
+    public RobotEventManager eventManager() {
+        return eventManager;
+    }
 }

@@ -132,6 +132,8 @@ public final class RobotLogger {
 
         RobotLog.w(mess);
         getInstance().context.status().log(Level.WARNING, tag, mess);
+
+
     }
 
     /**

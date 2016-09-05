@@ -18,11 +18,11 @@
 
 package org.ftccommunity.i2clibrary;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.I2cController;
 
 import org.ftccommunity.i2clibrary.interfaces.II2cDevice;
 
+import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 
 /**
@@ -77,9 +77,9 @@ public final class I2cDeviceOnI2cDeviceController implements II2cDevice
     @Override
     public String getConnectionInfo() {
         String sController = "anI2cController";
-        if (this.controller instanceof HardwareDevice)
+        if (this.controller != null)
             sController = this.controller.getConnectionInfo();
-        return String.format("%s; port: %d", sController, this.port);
+        return String.format(Locale.ENGLISH, "%s; port: %d", sController, this.port);
     }
 
     @Override

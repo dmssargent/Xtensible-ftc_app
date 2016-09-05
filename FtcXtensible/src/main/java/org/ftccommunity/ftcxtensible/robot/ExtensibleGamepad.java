@@ -17,35 +17,28 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
-import com.google.common.io.Files;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-
 import android.util.Log;
 
+import com.google.common.collect.Range;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.ftccommunity.ftcxtensible.core.exceptions.RuntimeIOException;
 import org.ftccommunity.ftcxtensible.core.internal.HashUtil;
-import org.ftccommunity.ftcxtensible.core.io.Files2;
+import org.ftccommunity.ftcxtensible.gamepad.Axis;
+import org.ftccommunity.ftcxtensible.gamepad.GamepadButton;
+import org.ftccommunity.ftcxtensible.gamepad.GamepadEvent;
+import org.ftccommunity.ftcxtensible.gamepad.GamepadTrigger;
+import org.ftccommunity.ftcxtensible.gamepad.learning.GamepadRecord;
+import org.ftccommunity.ftcxtensible.gamepad.learning.GamepadState;
+import org.ftccommunity.ftcxtensible.interfaces.GamepadAxis;
 import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
+import org.ftccommunity.ftcxtensible.interfaces.RobotAction;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.math.CartesianCoordinates;
 import org.ftccommunity.ftcxtensible.math.PolarCoordinates;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Closeable;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -63,9 +56,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Alpha
 public class ExtensibleGamepad implements Closeable {
-    private final Joystick leftJoystick;
-    private final Joystick rightJoystick;
-    private final Dpad dpad;
+    public final Joystick leftJoystick;
+    public final Joystick rightJoystick;
+    public final Dpad dpad;
     private boolean a;
     private boolean b;
     private boolean x;
@@ -88,6 +81,7 @@ public class ExtensibleGamepad implements Closeable {
     private transient GamepadRecord gamepadRecord;
 
     private boolean hasBeenClosed = false;
+    private List<GamepadEvent> handlers;
 
     /**
      * Setup a basic gamepad; be sure to call {@link ExtensibleGamepad#updateGamepad} to make this
@@ -103,6 +97,8 @@ public class ExtensibleGamepad implements Closeable {
 
         recording = false;
         playingBack = false;
+
+        handlers = new LinkedList<>();
     }
 
     public ExtensibleGamepad(final RobotContext ctx, Gamepad gp) {
@@ -159,7 +155,7 @@ public class ExtensibleGamepad implements Closeable {
             leftTrigger = state.leftTrigger;
             rightTrigger = state.rightTrigger;
 
-            getDpad().update(state.dpad.isUpPressed(), state.dpad.isDownPressed(),
+            dpad.update(state.dpad.isUpPressed(), state.dpad.isDownPressed(),
                     state.dpad.isRightPressed(), state.dpad.isLeftPressed());
 
             rightJoystick().update(state.rightJoystick.x, state.rightJoystick.y, state.rightJoystick.pressed);
@@ -198,7 +194,7 @@ public class ExtensibleGamepad implements Closeable {
 
             timestamp = gp.timestamp;
 
-            getDpad().update(gp.dpad_up, gp.dpad_down, gp.dpad_right, gp.dpad_left);
+            dpad.update(gp.dpad_up, gp.dpad_down, gp.dpad_right, gp.dpad_left);
 
             rightJoystick().update(gp.right_stick_x, gp.right_stick_y, gp.right_stick_button);
 
@@ -219,10 +215,16 @@ public class ExtensibleGamepad implements Closeable {
         }
 
         if (recording) {
-            gamepadRecord.addRecord(new GamepadState(leftJoystick, rightJoystick, dpad,
+            gamepadRecord.addRecord(new GamepadState(System.nanoTime(), leftJoystick, rightJoystick, dpad,
                     a, b, x, y,
                     guide, start, back,
                     leftBumper, rightBumper, leftTrigger, rightTrigger));
+        }
+
+        for (GamepadEvent event : handlers) {
+            if (checkForExecuteGamepadCallback(event.object, event.valueToExecuteOn, event.other)) {
+                event.action.perform();
+            }
         }
     }
 
@@ -395,9 +397,85 @@ public class ExtensibleGamepad implements Closeable {
      * Gets the D-Pad of this controller
      *
      * @return {@link org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad.Dpad} of this controller
+     * @deprecated see {@link #dpad()}
      */
+    @Deprecated
     public Dpad getDpad() {
         return dpad;
+    }
+
+    public Dpad dpad() {
+        return dpad;
+    }
+
+    public ExtensibleGamepad when(Joystick joystick, Range<Double> is, RobotAction action, Axis axis) {
+        handlers.add(new GamepadEvent(joystick, is, action, axis));
+        return this;
+    }
+
+    public ExtensibleGamepad when(GamepadButton button, boolean is, RobotAction action) {
+        handlers.add(new GamepadEvent(button, is, action));
+        return this;
+    }
+
+    public ExtensibleGamepad when(GamepadTrigger trigger, Range<Double> is, RobotAction action) {
+        handlers.add(new GamepadEvent(trigger, is, action));
+        return this;
+    }
+
+    private boolean checkForExecuteGamepadCallback(Object o, Object value, Object opt) {
+        if (o instanceof Joystick && value instanceof Range && opt instanceof Axis) {
+            Joystick joystick = (Joystick) o;
+            if (opt == Joystick.Axises.X) {
+                return ((Range<Double>) value).contains(joystick.x);
+            } else if (opt == Joystick.Axises.Y) {
+                return ((Range<Double>) value).contains(joystick.y);
+            }
+
+            return false;
+        } else if (o instanceof Buttons && value instanceof Boolean) {
+            Buttons button = (Buttons) o;
+            boolean val = (boolean) value;
+            switch (button) {
+                case A:
+                    return a == val;
+                case B:
+                    return b == val;
+                case X:
+                    return x == val;
+                case Y:
+                    return y == val;
+                case BACK:
+                    return back == val;
+                case GUIDE:
+                    return guide == val;
+                case START:
+                    return start == val;
+                case LEFT_BUMPER:
+                    return leftBumper == val;
+                case RIGHT_BUMPER:
+                    return rightBumper == val;
+                case DPAD_UP:
+                    return dpad.up == val;
+                case DPAD_LEFT:
+                    return dpad.left == val;
+                case DPAD_DOWN:
+                    return dpad.down == val;
+                case DPAD_RIGHT:
+                    return dpad.right == val;
+                default:
+                    return false;
+            }
+        } else if (o instanceof Triggers && value instanceof Range) {
+            switch ((Triggers) o) {
+                case LEFT_TRIGGER:
+                    return ((Range<Double>) value).contains((double) leftTrigger);
+                case RIGHT_TRIGGER:
+                    return ((Range<Double>) value).contains((double) rightTrigger);
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -417,7 +495,7 @@ public class ExtensibleGamepad implements Closeable {
      * has been called on this object
      */
     private synchronized void record() {
-        GamepadState record = new GamepadState(leftJoystick, rightJoystick, dpad,
+        GamepadState record = new GamepadState(System.nanoTime(), leftJoystick, rightJoystick, dpad,
                 a, b, x, y, guide, start, back,
                 leftBumper, rightBumper, leftTrigger, rightTrigger);
         gamepadRecord.addRecord(record);
@@ -477,7 +555,6 @@ public class ExtensibleGamepad implements Closeable {
         } else {
             throw new IllegalArgumentException("Unknown name for playback: " + name);
         }
-
     }
 
     /**
@@ -533,7 +610,7 @@ public class ExtensibleGamepad implements Closeable {
 
     /**
      * Closes the gamepad and release any system resources it holds.
-     * <p>
+     * <p/>
      * <p>Although only the first call has any effect, it is safe to call close multiple times on
      * the same object. This is more lenient than the overridden {@code AutoCloseable.close()},
      * which may be called at most once.
@@ -547,6 +624,49 @@ public class ExtensibleGamepad implements Closeable {
         }
 
         hasBeenClosed = true;
+    }
+
+    @Override
+    public int hashCode() {
+        HashUtil hash = new HashUtil(65);
+        hash.addFieldToHash(leftJoystick)
+                .addFieldToHash(rightJoystick)
+                .addFieldToHash(dpad)
+                .addFieldToHash(a)
+                .addFieldToHash(b)
+                .addFieldToHash(x)
+                .addFieldToHash(y)
+                .addFieldToHash(guide)
+                .addFieldToHash(start)
+                .addFieldToHash(back)
+                .addFieldToHash(leftBumper)
+                .addFieldToHash(rightBumper)
+                .addFieldToHash(leftTrigger)
+                .addFieldToHash(rightTrigger);
+        return hash.get();
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
+                        " dpad: %s" +
+                        " a: %s b: %s x: %s y: %s" +
+                        " guide: %s back: %s" +
+                        " left bumper: %s right bumper: %s" +
+                        " left trigger: %s right trigger: %s",
+                leftJoystick, rightJoystick, dpad,
+                a, b, x, y, guide, back,
+                leftBumper, rightBumper,
+                leftTrigger, rightTrigger);
+    }
+
+    public enum Buttons implements GamepadButton {
+        DPAD_UP, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT, A, B, X, Y,
+        GUIDE, START, BACK, LEFT_BUMPER, RIGHT_BUMPER
+    }
+
+    public enum Triggers implements GamepadTrigger {
+        LEFT_TRIGGER, RIGHT_TRIGGER
     }
 
     /**
@@ -644,26 +764,8 @@ public class ExtensibleGamepad implements Closeable {
         public String toString() {
             return " x: " + x + " y:" + y + " pressed: " + pressed;
         }
-    }
 
-    @Override
-    public int hashCode() {
-        HashUtil hash = new HashUtil(65);
-        hash.addFieldToHash(leftJoystick)
-                .addFieldToHash(rightJoystick)
-                .addFieldToHash(dpad)
-                .addFieldToHash(a)
-                .addFieldToHash(b)
-                .addFieldToHash(x)
-                .addFieldToHash(y)
-                .addFieldToHash(guide)
-                .addFieldToHash(start)
-                .addFieldToHash(back)
-                .addFieldToHash(leftBumper)
-                .addFieldToHash(rightBumper)
-                .addFieldToHash(leftTrigger)
-                .addFieldToHash(rightTrigger);
-        return hash.get();
+        public enum Axises implements GamepadAxis {X, Y}
     }
 
     /**
@@ -760,285 +862,7 @@ public class ExtensibleGamepad implements Closeable {
         }
     }
 
-    private static class GamepadState {
-        public final Joystick leftJoystick;
-        public final Joystick rightJoystick;
-        public final Dpad dpad;
-        public final boolean a;
-        public final boolean b;
-        public final boolean x;
-        public final boolean y;
-        public final boolean guide;
-        public final boolean start;
-        public final boolean back;
-        public final boolean leftBumper;
-        public final boolean rightBumper;
-        public final float leftTrigger;
-        public final float rightTrigger;
-
-        private transient int hashcode = 0;
-
-        public GamepadState(Joystick leftJoystick, Joystick rightJoystick,
-                            Dpad dpad, boolean a, boolean b, boolean x, boolean y,
-                            boolean guide, boolean start, boolean back,
-                            boolean leftBumper, boolean rightBumper, float leftTrigger, float rightTrigger) {
-            this.leftJoystick = leftJoystick;
-            this.rightJoystick = rightJoystick;
-            this.dpad = dpad;
-            this.a = a;
-            this.b = b;
-            this.x = x;
-            this.y = y;
-            this.guide = guide;
-            this.start = start;
-            this.back = back;
-            this.leftBumper = leftBumper;
-            this.rightBumper = rightBumper;
-            this.leftTrigger = leftTrigger;
-            this.rightTrigger = rightTrigger;
-        }
-
-        @Override
-        public int hashCode() {
-            if (hashcode != 0) {
-                return hashcode;
-            }
-
-            HashUtil hash = new HashUtil(3546);
-            hash.addFieldToHash(leftJoystick)
-                    .addFieldToHash(rightJoystick)
-                    .addFieldToHash(dpad)
-                    .addFieldToHash(a)
-                    .addFieldToHash(b)
-                    .addFieldToHash(x)
-                    .addFieldToHash(y)
-                    .addFieldToHash(guide)
-                    .addFieldToHash(start)
-                    .addFieldToHash(back)
-                    .addFieldToHash(leftBumper)
-                    .addFieldToHash(rightBumper)
-                    .addFieldToHash(leftTrigger)
-                    .addFieldToHash(rightTrigger);
-            hashcode = hash.get();
-            return hashcode;
-        }
-
-        public boolean equals(Object o) {
-            if (o == this) {
-                return true;
-            }
-
-            if (!(o instanceof GamepadState)) {
-                return false;
-            }
-            GamepadState s = (GamepadState) o;
-            return leftJoystick.equals(s.leftJoystick) &&
-                    rightJoystick.equals(s.rightJoystick) &&
-                    dpad.equals(s.dpad) &&
-                    a == s.a &&
-                    b == s.b &&
-                    x == s.x &&
-                    y == s.y &&
-                    guide == s.guide &&
-                    start == s.guide &&
-                    back == s.back &&
-                    leftBumper == s.leftBumper &&
-                    rightBumper == s.rightBumper &&
-                    leftTrigger == s.leftTrigger &&
-                    rightTrigger == s.rightTrigger;
-        }
-
-        @Override
-        public String toString() {
-            return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
-                            " dpad: %s" +
-                            " a: %s b: %s x: %s y: %s" +
-                            " guide: %s back: %s" +
-                            " left bumper: %s right bumper: %s" +
-                            " left trigger: %s right trigger: %s",
-                    leftJoystick, rightJoystick, dpad,
-                    a, b, x, y, guide, back,
-                    leftBumper, rightBumper,
-                    leftTrigger, rightTrigger);
-        }
-    }
-
-    private static class GamepadRecord implements Iterable<GamepadState> {
-        private final static String RECORD_DIR = "/sdcard/xtensible/gamepad/records/";
-        private final static List<GamepadRecord> RECORDS = getAvailableRecords();
-        private final String name;
-        private final int id;
-        private final LinkedList<GamepadState> states;
-        private transient int index = 0;
-
-        private GamepadRecord(String name) {
-            this.name = checkNotNull(name);
-            this.id = nextRecordId();
-            this.states = new LinkedList<>();
-        }
-
-        public static int nextRecordId(List<GamepadRecord> records) {
-            Map<Integer, GamepadRecord> recordMap = toIdMap(records);
-
-            for (int i = 0; i < Integer.MAX_VALUE; i++) {
-                if (!recordMap.containsKey(i)) {
-                    return i;
-                }
-            }
-
-            throw new IllegalArgumentException("The list of gamepad records doesn't have an available slot left between 0-" + Integer.MAX_VALUE);
-        }
-
-        @NotNull
-        public static List<GamepadRecord> getAvailableRecords() {
-            File gamepadDir = getRecordDir();
-            List<File> files = Arrays.asList(gamepadDir.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return pathname.getPath().endsWith(".gsr.json");
-                }
-            }));
-
-            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-            List<GamepadRecord> records = new LinkedList<>();
-            for (File possibleFile : files) {
-                try {
-                    GamepadRecord record = gson.fromJson(Files.newReader(possibleFile, Charset.forName("UTF-8")), GamepadRecord.class);
-                    if (record == null) {
-                        continue;
-                    }
-                    records.add(record);
-                } catch (FileNotFoundException e) {
-                    Log.e("GAMEPAD_RECORDS", "The file \"" + possibleFile.getPath() + "\" did not exist when it was attempted to be parsed", e);
-                } catch (JsonIOException ex) {
-                    Log.e("GAMEPAD_RECORDS", "The file \"" + possibleFile.getPath() + "\" was unable to be read from its input stream", ex);
-                } catch (JsonSyntaxException syntax) {
-                    Log.e("GAMEPAD_RECORDS", "The file \"" + possibleFile.getPath() + "\" has a syntax error", syntax);
-                }
-            }
-
-            return records;
-        }
-
-        private static Map<Integer, GamepadRecord> toIdMap(List<GamepadRecord> records) {
-            HashMap<Integer, GamepadRecord> recordMap = new HashMap<>();
-            for (GamepadRecord record : records) {
-                if (recordMap.containsKey(record.id)) {
-                    throw new IllegalArgumentException("The list of gamepad records contain non-unique ids; this is unsupported. The conflict is " + record.id + " in which the record " + recordMap.get(record.id) + " would be overridden by " + record);
-                }
-                recordMap.put(record.id, record);
-            }
-
-            return recordMap;
-        }
-
-        private static Map<String, GamepadRecord> toNameMap(List<GamepadRecord> records) {
-            HashMap<String, GamepadRecord> recordMap = new HashMap<>();
-            for (GamepadRecord record : records) {
-                if (recordMap.containsKey(record.name)) {
-                    throw new IllegalArgumentException("The list of gamepad records contain non-unique names; this is unsupported. The conflict is " + record.name + " in which the record " + recordMap.get(record.name) + " would be overridden by " + record);
-                }
-                recordMap.put(record.name, record);
-            }
-
-            return recordMap;
-        }
-
-        public static Map<String, GamepadRecord> getMap() {
-            return toNameMap(getAvailableRecords());
-        }
-
-        private static File getRecordDir() throws RuntimeIOException {
-            if (!Files2.mkdirs(RECORD_DIR)) {
-                throw new IllegalStateException("Cannot make the record directory");
-            } else {
-                return new File(RECORD_DIR);
-            }
-        }
-
-        public void addRecord(@NotNull GamepadState state) {
-            states.add(checkNotNull(state));
-        }
-
-        public GamepadState nextRecord() {
-            try {
-                return states.get(index++);
-            } catch (IndexOutOfBoundsException ex) {
-                Log.e("GAMEPAD RECORD", "End of Record! Returning null");
-                return null;
-            }
-        }
-
-        public boolean isFinished() {
-            return index == states.size() - 1;
-        }
-
-        public Iterator<GamepadState> iterator() {
-            return states.iterator();
-        }
-
-        public String name() {
-            return name;
-        }
-
-        public int id() {
-            return id;
-        }
-
-        public int nextRecordId() {
-            return nextRecordId(RECORDS);
-        }
-
-        public void save() throws IOException {
-            Gson gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().disableHtmlEscaping().create();
-            Writer writer = Files2.writer(RECORD_DIR + name + ".gsr.json");
-            gson.toJson(this, writer);
-            writer.flush();
-            writer.close();
-        }
-
-        @Override
-        public int hashCode() {
-            int hashcode = 43657;
-            final int nameHash = name.hashCode();
-            final int idHash = id;
-            final int statesHash = states.hashCode();
-
-            hashcode = 31 * hashcode + nameHash;
-            hashcode = 31 * hashcode + idHash;
-            hashcode = 31 * hashcode + statesHash;
-
-            return hashcode;
-        }
-
-
-
-        @Override
-        public boolean equals(Object other) {
-            if (other == this) {
-                return true;
-            }
-
-            if (!(other instanceof GamepadRecord)) {
-                return false;
-            }
-
-            GamepadRecord gamepadRecord = (GamepadRecord) other;
-
-            int numOfPasses = 0;
-            numOfPasses += name.equals(gamepadRecord.name) ? 1 : 0;
-            numOfPasses += id == gamepadRecord.id ? 1 : 0;
-            numOfPasses += states.equals(gamepadRecord.states) ? 1 : 0;
-
-            return numOfPasses == 3;
-        }
-
-
-
-
-    }
-
-    public class PlainJoystickScaler implements JoystickScaler {
+    public static class PlainJoystickScaler implements JoystickScaler {
         @Override
         public double scaleX(ExtensibleGamepad gamepad, double x) {
             return x;
@@ -1058,20 +882,6 @@ public class ExtensibleGamepad implements Closeable {
         public int userDefinedRight(RobotContext ctx, ExtensibleGamepad gamepad) {
             return 0;
         }
-    }
-
-    @Override
-    public String toString() {
-        return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
-                        " dpad: %s" +
-                        " a: %s b: %s x: %s y: %s" +
-                        " guide: %s back: %s" +
-                        " left bumper: %s right bumper: %s" +
-                        " left trigger: %s right trigger: %s",
-                leftJoystick, rightJoystick, dpad,
-                a, b, x, y, guide, back,
-                leftBumper, rightBumper,
-                leftTrigger, rightTrigger);
     }
 
 }

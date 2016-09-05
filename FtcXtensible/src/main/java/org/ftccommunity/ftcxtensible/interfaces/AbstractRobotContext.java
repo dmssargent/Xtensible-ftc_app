@@ -17,14 +17,14 @@
  */
 package org.ftccommunity.ftcxtensible.interfaces;
 
-import com.google.common.collect.ImmutableList;
-
 import android.content.Context;
 import android.view.View;
 
+import com.google.common.collect.ImmutableList;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.robocol.Telemetry;
 
 import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
@@ -80,7 +80,9 @@ public interface AbstractRobotContext {
      */
     void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException;
 
-    void prepare(Context ctx, HardwareMap basicHardwareMap, Gamepad gamepad1, Gamepad gamepad2);
+    //void prepare(Context ctx, HardwareMap basicHardwareMap, Gamepad gamepad1, Gamepad gamepad2);
+
+    void prepare(Context ctx, HardwareMap basicHardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry);
 
     /**
      * Returns an App Context

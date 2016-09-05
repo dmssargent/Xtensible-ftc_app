@@ -8,8 +8,8 @@ apply plugin: 'com.android.library'
 //artifacts.add("default", file('WirelessP2p-release.aar'))
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 24
+    buildToolsVersion '24.0.1'
 
     defaultConfig {
         minSdkVersion 19
@@ -46,18 +46,26 @@ android {
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
     }
+//    dexOptions {
+//        incremental true
+//    }
 }
 
 repositories {
     flatDir {
-        dirs '../libs'
+        dirs '../FtcRobotController/libs'
+        dirs += '../FtcSdk/libs'
     }
 }
 
 dependencies {
+    compile 'com.android.support:support-v4:24.2.0'
     compile name: 'FtcCommon-release', ext: 'aar'
     compile name: 'Hardware-release', ext: 'aar'
     compile name: 'ModernRobotics-release', ext: 'aar'
-    compile name: 'RobotCore-release', ext: 'aar'
+    compile(name: 'RobotCore-release', ext: 'aar')
+    //compile files('libs/d2xx.jar')
+    //compile files('libs/foo2-dex2jar.jar')
     compile name: 'WirelessP2p-release', ext: 'aar'
+    //compile files('../doc/ftc_app-javadoc.jar')
 }

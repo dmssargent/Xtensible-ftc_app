@@ -22,7 +22,7 @@ Thumbs.db
 *.iml
 .idea
 .gradle
-build/
+build
 
-captures/
+captures
 index-files/

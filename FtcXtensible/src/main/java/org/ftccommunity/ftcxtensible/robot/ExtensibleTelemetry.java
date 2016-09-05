@@ -17,32 +17,26 @@
  */
 package org.ftccommunity.ftcxtensible.robot;
 
+import android.util.Log;
+
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multiset;
-
-import android.util.Log;
-
 import com.qualcomm.robotcore.robocol.Telemetry;
 
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -55,7 +49,7 @@ public class ExtensibleTelemetry {
     public static final int MAX_DATA_MAX = 255;
     private static final String EMPTY = "";
     private static final String SPACE = " ";
-    private static final String TAG = "XTENSILBLE_TELEMETRY::";
+    private static final String TAG = ExtensibleTelemetry.class.getName();
     private final Telemetry parent;
     private final int dataPointsToSend;
 
@@ -64,12 +58,12 @@ public class ExtensibleTelemetry {
     private final Cache<String, String> cache;
     private final Queue<String> log;
 
-    private Process logcat;
-    private BufferedReader reader;
+    // private Process logcat;
+    // private BufferedReader reader;
 
     private long lastModificationTime;
 
-    private ScheduledExecutorService executorService;
+    // private ScheduledExecutorService executorService;
 
     public ExtensibleTelemetry(@NotNull Telemetry telemetry) {
         this(DEFAULT_DATA_MAX, telemetry);
@@ -90,36 +84,41 @@ public class ExtensibleTelemetry {
         data = LinkedHashMultimap.create();
         log = new LinkedList<>();
 
-        try {
-            logcat = Runtime.getRuntime().exec(new String[] {"logcat", "*:I"});
-            reader = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
-        } catch (IOException e) {
-            Log.e(TAG, "Cannot start logcat monitor", e);
-        }
-
-        executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(new SendDataRunnable(), 250, 250, TimeUnit.MILLISECONDS);
+//        try {
+//            logcat = Runtime.getRuntime().exec(new String[] {"logcat", "*:I"});
+//            reader = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
+//        } catch (IOException e) {
+//            Log.e(TAG, "Cannot start logcat monitor", e);
+//        }
+//
+//        executorService = Executors.newSingleThreadScheduledExecutor();
+//        executorService.scheduleAtFixedRate(new SendDataRunnable(), 250, 250, TimeUnit.MILLISECONDS);
     }
 
-    public synchronized void data(String tag, String message) {
+    public void data(String tag, String message) {
         checkArgument(!Strings.isNullOrEmpty(message), "Your message shouldn't be empty.");
         tag = Strings.nullToEmpty(tag);
 
+        Log.i(TAG, "Waiting to sending data " + Thread.currentThread().getName());
         synchronized (dataCache) {
             lastModificationTime = System.nanoTime();
             dataCache.add((!tag.equals(EMPTY) ? tag.toUpperCase(Locale.US) + SPACE : EMPTY) + message);
         }
     }
 
-    public synchronized void addPersistentData(String tag, String mess) {
+    public void addPersistentData(String tag, String mess) {
         synchronized (data) {
             lastModificationTime = System.nanoTime();
             data.put(tag, mess);
         }
     }
 
-    public synchronized void data(String tag, double message) {
+    public void data(String tag, double message) {
         data(tag, Double.toString(message));
+    }
+
+    public void data(String tag, Object object) {
+        data(tag, object.toString());
     }
 
     void updateLog() {
@@ -138,9 +137,9 @@ public class ExtensibleTelemetry {
     }
 
     synchronized void close() throws IOException {
-        executorService.shutdown();
-        reader.close();
-        logcat.destroy();
+//        executorService.shutdown();
+//        reader.close();
+//        logcat.destroy();
         synchronized (parent) {
             parent.clearData();
         }
@@ -246,21 +245,21 @@ public class ExtensibleTelemetry {
      */
     @NotNull
     private String cancelOut(int length, @NotNull String string) {
-        return  Strings.padStart(checkNotNull(string), length, '0');
+        return Strings.padStart(checkNotNull(string), length, '\b');
     }
 
-    private class SendDataRunnable implements Runnable {
-        /**
-         * Starts executing the active part of the class' code. This method is called when a thread is
-         * started that has been created with a class which implements {@code Runnable}.
-         */
-        @Override
-        public void run() {
-            try {
-                sendData();
-            } catch (Exception ex) {
-                Log.w(TAG, "Telemetry Sender threw an exception while executing.", ex);
-            }
-        }
-    }
+//    private class SendDataRunnable implements Runnable {
+//        /**
+//         * Starts executing the active part of the class' code. This method is called when a thread is
+//         * started that has been created with a class which implements {@code Runnable}.
+//         */
+//        @Override
+//        public void run() {
+//            try {
+//                sendData();
+//            } catch (Exception ex) {
+//                Log.w(TAG, "Telemetry Sender threw an exception while executing.", ex);
+//            }
+//        }
+//    }
 }

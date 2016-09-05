@@ -19,6 +19,7 @@
 package org.ftccommunity.ftcxtensible.hardware;
 
 import com.qualcomm.robotcore.hardware.I2cController;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 
 import java.util.concurrent.locks.Lock;
 
@@ -56,9 +57,16 @@ public abstract class ForwardingI2cDevice extends ForwardingHardwareDevice<I2cDe
         delegate().setI2cPortActionFlag();
     }
 
+    @Deprecated
     @Override
     public boolean isI2cPortActionFlagSet() {
+        //noinspection deprecation
         return delegate().isI2cPortActionFlagSet();
+    }
+
+    @Override
+    public void clearI2cPortActionFlag() {
+        delegate().clearI2cPortActionFlag();
     }
 
     @Override
@@ -92,6 +100,33 @@ public abstract class ForwardingI2cDevice extends ForwardingHardwareDevice<I2cDe
     }
 
     @Override
+    public void registerForPortReadyBeginEndCallback(I2cController.I2cPortReadyBeginEndNotifications i2cPortReadyBeginEndNotifications) {
+        delegate().registerForPortReadyBeginEndCallback(i2cPortReadyBeginEndNotifications);
+    }
+
+    @Override
+    public I2cController.I2cPortReadyBeginEndNotifications getPortReadyBeginEndCallback() {
+        return delegate().getPortReadyBeginEndCallback();
+    }
+
+    @Override
+    public void deregisterForPortReadyBeginEndCallback() {
+        delegate().deregisterForPortReadyBeginEndCallback();
+    }
+
+    @Override
+    public boolean isArmed() {
+        return delegate().isArmed();
+    }
+
+    @Deprecated
+    @Override
+    public I2cController getController() {
+        //noinspection deprecation
+        return delegate().getController();
+    }
+
+    @Override
     public Lock getI2cReadCacheLock() {
         return delegate().getI2cReadCacheLock();
     }
@@ -117,8 +152,18 @@ public abstract class ForwardingI2cDevice extends ForwardingHardwareDevice<I2cDe
     }
 
     @Override
+    public I2cController.I2cPortReadyCallback getI2cPortReadyCallback() {
+        return delegate().getI2cPortReadyCallback();
+    }
+
+    @Override
     public void deregisterForPortReadyCallback() {
         delegate().deregisterForPortReadyCallback();
+    }
+
+    @Override
+    public int getCallbackCount() {
+        return delegate().getCallbackCount();
     }
 
     /**
@@ -149,5 +194,15 @@ public abstract class ForwardingI2cDevice extends ForwardingHardwareDevice<I2cDe
     public void writeI2cPortFlagOnlyToModule() {
         //noinspection deprecation
         delegate().writeI2cPortFlagOnlyToModule();
+    }
+
+    @Override
+    public I2cController getI2cController() {
+        return delegate().getI2cController();
+    }
+
+    @Override
+    public int getPort() {
+        return delegate().getPort();
     }
 }

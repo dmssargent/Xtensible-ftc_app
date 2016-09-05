@@ -351,6 +351,7 @@ public class FtcRobotControllerActivity extends Activity {
     HardwareFactory modernRoboticsFactory = new HardwareFactory(context);
     modernRoboticsFactory.setXmlInputStream(fis);
     factory = modernRoboticsFactory;
+    //modernRoboticsFactory.enableDeviceEmulation();
 
     eventLoop = new XtensibleEventLoop(factory, new FtcOpModeRegister(), callback, this);
 
@@ -374,6 +375,7 @@ public class FtcRobotControllerActivity extends Activity {
       DbgLog.msg(msg);
       utility.saveToPreferences(Utility.NO_FILE, R.string.pref_hardware_config_filename);
       fis = null;
+      //HardwareFactory.enableDeviceEmulation();
     }
     utility.updateHeader(Utility.NO_FILE, R.string.pref_hardware_config_filename, R.id.active_filename, R.id.included_header);
     return fis;

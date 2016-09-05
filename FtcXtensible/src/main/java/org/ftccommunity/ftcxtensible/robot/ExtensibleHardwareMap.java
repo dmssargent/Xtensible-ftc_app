@@ -18,8 +18,6 @@
 
 package org.ftccommunity.ftcxtensible.robot;
 
-import android.util.Log;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.LinkedHashMultimap;
 import com.qualcomm.robotcore.hardware.AccelerationSensor;
@@ -35,6 +33,8 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
 import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.LegacyModule;
@@ -50,19 +50,14 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.ftccommunity.ftcxtensible.collections.DeviceMap;
 import org.ftccommunity.ftcxtensible.collections.DeviceMultiMap;
-import org.ftccommunity.ftcxtensible.hardware.HiTechnicDcMotorController;
-import org.ftccommunity.ftcxtensible.hardware.QualcommForwardingI2cDevice;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.util.I2cFactory;
 import org.ftccommunity.i2clibrary.Wire;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -97,30 +92,9 @@ public class ExtensibleHardwareMap {
     public ExtensibleHardwareMap(@NotNull HardwareMap hwMap) {
         this();
         basicMap = checkNotNull(hwMap);
-
         createDeviceMaps();
     }
 
-    /**
-     * Creates a new ExtensibleHardwareMap, based-off of a {@link ImmutableHardwareMap}
-     *
-     * @param map a non-null {@code ExtensibleHardwareMap} that is used as a base
-     */
-    @Deprecated
-    public ExtensibleHardwareMap(@NotNull ImmutableHardwareMap map) {
-        throw new AssertionError("Stub");
-    }
-
-    @Nullable
-    public static DcMotorController wrapDcMotorController(
-            @NotNull DcMotorController motorController,
-            @NotNull DcMotor motor1, @NotNull DcMotor motor2) {
-        if (HiTechnicDcMotorController.isValidMotorController(motorController)) {
-            return HiTechnicDcMotorController.create(motorController, motor1, motor2);
-        }
-
-        return null;
-    }
 
     /**
      * Rebuilds the Extensible HardwareMap from scratch based on a given {@link HardwareMap}. This
@@ -152,15 +126,7 @@ public class ExtensibleHardwareMap {
         fullMap.checkedPut(OpticalDistanceSensor.class, new DeviceMap<>(basicMap.opticalDistanceSensor));
         fullMap.checkedPut(TouchSensor.class, new DeviceMap<>(basicMap.touchSensor));
         fullMap.checkedPut(PWMOutput.class, new DeviceMap<>(basicMap.pwmOutput));
-
-        DeviceMap<I2cDevice> i2cDeviceDeviceMap = new DeviceMap<>(basicMap.i2cDevice);
-        HashMap<String, org.ftccommunity.ftcxtensible.hardware.I2cDevice> i2cDeviceHashMap = new HashMap<>();
-        for (Map.Entry<String, I2cDevice> deviceEntry : i2cDeviceDeviceMap.entrySet()) {
-            i2cDeviceHashMap.put(deviceEntry.getKey(), new ForwardedI2cDevice(deviceEntry.getValue()));
-        }
-
-
-        fullMap.checkedPut(org.ftccommunity.ftcxtensible.hardware.I2cDevice.class, new DeviceMap<>(i2cDeviceHashMap));
+        fullMap.checkedPut(I2cDevice.class, new DeviceMap<>(basicMap.i2cDevice));
         fullMap.checkedPut(AnalogOutput.class, new DeviceMap<>(basicMap.analogOutput));
         fullMap.checkedPut(ColorSensor.class, new DeviceMap<>(basicMap.colorSensor));
         fullMap.checkedPut(LED.class, new DeviceMap<>(basicMap.led));
@@ -175,62 +141,6 @@ public class ExtensibleHardwareMap {
         LinkedHashMultimap<DcMotorController, DcMotor> multimap = LinkedHashMultimap.create();
         for (DcMotor motor : dcMotors()) {
             multimap.put(motor.getController(), motor);
-
-        }
-
-        try {
-            List<VoltageSensor> voltageSensors = new LinkedList<>();
-            for (Map.Entry<DcMotorController, Collection<DcMotor>> entry : multimap.asMap().entrySet()) {
-                inferRobotVoltageSensor(voltageSensors, entry);
-            }
-
-            if (!voltageSensors.isEmpty()) {
-                basicMap.voltageSensor.put("MAIN_VOLTAGE_SENSOR", new ExtensibleRobotVoltage(voltageSensors));
-            }
-        } catch (Exception ex) {
-            Log.e(TAG, "Failed to make robot voltage sensor", ex);
-        }
-    }
-
-    private void inferRobotVoltageSensor(List<VoltageSensor> voltageSensors, Map.Entry<DcMotorController, Collection<DcMotor>> entry) {
-        Collection<DcMotor> value = entry.getValue();
-        DcMotor[] motors = value.toArray(new DcMotor[value.size()]);
-
-        final DcMotorController dcMotorController = entry.getKey();
-        final VoltageSensor voltageSensor;
-        if (HiTechnicDcMotorController.isValidMotorController(dcMotorController)) {
-            if (motors.length == 0) {
-                DcMotor motor0 = new DcMotor(dcMotorController, 1);
-                DcMotor motor1 = new DcMotor(dcMotorController, 2);
-                voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor0, motor1);
-            } else if (motors.length == 1) {
-                final DcMotor motor1;
-                final DcMotor motor2;
-                if (motors[0].getPortNumber() == 1) {
-                    motor1 = motors[0];
-                    motor2 = new DcMotor(dcMotorController, 2);
-                } else {
-                    motor1 = new DcMotor(dcMotorController, 1);
-                    motor2 = motors[0];
-                }
-                voltageSensor = ((HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor1, motor2)).voltageSensor();
-            } else {
-                final DcMotor motor1;
-                final DcMotor motor2;
-                if (motors[0].getPortNumber() == 1) {
-                    motor1 = motors[0];
-                    motor2 = motors[1];
-                } else {
-                    motor1 = motors[1];
-                    motor2 = motors[0];
-                }
-
-                voltageSensor = (HiTechnicDcMotorController) HiTechnicDcMotorController.create(dcMotorController, motor1, motor2);
-            }
-
-            if (voltageSensor != null) {
-                voltageSensors.add(voltageSensor);
-            }
         }
     }
 
@@ -264,6 +174,59 @@ public class ExtensibleHardwareMap {
     }
 
     /**
+     * Searches through this to find a {@link HardwareDevice} with the given name. If there are more
+     * than one {@code HardwareDevice}s with the given name, the first one found is the one
+     * returned.
+     *
+     * @param klazz the object type
+     * @param name a non-null, non-empty <code>String</code> to use to match to a HardwareDevice
+     * @return a HardwareDevice with the given name
+     * @throws RuntimeException         if the HardwareDevice cannot be cast to the correct form
+     * @throws NullPointerException     if name is null or empty
+     * @throws IllegalArgumentException if the a name with the given name cannot be found
+     */
+    @NotNull
+    public <T extends HardwareDevice> T get(Class<T> klazz, String name) throws RuntimeException {
+        name = checkNotNull(Strings.emptyToNull(name));
+        try {
+            if (!fullMap.containsKey(klazz)) {
+                throw new IllegalArgumentException("Type \"" + klazz.getSimpleName() + "\" is not recognized.");
+            }
+            if (fullMap.checkedGet(klazz).containsKey(name)) {
+                return fullMap.checkedGet(klazz).get(name);
+            }
+
+            throw new IllegalArgumentException("Unknown device \"" + name + "\"");
+        } catch (ClassCastException ex) {
+            throw new RuntimeException("Incorrect cast occurred for the Hardware Device " +
+                    "with the name of " + name, ex);
+        }
+    }
+
+    public String findNameFor(@NotNull HardwareDevice device) {
+        if (!fullMap.containsKey(checkNotNull(device).getClass())) {
+            throw new IllegalArgumentException("Unknown device type");
+        }
+
+        final DeviceMap<? extends HardwareDevice> hardwareDevices = fullMap.checkedGet(device.getClass());
+        final Set<? extends Map.Entry<String, ? extends HardwareDevice>> hardwareDevicesSet = hardwareDevices.entrySet();
+        if (hardwareDevices.containsValue(device)) {
+            for (Map.Entry<String, ? extends HardwareDevice> testDevice : hardwareDevicesSet) {
+                if (device.equals(testDevice.getValue())) {
+                    return testDevice.getKey();
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown device");
+    }
+
+    @Nullable
+    public <T extends HardwareDevice> DeviceMap<T> get(Class<T> klazz) {
+        return fullMap.checkedGet(klazz);
+    }
+
+    /**
      * Returns a {@link DeviceMap<DcMotorController>} for use to access DC Motor Controller
      * hardware
      *
@@ -284,6 +247,17 @@ public class ExtensibleHardwareMap {
      */
     public DeviceMap<DcMotor> dcMotors() {
         return fullMap.checkedGet(DcMotor.class);
+    }
+
+    /**
+     * Returns a {@link DcMotor} to use. This device name must be the same as it is in the
+     * active robot configuration
+     *
+     * @param name the device name
+     * @return the associated DC Motor
+     */
+    public DcMotor dcMotor(@NotNull String name) {
+        return dcMotors().get(name);
     }
 
     /**
@@ -408,6 +382,10 @@ public class ExtensibleHardwareMap {
      */
     public DeviceMap<I2cDevice> i2cDevices() {
         return fullMap.checkedGet(I2cDevice.class);
+    }
+
+    public I2cDeviceSynch wrappedI2cDevice(String name, int address) {
+        return new I2cDeviceSynchImpl(i2cDevices().get(name), address, false);
     }
 
     /**
@@ -549,18 +527,5 @@ public class ExtensibleHardwareMap {
      */
     DeviceMultiMap delegate() {
         return fullMap;
-    }
-
-    static class ForwardedI2cDevice extends QualcommForwardingI2cDevice {
-        private I2cDevice device;
-
-        private ForwardedI2cDevice(@NotNull I2cDevice device) {
-            device = checkNotNull(device);
-        }
-
-        @Override
-        protected I2cDevice delegate() {
-            return device;
-        }
     }
 }

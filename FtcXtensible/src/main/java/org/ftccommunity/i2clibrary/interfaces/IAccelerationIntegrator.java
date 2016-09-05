@@ -26,7 +26,6 @@ import org.ftccommunity.i2clibrary.navigation.Velocity;
  * {@link IAccelerationIntegrator} encapsulates an algorithm for integrating acceleration
  * information over time to produce velocity and position.
  *
- * @see IBNO055IMU
  */
 public interface IAccelerationIntegrator {
     /**

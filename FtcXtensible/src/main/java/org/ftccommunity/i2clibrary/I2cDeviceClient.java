@@ -31,6 +31,7 @@ import org.ftccommunity.i2clibrary.interfaces.IOpModeStateTransitionEvents;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -127,8 +128,6 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
         this.writeCacheStatus = WRITE_CACHE_STATUS.IDLE;
         this.modeCacheStatus = MODE_CACHE_STATUS.IDLE;
 
-        if (closeOnOpModeStop)
-            RobotStateTransitionNotifier.register(context, this);
     }
 
     @Override
@@ -359,7 +358,7 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
                     throw new IllegalStateException("can't write to I2cDeviceClient while not armed");
 
                 if (data.length > ReadWindow.cregWriteMax)
-                    throw new IllegalArgumentException(String.format("write request of %d bytes is too large; max is %d", data.length, ReadWindow.cregWriteMax));
+                    throw new IllegalArgumentException(String.format(Locale.ENGLISH, "write request of %d bytes is too large; max is %d", data.length, ReadWindow.cregWriteMax));
 
                 synchronized (this.callbackLock) {
                     // If there's already a pending write, can we coalesce?
@@ -1088,7 +1087,7 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
 
                     switch (caller) {
                         case FROM_CALLBACK:
-                            message.append(String.format("cyc %d", hardwareCycleCount));
+                            message.append(String.format(Locale.ENGLISH, "cyc %d", hardwareCycleCount));
                             break;
                         case FROM_USER_WRITE:
                             message.append("usr write");
@@ -1105,9 +1104,9 @@ public final class I2cDeviceClient implements II2cDeviceClient, IOpModeStateTran
                         message.append("| W.").append(prevWriteCacheStatus.toString()).append("->").append(writeCacheStatus.toString());
                     // if (modeCacheStatus != prevModeCacheStatus)   message.append("| M." + prevModeCacheStatus.toString() + "->" + modeCacheStatus.toString());
                     if (enabledWriteMode)
-                        message.append(String.format("| setWrite(0x%02x,%d)", iregWriteFirst, cregWrite));
+                        message.append(String.format(Locale.ENGLISH, "| setWrite(0x%02x,%d)", iregWriteFirst, cregWrite));
                     if (enabledReadMode)
-                        message.append(String.format("| setRead(0x%02x,%d)", readWindow.getIregFirst(), readWindow.getCreg()));
+                        message.append(String.format(Locale.ENGLISH, "| setRead(0x%02x,%d)", readWindow.getIregFirst(), readWindow.getCreg()));
 
                     log(Log.DEBUG, message.toString());
                 }

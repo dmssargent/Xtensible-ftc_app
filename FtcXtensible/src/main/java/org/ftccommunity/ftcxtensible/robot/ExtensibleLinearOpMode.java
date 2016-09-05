@@ -102,7 +102,7 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
 
         Thread.sleep(25);
         if (linearThread.isAlive()) {
-            linearThread.stop();
+            throw new IllegalStateException("Long running linear opmode");
         }
 
         watchdog().unlock();
@@ -176,7 +176,7 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
      */
     protected final void waitUntil(@NotNull OpModeState waitTillState) throws
             InterruptedException, IllegalArgumentException {
-        checkArgument(waitTillState.ordinal() < state.ordinal(),
+        checkArgument(waitTillState.ordinal() <= state.ordinal(),
                 "The given state has already been achieved");
 
         while (state != checkNotNull(waitTillState)) {
@@ -338,6 +338,7 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
          *
          * @param event an even representing a success type
          */
+        @Deprecated
         void success(Object event);
     }
 
