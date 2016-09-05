@@ -1,4 +1,9 @@
-apply plugin: 'com.android.application'
+import java.util.regex.Pattern
+
+//
+// build.gradle in FtcRobotController
+//
+apply plugin: 'com.android.library'
 
 android {
     signingConfigs {
@@ -9,6 +14,7 @@ android {
             storePassword 'android'
         }
     }
+
 
     defaultConfig {
         minSdkVersion 19
