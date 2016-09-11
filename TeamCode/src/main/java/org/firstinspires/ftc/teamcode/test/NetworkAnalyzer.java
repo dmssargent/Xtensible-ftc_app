@@ -32,6 +32,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.RunShellCommand;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 @Autonomous
+@Disabled
 public class NetworkAnalyzer extends OpMode {
     private WifiManager wifi;
     private String mostCommon = "None";

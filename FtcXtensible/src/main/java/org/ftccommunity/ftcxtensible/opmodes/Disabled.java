@@ -17,9 +17,19 @@
  */
 package org.ftccommunity.ftcxtensible.opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Add to {@link OpMode}s you want to disable
+ *
+ * @see com.qualcomm.robotcore.eventloop.opmode.Disabled
+ * @deprecated use {@link com.qualcomm.robotcore.eventloop.opmode.Disabled} instead
+ */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Disabled {
 

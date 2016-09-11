@@ -32,10 +32,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package org.firstinspires.ftc.robotcontroller.internal;
 
 import com.google.blocks.ftcrobotcontroller.runtime.BlocksOpMode;
+import com.qualcomm.ftcrobotcontroller.R;
+import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
-import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
+
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
+import org.ftccommunity.bindings.DataBinder;
+import org.ftccommunity.ftcxtensible.AnnotationFtcRegister;
 
 /**
  * {@link FtcOpModeRegister} is responsible for registering opmodes for use in an FTC game.
@@ -72,7 +76,13 @@ public class FtcOpModeRegister implements OpModeRegister {
         /**
          * Register OpModes that use the annotation-based registration mechanism.
          */
-        AnnotatedOpModeRegistrar.register(manager);
+        //AnnotatedOpModeRegistrar.register(manager);
+        try {
+            DataBinder.getInstance().integers().put(DataBinder.RC_VIEW, R.id.entire_screen);
+            AnnotationFtcRegister.loadOpModes(manager); // Use the Xtensible version
+        } catch (Exception ex) {
+            AnnotatedOpModeRegistrar.register(manager); // Use the FIRST version, in case of error
+        }
 
         /**
          * Any manual OpMode class registrations should go here.

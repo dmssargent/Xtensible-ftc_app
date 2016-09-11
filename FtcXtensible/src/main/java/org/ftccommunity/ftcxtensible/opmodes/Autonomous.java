@@ -28,9 +28,12 @@ import java.lang.annotation.RetentionPolicy;
  * @author David Sargent, maths222
  * @see TeleOp
  * @since 0.1.0
+ * @deprecated see {@link com.qualcomm.robotcore.eventloop.opmode.Autonomous}
+ * @see com.qualcomm.robotcore.eventloop.opmode.Autonomous
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Deprecated
 public @interface Autonomous {
     /**
      * The name of the op mode. This is displayed on the driver station. If empty, the name of the

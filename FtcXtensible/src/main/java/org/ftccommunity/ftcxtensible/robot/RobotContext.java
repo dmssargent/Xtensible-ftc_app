@@ -27,7 +27,6 @@ import com.google.common.annotations.Beta;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -61,6 +60,7 @@ public class RobotContext implements AbstractRobotContext {
     private final ServerSettings serverSettings;
     private final RobotStatus status;
     private final LinkedList<InterfaceHttpData> postedData;
+    //private List<Thread> asyncsRunning;
     private final ExecutorService asyncService;
     private final RobotLogger logger;
     private final DataBinder bindings;
@@ -77,7 +77,7 @@ public class RobotContext implements AbstractRobotContext {
     private NetworkedOpMode networkedOpMode;
     private boolean networkingEnabled;
     private View layout;
-    private OpModeManager opModeManager;
+    //private OpModeManager opModeManager;
     private List<RobotEvent> events = new LinkedList<>();
 
     RobotContext() {
@@ -105,9 +105,6 @@ public class RobotContext implements AbstractRobotContext {
             asyncService.submit(runnable);
         }
     }
-
-
-
 
     @Nullable
     public static Context buildApplicationContext() {
@@ -242,7 +239,7 @@ public class RobotContext implements AbstractRobotContext {
         this.gamepad2 = checkNotNull(gamepad2, "Gamepad 2 is null");
         extensibleTelemetry = new ExtensibleTelemetry(checkNotNull(telemetry, "telemetry is null"));
         layout = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.RC_VIEW));
-        opModeManager = ((OpModeManager) controllerBindings().objects().get(DataBinder.RC_MANAGER));
+        //opModeManager = ((OpModeManager) controllerBindings().objects().get(DataBinder.RC_MANAGER));
 
         eventManager.run();
     }
@@ -332,6 +329,7 @@ public class RobotContext implements AbstractRobotContext {
                     runnables.put(method.getName(), new Runnable() {
                         @Override
                         public void run() {
+                            ///asyncsRunning.add(Thread.currentThread());
                             try {
                                 final String name = method.getDeclaringClass() + "#" + method.getName();
                                 Thread.currentThread().setName(name);
@@ -342,7 +340,11 @@ public class RobotContext implements AbstractRobotContext {
                                 Log.e("ASYNC_RUNNER", "Failed to start method", e);
                             } catch (InvocationTargetException e) {
                                 Throwables.propagate(e.getTargetException());
+                            } catch (Exception e) {
+                                Log.e("ASYNC_RUNNER", "An error occurred while executing" +
+                                        " async runner \"" + Thread.currentThread().getName() + "\".", e);
                             }
+                            //asyncsRunning.remove(Thread.currentThread());
                         }
                     });
                 }
@@ -442,8 +444,12 @@ public class RobotContext implements AbstractRobotContext {
             disableNetworking();
         }
 
-        if (asyncService != null) {
-            asyncService.shutdown();
+        if (asyncService.isTerminated()) {
+            //for (Thread async : asyncsRunning) {
+            //    async.interrupt();
+            //}
+            //asyncService.shutdown();
+            asyncService.shutdownNow();
         }
 
         if (extensibleTelemetry != null) {
@@ -485,15 +491,15 @@ public class RobotContext implements AbstractRobotContext {
         return layout;
     }
 
-    @Override
-    @NotNull
-    public OpModeManager opModeManager() {
-        if (opModeManager == null) {
-            throw new IllegalStateException("Prepare has not been called correctly yet.");
-        }
-
-        return opModeManager;
-    }
+//    @Override
+//    @NotNull
+//    public OpModeManager opModeManager() {
+//        if (opModeManager == null) {
+//            throw new IllegalStateException("Prepare has not been called correctly yet.");
+//        }
+//
+//        return opModeManager;
+//    }
 
     public List<RobotEvent> events() {
         return events;

@@ -21,7 +21,6 @@ import android.content.Context;
 import android.view.View;
 
 import com.google.common.collect.ImmutableList;
-import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -198,7 +197,4 @@ public interface AbstractRobotContext {
      */
     @NotNull
     View robotControllerView();
-
-    @NotNull
-    OpModeManager opModeManager();
 }

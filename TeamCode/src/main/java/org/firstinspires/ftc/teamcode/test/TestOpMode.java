@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.test;
 
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 
-@TeleOp
+@TeleOp(name = "Annotation Test")
 public class TestOpMode extends TestOpModeParent {
     @Override
     public void init() {

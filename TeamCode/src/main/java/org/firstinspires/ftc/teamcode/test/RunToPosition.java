@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 
-/**
- * Created by David on 8/11/2016.
- */
 @TeleOp
+@Disabled
 public class RunToPosition extends OpMode {
     DcMotor test;
     private int target;

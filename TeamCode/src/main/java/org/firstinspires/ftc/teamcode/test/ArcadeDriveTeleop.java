@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.ftccommunity.ftcxtensible.interfaces.JoystickScaler;
 import org.ftccommunity.ftcxtensible.math.PolarCoordinates;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
@@ -37,6 +38,7 @@ import java.util.LinkedList;
  */
 @TeleOp
 @RobotSdkVersion(RobotSdkApiLevel.R3_2015)
+@Disabled
 public class ArcadeDriveTeleop extends ExtensibleOpMode {
     double lastTurnFactor;
     private DcMotor driveForwardLeft;

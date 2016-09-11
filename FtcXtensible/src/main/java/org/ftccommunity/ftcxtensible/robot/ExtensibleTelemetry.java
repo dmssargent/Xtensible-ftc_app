@@ -22,11 +22,11 @@ import android.util.Log;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multiset;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.ftccommunity.ftcxtensible.collections.SynchronousArrayQueue;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +53,7 @@ public class ExtensibleTelemetry {
     private final Telemetry parent;
     private final int dataPointsToSend;
 
-    private final EvictingQueue<String> dataCache;
+    private final SynchronousArrayQueue<TelemetryItem> dataCache;
     private final LinkedHashMultimap<String, String> data;
     private final Cache<String, String> cache;
     private final Queue<String> log;
@@ -80,30 +80,18 @@ public class ExtensibleTelemetry {
                 expireAfterAccess(250, TimeUnit.MILLISECONDS).
                 maximumSize(dataPointsToSend).build();
 
-        dataCache = EvictingQueue.create((int) (dataPointsToSend * .75));
+        dataCache = new SynchronousArrayQueue<>(50);
         data = LinkedHashMultimap.create();
         log = new LinkedList<>();
-
-//        try {
-//            logcat = Runtime.getRuntime().exec(new String[] {"logcat", "*:I"});
-//            reader = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
-//        } catch (IOException e) {
-//            Log.e(TAG, "Cannot start logcat monitor", e);
-//        }
-//
-//        executorService = Executors.newSingleThreadScheduledExecutor();
-//        executorService.scheduleAtFixedRate(new SendDataRunnable(), 250, 250, TimeUnit.MILLISECONDS);
     }
 
     public void data(String tag, String message) {
         checkArgument(!Strings.isNullOrEmpty(message), "Your message shouldn't be empty.");
         tag = Strings.nullToEmpty(tag);
 
-        Log.i(TAG, "Waiting to sending data " + Thread.currentThread().getName());
-        synchronized (dataCache) {
-            lastModificationTime = System.nanoTime();
-            dataCache.add((!tag.equals(EMPTY) ? tag.toUpperCase(Locale.US) + SPACE : EMPTY) + message);
-        }
+        lastModificationTime = System.nanoTime();
+        //parent.addData(tag, message);
+        dataCache.add(new TelemetryItem(tag.equals(EMPTY) ? EMPTY : tag.toUpperCase(Locale.US) + SPACE, message));
     }
 
     public void addPersistentData(String tag, String mess) {
@@ -121,21 +109,6 @@ public class ExtensibleTelemetry {
         data(tag, object.toString());
     }
 
-    void updateLog() {
-        //String temp = null;
-           /* StringBuilder buf = new StringBuilder();
-            try {
-                int temp = reader.read();
-                while (temp >= 0) {
-                    buf.append((char) temp);
-                    temp = reader.read();
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "An error occurred while reading the log.", e);
-            }
-            log.add(buf.toString());*/
-    }
-
     synchronized void close() throws IOException {
 //        executorService.shutdown();
 //        reader.close();
@@ -146,9 +119,11 @@ public class ExtensibleTelemetry {
         synchronized (log) {
             log.clear();
         }
-        synchronized (dataCache) {
-            dataCache.clear();
-        }
+
+        //synchronized (dataCache) {
+        //dataCache.clear();
+        //}
+
         synchronized (data) {
             data.clear();
         }
@@ -170,24 +145,24 @@ public class ExtensibleTelemetry {
     }
 
     synchronized void forceUpdateCache() {
-        updateLog();
-
         int numberOfElements;
         synchronized (cache) {
             cache.invalidateAll();
 
-            synchronized (dataCache) {
+            //synchronized (dataCache) {
                 int numberOfElementsAdded = 0;
-                int min = Math.min(dataCache.size(), (int) (dataPointsToSend * .75));
+            int min = Math.min(dataCache.length(), (int) (dataPointsToSend * .75));
                 int stringLength = String.valueOf(min).length();
                 for (; numberOfElementsAdded < min; numberOfElementsAdded++) {
-                    cache.put(cancelOut(stringLength, String.valueOf(numberOfElementsAdded)), dataCache.poll());
+                    final TelemetryItem remove = dataCache.remove();
+                    cache.put(cancelOut(stringLength, String.valueOf(numberOfElementsAdded)), remove.getTag() + remove.getMessage());
                 }
+
                 numberOfElements = numberOfElementsAdded;
-            }
+            //}
 
             synchronized (data) {
-                int numberOfElementsAdded = 0;
+                numberOfElementsAdded = 0;
                 HashMap<String, String> entries = new HashMap<>();
 
                 LinkedList<Multiset.Entry<String>> keys = new LinkedList<>(data.keys().entrySet());
@@ -246,6 +221,24 @@ public class ExtensibleTelemetry {
     @NotNull
     private String cancelOut(int length, @NotNull String string) {
         return Strings.padStart(checkNotNull(string), length, '\b');
+    }
+
+    private class TelemetryItem {
+        private String tag;
+        private String message;
+
+        private TelemetryItem(String tag, String message) {
+            this.tag = tag;
+            this.message = message;
+        }
+
+        public String getTag() {
+            return tag;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 
 //    private class SendDataRunnable implements Runnable {

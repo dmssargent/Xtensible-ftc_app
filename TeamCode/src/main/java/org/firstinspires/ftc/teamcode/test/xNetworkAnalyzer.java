@@ -29,6 +29,7 @@ import com.google.common.io.Files;
 import com.qualcomm.robotcore.util.RunShellCommand;
 
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
@@ -42,6 +43,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 @Autonomous
+@Disabled
 public class xNetworkAnalyzer extends SimpleOpMode {
     private WifiManager wifi;
     private String mostCommon = "None";

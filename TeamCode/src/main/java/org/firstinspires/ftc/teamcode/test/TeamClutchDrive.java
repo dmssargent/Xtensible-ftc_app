@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftccommunity.ftcxtensible.interfaces.RobotAction;
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.Async;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
@@ -16,6 +17,7 @@ import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 @TeleOp
+@Disabled
 public class TeamClutchDrive extends SimpleOpMode {
     protected DcMotor right0;
     protected DcMotor right1;

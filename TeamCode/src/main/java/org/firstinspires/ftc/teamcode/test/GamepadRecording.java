@@ -18,6 +18,7 @@
 
 package org.firstinspires.ftc.teamcode.test;
 
+import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
@@ -28,6 +29,7 @@ import java.util.LinkedList;
  * A demo GamePad recording OpMode
  */
 @TeleOp
+@Disabled
 public class GamepadRecording extends SimpleOpMode {
     @Override
     public void init(RobotContext ctx) throws Exception {

@@ -22,6 +22,8 @@ import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.Environment;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.ftccommunity.ftcxtensible.hardware.camera.CameraImageCallback;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
@@ -38,6 +40,7 @@ import java.util.LinkedList;
 
 @SuppressWarnings("deprecation")
 @Autonomous
+@Disabled
 public class CameraOpMode extends ExtensibleOpMode {
     int red = 0;
     int blue = 0;

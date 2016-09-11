@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
-
 @Autonomous
+
 public class PerformanceTest extends SimpleOpMode {
     private static final int REDUCE_BY_FACTOR = 50;
     private final static String test = "TEST";

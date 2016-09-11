@@ -32,7 +32,11 @@ public class ArrayQueue<AnyType> {
     private int tail;
 
     public ArrayQueue() {
-        queue = newQueue(DEFAULT_SIZE);
+        this(DEFAULT_SIZE);
+    }
+
+    public ArrayQueue(int size) {
+        queue = newQueue(size);
         queueSize = queue.length;
         head = 0;
         tail = 0;
@@ -44,7 +48,7 @@ public class ArrayQueue<AnyType> {
     }
 
     public void close() {
-        while (!isEmpty()) {
+        while (!(head == tail)) {
             remove(); // Discard all elements
         }
     }
@@ -79,7 +83,7 @@ public class ArrayQueue<AnyType> {
     }
 
     public AnyType remove() {
-        if (isEmpty()) {
+        if (head == tail) {
             return null;
         }
 

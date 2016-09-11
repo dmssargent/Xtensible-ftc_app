@@ -20,41 +20,27 @@ package org.ftccommunity.ftcxtensible;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.ftccommunity.ftcxtensible.core.Attachable;
 import org.ftccommunity.ftcxtensible.dagger.ReflectionUtilities;
-import org.ftccommunity.ftcxtensible.dagger.SimpleDag;
-import org.ftccommunity.ftcxtensible.dagger.annonations.Named;
-import org.ftccommunity.ftcxtensible.dagger.annonations.Provides;
-import org.ftccommunity.ftcxtensible.dagger.annonations.VariableNamedProvider;
 import org.ftccommunity.ftcxtensible.interfaces.RobotInitStartStopLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RobotInitStopLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RobotLoop;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
-import org.ftccommunity.ftcxtensible.opmodes.CustomRunner;
 import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
-import org.ftccommunity.ftcxtensible.opmodes.methods.EntryPoint;
-import org.ftccommunity.ftcxtensible.opmodes.methods.Init;
-import org.ftccommunity.ftcxtensible.opmodes.methods.Loop;
-import org.ftccommunity.ftcxtensible.opmodes.methods.Stop;
-import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
+import org.ftccommunity.ftcxtensible.opmodes.internal.AttachedOpMode;
+import org.ftccommunity.ftcxtensible.opmodes.internal.FtcOpModeInterfaceRunner;
+import org.ftccommunity.ftcxtensible.opmodes.internal.FtcOpModeRunner;
+import org.ftccommunity.ftcxtensible.opmodes.internal.FtcOpModeStopInitInterfaceRunner;
+import org.ftccommunity.ftcxtensible.opmodes.internal.OpModeRunnerProvider;
 import org.ftccommunity.ftcxtensible.versioning.RobotSdkApiLevel;
 import org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -68,8 +54,6 @@ import java.util.LinkedList;
 import java.util.TreeMap;
 
 import dalvik.system.DexFile;
-
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * An manager that reads in the OpMode classes
@@ -122,8 +106,8 @@ public class AnnotationFtcRegister {
                 // todo workaround an the issue of reflectively loading an non-public class
                 // fails silenty
                 if (!Modifier.isPublic(opMode.getModifiers())) {
-                    RobotLog.setGlobalErrorMsg(getOpModeName(opMode) + " is marked as an OpMode" +
-                            ", however it is not public. Please add the keyword 'public' to it");
+                    RobotLog.setGlobalErrorMsg(getOpModeName(opMode) + " is marked as an OpMode, " +
+                            "however it is not public. Please add the keyword 'public' to it");
                 }
                 // register.register(getOpModeName(opMode), opMode);
                 opModesToRegister.add(opMode);
@@ -140,7 +124,8 @@ public class AnnotationFtcRegister {
                 register.register(getOpModeName(opMode), new FtcOpModeStopInitInterfaceRunner<>((Class<? extends RobotInitStopLoop>) opMode));
             else if (ReflectionUtilities.isParent(opMode, RobotLoop.class))
                 register.register(getOpModeName(opMode), new FtcOpModeInterfaceRunner<>((Class<? extends RobotLoop>) opMode));
-            else register.register(getOpModeName(opMode), new FtcOpModeRunner<>(opMode));
+            else
+                register.register(getOpModeName(opMode), new FtcOpModeRunner<>(opMode));
         }
 
     }
@@ -153,13 +138,19 @@ public class AnnotationFtcRegister {
      * @return the name to use of defined by the user
      */
     private static String getOpModeName(Class<?> opMode) {
-        String name;
+        String name = "";
+        //noinspection deprecation
         if (opMode.isAnnotationPresent(TeleOp.class)) {
+            //noinspection deprecation
             name = opMode.getAnnotation(TeleOp.class).name();
-        } else if (opMode.isAnnotationPresent(Autonomous.class)) {
-            name = opMode.getAnnotation(Autonomous.class).name();
-        } else {
-            name = opMode.getSimpleName();
+        } else if (opMode.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class)) {
+            name = opMode.getAnnotation(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class).name();
+        } else //noinspection deprecation
+            if (opMode.isAnnotationPresent(Autonomous.class)) {
+                //noinspection deprecation
+                name = opMode.getAnnotation(Autonomous.class).name();
+            } else if (opMode.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class)) {
+                name = opMode.getAnnotation(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class).name();
         }
 
         if (name.equals("")) name = opMode.getSimpleName();
@@ -173,7 +164,8 @@ public class AnnotationFtcRegister {
     private void buildNoCheckList() {
         noCheckList.add("com.google");
         noCheckList.add("io.netty");
-
+        noCheckList.add("com.ftdi");
+        noCheckList.add("com.vuforia");
     }
 
     /**
@@ -264,9 +256,9 @@ public class AnnotationFtcRegister {
      * @return a HashMap containing OpMode groupings
      */
     private HashMap<String, LinkedList<Class<?>>> findOpModes(LinkedList<Class> klazzes) {
-        Class<TeleOp> teleOpClass = TeleOp.class;
-        Class<Autonomous> autoClass = Autonomous.class;
-        Class<Disabled> disabledClass = Disabled.class;
+        @SuppressWarnings("deprecation") Class<TeleOp> teleOpClass = TeleOp.class;
+        @SuppressWarnings("deprecation") Class<Autonomous> autoClass = Autonomous.class;
+        @SuppressWarnings("deprecation") Class<Disabled> disabledClass = Disabled.class;
 
         int nextAvailableIndex = 0;
         HashMap<String, LinkedList<Class<?>>> opModes = new HashMap<>();
@@ -275,15 +267,26 @@ public class AnnotationFtcRegister {
                 continue;
             }*/
 
-            if (!currentClass.isAnnotationPresent(disabledClass)) {
+            final boolean isNotDisabled = !(currentClass.isAnnotationPresent(disabledClass) || currentClass.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.Disabled.class));
+            if (isNotDisabled) {
                 if (currentClass.isAnnotationPresent(teleOpClass)) {
                     Annotation annotation = currentClass.getAnnotation(teleOpClass);
-                    String name = ((TeleOp) annotation).pairWithAuto();
+                    @SuppressWarnings("deprecation") String name = ((TeleOp) annotation).pairWithAuto();
+                    nextAvailableIndex = getNextAvailableIndex(nextAvailableIndex, opModes, currentClass, name);
+                } else if (currentClass.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class)) {
+                    Annotation annotation = currentClass.getAnnotation(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class);
+                    String name = ((com.qualcomm.robotcore.eventloop.opmode.TeleOp) annotation).group();
                     nextAvailableIndex = getNextAvailableIndex(nextAvailableIndex, opModes, currentClass, name);
                 }
                 if (currentClass.isAnnotationPresent(autoClass)) {
                     Annotation annotation = currentClass.getAnnotation(autoClass);
+                    //noinspection deprecation
                     String name = ((Autonomous) annotation).pairWithTeleOp();
+                    nextAvailableIndex = getNextAvailableIndex(nextAvailableIndex, opModes, currentClass, name);
+                }
+                if (currentClass.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class)) {
+                    Annotation annotation = currentClass.getAnnotation(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class);
+                    String name = ((com.qualcomm.robotcore.eventloop.opmode.Autonomous) annotation).group();
                     nextAvailableIndex = getNextAvailableIndex(nextAvailableIndex, opModes, currentClass, name);
                 }
             }
@@ -353,541 +356,25 @@ public class AnnotationFtcRegister {
     private static class OpModeComparator implements Comparator<Class> {
         @Override
         public int compare(Class lhs, Class rhs) {
-            if (lhs.isAnnotationPresent(TeleOp.class) &&
-                    rhs.isAnnotationPresent(TeleOp.class)) {
-                String lName = ((TeleOp) lhs.getAnnotation(TeleOp.class)).name();
-                String rName = ((TeleOp) lhs.getAnnotation(TeleOp.class)).name();
-
-                if (lName.equals("")) {
-                    lName = lhs.getSimpleName();
-                }
-
-                if (rName.equals("")) {
-                    rName = rhs.getSimpleName();
-                }
-                return lName.compareTo(rName);
+            @SuppressWarnings("deprecation") final boolean leftHandSideTeleOp = lhs.isAnnotationPresent(TeleOp.class) || lhs.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class);
+            @SuppressWarnings("deprecation") final boolean leftHandSideAutonomous = lhs.isAnnotationPresent(Autonomous.class) || lhs.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class);
+            @SuppressWarnings("deprecation") final boolean rightHandSideTeleOp = rhs.isAnnotationPresent(TeleOp.class) || rhs.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class);
+            @SuppressWarnings("deprecation") final boolean rightHandSideAutonomous = rhs.isAnnotationPresent(Autonomous.class) || rhs.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class);
+            if (leftHandSideTeleOp && rightHandSideTeleOp) {
+                return getOpModeName(lhs).compareTo(getOpModeName(rhs));
             }
 
-            if (lhs.isAnnotationPresent(Autonomous.class) &&
-                    rhs.isAnnotationPresent(TeleOp.class)) {
+            if (leftHandSideAutonomous && rightHandSideTeleOp) {
                 return 1;
-            } else if (rhs.isAnnotationPresent(Autonomous.class) &&
-                    lhs.isAnnotationPresent(TeleOp.class)) {
+            } else if (leftHandSideTeleOp && rightHandSideAutonomous) {
                 return -1;
             }
 
-            if (lhs.isAnnotationPresent(Autonomous.class) &&
-                    rhs.isAnnotationPresent(Autonomous.class)) {
-                String lName = ((Autonomous) lhs.getAnnotation(Autonomous.class)).name();
-                String rName = ((Autonomous) rhs.getAnnotation(Autonomous.class)).name();
-
-                if (lName.equals("")) {
-                    lName = lhs.getSimpleName();
-                }
-
-                if (rName.equals("")) {
-                    rName = rhs.getSimpleName();
-                }
-                return lName.compareTo(rName);
+            if (leftHandSideAutonomous && rightHandSideAutonomous) {
+                return getOpModeName(lhs).compareTo(getOpModeName(rhs));
             }
 
             return -1;
-        }
-    }
-
-    public static class FtcOpModeRunner<T> extends AttachedOpMode {
-        private final Class<T> opClass;
-        private final OpModeType type;
-        private final Method mainMethod;
-        @Nullable
-        private final Method initMethod;
-        @Nullable
-        private final Method stopMethod;
-        private Object instance;
-
-        public FtcOpModeRunner(Class<T> opClass) {
-            this.opClass = opClass;
-
-            OpModeTypes temp = null;
-            if (opClass.isAnnotationPresent(CustomRunner.class)) {
-                final Class<? extends OpModeType> value = opClass.getAnnotation(CustomRunner.class).value();
-                type = SimpleDag.create(value, null);
-            } else {
-                for (OpModeTypes opModeType : OpModeTypes.values()) {
-                    if (opModeType.check(opClass)) {
-                        if (temp == null) {
-                            temp = opModeType;
-                        } else if ((temp == OpModeTypes.LOOP && opModeType == OpModeTypes.FULL) ||
-                                (temp == OpModeTypes.FULL && opModeType == OpModeTypes.LOOP)) {
-                            temp = OpModeTypes.FULL;
-                        } else {
-                            throw new UnknownError("Cannot determine type, the class \"" +
-                                    opClass.getSimpleName() + "\" fits the contract for \"" +
-                                    temp + "\" and \"" + opModeType + "\"");
-                        }
-                    }
-                }
-                if (temp == null) {
-                    throw new UnknownError("Cannot determine type, the class \"" +
-                            opClass.getSimpleName() + "\" fits no available contracts.");
-                }
-                type = temp;
-            }
-
-            initMethod = type.initMethod(opClass);
-            mainMethod = type.mainMethod(opClass);
-            stopMethod = type.stopMethod(opClass);
-        }
-
-        @Override
-        public void init() {
-            super.init();
-            recreateInstance();
-            type.init(initMethod, instance);
-        }
-
-        @Override
-        public void loop() {
-            super.loop();
-            type.loop(mainMethod, instance);
-        }
-
-        @Override
-        public void stop() {
-            type.stop(stopMethod, instance);
-            instance = null;
-            super.stop();
-        }
-
-        private void recreateInstance() {
-            instance = SimpleDag.create(opClass, AnnotationFtcRegister.OP_MODE_RUNNER_PROVIDER);
-        }
-
-        private enum OpModeTypes implements OpModeType {
-            MAIN {
-                @Override
-                public void init(Method method, Object instance) {
-                    try {
-                        method.invoke(null);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void loop(Method method, Object instance) {
-
-                }
-
-                @Override
-                public void stop(Method method, Object instance) {
-
-                }
-
-                @Override
-                public Method initMethod(Class<?> instance) {
-                    return mainMethod(instance);
-                }
-
-                @NonNull
-                @Override
-                public Method mainMethod(Class<?> instance) {
-                    try {
-                        return instance.getMethod("main");
-                    } catch (NoSuchMethodException e) {
-                        throw verify(MAIN, instance);
-                    }
-                }
-
-                @Override
-                public Method stopMethod(Class<?> instance) {
-                    return null;
-                }
-
-                @Override
-                public boolean check(Class<?> klazz) {
-                    for (Method method : klazz.getMethods()) {
-                        if (Modifier.isStatic(method.getModifiers()) && method.getName().equals("main")) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
-            }, ENTRY_POINT {
-                @Override
-                public void init(Method method, Object instance) {
-                    try {
-                        method.invoke(instance);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void loop(Method method, Object instance) {
-
-                }
-
-                @Override
-                public void stop(Method method, Object instance) {
-
-                }
-
-                @Override
-                public Method initMethod(Class<?> instance) {
-                    return mainMethod(instance);
-                }
-
-                @Override
-                @NonNull
-                public Method mainMethod(Class<?> instance) {
-                    for (Method method : instance.getMethods()) {
-                        if (method.isAnnotationPresent(EntryPoint.class)) {
-                            return method;
-                        }
-                    }
-
-                    throw verify(ENTRY_POINT, instance);
-                }
-
-                @Override
-                public Method stopMethod(Class<?> instance) {
-                    return null;
-                }
-
-                @Override
-                public boolean check(Class<?> klazz) {
-                    boolean entryPointDetected = false;
-                    for (Method method : klazz.getMethods()) {
-                        if (method.isAnnotationPresent(EntryPoint.class)) {
-                            if (entryPointDetected) {
-                                return false;
-                            }
-                            entryPointDetected = true;
-                        }
-                    }
-
-                    return entryPointDetected;
-                }
-            }, LOOP {
-                @Override
-                public void init(Method method, Object instance) {
-
-                }
-
-                @Override
-                public void loop(Method method, Object instance) {
-                    try {
-                        method.invoke(instance);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void stop(Method method, Object instance) {
-
-                }
-
-                @Override
-                public Method initMethod(Class<?> instance) {
-                    return null;
-                }
-
-                @Override
-                @NonNull
-                public Method mainMethod(Class<?> instance) {
-                    for (Method method : instance.getMethods()) {
-                        if (method.isAnnotationPresent(Loop.class)) {
-                            return method;
-                        }
-                    }
-
-                    throw verify(LOOP, instance);
-                }
-
-                @Override
-                public Method stopMethod(Class<?> instance) {
-                    return null;
-                }
-
-                @Override
-                public boolean check(Class<?> klazz) {
-                    boolean entryPointDetected = false;
-                    for (Method method : klazz.getMethods()) {
-                        if (method.isAnnotationPresent(Loop.class)) {
-                            if (entryPointDetected) {
-                                return false;
-                            }
-                            entryPointDetected = true;
-                        }
-                    }
-
-                    return entryPointDetected;
-                }
-            }, FULL {
-                @Override
-                public void init(Method method, Object instance) {
-                    try {
-                        method.invoke(instance);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void loop(Method method, Object instance) {
-                    try {
-                        method.invoke(instance);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void stop(Method method, Object instance) {
-                    try {
-                        method.invoke(instance);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public Method initMethod(Class<?> instance) {
-                    for (Method method : instance.getMethods()) {
-                        if (method.isAnnotationPresent(Init.class)) {
-                            return method;
-                        }
-                    }
-
-                    return null;
-                }
-
-                @Override
-                @NonNull
-                public Method mainMethod(Class<?> instance) {
-                    for (Method method : instance.getMethods()) {
-                        if (method.isAnnotationPresent(Loop.class)) {
-                            return method;
-                        }
-                    }
-
-                    throw verify(FULL, instance);
-                }
-
-                @Override
-                public Method stopMethod(Class<?> instance) {
-                    for (Method method : instance.getMethods()) {
-                        if (method.isAnnotationPresent(Stop.class)) {
-                            return method;
-                        }
-                    }
-
-                    return null;
-                }
-
-                @Override
-                public boolean check(Class<?> klazz) {
-                    if (!LOOP.check(klazz)) {
-                        return false;
-                    }
-
-                    boolean initPointDetected = false;
-                    boolean stopPointDetected = false;
-                    for (Method method : klazz.getMethods()) {
-                        if (method.isAnnotationPresent(Init.class)) {
-                            if (initPointDetected) {
-                                return false;
-                            }
-                            initPointDetected = true;
-                        }
-                        if (method.isAnnotationPresent(Stop.class)) {
-                            if (stopPointDetected) {
-                                return false;
-                            }
-                            stopPointDetected = true;
-                        }
-                    }
-
-                    return initPointDetected || stopPointDetected;
-                }
-            };
-
-            private static RuntimeException verify(OpModeType type, Class<?> instance) {
-                if (type.check(instance)) {
-                    return new RuntimeException("Contract passed, missing method! impl bad");
-                } else {
-                    return new UnsupportedOperationException("Class is not qualified for the operation");
-                }
-            }
-        }
-    }
-
-    public static class FtcOpModeInterfaceRunner<T extends RobotLoop> extends AttachedOpMode {
-        private final Class<T> loop;
-        private T currentInstance;
-
-
-        public FtcOpModeInterfaceRunner(Class<T> loop) {
-            this.loop = loop;
-
-        }
-
-        @Override
-        @CallSuper
-        public void init() {
-            super.init();
-            recreateDelegate();
-        }
-
-        @Override
-        @CallSuper
-        public void loop() {
-            super.loop();
-            currentInstance.loop();
-        }
-
-        @Override
-        @CallSuper
-        public void stop() {
-            currentInstance = null;
-            super.stop();
-        }
-
-        @Contract(pure = true)
-        @NotNull
-        protected T delegate() {
-            if (currentInstance == null) {
-                recreateDelegate();
-            }
-
-            return currentInstance;
-
-        }
-
-        private void recreateDelegate() {
-            if (currentInstance == null) {
-                currentInstance = SimpleDag.create(loop, AnnotationFtcRegister.OP_MODE_RUNNER_PROVIDER);
-            }
-        }
-    }
-
-    public static class FtcOpModeStopInitInterfaceRunner<T extends RobotInitStopLoop> extends FtcOpModeInterfaceRunner<T> {
-        public FtcOpModeStopInitInterfaceRunner(Class<T> loop) {
-            super(loop);
-        }
-
-        @Override
-        public void init() {
-            super.init();
-            delegate().init();
-        }
-
-        @Override
-        public void stop() {
-            delegate().stop();
-            super.stop();
-        }
-    }
-
-    public static class FtcOpModeInitStartStopInterfaceRunner<T extends RobotInitStartStopLoop> extends FtcOpModeStopInitInterfaceRunner<T> {
-        public FtcOpModeInitStartStopInterfaceRunner(Class<T> loop) {
-            super(loop);
-        }
-
-        @Override
-        public void start() {
-            delegate().start();
-        }
-    }
-
-    public static class AttachedOpMode extends OpMode {
-        @Override
-        @CallSuper
-        public void init() {
-            AnnotationFtcRegister.OP_MODE_RUNNER_PROVIDER.attach(this);
-        }
-
-        @Override
-        public void loop() {
-
-        }
-
-        @CallSuper
-        @Override
-        public void stop() {
-            super.stop();
-            AnnotationFtcRegister.OP_MODE_RUNNER_PROVIDER.detach();
-        }
-    }
-
-    private static class OpModeRunnerProvider implements Attachable<AttachedOpMode> {
-        private AttachedOpMode coreProvider = null;
-        private ExtensibleHardwareMap extensibleHardwareMap = null;
-
-        @Override
-        @Nullable
-        public AttachedOpMode attach(@NotNull AttachedOpMode provider) {
-            AttachedOpMode temp = detach();
-            coreProvider = provider;
-            extensibleHardwareMap = new ExtensibleHardwareMap(coreProvider.hardwareMap);
-            return temp;
-        }
-
-        @Override
-        @Nullable
-        public AttachedOpMode detach() {
-            AttachedOpMode temp = coreProvider;
-            coreProvider = null;
-            extensibleHardwareMap = null;
-            return temp;
-        }
-
-        @Override
-        @Contract(pure = true)
-        public boolean isAttached() {
-            return coreProvider != null;
-        }
-
-        @Provides
-        public Telemetry providesTelemetry() {
-            checkState(isAttached(), "provider is not attached");
-            return coreProvider.telemetry;
-        }
-
-        @Provides
-        public Gamepad providesGamepad() {
-            checkState(isAttached(), "provider is not attached");
-            return coreProvider.gamepad1;
-        }
-
-        @Provides
-        @Named("gamepad2")
-        public Gamepad providesGamepad2() {
-            checkState(isAttached(), "provider is not attached");
-            return coreProvider.gamepad2;
-        }
-
-        @Provides
-        @Named("gamepad1")
-        public Gamepad providesGamepad1() {
-            checkState(isAttached(), "provider is not attached");
-            return coreProvider.gamepad1;
-        }
-
-        @Provides
-        public HardwareMap providesHardwareMap() {
-            checkState(isAttached(), "provider is not attached");
-            return coreProvider.hardwareMap;
-        }
-
-        @Provides
-        @VariableNamedProvider
-        public HardwareDevice providesHardwareDevices(String name) {
-            checkState(isAttached(), "provider is not attached");
-            return extensibleHardwareMap.get(name);
         }
     }
 }

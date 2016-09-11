@@ -26,11 +26,12 @@ import java.lang.annotation.RetentionPolicy;
  * on the driver station.
  *
  * @author David Sargent, maths222
- * @see Autonomous
- * @see Disabled
+ * @deprecated use FIRST's version instead
+ * @see com.qualcomm.robotcore.eventloop.opmode.TeleOp
  * @see org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion
  * @since 0.1.0
  */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface TeleOp {
