@@ -25,8 +25,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multiset;
-import com.qualcomm.robotcore.robocol.Telemetry;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.ftccommunity.ftcxtensible.internal.Alpha;
 import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.jetbrains.annotations.NotNull;
@@ -141,7 +141,7 @@ public class ExtensibleTelemetry {
 //        reader.close();
 //        logcat.destroy();
         synchronized (parent) {
-            parent.clearData();
+            parent.clearAll();
         }
         synchronized (log) {
             log.clear();

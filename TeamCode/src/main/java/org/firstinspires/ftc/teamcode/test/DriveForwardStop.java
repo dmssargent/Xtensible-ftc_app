@@ -1,7 +1,3 @@
-include ':FtcRobotController',
-        ':FtcXtensible',
-        ':FtcSdk',
-        ':TeamCode'
 /*
  * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -19,3 +15,39 @@ include ':FtcRobotController',
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package org.firstinspires.ftc.teamcode.test;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+public class DriveForwardStop extends OpMode {
+    private DcMotor left;
+    private DcMotor right;
+    private long startTime;
+    private int loopCount;
+
+    @Override
+    public void init() {
+        left = hardwareMap.dcMotor.get("left_motor");
+        right = hardwareMap.dcMotor.get("right_motor");
+        left.getController();
+
+        loopCount = 0;
+    }
+
+    @Override
+    public void loop() {
+        if (loopCount == 0) {
+            startTime = System.nanoTime();
+        }
+
+        if ((startTime + (1E9 * (long) 5)) < System.nanoTime()) {
+            left.setPower(1);
+            right.setPower(1);
+        } else {
+            left.setPower(0);
+            left.setPower(0);
+        }
+
+    }
+}

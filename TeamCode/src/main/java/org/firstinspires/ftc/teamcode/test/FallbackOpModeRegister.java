@@ -1,7 +1,3 @@
-include ':FtcRobotController',
-        ':FtcXtensible',
-        ':FtcSdk',
-        ':TeamCode'
 /*
  * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -19,3 +15,27 @@ include ':FtcRobotController',
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+package org.firstinspires.ftc.teamcode.test;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
+
+/**
+ * @author David Sargent - FTC5395, maths222, Qualcomm
+ * @since 1.0
+ */
+public class FallbackOpModeRegister {
+    private static String TAG = "FTC_OP_MODE_REGISTER::";
+
+    /**
+     * The Op Mode Manager will call this method when it wants stopMode list of all available op
+     * modes. Add your op mode to the list to enable it.
+     *
+     * @param mgr op mode manager
+     */
+    public static void register(final OpModeManager mgr) {
+        // Add your hardcoded OpModes here
+
+        // Please note that this executes immediately
+    }
+}

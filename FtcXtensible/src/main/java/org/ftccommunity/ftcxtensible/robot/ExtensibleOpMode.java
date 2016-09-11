@@ -28,12 +28,10 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.EvictingQueue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.robocol.Telemetry;
-import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.ftccommunity.ftcxtensible.dagger.annonations.Inject;
 import org.ftccommunity.ftcxtensible.dagger.annonations.Named;
 import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;
@@ -388,55 +386,58 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
             }
         } else {
             if (this.getClass().isAnnotationPresent(RobotsDontQuit.class)) {
-                final Exception ex = e;
-                Thread codeRestarter = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        skipNextLoop = Integer.MAX_VALUE;
-                        //final Gamepad gamepad1 = ExtensibleOpMode.super.gamepad1;
-                        //final Gamepad gamepad2 = ExtensibleOpMode.super.gamepad2;
-                        RobotLog.setGlobalErrorMsg(ex.toString() + "\n Robot Code will restart automatically in 5 seconds");
-                        final OpModeManager mgr = opModeManager();
-                        final String currentName = mgr.getActiveOpModeName();
-                        mgr.stopActiveOpMode();
-                        try {
-                            for (int i = 5; i >= 0; i--) {
-                                RobotLog.clearGlobalErrorMsg();
-                                RobotLog.setGlobalErrorMsg(ex.toString() + "\n Robot Code will restart automatically in " + i + " seconds");
-                                Thread.sleep(1000);
-                            }
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
-                        RobotLog.clearGlobalErrorMsg();
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
-                        try {
-                            do {
-                                Log.i(TAG, "Attempted to start " + currentName);
-                                RobotLog.setGlobalErrorMsg("Attempting to start " + currentName);
-                                Thread.sleep(20);
-                                RobotLog.clearGlobalErrorMsg();
-                                Thread.sleep(20);
-                                mgr.initActiveOpMode(currentName);
-                                mgr.startActiveOpMode();
-                                mgr.runActiveOpMode(new Gamepad[]{gamepad1, gamepad2});
-                            } while (!mgr.getActiveOpModeName().equals(currentName));
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                });
-                codeRestarter.setName(opModeManager().getActiveOpModeName() + " Restarter");
-                codeRestarter.start();
-            } else {
-                status().setCurrentStateType(RobotStatus.Type.FAILURE);
-                RobotLog.setGlobalErrorMsg(e.toString());
-                Throwables.propagate(e);
+                // // TODO: 9/5/2016
             }
+//                final Exception ex = e;
+//                Thread codeRestarter = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        skipNextLoop = Integer.MAX_VALUE;
+//                        //final Gamepad gamepad1 = ExtensibleOpMode.super.gamepad1;
+//                        //final Gamepad gamepad2 = ExtensibleOpMode.super.gamepad2;
+//                        RobotLog.setGlobalErrorMsg(ex.toString() + "\n Robot Code will restart automatically in 5 seconds");
+//                        final OpModeManager mgr = opModeManager();
+//
+//                        final String currentName = mgr.getActiveOpModeName();
+//                        mgr.stopActiveOpMode();
+//                        try {
+//                            for (int i = 5; i >= 0; i--) {
+//                                RobotLog.clearGlobalErrorMsg();
+//                                RobotLog.setGlobalErrorMsg(ex.toString() + "\n Robot Code will restart automatically in " + i + " seconds");
+//                                Thread.sleep(1000);
+//                            }
+//                        } catch (InterruptedException e1) {
+//                            e1.printStackTrace();
+//                        }
+//                        RobotLog.clearGlobalErrorMsg();
+//                        try {
+//                            Thread.sleep(20);
+//                        } catch (InterruptedException e1) {
+//                            e1.printStackTrace();
+//                        }
+//                        try {
+//                            do {
+//                                Log.i(TAG, "Attempted to start " + currentName);
+//                                RobotLog.setGlobalErrorMsg("Attempting to start " + currentName);
+//                                Thread.sleep(20);
+//                                RobotLog.clearGlobalErrorMsg();
+//                                Thread.sleep(20);
+//                                mgr.initActiveOpMode(currentName);
+//                                mgr.startActiveOpMode();
+//                                mgr.runActiveOpMode(new Gamepad[]{gamepad1, gamepad2});
+//                            } while (!mgr.getActiveOpModeName().equals(currentName));
+//                        } catch (InterruptedException e1) {
+//                            e1.printStackTrace();
+//                        }
+//                    }
+//                });
+//                codeRestarter.setName(opModeManager().getActiveOpModeName() + " Restarter");
+//                codeRestarter.start();
+//            } else {
+//                status().setCurrentStateType(RobotStatus.Type.FAILURE);
+//                RobotLog.setGlobalErrorMsg(e.toString());
+//                Throwables.propagate(e);
+//            }
         }
     }
 

@@ -59,8 +59,8 @@ android {
 repositories {
     flatDir {
         // Used for FtcSdk (dependent of Xtensible)
-        dirs '../FtcRobotController/libs'
-        dirs += 'libs'
+        //dirs '../FtcRobotController/libs'
+        dirs '../libs'
     }
 }
 

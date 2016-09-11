@@ -1,7 +1,3 @@
-include ':FtcRobotController',
-        ':FtcXtensible',
-        ':FtcSdk',
-        ':TeamCode'
 /*
  * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -19,3 +15,36 @@ include ':FtcRobotController',
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package org.firstinspires.ftc.teamcode.test;
+
+
+import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.versioning.RobotSdkApiLevel;
+import org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion;
+import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
+
+import java.util.LinkedList;
+import java.util.logging.Level;
+
+@RobotSdkVersion(RobotSdkApiLevel.R16_03_09)
+@Autonomous(name = "Network Op")
+public class NetworkOpMode extends SimpleOpMode {
+    @Override
+    public void init(RobotContext ctx) throws Exception {
+        enableNetworking().startNetworking();
+    }
+
+    @Override
+    public void loop(RobotContext ctx) throws Exception {
+        final int loopCount = getLoopCount();
+        if (loopCount % 10 == 0) {
+            ctx.status().log(Level.WARNING, "FOO", "This is opMode test! " + loopCount);
+        }
+    }
+
+    @Override
+    public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+        ctx.stopNetworking().disableNetworking();
+    }
+}

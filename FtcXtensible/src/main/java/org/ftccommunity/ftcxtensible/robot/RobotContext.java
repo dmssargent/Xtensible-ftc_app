@@ -30,8 +30,8 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.robocol.Telemetry;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.hardware.camera.ExtensibleCameraManager;
 import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;

@@ -32,6 +32,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
@@ -384,7 +385,7 @@ public class ExtensibleHardwareMap {
         return fullMap.checkedGet(I2cDevice.class);
     }
 
-    public I2cDeviceSynch wrappedI2cDevice(String name, int address) {
+    public I2cDeviceSynch wrappedI2cDevice(String name, I2cAddr address) {
         return new I2cDeviceSynchImpl(i2cDevices().get(name), address, false);
     }
 

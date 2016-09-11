@@ -18,6 +18,7 @@
 
 package org.ftccommunity.ftcxtensible.hardware;
 
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cController;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 
@@ -28,12 +29,12 @@ public abstract class ForwardingI2cDevice extends ForwardingHardwareDevice<I2cDe
     protected abstract I2cDevice delegate();
 
     @Override
-    public void enableI2cReadMode(int i2cAddress, int memAddress, int length) {
+    public void enableI2cReadMode(I2cAddr i2cAddress, int memAddress, int length) {
         delegate().enableI2cReadMode(i2cAddress, memAddress, length);
     }
 
     @Override
-    public void enableI2cWriteMode(int i2cAddress, int memAddress, int length) {
+    public void enableI2cWriteMode(I2cAddr i2cAddress, int memAddress, int length) {
         delegate().enableI2cReadMode(i2cAddress, memAddress, length);
     }
 
@@ -119,12 +120,12 @@ public abstract class ForwardingI2cDevice extends ForwardingHardwareDevice<I2cDe
         return delegate().isArmed();
     }
 
-    @Deprecated
-    @Override
-    public I2cController getController() {
-        //noinspection deprecation
-        return delegate().getController();
-    }
+//    @Deprecated
+//    @Override
+//    public I2cController getController() {
+//        //noinspection deprecation
+//        return delegate().getController();
+//    }
 
     @Override
     public Lock getI2cReadCacheLock() {
@@ -166,35 +167,35 @@ public abstract class ForwardingI2cDevice extends ForwardingHardwareDevice<I2cDe
         return delegate().getCallbackCount();
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public void readI2cCacheFromModule() {
-        //noinspection deprecation
-        delegate().readI2cCacheFromModule();
-    }
+//    /**
+//     * @deprecated
+//     */
+//    @Deprecated
+//    @Override
+//    public void readI2cCacheFromModule() {
+//        //noinspection deprecation
+//        delegate().readI2cCacheFromModule();
+//    }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public void writeI2cCacheToModule() {
-        //noinspection deprecation
-        delegate().writeI2cCacheToModule();
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    @Override
-    public void writeI2cPortFlagOnlyToModule() {
-        //noinspection deprecation
-        delegate().writeI2cPortFlagOnlyToModule();
-    }
+//    /**
+//     * @deprecated
+//     */
+//    @Deprecated
+//    @Override
+//    public void writeI2cCacheToModule() {
+//        //noinspection deprecation
+//        delegate().writeI2cCacheToModule();
+//    }
+//
+//    /**
+//     * @deprecated
+//     */
+//    @Deprecated
+//    @Override
+//    public void writeI2cPortFlagOnlyToModule() {
+//        //noinspection deprecation
+//        delegate().writeI2cPortFlagOnlyToModule();
+//    }
 
     @Override
     public I2cController getI2cController() {

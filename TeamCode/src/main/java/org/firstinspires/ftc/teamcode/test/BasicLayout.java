@@ -1,7 +1,3 @@
-include ':FtcRobotController',
-        ':FtcXtensible',
-        ':FtcSdk',
-        ':TeamCode'
 /*
  * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -19,3 +15,18 @@ include ':FtcRobotController',
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package org.firstinspires.ftc.teamcode.test;
+
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
+
+public class BasicLayout extends SimpleOpMode {
+    @Override
+    public void init(RobotContext ctx) throws Exception {
+    }
+
+    @Override
+    public void loop(RobotContext ctx) throws Exception {
+
+    }
+}

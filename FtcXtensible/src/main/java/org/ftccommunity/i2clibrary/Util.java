@@ -18,6 +18,7 @@
 
 package org.ftccommunity.i2clibrary;
 
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -82,7 +83,7 @@ public class Util {
         return result;
     }
 
-    public static <T> void remove(HardwareMap.DeviceMapping<T> from, IFuncArg<Boolean, T> predicate, IAction<T> action) {
+    public static <T extends HardwareDevice> void remove(HardwareMap.DeviceMapping<T> from, IFuncArg<Boolean, T> predicate, IAction<T> action) {
         List<String> names = new LinkedList<>();
         for (Map.Entry<String, T> pair : from.entrySet()) {
             T t = pair.getValue();
@@ -96,11 +97,11 @@ public class Util {
         }
     }
 
-    public static <T> void removeName(HardwareMap.DeviceMapping<T> entrySet, String name) {
+    public static <T extends HardwareDevice> void removeName(HardwareMap.DeviceMapping<T> entrySet, String name) {
         Util.<Map>getPrivateObjectField(entrySet, 0).remove(name);
     }
 
-    public static <T> boolean contains(HardwareMap.DeviceMapping<T> map, String name) {
+    public static <T extends HardwareDevice> boolean contains(HardwareMap.DeviceMapping<T> map, String name) {
         for (Map.Entry<String, T> pair : map.entrySet()) {
             if (pair.getKey().equals(name))
                 return true;

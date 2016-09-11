@@ -17,15 +17,19 @@
  */
 package org.ftccommunity.ftcxtensible.robot.core;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.qualcomm.ftccommon.FtcEventLoop;
+import com.qualcomm.ftccommon.ProgrammingModeController;
 import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.hardware.HardwareFactory;
 import com.qualcomm.robotcore.eventloop.EventLoopManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.robocol.Command;
+
+import org.firstinspires.ftc.robotcore.internal.network.CallbackResult;
 
 import java.util.concurrent.Semaphore;
 
@@ -41,8 +45,8 @@ public class XtensibleEventLoop extends FtcEventLoop {
     private Semaphore semaphore;
 
     public XtensibleEventLoop(HardwareFactory hardwareFactory, OpModeRegister register,
-                              UpdateUI.Callback callback, Context robotControllerContext) {
-        super(hardwareFactory, register, callback, robotControllerContext);
+                              UpdateUI.Callback callback, Context robotControllerContext, ProgrammingModeController programmingModeController) {
+        super(hardwareFactory, register, callback, (Activity) robotControllerContext, programmingModeController);
         semaphore = new Semaphore(0);
     }
 
@@ -54,13 +58,16 @@ public class XtensibleEventLoop extends FtcEventLoop {
     }
 
     @Override
-    public void processCommand(Command command) {
+    public CallbackResult processCommand(Command command) throws RobotCoreException {
         try {
             semaphore.acquire();
-            super.processCommand(command);
+            CallbackResult result = super.processCommand(command);
             semaphore.release();
+            return result;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            return null;
         }
+
     }
 }

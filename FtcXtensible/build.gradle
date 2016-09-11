@@ -52,14 +52,12 @@ android {
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
     }
-    productFlavors {
-    }
 }
 
 repositories {
     flatDir {
-        dirs '../FtcRobotController/libs'
-        dirs += 'libs'
+        //dirs '../FtcRobotController/libs'
+        dirs '../libs'
     }
 }
 
@@ -67,8 +65,8 @@ dependencies {
     compile project(':FtcSdk')
     compile files('libs/netty-all-4.0.40.Final.jar')
     compile 'com.google.guava:guava:19.0'
-    compile 'com.google.code.gson:gson:2.4'
+    //compile 'com.google.code.gson:gson:2.4'
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations:13.0'
-    compile 'com.android.support:support-annotations:24.2.0'
+    //compile 'com.android.support:support-annotations:24.2.0'
 }

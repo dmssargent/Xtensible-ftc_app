@@ -21,25 +21,25 @@ package org.ftccommunity.ftcxtensible.hardware;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 public abstract class ForwardingDcMotorController extends ForwardingHardwareDevice<DcMotorController> implements DcMotorController {
-    @Override
-    public void setMotorControllerDeviceMode(DeviceMode deviceMode) {
-        delegate().setMotorControllerDeviceMode(deviceMode);
-    }
+//    @Override
+//    public void setMotorControllerDeviceMode(DeviceMode deviceMode) {
+//        delegate().setMotorControllerDeviceMode(deviceMode);
+//    }
+//
+//    @Override
+//    public DeviceMode getMotorControllerDeviceMode() {
+//        return delegate().getMotorControllerDeviceMode();
+//    }
 
-    @Override
-    public DeviceMode getMotorControllerDeviceMode() {
-        return delegate().getMotorControllerDeviceMode();
-    }
+//    @Override
+//    public void setMotorChannelMode(int port, DcMotor.RunMode runMode) {
+//        delegate().setMotorChannelMode(port, runMode);
+//    }
 
-    @Override
-    public void setMotorChannelMode(int port, RunMode runMode) {
-        delegate().setMotorChannelMode(port, runMode);
-    }
-
-    @Override
-    public RunMode getMotorChannelMode(int port) {
-        return delegate().getMotorChannelMode(port);
-    }
+//    @Override
+//    public DcMotor.RunMode getMotorChannelMode(int port) {
+//        return delegate().getMotorChannelMode(port);
+//    }
 
     @Override
     public void setMotorPower(int port, double power) {
@@ -56,10 +56,10 @@ public abstract class ForwardingDcMotorController extends ForwardingHardwareDevi
         return delegate().isBusy(port);
     }
 
-    @Override
-    public void setMotorPowerFloat(int port) {
-        delegate().setMotorPowerFloat(port);
-    }
+//    @Override
+//    public void setMotorPowerFloat(int port) {
+//        delegate().setMotorPowerFloat(port);
+//    }
 
     @Override
     public boolean getMotorPowerFloat(int port) {

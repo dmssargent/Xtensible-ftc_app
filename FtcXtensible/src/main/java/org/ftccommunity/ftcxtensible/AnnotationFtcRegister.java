@@ -29,9 +29,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.robocol.Telemetry;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.ftccommunity.ftcxtensible.core.Attachable;
 import org.ftccommunity.ftcxtensible.dagger.ReflectionUtilities;
 import org.ftccommunity.ftcxtensible.dagger.SimpleDag;
@@ -133,7 +133,7 @@ public class AnnotationFtcRegister {
         for (Class<?> opMode : opModesToRegister) {
             Log.i(TAG, "Registering " + getOpModeName(opMode));
             if (ReflectionUtilities.isParent(opMode, OpMode.class))
-                register.register(getOpModeName(opMode), opMode);
+                register.register(getOpModeName(opMode), (Class<? extends OpMode>) opMode);
             else if (ReflectionUtilities.isParent(opMode, RobotInitStartStopLoop.class))
                 register.register(getOpModeName(opMode), new FtcOpModeInitStartStopInterfaceRunner<>((Class<? extends RobotInitStartStopLoop>) opMode));
             else if (ReflectionUtilities.isParent(opMode, RobotInitStopLoop.class))

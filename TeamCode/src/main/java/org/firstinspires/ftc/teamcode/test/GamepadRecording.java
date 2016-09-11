@@ -1,7 +1,3 @@
-include ':FtcRobotController',
-        ':FtcXtensible',
-        ':FtcSdk',
-        ':TeamCode'
 /*
  * Copyright © 2016 David Sargent
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -19,3 +15,40 @@ include ':FtcRobotController',
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+package org.firstinspires.ftc.teamcode.test;
+
+import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
+
+import java.util.LinkedList;
+
+/**
+ * A demo GamePad recording OpMode
+ */
+@TeleOp
+public class GamepadRecording extends SimpleOpMode {
+    @Override
+    public void init(RobotContext ctx) throws Exception {
+        if (gamepad1.hasRecord("test")) {
+            gamepad1.startPlayback("test");
+        } else {
+            gamepad1.startRecording("test");
+        }
+    }
+
+    @Override
+    public void loop(RobotContext ctx) throws Exception {
+
+    }
+
+    @Override
+    public void stop(RobotContext ctx, LinkedList<Object> objects) throws Exception {
+        if (gamepad1.isRecording()) {
+            gamepad1.stopRecording();
+        } else if (gamepad1.isPlayingBack()) {
+            gamepad1.stopPlayback();
+        }
+    }
+}
