@@ -8,7 +8,7 @@ android {
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('libs/ftc.debug.keystore')
+            storeFile file('../libs/ftc.debug.keystore')
             storePassword 'android'
         }
     }
