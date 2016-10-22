@@ -12,7 +12,10 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.test.AdafruitSensorWrapper;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
@@ -36,6 +39,8 @@ public class TestDrive extends SimpleOpMode {
     private VuforiaLocalizer vuforia;
     private Servo buttonLeft;
     private Servo buttonRight;
+    private VuforiaTrackables vuforiaTrackables;
+    private OpenGLMatrix lastLocation;
 
     @Override
     public void init(RobotContext ctx) throws Exception {
@@ -59,7 +64,7 @@ public class TestDrive extends SimpleOpMode {
         vuforiaParams.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
        // vuforia = ClassFactory.createVuforiaLocalizer(vuforiaParams);
-        VuforiaTrackables vuforiaTrackables = vuforia.loadTrackablesFromAsset("FTC_2016-17");
+        vuforiaTrackables = vuforia.loadTrackablesFromAsset("FTC_2016-17");
 
         // Set names of trackables
         vuforiaTrackables.get(0).setName("Wheels");
@@ -93,6 +98,16 @@ public class TestDrive extends SimpleOpMode {
             buttonRight.setPosition(0);
         if (gamepad1.isBPressed())
             buttonRight.setPosition(1);
+
+        for (VuforiaTrackable trackable : vuforiaTrackables) {
+            VuforiaTrackableDefaultListener listener = (VuforiaTrackableDefaultListener) trackable.getListener();
+            telemetry.data(trackable.getName(), listener.isVisible());
+            if (listener.getUpdatedRobotLocation() != null)
+                lastLocation = listener.getUpdatedRobotLocation();
+        }
+         
+        telemetry.data("POS", lastLocation != null ? lastLocation.formatAsTransform() : "Unknown");
+
 
         telemetry.data("COLOR", colorRight.redOrBlue().toString());
         telemetry.data("GYRO_X", gyro.readX());
