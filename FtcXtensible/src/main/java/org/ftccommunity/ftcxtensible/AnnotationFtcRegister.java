@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeMeta;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftccommunity.ftcxtensible.core.Attachable;
@@ -104,30 +105,63 @@ public class AnnotationFtcRegister {
                 }
 
                 // todo workaround an the issue of reflectively loading an non-public class
-                // fails silenty
+
                 if (!Modifier.isPublic(opMode.getModifiers())) {
                     RobotLog.setGlobalErrorMsg(getOpModeName(opMode) + " is marked as an OpMode, " +
                             "however it is not public. Please add the keyword 'public' to it");
                 }
-                // register.register(getOpModeName(opMode), opMode);
+
                 opModesToRegister.add(opMode);
             }
         }
 
         for (Class<?> opMode : opModesToRegister) {
             Log.i(TAG, "Registering " + getOpModeName(opMode));
+            final OpModeMeta opModeMeta = generateRegistrationMeta(opMode);
             if (ReflectionUtilities.isParent(opMode, OpMode.class))
-                register.register(getOpModeName(opMode), (Class<? extends OpMode>) opMode);
+                register.register(opModeMeta, (Class) opMode);
             else if (ReflectionUtilities.isParent(opMode, RobotInitStartStopLoop.class))
-                register.register(getOpModeName(opMode), new FtcOpModeInitStartStopInterfaceRunner<>((Class<? extends RobotInitStartStopLoop>) opMode));
+                register.register(opModeMeta, new FtcOpModeInitStartStopInterfaceRunner<>((Class<? extends RobotInitStartStopLoop>) opMode));
             else if (ReflectionUtilities.isParent(opMode, RobotInitStopLoop.class))
-                register.register(getOpModeName(opMode), new FtcOpModeStopInitInterfaceRunner<>((Class<? extends RobotInitStopLoop>) opMode));
+                register.register(opModeMeta, new FtcOpModeStopInitInterfaceRunner<>((Class<? extends RobotInitStopLoop>) opMode));
             else if (ReflectionUtilities.isParent(opMode, RobotLoop.class))
-                register.register(getOpModeName(opMode), new FtcOpModeInterfaceRunner<>((Class<? extends RobotLoop>) opMode));
+                register.register(opModeMeta, new FtcOpModeInterfaceRunner<>((Class<? extends RobotLoop>) opMode));
             else
-                register.register(getOpModeName(opMode), new FtcOpModeRunner<>(opMode));
+                register.register(opModeMeta, new FtcOpModeRunner<>(opMode));
         }
 
+    }
+
+    private static OpModeMeta generateRegistrationMeta(Class<?> opMode) {
+        String group;
+        boolean teleOp = opMode.isAnnotationPresent(TeleOp.class);
+        final String opModeName = getOpModeName(opMode);
+        if (teleOp) {
+            group = opMode.getAnnotation(TeleOp.class).pairWithAuto();
+            return new OpModeMeta(opModeName, OpModeMeta.Flavor.TELEOP, group.equals("") ? OpModeMeta.DefaultGroup : group);
+        } else {
+            teleOp = opMode.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class);
+        }
+
+        if (teleOp) {
+            group = opMode.getAnnotation(com.qualcomm.robotcore.eventloop.opmode.TeleOp.class).group();
+            return new OpModeMeta(opModeName, OpModeMeta.Flavor.TELEOP, group.equals("") ? OpModeMeta.DefaultGroup : group);
+        }
+
+        // Repeat for Autonmous
+        boolean auto = opMode.isAnnotationPresent(Autonomous.class);
+        if (auto) {
+            group = opMode.getAnnotation(Autonomous.class).pairWithTeleOp();
+            return new OpModeMeta(opModeName, OpModeMeta.Flavor.AUTONOMOUS, group.equals("") ? OpModeMeta.DefaultGroup : group);
+        }
+
+        auto = opMode.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class);
+        if (auto) {
+            group = opMode.getAnnotation(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class).group();
+            return new OpModeMeta(opModeName, OpModeMeta.Flavor.TELEOP, group.equals("") ? OpModeMeta.DefaultGroup : group);
+        }
+
+        throw new IllegalArgumentException("OpMode does not contain necessary annotations");
     }
 
     /**
