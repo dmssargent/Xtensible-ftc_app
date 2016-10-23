@@ -75,6 +75,7 @@ android {
     buildTypes {
         release {
             debuggable true
+
             ndk {
                 abiFilters "armeabi-v7a"
             }
