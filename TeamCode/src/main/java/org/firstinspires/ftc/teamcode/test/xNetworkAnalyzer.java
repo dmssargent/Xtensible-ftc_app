@@ -26,11 +26,12 @@ import android.net.wifi.WifiManager;
 
 import com.google.common.collect.HashBiMap;
 import com.google.common.io.Files;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.RunShellCommand;
 
-import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.robot.RobotLogger;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.io.File;
@@ -87,7 +88,7 @@ public class xNetworkAnalyzer extends SimpleOpMode {
             RunShellCommand cmd = new RunShellCommand();
             String output;
             if ((output = cmd.run(String.format("cp /data/misc/wifi/p2p_supplicant.conf %sp2p_supplicant.conf \n", absolutePath))).length() > 0) {
-                log().e(this.getClass().getSimpleName(), "Cannot copy p2p file" + output);
+                RobotLogger.e(this.getClass().getSimpleName(), "Cannot copy p2p file" + output);
                 operChannel = output;
             }
 

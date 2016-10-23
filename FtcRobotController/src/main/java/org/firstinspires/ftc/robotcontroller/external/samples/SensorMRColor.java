@@ -62,7 +62,7 @@ public class SensorMRColor extends LinearOpMode {
 
 
   @Override
-  public void runOpMode() {
+  public void runOpMode() throws InterruptedException {
 
     // hsvValues is an array that will hold the hue, saturation, and value information.
     float hsvValues[] = {0F,0F,0F};

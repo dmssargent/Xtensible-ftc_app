@@ -39,7 +39,7 @@ android {
         targetSdkVersion 24
 
         jackOptions {
-            useJack true
+            enabled true
         }
 
         /**

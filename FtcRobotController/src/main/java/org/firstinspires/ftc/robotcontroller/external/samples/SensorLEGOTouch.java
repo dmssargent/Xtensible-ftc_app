@@ -34,7 +34,6 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /*
@@ -52,7 +51,7 @@ public class SensorLEGOTouch extends LinearOpMode {
   TouchSensor touchSensor;  // Hardware Device Object
 
   @Override
-  public void runOpMode() {
+  public void runOpMode() throws InterruptedException {
 
     // get a reference to our Light Sensor object.
     touchSensor = hardwareMap.touchSensor.get("sensor_touch");
