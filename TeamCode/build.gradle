@@ -16,6 +16,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    lintOptions {
+        textReport true
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
+    }
 }
+
+
+
 dependencies {
+    compile project(path: ':FtcXtensible')
 }

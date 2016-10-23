@@ -17,20 +17,20 @@
  */
 package org.ftccommunity.ftcxtensible.robot.handlers;
 
-import com.google.common.base.Throwables;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.base.Throwables;
+
 import org.ftccommunity.ftcxtensible.robot.ExtensibleOpMode;
 
 public class RobotUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-    public static Context context;
     private final int delay;
-    PendingIntent pendingIntent;
+    public Context context;
+    private PendingIntent pendingIntent;
 
     public RobotUncaughtExceptionHandler(Context ctx, PendingIntent intent, int delay) {
         context = ctx;
