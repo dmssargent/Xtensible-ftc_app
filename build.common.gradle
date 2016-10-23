@@ -38,6 +38,10 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
 
+        jackOptions {
+            useJack true
+        }
+
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
          * the master information published in the AndroidManifest.xml file of the FtcRobotController
@@ -71,6 +75,7 @@ android {
     buildTypes {
         release {
             debuggable true
+
             ndk {
                 abiFilters "armeabi-v7a"
             }
