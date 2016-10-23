@@ -246,7 +246,7 @@ to do something.
         - "opmodes" - provides user-defined OpModes
  * OpModeLibrary - This module is where you add your OpMode code (note that you must not have
     dependencies on the FtcRobotController module, but you may depend on its libraries)
- * FtcXtesible - This module contains our code to help you out with your programming
+ * FtcXtensible - This module contains our code to help you out with your programming
 
 ### Upstream Changelog
  * New user interfaces for FTC Driver Station and FTC Robot Controller apps.
