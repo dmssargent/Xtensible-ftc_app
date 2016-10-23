@@ -78,7 +78,7 @@ public class DriveTrain {
                 target.leftRear = v3;
                 target.rightRear = v4;
             }
-        }, ARCADE
+        }
     }
 
 

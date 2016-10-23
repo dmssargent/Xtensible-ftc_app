@@ -51,7 +51,7 @@ public class SensorMROpticalDistance extends LinearOpMode {
   OpticalDistanceSensor odsSensor;  // Hardware Device Object
 
   @Override
-  public void runOpMode() {
+  public void runOpMode() throws InterruptedException {
 
     // get a reference to our Light Sensor object.
     odsSensor = hardwareMap.opticalDistanceSensor.get("sensor_ods");

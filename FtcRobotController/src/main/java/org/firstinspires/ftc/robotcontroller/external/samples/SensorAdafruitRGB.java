@@ -35,7 +35,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 
-import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -75,15 +74,14 @@ import com.qualcomm.robotcore.hardware.DigitalChannelController;
 @Disabled                            // Comment this out to add to the opmode list
 public class SensorAdafruitRGB extends LinearOpMode {
 
-  ColorSensor sensorRGB;
-  DeviceInterfaceModule cdim;
-
   // we assume that the LED pin of the RGB sensor is connected to
   // digital port 5 (zero indexed).
   static final int LED_CHANNEL = 5;
+  ColorSensor sensorRGB;
+  DeviceInterfaceModule cdim;
 
   @Override
-  public void runOpMode() {
+  public void runOpMode() throws InterruptedException {
 
     // hsvValues is an array that will hold the hue, saturation, and value information.
     float hsvValues[] = {0F,0F,0F};

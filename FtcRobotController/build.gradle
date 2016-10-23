@@ -39,15 +39,6 @@ repositories {
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
-        flatDir {
-            dirs 'out'
-        }
-    }
-}
-
 dependencies {
     //compile 'com.android.support:support-annotations:24.2.0'
     //compile project(':FtcSdk')

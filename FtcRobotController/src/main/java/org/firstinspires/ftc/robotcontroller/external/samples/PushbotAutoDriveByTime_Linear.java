@@ -35,7 +35,6 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -63,16 +62,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Disabled
 public class PushbotAutoDriveByTime_Linear extends LinearOpMode {
 
+    static final double FORWARD_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
     /* Declare OpMode members. */
     HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
-
-    static final double     FORWARD_SPEED = 0.6;
-    static final double     TURN_SPEED    = 0.5;
-
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
 
         /*
          * Initialize the drive system variables.

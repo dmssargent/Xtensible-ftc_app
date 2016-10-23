@@ -69,7 +69,6 @@ import com.qualcomm.ftccommon.FtcRobotControllerSettingsActivity;
 import com.qualcomm.ftccommon.LaunchActivityConstantsList;
 import com.qualcomm.ftccommon.ProgrammingModeController;
 import com.qualcomm.ftccommon.Restarter;
-import org.firstinspires.ftc.ftccommon.external.SoundPlayingRobotMonitor;
 import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftccommon.configuration.EditParameters;
 import com.qualcomm.ftccommon.configuration.FtcLoadFileActivity;
@@ -88,6 +87,7 @@ import com.qualcomm.robotcore.wifi.NetworkConnectionFactory;
 import com.qualcomm.robotcore.wifi.NetworkType;
 import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
 
+import org.firstinspires.ftc.ftccommon.external.SoundPlayingRobotMonitor;
 import org.firstinspires.ftc.robotcore.internal.AppUtil;
 import org.firstinspires.inspection.RcInspectionActivity;
 
@@ -98,13 +98,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class FtcRobotControllerActivity extends Activity {
 
   public static final String TAG = "RCActivity";
-
+  public static final String NETWORK_TYPE_FILENAME = "ftc-network-type.txt";
   private static final int REQUEST_CONFIG_WIFI_CHANNEL = 1;
   private static final boolean USE_DEVICE_EMULATION = false;
   private static final int NUM_GAMEPADS = 2;
-
-  public static final String NETWORK_TYPE_FILENAME = "ftc-network-type.txt";
-
   protected WifiManager.WifiLock wifiLock;
   protected RobotConfigFileManager cfgFileMgr;
 
@@ -133,15 +130,6 @@ public class FtcRobotControllerActivity extends Activity {
 
   protected FtcEventLoop eventLoop;
   protected Queue<UsbDevice> receivedUsbAttachmentNotifications;
-
-  protected class RobotRestarter implements Restarter {
-
-    public void requestRestart() {
-      requestRobotRestart();
-    }
-
-  }
-
   protected ServiceConnection connection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -383,7 +371,6 @@ public class FtcRobotControllerActivity extends Activity {
     }
   }
 
-
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.ftc_robot_controller, menu);
@@ -526,5 +513,13 @@ public class FtcRobotControllerActivity extends Activity {
         }
       });
     }
+  }
+
+  protected class RobotRestarter implements Restarter {
+
+    public void requestRestart() {
+      requestRobotRestart();
+    }
+
   }
 }

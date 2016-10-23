@@ -25,19 +25,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 public class HardwareK9bot
 {
-    /* Public OpMode members. */
-    public DcMotor  leftMotor   = null;
-    public DcMotor  rightMotor  = null;
-    public Servo    arm         = null;
-    public Servo    claw        = null;
-
     public final static double ARM_HOME = 0.2;
     public final static double CLAW_HOME = 0.2;
     public final static double ARM_MIN_RANGE  = 0.20;
     public final static double ARM_MAX_RANGE  = 0.90;
     public final static double CLAW_MIN_RANGE  = 0.20;
     public final static double CLAW_MAX_RANGE  = 0.7;
-
+    /* Public OpMode members. */
+    public DcMotor leftMotor = null;
+    public DcMotor rightMotor = null;
+    public Servo arm = null;
+    public Servo claw = null;
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
@@ -52,8 +50,8 @@ public class HardwareK9bot
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        leftMotor   = hwMap.dcMotor.get("left_drive");
-        rightMotor  = hwMap.dcMotor.get("right_drive");
+        leftMotor = hwMap.dcMotor.get("left_drive");
+        rightMotor = hwMap.dcMotor.get("right_drive");
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
