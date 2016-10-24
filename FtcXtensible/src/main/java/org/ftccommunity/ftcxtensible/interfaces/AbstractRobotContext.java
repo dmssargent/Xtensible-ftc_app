@@ -197,4 +197,7 @@ public interface AbstractRobotContext {
      */
     @NotNull
     View robotControllerView();
+
+    @NotNull
+    View cameraView();
 }

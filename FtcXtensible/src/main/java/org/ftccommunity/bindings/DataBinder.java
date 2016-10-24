@@ -42,6 +42,7 @@ public class DataBinder {
     public static final String RC_VIEW = "ftcview";
 
     public static final String RC_MANAGER = "ftcopmanager";
+    public static final String CAMERA_VIEW = "ftccamera";
 
     private static DataBinder instance;
     private static HashMap<String, Integer> integerBindings;
