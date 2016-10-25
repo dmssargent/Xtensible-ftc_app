@@ -31,16 +31,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
-
-import com.qualcomm.ftcrobotcontroller.R;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.LightSensor;
 
 /*
@@ -61,7 +54,7 @@ public class SensorLEGOLight extends LinearOpMode {
   LightSensor lightSensor;  // Hardware Device Object
 
   @Override
-  public void runOpMode() {
+  public void runOpMode() throws InterruptedException {
 
     // bPrevState and bCurrState represent the previous and current state of the button.
     boolean bPrevState = false;

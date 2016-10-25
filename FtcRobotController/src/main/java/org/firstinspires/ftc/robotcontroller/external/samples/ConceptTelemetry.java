@@ -52,13 +52,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 @Autonomous(name = "Concept: Telemetry", group = "Concept")
 @Disabled
-public class ConceptTelemetry extends LinearOpMode  {
-    /** keeps track of the line of the poem which is to be emitted next */
-    int poemLine = 0;
-
-    /** keeps track of how long it's been since we last emitted a line of poetry */
-    ElapsedTime poemElapsed = new ElapsedTime();
-
+public class ConceptTelemetry extends LinearOpMode {
     static final String[] poem = new String[] {
 
         "Mary had a little lamb,",
@@ -83,8 +77,16 @@ public class ConceptTelemetry extends LinearOpMode  {
         "",
         ""
     };
+    /**
+     * keeps track of the line of the poem which is to be emitted next
+     */
+    int poemLine = 0;
+    /**
+     * keeps track of how long it's been since we last emitted a line of poetry
+     */
+    ElapsedTime poemElapsed = new ElapsedTime();
 
-    @Override public void runOpMode() {
+    @Override public void runOpMode() throws InterruptedException {
 
         /* we keep track of how long it's been since the OpMode was started, just
          * to have some interesting data to show */

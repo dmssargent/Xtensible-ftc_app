@@ -58,15 +58,15 @@ import com.qualcomm.robotcore.util.Range;
 @Disabled
 public class K9botTeleopTank_Linear extends LinearOpMode {
 
+    final double CLAW_SPEED = 0.01;                            // sets rate to move servo
+    final double ARM_SPEED = 0.01;                            // sets rate to move servo
     /* Declare OpMode members. */
     HardwareK9bot   robot           = new HardwareK9bot();              // Use a K9'shardware
     double          armPosition     = robot.ARM_HOME;                   // Servo safe position
     double          clawPosition    = robot.CLAW_HOME;                  // Servo safe position
-    final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
-    final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         double left;
         double right;
 
