@@ -362,7 +362,7 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
      */
     private void handleException(LinkedList<Object> list, Exception e) {
         Log.e(TAG,
-                "An exception occurred running the OpMode " + getCallerClassName(e), e);
+                "An exception occurred running the OpMode \"" + getCallerClassName(e) + "\"", e);
         if (e instanceof NullPointerException && (e.getMessage() == null || e.getMessage().equals(""))) {
             String className = "";
             String lineNumber = "";
@@ -388,6 +388,8 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
             if (this.getClass().isAnnotationPresent(RobotsDontQuit.class)) {
                 // // TODO: 9/5/2016
             }
+
+            throw (RuntimeException) (e instanceof RuntimeException ? e : new RuntimeException(e));
 //                final Exception ex = e;
 //                Thread codeRestarter = new Thread(new Runnable() {
 //                    @Override

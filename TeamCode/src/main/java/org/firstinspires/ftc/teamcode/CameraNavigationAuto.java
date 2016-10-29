@@ -6,8 +6,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.google.common.collect.Queues;
+import com.google.common.io.ByteSink;
+import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.RobotLog;
+import com.qualcomm.robotcore.util.RollingAverage;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -15,25 +21,32 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.ftccommunity.ftcxtensible.collections.ArrayQueue;
+import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.robot.Async;
-import org.ftccommunity.ftcxtensible.robot.ExtensibleLinearOpMode;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.Queue;
 
-import static org.firstinspires.ftc.teamcode.AccelerometerListenerState.START;
+import static android.R.attr.format;
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.METER;
 
 /**
  * Created by David on 10/23/2016.
  */
 @Autonomous
-public class CameraNavigationAuto extends ExtensibleLinearOpMode {
+public class CameraNavigationAuto extends LinearOpMode {
     private OpenGLMatrix lastLocation;
     private int VUF_WHEEL_TARGET = 0;
     private int VUF_TOOL_TARGET = 1;
@@ -50,8 +63,10 @@ public class CameraNavigationAuto extends ExtensibleLinearOpMode {
      */
     @Override
     public void runOpMode() throws InterruptedException {
-        telemetry().data("STATUS", "Initializing");
-        VuforiaLocalizer.Parameters vuforiaParams = new VuforiaLocalizer.Parameters(cameraView().getId());
+        telemetry.addData("STATUS", "Initializing");
+        telemetry.update();
+        int id = DataBinder.getInstance().integers().get(DataBinder.CAMERA_VIEW);
+        VuforiaLocalizer.Parameters vuforiaParams = new VuforiaLocalizer.Parameters(id);
         try {
             vuforiaParams.vuforiaLicenseKey = Files.toString(new File("/sdcard/robot/vuforia.key"), Charset.forName("utf-8"));
         } catch (IOException e) {
@@ -92,9 +107,9 @@ public class CameraNavigationAuto extends ExtensibleLinearOpMode {
         *  their respective figures minus 1" (edge "_" = 11"; edge "|' = 23")
         */
 
-        float mmPerInch        = 25.4f;
-        float mmBotWidth       = 18 * mmPerInch;            // ... or whatever is right for your robot
-        float mmFTCFieldWidth  = (12*12 - 2) * mmPerInch;   // the FTC field is ~11'10" center-to-center of the glass panels
+        float mmPerInch = 25.4f;
+        float mmBotWidth = 18 * mmPerInch;            // ... or whatever is right for your robot
+        float mmFTCFieldWidth = (12 * 12 - 2) * mmPerInch;   // the FTC field is ~11'10" center-to-center of the glass panels
 
         final OpenGLMatrix gearsFieldLocation = OpenGLMatrix
                 /* Then we translate the target off to the RED WALL. Our translation here
@@ -135,7 +150,7 @@ public class CameraNavigationAuto extends ExtensibleLinearOpMode {
 
         // Assume the phone is at the center of the robot
         final OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-                .translation(mmBotWidth / 2,mmBotWidth / 2, mmBotWidth / 2)
+                .translation(mmBotWidth / 2, mmBotWidth / 2, mmBotWidth / 2)
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YZY,
                         AngleUnit.DEGREES, -90, 0, 0));
@@ -144,37 +159,46 @@ public class CameraNavigationAuto extends ExtensibleLinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, VuforiaLocalizer.CameraDirection.BACK);
         }
 
-        final SensorManager systemService = (SensorManager) appContext().getSystemService(Context.SENSOR_SERVICE);
+        final SensorManager systemService = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
         final Sensor accelerometer = systemService.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        systemService.registerListener(new SensorEventListener() {
-            private int accurancy = SensorManager.SENSOR_STATUS_ACCURACY_LOW;
-            private ArrayQueue sample = new ArrayQueue(5000);
-            private AccelerometerListenerState state = START;
+        AccerolmeterListener listener1 = new AccerolmeterListener();
+        systemService.registerListener(listener1, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        Thread aDataLoop = new Thread(new Runnable() {
             @Override
-            public void onSensorChanged(SensorEvent event) {
-                if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
-                    return;
-
-                // // TODO: 10/23/2016  code accerolmeter inpur
-
+            public void run() {
+                listener1.processData();
             }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-                if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                    accurancy = accuracy;
-                }
-            }
-        }, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
-        waitForStart();
+        });
+        aDataLoop.start();
+        try {
+            telemetry.addData("STATUS", "Ready");
+            telemetry.update();
+            waitForStart();
+            telemetry.addData("STATUS", "Running");
+        } catch (RuntimeException ex) {
+            // ignore bug
+        }
 
         vuforiaTrackables.activate();
-        for (VuforiaTrackable trackable : vuforiaTrackables) {
-            VuforiaTrackableDefaultListener listener = (VuforiaTrackableDefaultListener) trackable.getListener();
-            telemetry().data(trackable.getName(), listener.isVisible());
-            if (listener.getUpdatedRobotLocation() != null)
-                lastLocation = listener.getUpdatedRobotLocation();
+        while (opModeIsActive()) {
+            for (VuforiaTrackable trackable : vuforiaTrackables) {
+                VuforiaTrackableDefaultListener listener = (VuforiaTrackableDefaultListener) trackable.getListener();
+                telemetry.addData(trackable.getName(), listener.isVisible());
+                OpenGLMatrix updatedRobotLocation = listener.getUpdatedRobotLocation();
+                if (updatedRobotLocation != null)
+                    lastLocation = updatedRobotLocation;
+
+            }
+            if (lastLocation != null)
+                telemetry.addData("I_LOCATION", lastLocation.formatAsTransform());
+            Position currentPosition = listener1.getCurrentPosition();
+            telemetry.addData("A_LOCATION", "X: " + currentPosition.x + " Y: " + currentPosition.y + " Z: " + currentPosition.z);
+            telemetry.addData("ACCEL_DATA", listener1.getDataDisplay());
+            telemetry.update();
         }
+        aDataLoop.interrupt();
+        vuforiaTrackables.deactivate();
+
 
     }
     
@@ -182,5 +206,105 @@ public class CameraNavigationAuto extends ExtensibleLinearOpMode {
     @Async
     public void sensorLoop() {
 
+    }
+
+    private static class AccerolmeterListener implements SensorEventListener {
+        private BufferedWriter bufferedWriter;
+        private OutputStream fileStream;
+        private int accurancy = SensorManager.SENSOR_STATUS_ACCURACY_LOW;
+        private Position currentPosition = new Position(METER, 0,0,0, System.nanoTime());
+        private Velocity currentVelocity = new Velocity(METER, 0, 0, 0, System.nanoTime());
+        private long lastTimestamp = 0;
+        //private AccelerometerListenerState state = START;
+        private final Queue<SensorEvent> dataQueue = Queues.synchronizedDeque(Queues.<SensorEvent>newArrayDeque());
+        private String currentData;
+
+        public  AccerolmeterListener() {
+
+            File file = new File("/sdcard/robot/gryo-data.csv");
+
+                try {
+                    bufferedWriter = new BufferedWriter(new FileWriter(file));
+                } catch (IOException e) {
+                    RobotLog.e(e.getMessage());
+                }
+
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
+                return;
+
+            dataQueue.add(event);
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                accurancy = accuracy;
+            }
+        }
+
+        public void processData() {
+            final int SAMPLE_SIZE = 10;
+            TripleAxis<RollingAverage> averages = new TripleAxis<>(new RollingAverage(SAMPLE_SIZE), new RollingAverage(SAMPLE_SIZE), new RollingAverage(SAMPLE_SIZE));
+            while (!Thread.currentThread().isInterrupted()) {
+                if (dataQueue.isEmpty()) {
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                    continue;
+                }
+
+                SensorEvent poll = dataQueue.poll();
+                if (lastTimestamp == 0) lastTimestamp = poll.timestamp;
+                double dt = (poll.timestamp - lastTimestamp) / 1E9;
+                // Now set timestamp
+                lastTimestamp = poll.timestamp;
+                averages.X.addNumber((int) (poll.values[0] * 100));
+                double x = averages.X.getAverage() / 100d;
+                averages.Y.addNumber((int) (poll.values[1] * 100));
+                double y = averages.Y.getAverage() / 100d;
+                averages.Z.addNumber((int) (poll.values[2] * 100));
+                double z  = averages.Z.getAverage() / 100d;
+                RobotLog.d("%s,%s,%s,%s", x, y, z, dt);
+
+                try {
+                    currentData = String.format("%s,%s,%s,%s\n", x, y, z, dt);
+                    bufferedWriter.write(currentData);
+                    bufferedWriter.flush();
+                } catch (IOException e) {
+                    RobotLog.w(e.toString());
+                }
+                currentVelocity.acquisitionTime = poll.timestamp;
+                currentVelocity.xVeloc = computeVelocity(x, dt, currentVelocity.xVeloc);
+                currentVelocity.yVeloc = computeVelocity(y, dt, currentVelocity.yVeloc);
+                currentVelocity.zVeloc = computeVelocity(z, dt, currentVelocity.zVeloc);
+                currentPosition.acquisitionTime = poll.timestamp;
+                currentPosition.x = computePosition(x, dt, currentVelocity.xVeloc, currentPosition.x);
+                currentPosition.y = computePosition(y, dt, currentVelocity.yVeloc, currentPosition.y);
+                currentPosition.z = computePosition(z, dt, currentVelocity.zVeloc, currentPosition.z);
+            }
+        }
+
+        private double computePosition(double a, double dt, double velocity, double lastPosition) {
+            return .5 * a * dt * dt + dt * velocity + lastPosition;
+        }
+
+        private double computeVelocity(double a, double dt, double initialVelocity) {
+            return a * dt + initialVelocity;
+        }
+
+        public Position getCurrentPosition() {
+            return currentPosition;
+        }
+
+        String getDataDisplay() {
+            return currentData;
+        }
     }
 }

@@ -61,7 +61,7 @@ public class ArcadeDriveTeleop extends ExtensibleOpMode {
 
             @Override
             public double scaleY(ExtensibleGamepad gamepad, double y) {
-                //return Range.clip(2.2842 * Math.pow(Math.tanh(y), 3d), -1, 1);
+                //return Range.clip(2.2842 * Math.pow(Math.tanh(Y), 3d), -1, 1);
                 return y;
             }
 
