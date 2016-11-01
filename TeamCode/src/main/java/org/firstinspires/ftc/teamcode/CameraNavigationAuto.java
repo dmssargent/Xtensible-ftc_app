@@ -7,8 +7,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import com.google.common.collect.Queues;
-import com.google.common.io.ByteSink;
-import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -35,11 +33,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.Queue;
 
-import static android.R.attr.format;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.METER;
 
 /**
@@ -161,7 +157,7 @@ public class CameraNavigationAuto extends LinearOpMode {
 
         final SensorManager systemService = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
         final Sensor accelerometer = systemService.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        AccerolmeterListener listener1 = new AccerolmeterListener();
+        AccelerometerListener listener1 = new AccelerometerListener();
         systemService.registerListener(listener1, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         Thread aDataLoop = new Thread(new Runnable() {
             @Override
@@ -194,6 +190,7 @@ public class CameraNavigationAuto extends LinearOpMode {
             Position currentPosition = listener1.getCurrentPosition();
             telemetry.addData("A_LOCATION", "X: " + currentPosition.x + " Y: " + currentPosition.y + " Z: " + currentPosition.z);
             telemetry.addData("ACCEL_DATA", listener1.getDataDisplay());
+            telemetry.addData("ACCEL_DATA_READY", listener1.isInitialized());
             telemetry.update();
         }
         aDataLoop.interrupt();
@@ -208,7 +205,7 @@ public class CameraNavigationAuto extends LinearOpMode {
 
     }
 
-    private static class AccerolmeterListener implements SensorEventListener {
+    private static class AccelerometerListener implements SensorEventListener {
         private BufferedWriter bufferedWriter;
         private OutputStream fileStream;
         private int accurancy = SensorManager.SENSOR_STATUS_ACCURACY_LOW;
@@ -218,8 +215,9 @@ public class CameraNavigationAuto extends LinearOpMode {
         //private AccelerometerListenerState state = START;
         private final Queue<SensorEvent> dataQueue = Queues.synchronizedDeque(Queues.<SensorEvent>newArrayDeque());
         private String currentData;
+        private boolean initialized = false;
 
-        public  AccerolmeterListener() {
+        public AccelerometerListener() {
 
             File file = new File("/sdcard/robot/gryo-data.csv");
 
@@ -247,8 +245,10 @@ public class CameraNavigationAuto extends LinearOpMode {
         }
 
         public void processData() {
-            final int SAMPLE_SIZE = 10;
-            TripleAxis<RollingAverage> averages = new TripleAxis<>(new RollingAverage(SAMPLE_SIZE), new RollingAverage(SAMPLE_SIZE), new RollingAverage(SAMPLE_SIZE));
+            final int SAMPLE_SIZE = 5;
+            TripleAxis<RollingAverage> averages = new TripleAxis<>(new RollingAverage(3000), new RollingAverage(3000), new RollingAverage(3000));
+            //boolean initialized = false;
+            double tar[] = new double[3];
             while (!Thread.currentThread().isInterrupted()) {
                 if (dataQueue.isEmpty()) {
                     try {
@@ -265,13 +265,26 @@ public class CameraNavigationAuto extends LinearOpMode {
                 double dt = (poll.timestamp - lastTimestamp) / 1E9;
                 // Now set timestamp
                 lastTimestamp = poll.timestamp;
-                averages.X.addNumber((int) (poll.values[0] * 100));
-                double x = averages.X.getAverage() / 100d;
-                averages.Y.addNumber((int) (poll.values[1] * 100));
-                double y = averages.Y.getAverage() / 100d;
-                averages.Z.addNumber((int) (poll.values[2] * 100));
-                double z  = averages.Z.getAverage() / 100d;
+                averages.X.addNumber((int) (poll.values[0] * 100 - tar[0]) );
+                double x = Math.round(averages.X.getAverage() / 10) / 10d;
+                averages.Y.addNumber((int) (poll.values[1] * 100 - tar[1]));
+                double y = Math.round(averages.Y.getAverage() / 10) / 10d;
+                averages.Z.addNumber((int) (poll.values[2] * 100 - tar[2]));
+                double z  = Math.round(averages.Z.getAverage() / 10) / 10d;
                 RobotLog.d("%s,%s,%s,%s", x, y, z, dt);
+
+                if (!initialized) {
+                    if (averages.X.size() == 3000) {
+                        initialized = true;
+                        tar[0] = averages.X.getAverage();
+                        tar[1] = averages.Y.getAverage();
+                        tar[2] = averages.Z.getAverage();
+
+                        averages = new TripleAxis<>(new RollingAverage(SAMPLE_SIZE), new RollingAverage(SAMPLE_SIZE), new RollingAverage(SAMPLE_SIZE));
+                    }
+
+                    continue;
+                }
 
                 try {
                     currentData = String.format("%s,%s,%s,%s\n", x, y, z, dt);
@@ -296,7 +309,7 @@ public class CameraNavigationAuto extends LinearOpMode {
         }
 
         private double computeVelocity(double a, double dt, double initialVelocity) {
-            return a * dt + initialVelocity;
+            return .5 * a * dt + initialVelocity;
         }
 
         public Position getCurrentPosition() {
@@ -305,6 +318,10 @@ public class CameraNavigationAuto extends LinearOpMode {
 
         String getDataDisplay() {
             return currentData;
+        }
+
+        boolean isInitialized() {
+            return initialized;
         }
     }
 }
