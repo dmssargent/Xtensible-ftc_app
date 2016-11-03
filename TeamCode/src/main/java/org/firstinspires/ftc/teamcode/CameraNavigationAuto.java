@@ -61,6 +61,7 @@ public class CameraNavigationAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry.addData("STATUS", "Initializing");
         telemetry.update();
+
         int id = DataBinder.getInstance().integers().get(DataBinder.CAMERA_VIEW);
         VuforiaLocalizer.Parameters vuforiaParams = new VuforiaLocalizer.Parameters(id);
         try {
@@ -155,6 +156,7 @@ public class CameraNavigationAuto extends LinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, VuforiaLocalizer.CameraDirection.BACK);
         }
 
+idle();
         final SensorManager systemService = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
         final Sensor accelerometer = systemService.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         AccelerometerListener listener1 = new AccelerometerListener();

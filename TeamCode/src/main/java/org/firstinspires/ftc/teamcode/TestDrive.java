@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.google.common.io.Files;
-import com.qualcomm.hardware.adafruit.AdafruitBNO055IMU;
-import com.qualcomm.hardware.adafruit.AdafruitI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -75,6 +72,19 @@ public class TestDrive extends SimpleOpMode {
 
     @Override
     public void loop(RobotContext ctx) throws Exception {
+
+        double r = Math.hypot(gamepad1.left_stick_y, gamepad1.left_stick_x)
+        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI;
+        double rightX = gamepad1.right_stick_x;
+        final double v1 = r * Math.cos(robotAngle) + rightX;
+        final double v2 = r * Math.sin(robotAngle) - rightX;
+        final double v3 = r * Math.sin(robotAngle) + rightX;
+        final double v4 = r * Math.cos(robotAngle) - rightX;
+
+        leftFront.setPower(v1);
+        rightFront.setPower(v2);
+        leftRear.setPower(v3);
+        rightRear.setPower(v4);
 
         final double robotAngle = gamepad1.leftJoystick.polar().getTheta() - Math.PI / 4;
         double rightY = gamepad1.rightJoystick.X();
