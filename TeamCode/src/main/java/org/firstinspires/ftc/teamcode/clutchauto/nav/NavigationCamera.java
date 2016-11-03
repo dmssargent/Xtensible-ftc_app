@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.concurrent.Semaphore;
 
 import static com.google.common.base.Preconditions.checkState;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
@@ -189,8 +191,22 @@ class NavigationCamera {
         return watcher;
     }
 
+    public Velocity velocity() {
+        //// TODO: 11/3/16
+        return null;
+    }
+
+    public void unlock() {
+        watcher.unlock();
+    }
+
+    public void lock() {
+        watcher.lock();
+    }
+
     private static class CameraWatcher implements Runnable {
         private static CameraWatcher instance;
+        private final Semaphore semaphore = new Semaphore(0, true);
         private final VuforiaTrackables trackables;
         private long lastTimestamp;
         private OpenGLMatrix lastLocation;
@@ -217,6 +233,7 @@ class NavigationCamera {
         @Override
         public void run() {
             boolean locationUpdated = false;
+            lock();
             synchronized (this) {
                 for (VuforiaTrackable trackable : trackables) {
                     VuforiaTrackableDefaultListener listener = (VuforiaTrackableDefaultListener) trackable.getListener();
@@ -231,6 +248,20 @@ class NavigationCamera {
 
                 usableData = locationUpdated;
             }
+            unlock();
+        }
+
+        public void lock() {
+            try {
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+
+        public void unlock() {
+            semaphore.release();
         }
     }
 }
