@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
@@ -8,9 +7,6 @@ import org.firstinspires.ftc.teamcode.clutchauto.nav.Navigation;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
-/**
- * Created by mhsrobotics on 11/3/16.
- */
 
 public class Drive2 extends SimpleOpMode {
     private Navigation navigation;
@@ -32,6 +28,10 @@ public class Drive2 extends SimpleOpMode {
 
     @Override
     public void loop(RobotContext ctx) throws Exception {
-
+        driveTrain.updateTargetWithGamepad();
+        telemetry.data("NAV_POS", navigation.position());
+        telemetry.data("NAV_VEL", navigation.velocity());
+        telemetry.data("ODS_READ", opticalDistanceSensor.getRawLightDetected());
+        telemetry.data("DIS_READ", distanceSensor.getUltrasonicLevel());
     }
 }

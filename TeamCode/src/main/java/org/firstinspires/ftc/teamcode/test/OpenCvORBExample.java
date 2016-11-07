@@ -478,7 +478,7 @@
 //    }
 //
 //    @Override
-//    public void stop(RobotContext ctx, LinkedList<Object> out) throws Exception {
+//    public void stopRobot(RobotContext ctx, LinkedList<Object> out) throws Exception {
 //        if (mOpenCvCameraView != null) {
 //            mOpenCvCameraView.disableView();
 //        }

@@ -210,7 +210,7 @@
 //    }
 //
 //    /**
-//     * Read the byte at the indicated register.
+//     * READ the byte at the indicated register.
 //     */
 //    @Override
 //    public byte read8(int ireg) {
@@ -218,7 +218,7 @@
 //    }
 //
 //    /**
-//     * Read a contiguous set of registers
+//     * READ a contiguous set of registers
 //     */
 //    @Override
 //    public byte[] read(int ireg, int creg) {
@@ -230,7 +230,7 @@
 //    //----------------------------------------------------------------------------------------------
 //
 //    /**
-//     * Read a contiguous set of registers.
+//     * READ a contiguous set of registers.
 //     */
 //    @Override
 //    public TimestampedData readTimeStamped(int ireg, int creg) {
@@ -314,7 +314,7 @@
 //    public TimestampedData readTimeStamped(final int ireg, final int creg, final ReadWindow readWindowNeeded, final ReadWindow readWindowSet) {
 //        return this.executeFunctionWhileLocked(new IFunc<TimestampedData>() {
 //            @Override
-//            public TimestampedData value() {
+//            public TimestampedData val() {
 //                ensureReadWindow(readWindowNeeded, readWindowSet);
 //                return readTimeStamped(ireg, creg);
 //            }
@@ -322,7 +322,7 @@
 //    }
 //
 //    /**
-//     * Write a byte to the indicated register
+//     * WRITE a byte to the indicated register
 //     */
 //    @Override
 //    public void write8(int ireg, int data) {
@@ -330,7 +330,7 @@
 //    }
 //
 //    /**
-//     * Write data to a set of registers, beginning with the one indicated. The data will be written
+//     * WRITE data to a set of registers, beginning with the one indicated. The data will be written
 //     * to the I2C device as expeditiously as possible. This method will not return until the data
 //     * has been written to the device controller; however, that does not necessarily indicate that
 //     * the data has been issued in an I2C write transaction, though that ought to happen a short
@@ -439,7 +439,7 @@
 //    @Override
 //    public <T> T executeFunctionWhileLocked(IFunc<T> func) {
 //        synchronized (this.concurrentClientLock) {
-//            return func.value();
+//            return func.val();
 //        }
 //    }
 //
@@ -1056,7 +1056,7 @@
 //                }
 //
 //                //----------------------------------------------------------------------------------
-//                // Read, set action flag and / or queue to module as requested
+//                // READ, set action flag and / or queue to module as requested
 //
 //                if (setActionFlag)
 //                    i2cDevice.setI2cPortActionFlag();

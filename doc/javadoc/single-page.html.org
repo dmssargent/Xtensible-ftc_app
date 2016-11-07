@@ -15547,7 +15547,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/AnalogInputController.html#getAnalogInputValue(int)">getAnalogInputValue</a></strong>(int&nbsp;channel)</code>
-<div class="block">Get the value of this analog input
+<div class="block">Get the val of this analog input
 
  Return the current ADC results from the A0-A7 channel input pins.</div>
 </td>
@@ -15587,7 +15587,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>getAnalogInputValue</h4>
 <pre>int&nbsp;getAnalogInputValue(int&nbsp;channel)</pre>
-<div class="block">Get the value of this analog input
+<div class="block">Get the val of this analog input
 
  Return the current ADC results from the A0-A7 channel input pins.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>channel</code> - which analog channel to read</dd>
@@ -15910,7 +15910,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.h
 <div class="block">Sets the channel output voltage.
  If mode == 0: takes input from -1023-1023, output in the range -4 to +4 volts.
  If mode == 1, 2, or 3: takes input from 0-1023, output in the range 0 to 8 volts.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>voltage</code> - voltage value in the correct range.</dd></dl>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>voltage</code> - voltage val in the correct range.</dd></dl>
 </li>
 </ul>
 <a name="setAnalogOutputFrequency(int)">
@@ -16259,7 +16259,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <div class="block">Sets the channel output voltage.
  If mode == 0: takes input from -1023-1023, output in the range -4 to +4 volts.
  If mode == 1, 2, or 3: takes input from 0-1023, output in the range 0 to 8 volts.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>port</code> - channel 0 or 1</dd><dd><code>voltage</code> - voltage value in the correct range.</dd></dl>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>port</code> - channel 0 or 1</dd><dd><code>voltage</code> - voltage val in the correct range.</dd></dl>
 </li>
 </ul>
 <a name="setAnalogOutputFrequency(int, int)">
@@ -16518,7 +16518,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/ColorSensor.html#setI2cAddress(int)">setI2cAddress</a></strong>(int&nbsp;newAddress)</code>
-<div class="block">Set the I2C address to a new value.</div>
+<div class="block">Set the I2C address to a new val.</div>
 </td>
 </tr>
 </table>
@@ -16616,7 +16616,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>setI2cAddress</h4>
 <pre>void&nbsp;setI2cAddress(int&nbsp;newAddress)</pre>
-<div class="block">Set the I2C address to a new value.</div>
+<div class="block">Set the I2C address to a new val.</div>
 </li>
 </ul>
 <a name="getI2cAddress()">
@@ -17873,7 +17873,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.h
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition()">getCurrentPosition</a></strong>()</code>
-<div class="block">Get the current encoder value.</div>
+<div class="block">Get the current encoder val.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -18240,7 +18240,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.h
 <h4>setTargetPosition</h4>
 <pre>public&nbsp;void&nbsp;setTargetPosition(int&nbsp;position)</pre>
 <div class="block">Set the motor target position, using an integer. If this motor has been set to REVERSE,
- the passed-in "position" value will be multiplied by -1.</div>
+ the passed-in "position" val will be multiplied by -1.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>position</code> - range from Integer.MIN_VALUE to Integer.MAX_VALUE</dd></dl>
 </li>
 </ul>
@@ -18263,7 +18263,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.h
 <li class="blockList">
 <h4>getCurrentPosition</h4>
 <pre>public&nbsp;int&nbsp;getCurrentPosition()</pre>
-<div class="block">Get the current encoder value. If this motor has been set to REVERSE, the returned "position"
+<div class="block">Get the current encoder val. If this motor has been set to REVERSE, the returned "position"
  will be multiplied by -1.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>double indicating current position</dd></dl>
 </li>
@@ -19742,7 +19742,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DigitalChannelContr
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/DeviceInterfaceModule.html#setDigitalOutputByte(byte)">setDigitalOutputByte</a></strong>(byte&nbsp;input)</code>
 <div class="block">If a a particular control field bit is set to one, the channel pin will be in output mode and
- will reflect the value of the corresponding field bit.</div>
+ will reflect the val of the corresponding field bit.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -19851,7 +19851,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DigitalChannelContr
 <h4>setDigitalOutputByte</h4>
 <pre>void&nbsp;setDigitalOutputByte(byte&nbsp;input)</pre>
 <div class="block">If a a particular control field bit is set to one, the channel pin will be in output mode and
- will reflect the value of the corresponding field bit.</div>
+ will reflect the val of the corresponding field bit.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - with output state of the digital pins.</dd></dl>
 </li>
 </ul>
@@ -19864,7 +19864,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DigitalChannelContr
 <pre>byte&nbsp;getDigitalOutputStateByte()</pre>
 <div class="block">The D7-D0 output set field is a byte containing the required I/O output of the D7-D0
  channel pins. If the corresponding Dy-D0 I/O control field bit is set to one, the channel pin
- will be in output mode and will reflect the value of the corresponding D7-D0 output set field bit.</div>
+ will be in output mode and will reflect the val of the corresponding D7-D0 output set field bit.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>D7-D0 output set field.</dd></dl>
 </li>
 </ul>
@@ -22895,7 +22895,7 @@ extends RobocolParsableBase</pre>
 <tr class="rowColor">
 <td class="colFirst"><code>protected float</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/Gamepad.html#joystickDeadzone">joystickDeadzone</a></strong></code>
-<div class="block">If the motion value is less than the threshold, the controller will be
+<div class="block">If the motion val is less than the threshold, the controller will be
  considered at rest</div>
 </td>
 </tr>
@@ -23377,7 +23377,7 @@ extends RobocolParsableBase</pre>
 <li class="blockList">
 <h4>id</h4>
 <pre>public&nbsp;int id</pre>
-<div class="block">ID assigned to this gamepad by the OS. This value can change each time the device is plugged in</div>
+<div class="block">ID assigned to this gamepad by the OS. This val can change each time the device is plugged in</div>
 </li>
 </ul>
 <a name="timestamp">
@@ -23408,7 +23408,7 @@ extends RobocolParsableBase</pre>
 <li class="blockList">
 <h4>joystickDeadzone</h4>
 <pre>protected&nbsp;float joystickDeadzone</pre>
-<div class="block">If the motion value is less than the threshold, the controller will be
+<div class="block">If the motion val is less than the threshold, the controller will be
  considered at rest</div>
 </li>
 </ul>
@@ -23846,19 +23846,19 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/GyroSensor.html#rawX()">rawX</a></strong>()</code>
-<div class="block">Return the gyro's raw X value.</div>
+<div class="block">Return the gyro's raw X val.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/GyroSensor.html#rawY()">rawY</a></strong>()</code>
-<div class="block">Return the gyro's raw Y value.</div>
+<div class="block">Return the gyro's raw Y val.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/GyroSensor.html#rawZ()">rawZ</a></strong>()</code>
-<div class="block">Return the gyro's raw Z value.</div>
+<div class="block">Return the gyro's raw Z val.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -23954,8 +23954,8 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>rawX</h4>
 <pre>int&nbsp;rawX()</pre>
-<div class="block">Return the gyro's raw X value.</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>X value</dd>
+<div class="block">Return the gyro's raw X val.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>X val</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>java.lang.UnsupportedOperationException</code> - if unsupported; not all gyro devices support this feature</dd></dl>
 </li>
@@ -23967,8 +23967,8 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>rawY</h4>
 <pre>int&nbsp;rawY()</pre>
-<div class="block">Return the gyro's raw Y value.</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>Y value</dd>
+<div class="block">Return the gyro's raw Y val.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>Y val</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>java.lang.UnsupportedOperationException</code> - if unsupported; not all gyro devices support this feature</dd></dl>
 </li>
@@ -23980,8 +23980,8 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>rawZ</h4>
 <pre>int&nbsp;rawZ()</pre>
-<div class="block">Return the gyro's raw Z value.</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>Z value</dd>
+<div class="block">Return the gyro's raw Z val.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>Z val</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>java.lang.UnsupportedOperationException</code> - if unsupported; not all gyro devices support this feature</dd></dl>
 </li>
@@ -28516,7 +28516,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/IrSeekerSensor.html#setI2cAddress(int)">setI2cAddress</a></strong>(int&nbsp;newAddress)</code>
-<div class="block">Set the I2C address to a new value.</div>
+<div class="block">Set the I2C address to a new val.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -28664,7 +28664,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>setI2cAddress</h4>
 <pre>void&nbsp;setI2cAddress(int&nbsp;newAddress)</pre>
-<div class="block">Set the I2C address to a new value.</div>
+<div class="block">Set the I2C address to a new val.</div>
 </li>
 </ul>
 <a name="getI2cAddress()">
@@ -29903,7 +29903,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/LegacyModule.html#readAnalog(int)">readAnalog</a></strong>(int&nbsp;physicalPort)</code>
-<div class="block">Read an analog value from a device; only works in analog read mode</div>
+<div class="block">Read an analog val from a device; only works in analog read mode</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -29911,7 +29911,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/LegacyModule.html#setDigitalLine(int,%20int,%20boolean)">setDigitalLine</a></strong>(int&nbsp;physicalPort,
               int&nbsp;line,
               boolean&nbsp;set)</code>
-<div class="block">Set the value of digital line 0 or 1 while in analog mode.</div>
+<div class="block">Set the val of digital line 0 or 1 while in analog mode.</div>
 </td>
 </tr>
 </table>
@@ -29975,7 +29975,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <pre>void&nbsp;setDigitalLine(int&nbsp;physicalPort,
                   int&nbsp;line,
                   boolean&nbsp;set)</pre>
-<div class="block">Set the value of digital line 0 or 1 while in analog mode.
+<div class="block">Set the val of digital line 0 or 1 while in analog mode.
  <p>
  These are port pins 5 and 6.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>physicalPort</code> - physical port number on the device</dd><dd><code>line</code> - line 0 or 1</dd><dd><code>set</code> - true to set; otherwise false</dd></dl>
@@ -29988,7 +29988,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>readAnalog</h4>
 <pre>byte[]&nbsp;readAnalog(int&nbsp;physicalPort)</pre>
-<div class="block">Read an analog value from a device; only works in analog read mode</div>
+<div class="block">Read an analog val from a device; only works in analog read mode</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>physicalPort</code> - physical port number on the device</dd>
 <dt><span class="strong">Returns:</span></dt><dd>byte[] containing the two analog values; low byte first, high byte second</dd></dl>
 </li>
@@ -32167,7 +32167,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.h
 <li class="blockList">
 <h4>setPulseWidthOutputTime</h4>
 <pre>public&nbsp;void&nbsp;setPulseWidthOutputTime(int&nbsp;time)</pre>
-<div class="block">Set the pulse width output time for this port. Typically set to a value between
+<div class="block">Set the pulse width output time for this port. Typically set to a val between
  750 and 2,250 to control a servo.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>time</code> - pulse width for the port in microseconds.</dd></dl>
 </li>
@@ -32524,7 +32524,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <h4>setPulseWidthOutputTime</h4>
 <pre>void&nbsp;setPulseWidthOutputTime(int&nbsp;port,
                            int&nbsp;time)</pre>
-<div class="block">Set the pulse width output time for this channel. Typically set to a value between
+<div class="block">Set the pulse width output time for this channel. Typically set to a val between
  750 and 2,250 to control a servo.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>port</code> - port this device is attached to</dd><dd><code>time</code> - pulse width for the port in microseconds.</dd></dl>
 </li>
@@ -33511,7 +33511,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.h
  <p>
  This is useful if you don't want the servo to move past a given position,
  but don't want to manually scale the input to setPosition each time.
- getPosition() will scale the value back to a value between 0.0 and 1.0. If
+ getPosition() will scale the val back to a val between 0.0 and 1.0. If
  you need to know the actual position use
  Servo.getController().getServoPosition(Servo.getChannel()).</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>min</code> - minimum position of the servo from 0.0 to 1.0</dd><dd><code>max</code> - maximum position of the servo from 0.0 to 1.0</dd>
@@ -34340,7 +34340,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/TouchSensor.html#getValue()">getValue</a></strong>()</code>
 <div class="block">Represents how much force is applied to the touch sensor; for some touch sensors
- this value will only ever be 0 or 1.</div>
+ this val will only ever be 0 or 1.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -34379,7 +34379,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <h4>getValue</h4>
 <pre>double&nbsp;getValue()</pre>
 <div class="block">Represents how much force is applied to the touch sensor; for some touch sensors
- this value will only ever be 0 or 1.</div>
+ this val will only ever be 0 or 1.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>a number between 0 and 1</dd></dl>
 </li>
 </ul>
@@ -36783,7 +36783,7 @@ extends java.lang.Object</pre>
            double&nbsp;y2)</pre>
 <div class="block">Scale a number in the range of x1 to x2, to the range of y1 to y2</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>n</code> - number to scale</dd><dd><code>x1</code> - lower bound range of n</dd><dd><code>x2</code> - upper bound range of n</dd><dd><code>y1</code> - lower bound of scale</dd><dd><code>y2</code> - upper bound of scale</dd>
-<dt><span class="strong">Returns:</span></dt><dd>a double scaled to a value between y1 and y2, inclusive</dd></dl>
+<dt><span class="strong">Returns:</span></dt><dd>a double scaled to a val between y1 and y2, inclusive</dd></dl>
 </li>
 </ul>
 <a name="clip(double, double, double)">
@@ -36796,7 +36796,7 @@ extends java.lang.Object</pre>
           double&nbsp;min,
           double&nbsp;max)</pre>
 <div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd></dl>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum val allowed</dd><dd><code>max</code> - maximum val allowed</dd></dl>
 </li>
 </ul>
 <a name="clip(float, float, float)">
@@ -36809,7 +36809,7 @@ extends java.lang.Object</pre>
          float&nbsp;min,
          float&nbsp;max)</pre>
 <div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd></dl>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum val allowed</dd><dd><code>max</code> - maximum val allowed</dd></dl>
 </li>
 </ul>
 <a name="throwIfRangeIsInvalid(double, double, double)">
@@ -36823,7 +36823,7 @@ extends java.lang.Object</pre>
                          double&nbsp;max)
                                   throws java.lang.IllegalArgumentException</pre>
 <div class="block">Throw an IllegalArgumentException if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum val allowed</dd><dd><code>max</code> - maximum val allowed</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>java.lang.IllegalArgumentException</code> - if number is outside of range</dd></dl>
 </li>
@@ -37471,7 +37471,7 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/TypeConversion.html#unsignedShortToInt(short)">unsignedShortToInt</a></strong>(short&nbsp;s)</code>
-<div class="block">Treats a short as an unsigned value and returns that value as a int</div>
+<div class="block">Treats a short as an unsigned val and returns that val as a int</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -37659,7 +37659,7 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;int&nbsp;unsignedByteToInt(byte&nbsp;b)</pre>
 <div class="block">Accept a byte, treat that byte as an unsigned byte, then covert it to the return type</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>b</code> - byte to treat as unsigned byte</dd>
-<dt><span class="strong">Returns:</span></dt><dd>a positive value between 0 and 255</dd></dl>
+<dt><span class="strong">Returns:</span></dt><dd>a positive val between 0 and 255</dd></dl>
 </li>
 </ul>
 <a name="unsignedShortToInt(short)">
@@ -37669,9 +37669,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>unsignedShortToInt</h4>
 <pre>public static&nbsp;int&nbsp;unsignedShortToInt(short&nbsp;s)</pre>
-<div class="block">Treats a short as an unsigned value and returns that value as a int</div>
+<div class="block">Treats a short as an unsigned val and returns that val as a int</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>s</code> - the short to be converted to an int</dd>
-<dt><span class="strong">Returns:</span></dt><dd>a positive value between 0 and 65535</dd></dl>
+<dt><span class="strong">Returns:</span></dt><dd>a positive val between 0 and 65535</dd></dl>
 </li>
 </ul>
 <a name="unsignedByteToDouble(byte)">

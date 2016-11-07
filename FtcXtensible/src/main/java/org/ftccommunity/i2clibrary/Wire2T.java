@@ -18,10 +18,14 @@
 
 package org.ftccommunity.i2clibrary;
 
+import android.support.annotation.CallSuper;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cController;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 
+import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
 import org.ftccommunity.i2clibrary.collections.ArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,53 +37,93 @@ import java.util.concurrent.locks.Lock;
  * @author Olavi Kamppari
  * @since 0.3.1
  */
-public class Wire implements I2cController.I2cPortReadyCallback {
+public class Wire2T<T extends Enum & Wire2T.Register> implements I2cController.I2cPortReadyCallback {
 // --------------------------------- CONSTANTS -------------------------------------------------
 
-    // Cache buffer constant values
-    static final byte
-            /**
-             * MSB 1
-             */
-            READ_MODE = 0x00 - 128,   // MSB = 1
     /**
-     * MSB 0
+     * Cache buffer constant values
      */
-    WRITE_MODE = 0x00;         // MSB = 0
+    enum Modes {
+        /**
+         * MSB 1
+         */
+        READ(0x00 - 128),
+        /**
+         * MSB 0
+         */
+        WRITE(0x00);
+
+        final byte val;
+
+        Modes(int val) {
+            this.val = (byte) val;
+        }
+    }
 
     // Cache buffer index values
-    static final int
-            CACHE_MODE = 0,            // MSB = 1 when read mode is active
-            DEV_ADDR = 1,            // Device address
-            REG_NUMBER = 2,            // Register address
-            REG_COUNT = 3,            // Register count
-            DATA_OFFSET = 4,            // First byte of transferred data
-            LAST_INDEX = 29,           // Last index available for data
-            ACTION_FLAG = 31,           // 0 = idle, -1 = transfer is active
-            CACHE_SIZE = 32;           // downStreamCache fixed size
+
+    /**
+     * MSB = 1 when read mode is active
+     */
+    static final int CACHE_MODE = 0;
+
+    /**
+     * Device address
+     */
+    static final int DEV_ADDR = 1;
+
+    /**
+     * Register address
+     */
+    static final int REG_NUMBER = 2;
+
+    /**
+     * Register count
+     */
+    static final int REG_COUNT = 3;
+
+    /**
+     * First byte of transferred data
+     */
+    static final int DATA_OFFSET = 4;
+
+    /**
+     * Last index available for data
+     */
+    static final int LAST_INDEX = 29;
+
+    /**
+     * 0 = idle, -1 = transfer is active
+     */
+    static final int ACTION_FLAG = 31;
+
+    /**
+     * downStreamCache has a fixed size
+     */
+    static final int CACHE_SIZE = 32;
 
     // --------------------------------- CLASS VARIABLES -------------------------------------------
-    private ArrayQueue<Element> downQueue;  // Down stream buffer
-    private ArrayQueue<Element> upQueue;    // Up stream buffer
-    private I2cDevice wireDevice;              // Generic I2C Device Object
-    private byte wireDevAddress;               // Generic Device Address
-    private byte[] readCache;                  // READ Cache
-    private byte[] writeCache;                  // WRITE Cache
-    private Lock readLock;                     // Lock for READ Cache
-    private Lock writeLock;                     // Lock for WRITE Cache & request queue
+    private final ArrayQueue<Element> downQueue; // Down stream buffer
+    private final ArrayQueue<Element> upQueue; // Up stream buffer
+    private I2cDevice wireDevice; // Generic I2C Device Object
+    private byte wireDevAddress; // Generic Device Address
+    private byte[] readCache; // READ Cache
+    private byte[] writeCache; // WRITE Cache
+    private Lock readLock; // Lock for READ Cache
+    private Lock writeLock; // Lock for WRITE Cache & request queue
 
-    private byte[] downStreamCache;                  // Buffer for down stream details
-    private int downstreamNextLocation;                      // Next location for incoming bytes
-    private byte[] upstreamCache;                  // Buffer for up stream response
-    private int upstreamNextCache;                      // Next location for response bytes
-    private int uLimit;                     // Last location for response bytes
-    private long uMicros;                   // Time stamp, microseconds since start
-    private long startTime;                 // Start time in nanoseconds
-    private boolean isIdle;                 // Mechanism to control polling
+    private final byte[] downStreamCache; // Buffer for down stream details
+    private int downstreamNextLocation; // Next location for incoming bytes
+    private final byte[] upstreamCache; // Buffer for up stream response
+    private int upstreamNextCache; // Next location for response bytes
+    private int uLimit; // Last location for response bytes
+    private long uMicros; // Time stamp, microseconds since start
+    private final long startTime; // Start time in nanoseconds
+    private boolean isIdle; // Mechanism to control polling
 
 // --------------------------------- CLASS INIT AND CLOSE ---------------------------------------
 
-    private Wire() {
+    private Wire2T() {
         downQueue = new ArrayQueue<>();
         upQueue = new ArrayQueue<>();
 
@@ -93,7 +137,7 @@ public class Wire implements I2cController.I2cPortReadyCallback {
         isIdle = true;
     }
 
-    public Wire(@NotNull I2cDevice device, int deviceAddress) {
+    public Wire2T(@NotNull I2cDevice device, int deviceAddress) {
         this();
         this.wireDevice = device;
         wireDevAddress = (byte) deviceAddress;
@@ -106,10 +150,19 @@ public class Wire implements I2cController.I2cPortReadyCallback {
         wireDevice.registerForI2cPortReadyCallback(this);
     }
 
-    public Wire(HardwareMap hardwareMap, String deviceName, int devAddr) {
+    public Wire2T(@NotNull I2cDevice device, I2cAddr deviceAddress) {
+        this(device, deviceAddress.get7Bit());
+    }
+
+    public Wire2T(HardwareMap hardwareMap, String deviceName, int devAddr) {
         this(hardwareMap.i2cDevice.get(deviceName), devAddr);
     }
 
+    public Wire2T(ExtensibleHardwareMap hardwareMap, String deviceName, int devAddr) {
+        this(hardwareMap.i2cDevices().get(deviceName), devAddr);
+    }
+
+    @CallSuper
     public void close() {
         wireDevice.deregisterForPortReadyCallback();
         downQueue.close();
@@ -118,47 +171,61 @@ public class Wire implements I2cController.I2cPortReadyCallback {
     }
 
     //------------------------------------------------- Public Methods -------------------------
-    public void beginWrite(int regNumber) {
-        downStreamCache[CACHE_MODE] = WRITE_MODE;
+    private void beginWrite(T regNumber) {
+        downStreamCache[CACHE_MODE] = Modes.WRITE.val;
         downStreamCache[DEV_ADDR] = wireDevAddress;
-        downStreamCache[REG_NUMBER] = (byte) regNumber;
+        downStreamCache[REG_NUMBER] = regNumber.address();
         downstreamNextLocation = DATA_OFFSET;
     }
 
-    public void write(int value) {
+    protected void write(int value) {
         if (downstreamNextLocation >= LAST_INDEX) return;    // Max write size has been reached
         downStreamCache[downstreamNextLocation++] = (byte) value;
     }
 
-    public void write(int regNumber, int value) {
+    public void write(T regNumber, int value) {
         beginWrite(regNumber);
-        write(value);
+        switch (regNumber.type()) {
+            case NORMAL:
+                write(value);
+                break;
+            case LOW_HIGH:
+                writeLH(regNumber, value);
+                break;
+            case HIGH_LOW:
+                writeHL(regNumber, value);
+                break;
+            default:
+                endWrite();
+                throw new IllegalArgumentException("Unknown register type");
+        }
+
         endWrite();
     }
 
-    public void writeHL(int regNumber, int value) {
+    private void writeHL(T regNumber, int value) {
         beginWrite(regNumber);
         write((byte) (value >> 8));
         write((byte) (value));
         endWrite();
     }
 
-    public void writeLH(int regNumber, int value) {
+    private void writeLH(T regNumber, int value) {
         beginWrite(regNumber);
         write((byte) (value));
         write((byte) (value >> 8));
         endWrite();
     }
 
-    public void endWrite() {
+    private void endWrite() {
         downStreamCache[REG_COUNT] = (byte) (downstreamNextLocation - DATA_OFFSET);
         addRequest();
     }
 
-    public void requestFrom(int regNumber, int regCount) {
-        downStreamCache[CACHE_MODE] = READ_MODE;
+    public void requestFrom(T regNumber, int regCount) {
+        downStreamCache[CACHE_MODE] = Modes.READ.val;
         downStreamCache[DEV_ADDR] = wireDevAddress;
-        downStreamCache[REG_NUMBER] = (byte) regNumber;
+        downStreamCache[REG_NUMBER] = regNumber.address();
         downStreamCache[REG_COUNT] = (byte) regCount;
         addRequest();
     }
@@ -179,7 +246,8 @@ public class Wire implements I2cController.I2cPortReadyCallback {
         upstreamNextCache = DATA_OFFSET;
         uLimit = upstreamNextCache;
         try {
-            readLock.lock();                   // Explicit protection with readLock
+            // Explicit protection with readLock
+            readLock.lock();
             if (!upQueue.isEmpty()) {
                 responseReceived = true;
                 uMicros = getFromQueue(upstreamCache, upQueue);
@@ -192,41 +260,41 @@ public class Wire implements I2cController.I2cPortReadyCallback {
     }
 
     public boolean isRead() {
-        return (upstreamCache[CACHE_MODE] == READ_MODE);
+        return (upstreamCache[CACHE_MODE] == Modes.READ.val);
     }
 
     public boolean isWrite() {
-        return (upstreamCache[CACHE_MODE] == WRITE_MODE);
+        return (upstreamCache[CACHE_MODE] == Modes.WRITE.val);
     }
 
-    public int registerNumber() {
+    protected final int registerNumber() {
         return upstreamCache[REG_NUMBER] & 0xff;
     }
 
-    public int deviceAddress() {
+    protected final int deviceAddress() {
         return upstreamCache[DEV_ADDR] & 0xff;
     }
 
-    public long micros() {
+    protected long micros() {
         return uMicros;
     }
 
-    public int available() {
+    protected int available() {
         return uLimit - upstreamNextCache;
     }
 
-    public int read() {
+    private int read() {
         if (upstreamNextCache >= uLimit) return 0;
         return upstreamCache[upstreamNextCache++] & 0xff;
     }
 
-    public int readHL() {
+    protected final int readHL() {
         int high = read();
         int low = read();
         return 256 * high + low;
     }
 
-    public int readLH() {
+    protected final int readLH() {
         int low = read();
         int high = read();
         return 256 * high + low;
@@ -234,34 +302,38 @@ public class Wire implements I2cController.I2cPortReadyCallback {
 
 //------------------------------------------------- Main routine: Device CallBack -------------
 
+    @Override
     public void portIsReady(int port) {
         if (isIdle) return;
         boolean isValidReply = false;
         try {
             readLock.lock();
-            if (
-                    readCache[CACHE_MODE] == writeCache[CACHE_MODE] &&
-                            readCache[DEV_ADDR] == writeCache[DEV_ADDR] &&
-                            readCache[REG_NUMBER] == writeCache[REG_NUMBER] &&
-                            readCache[REG_COUNT] == writeCache[REG_COUNT]) {
+            if (readCache[CACHE_MODE] == writeCache[CACHE_MODE] &&
+                readCache[DEV_ADDR] == writeCache[DEV_ADDR] &&
+                readCache[REG_NUMBER] == writeCache[REG_NUMBER] &&
+                readCache[REG_COUNT] == writeCache[REG_COUNT]) {
                 storeReceivedData();                        // Store read/write data
                 isValidReply = true;
             }
         } finally {
             readLock.unlock();
         }
+
         if (isValidReply) {
-            executeCommands();                              // Start next transmission
+            // Start next transmission
+            executeCommands();
         } else {
             boolean isPollingRequired = false;
             try {
-                writeLock.lock();                               // Protect the testing
+                // Protect the testing
+                writeLock.lock();
                 isPollingRequired = (writeCache[DEV_ADDR] == wireDevAddress);
             } finally {
                 writeLock.unlock();
             }
             if (isPollingRequired) {
-                wireDevice.readI2cCacheFromController();       // Keep polling active
+                // Keep polling active
+                wireDevice.readI2cCacheFromController();
             }
         }
     }
@@ -274,7 +346,8 @@ public class Wire implements I2cController.I2cPortReadyCallback {
             if (downQueue.isEmpty()) {
                 isIdle = true;
             } else {
-                getFromQueue(writeCache, downQueue); // Ignore timestamp
+                // Ignore timestamp
+                getFromQueue(writeCache, downQueue);
                 writeCache[ACTION_FLAG] = -1;
             }
         } finally {
@@ -337,5 +410,15 @@ public class Wire implements I2cController.I2cPortReadyCallback {
     private class Element {
         public long timeStamp;
         public byte[] cache;
+    }
+
+    public interface Register {
+        byte address();
+        RegisterType type();
+
+
+        enum RegisterType {
+            NORMAL, HIGH_LOW, LOW_HIGH
+        }
     }
 }

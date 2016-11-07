@@ -35,10 +35,12 @@ public class Navigation {
 
     public Velocity velocity() {
         navigationCamera.lock();
-        if (navigationCamera.hasUsableData()) {
-            Velocity velocity = navigationCamera.velocity();
+        try {
+            if (navigationCamera.hasUsableData()) {
+                return navigationCamera.velocity();
+            }
+        } finally {
             navigationCamera.unlock();
-            return velocity;
         }
 
         return navigationAccel.velocity();

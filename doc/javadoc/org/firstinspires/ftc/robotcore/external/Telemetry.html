@@ -141,7 +141,7 @@
  <p>In this way different parts of the code can update only a portion of the telemetry screen
  without disturbing other parts.</p>
 
- <p>Below the list of caption, value, pairs, on the screen a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> also displays
+ <p>Below the list of caption, val, pairs, on the screen a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> also displays
  a short, unstructured log of messages. Use <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Log.html#add(java.lang.String,%20java.lang.Object...)"><code>log().add()</code></a>
  to add to the log. See also <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#log()"><code>log()</code></a>.</p>
 
@@ -158,7 +158,7 @@
 
  <p>First, the automatic issuance of calls to <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a> can be altered by means of
  <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#setAutoClear(boolean)"><code>setAutoClear(boolean)</code></a>. If auto clearing is set to false, previously added telemetry
- items remain present from <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a> to <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a>, but their value can still be altered
+ items remain present from <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a> to <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a>, but their val can still be altered
  using <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html#setValue(java.lang.Object)"><code>Item.setValue()</code></a>, items can be removed using <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#removeItem(org.firstinspires.ftc.robotcore.external.Telemetry.Item)"><code>removeItem(Item)</code></a>,
  and new items can be added using <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)"><code>addData()</code></a> and <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html#addData(java.lang.String,%20java.lang.Object)"><code>Item.addData()</code></a>.</p>
 
@@ -166,9 +166,9 @@
  <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html#addData(java.lang.String,%20org.firstinspires.ftc.robotcore.external.Func)"><code>Telemetry.Item.addData(String, Func)</code></a> are <em>not</em> automatically removed when <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a>
  is called, either implicitly or explicitly (though they are removed when <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clearAll()"><code>clearAll()</code></a> is
  called). The intent of such items is allow a one-time specification of telemetry items by
- providing a function that can <em>produce</em> a value to be displayed rather than providing the
- actual value itself. Such functions are evaluated only when it is known that telemetry is going to
- be transmitted to the driver station (and so a value is required). This approach can be particularly
+ providing a function that can <em>produce</em> a val to be displayed rather than providing the
+ actual val itself. Such functions are evaluated only when it is known that telemetry is going to
+ be transmitted to the driver station (and so a val is required). This approach can be particularly
  useful if the acquisition of the data to be displayed is relatively expensive or time consuming, as
  that cost is only expended when actually useful.
 
@@ -187,7 +187,7 @@
  </pre>
 
  <p>Items on the same line are separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getItemSeparator()"><code>item separator</code></a>. Caption
- and value within an item are separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption value separator</code></a>.</p>
+ and val within an item are separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption val separator</code></a>.</p>
 
  <p>Note: in the 2015/16 season, it was possible for <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> instances to be automatically
  sorted in alphabetical order by caption. This functionality is no longer supported.</p></div>
@@ -259,7 +259,7 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external">Telemetry.Item</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)">addData</a></strong>(java.lang.String&nbsp;caption,
-       java.lang.Object&nbsp;value)</code>
+       java.lang.Object&nbsp;val)</code>
 <div class="block">Adds an item to the end if the telemetry being built for driver station display.</div>
 </td>
 </tr>
@@ -294,7 +294,7 @@
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()">clear</a></strong>()</code>
-<div class="block">Removes all items from the receiver whose value is not to be retained.</div>
+<div class="block">Removes all items from the receiver whose val is not to be retained.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -306,7 +306,7 @@
 <tr class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()">getCaptionValueSeparator</a></strong>()</code>
-<div class="block">Returns the string which is used to separate caption from value within a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a>
+<div class="block">Returns the string which is used to separate caption from val within a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a>
  <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>.</div>
 </td>
 </tr>
@@ -406,13 +406,13 @@
 <pre><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external">Telemetry.Item</a>&nbsp;addData(java.lang.String&nbsp;caption,
                      java.lang.String&nbsp;format,
                      java.lang.Object...&nbsp;args)</pre>
-<div class="block">Adds an item to the end of the telemetry being built for driver station display. The value shown
+<div class="block">Adds an item to the end of the telemetry being built for driver station display. The val shown
  will be the result of calling <code>String.format()</code>
- with the indicated format and arguments. The caption and value are shown on the driver station
- separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption value separator</code></a>. The item
+ with the indicated format and arguments. The caption and val are shown on the driver station
+ separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption val separator</code></a>. The item
  is removed if <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a> or <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clearAll()"><code>clearAll()</code></a> is called.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>format</code> - the string by which the arguments are to be formatted</dd><dd><code>args</code> - the arguments to format</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the value or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)"><code>addData(String, Object)</code></a>, 
+<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the val or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)"><code>addData(String, Object)</code></a>,
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20org.firstinspires.ftc.robotcore.external.Func)"><code>addData(String, Func)</code></a></dd></dl>
 </li>
 </ul>
@@ -423,13 +423,13 @@
 <li class="blockList">
 <h4>addData</h4>
 <pre><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external">Telemetry.Item</a>&nbsp;addData(java.lang.String&nbsp;caption,
-                     java.lang.Object&nbsp;value)</pre>
-<div class="block">Adds an item to the end if the telemetry being built for driver station display. The value shown
- will be the result of calling <code>toString()</code> on the provided value
- object. The caption and value are shown on the driver station separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption value separator</code></a>. The item is removed if <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a>
+                     java.lang.Object&nbsp;val)</pre>
+<div class="block">Adds an item to the end if the telemetry being built for driver station display. The val shown
+ will be the result of calling <code>toString()</code> on the provided val
+ object. The caption and val are shown on the driver station separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption val separator</code></a>. The item is removed if <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a>
  or <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clearAll()"><code>clearAll()</code></a> is called.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>value</code> - the value to display</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the value or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>, 
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>val</code> - the val to display</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the val or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>,
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20org.firstinspires.ftc.robotcore.external.Func)"><code>addData(String, Func)</code></a></dd></dl>
 </li>
 </ul>
@@ -441,10 +441,10 @@
 <h4>addData</h4>
 <pre>&lt;T&gt;&nbsp;<a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external">Telemetry.Item</a>&nbsp;addData(java.lang.String&nbsp;caption,
                          <a href="../../../../../org/firstinspires/ftc/robotcore/external/Func.html" title="interface in org.firstinspires.ftc.robotcore.external">Func</a>&lt;T&gt;&nbsp;valueProducer)</pre>
-<div class="block">Adds an item to the end of the telemetry being built for driver station display. The value shown
+<div class="block">Adds an item to the end of the telemetry being built for driver station display. The val shown
  will be the result of calling <code>toString()</code> on the object which is
- returned from invoking valueProducer.<a href="../../../../../org/firstinspires/ftc/robotcore/external/Func.html#value()"><code>Func.value()</code></a> value()}. The caption and value are
- shown on the driver station separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption value
+ returned from invoking valueProducer.<a href="../../../../../org/firstinspires/ftc/robotcore/external/Func.html#val()"><code>Func.val()</code></a> val()}. The caption and val are
+ shown on the driver station separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption val
  separator</code></a>. The item is removed if <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clearAll()"><code>clearAll()</code></a> is called, but <em>not</em> if
  <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a> is called.
 
@@ -452,8 +452,8 @@
  is to occur. This is important, as it provides a means of displaying telemetry which
  is relatively expensive to evaluate while avoiding computation or delay on evaluations
  which won't be transmitted due to transmission interval throttling.</p></div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>valueProducer</code> - the object which will provide the value to display</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the value or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>, 
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>valueProducer</code> - the object which will provide the val to display</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the val or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>,
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)"><code>addData(String, Object)</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20org.firstinspires.ftc.robotcore.external.Func)"><code>addData(String, String, Func)</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>getMsTransmissionInterval()</code></a></dd></dl>
@@ -468,18 +468,18 @@
 <pre>&lt;T&gt;&nbsp;<a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external">Telemetry.Item</a>&nbsp;addData(java.lang.String&nbsp;caption,
                          java.lang.String&nbsp;format,
                          <a href="../../../../../org/firstinspires/ftc/robotcore/external/Func.html" title="interface in org.firstinspires.ftc.robotcore.external">Func</a>&lt;T&gt;&nbsp;valueProducer)</pre>
-<div class="block">Adds an item to the end of the telemetry being built for driver station display. The value shown
+<div class="block">Adds an item to the end of the telemetry being built for driver station display. The val shown
  will be the result of calling <code>String.format(java.lang.String, java.lang.Object...)</code> on the object which is returned from invoking
- valueProducer.<a href="../../../../../org/firstinspires/ftc/robotcore/external/Func.html#value()"><code>Func.value()</code></a> value()}. The caption and value are shown on the driver station
- separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption value separator</code></a>. The item is removed
+ valueProducer.<a href="../../../../../org/firstinspires/ftc/robotcore/external/Func.html#val()"><code>Func.val()</code></a> val()}. The caption and val are shown on the driver station
+ separated by the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getCaptionValueSeparator()"><code>caption val separator</code></a>. The item is removed
  if <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clearAll()"><code>clearAll()</code></a> is called, but <em>not</em> if <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a> is called.
 
  <p>The valueProducer is evaluated only if actual transmission to the driver station
  is to occur. This is important, as it provides a means of displaying telemetry which
  is relatively expensive to evaluate while avoiding computation or delay on evaluations
  which won't be transmitted due to transmission interval throttling.</p></div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>valueProducer</code> - the object which will provide the value to display</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the value or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>, 
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>valueProducer</code> - the object which will provide the val to display</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the val or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>,
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)"><code>addData(String, Object)</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20org.firstinspires.ftc.robotcore.external.Func)"><code>addData(String, Func)</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>getMsTransmissionInterval()</code></a></dd></dl>
@@ -504,7 +504,7 @@
 <li class="blockList">
 <h4>clear</h4>
 <pre>void&nbsp;clear()</pre>
-<div class="block">Removes all items from the receiver whose value is not to be retained.</div>
+<div class="block">Removes all items from the receiver whose val is not to be retained.</div>
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html#setRetained(java.lang.Boolean)"><code>Telemetry.Item.setRetained(Boolean)</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html#isRetained()"><code>Telemetry.Item.isRetained()</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clearAll()"><code>clearAll()</code></a>, 
@@ -680,9 +680,9 @@
 <li class="blockList">
 <h4>getCaptionValueSeparator</h4>
 <pre>java.lang.String&nbsp;getCaptionValueSeparator()</pre>
-<div class="block">Returns the string which is used to separate caption from value within a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a>
+<div class="block">Returns the string which is used to separate caption from val within a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a>
  <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>. The default separator is " : ";</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>the string which is used to separate caption from value within a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>.</dd></dl>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the string which is used to separate caption from val within a <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>.</dd></dl>
 </li>
 </ul>
 <a name="setCaptionValueSeparator(java.lang.String)">

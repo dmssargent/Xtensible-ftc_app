@@ -39,7 +39,6 @@ import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -110,7 +109,7 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     @Nullable
-    public static Context buildApplicationContext() {
+    private static Context buildApplicationContext() {
         try {
             final Class<?> activityThreadClass =
                     Class.forName("android.app.ActivityThread");
@@ -457,11 +456,6 @@ public class RobotContext implements AbstractRobotContext {
         }
 
         if (extensibleTelemetry != null) {
-            try {
-                extensibleTelemetry.close();
-            } catch (IOException e) {
-                Log.wtf("ROBOT_CONTEXT::", e);
-            }
             extensibleTelemetry = null;
         }
 

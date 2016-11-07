@@ -275,12 +275,12 @@ public class TeamClutchDrive extends SimpleOpMode {
     }
 
 //    @Override
-//    public void stop() {
+//    public void stopRobot() {
 //        robotStop(ctx, objects);
 //    }
 //
 //    protected void robotStop() {
-//        super.stop(ctx, objects);
+//        super.stopRobot(ctx, objects);
 //    }
 
 //    protected boolean pivotInWriteMode() {

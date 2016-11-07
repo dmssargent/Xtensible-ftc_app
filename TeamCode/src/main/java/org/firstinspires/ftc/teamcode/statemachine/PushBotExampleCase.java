@@ -77,7 +77,7 @@
 //                    // Reset the encoders to ensure they are at a known good value.
 //                    reset_drive_encoders();
 //
-//                    // Stop the motors.
+//                    // stopRobot the motors.
 //                    set_drive_power(0.0f, 0.0f);
 //
 //                    // Transition to the next state when this method is called

@@ -176,10 +176,21 @@ class NavigationCamera {
 
     Position currentLocation() {
         synchronized (watcher) {
-            checkState(hasUsableData(), "position is unavailable");
-            final OpenGLMatrix lastLocation = watcher.lastLocation;
-            return new Position(MM, lastLocation.get(0, 0), lastLocation.get(0, 1), lastLocation.get(0, 2), lastUpdate());
+            lock();
+            try {
+                checkState(hasUsableData(), "position is unavailable");
+                final OpenGLMatrix lastLocation = watcher.lastLocation;
+                final Position position = getPosition(lastLocation);
+                return position;
+            } finally {
+                unlock();
+            }
         }
+    }
+
+    @NonNull
+    private Position getPosition(OpenGLMatrix lastLocation) {
+        return new Position(MM, lastLocation.get(0, 0), lastLocation.get(0, 1), lastLocation.get(0, 2), lastUpdate());
     }
 
     @NonNull
@@ -192,8 +203,14 @@ class NavigationCamera {
     }
 
     public Velocity velocity() {
-        //// TODO: 11/3/16
-        return null;
+        Position currentLocation = currentLocation();
+        Position lastLocation = getPosition(watcher.oldLocation);
+        final long dt = currentLocation.acquisitionTime - lastLocation.acquisitionTime;
+        return new Velocity(MM,
+                (currentLocation.x - lastLocation.x) / dt,
+                (currentLocation.y - lastLocation.y) / dt,
+                (currentLocation.z - lastLocation.z) / dt,
+                watcher.lastTimestamp);
     }
 
     public void unlock() {
@@ -210,6 +227,7 @@ class NavigationCamera {
         private final VuforiaTrackables trackables;
         private long lastTimestamp;
         private OpenGLMatrix lastLocation;
+        private OpenGLMatrix oldLocation;
         private String currentTrackable;
         private boolean usableData = false;
 
@@ -240,6 +258,7 @@ class NavigationCamera {
                     if (listener.isVisible()) currentTrackable = trackable.getName();
                     OpenGLMatrix updatedRobotLocation = listener.getUpdatedRobotLocation();
                     if (updatedRobotLocation != null) {
+                        oldLocation = lastLocation;
                         lastLocation = updatedRobotLocation;
                         lastTimestamp = System.nanoTime();
                         locationUpdated = true;
@@ -256,7 +275,6 @@ class NavigationCamera {
                 semaphore.acquire();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                return;
             }
         }
 
