@@ -76,7 +76,6 @@ public class ExtensibleTelemetry implements Telemetry {
         return data(tag, Double.toString(message));
     }
 
-    @Deprecated
     public Item data(String tag, Object object) {
         return data(tag, object.toString());
     }

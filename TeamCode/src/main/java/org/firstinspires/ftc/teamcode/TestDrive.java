@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -60,7 +61,7 @@ public class TestDrive extends SimpleOpMode {
         vuforiaParams.vuforiaLicenseKey = Files.toString(new File("/sdcard/robot/vuforia.key"), Charset.forName("utf-8"));
         vuforiaParams.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-       // vuforia = ClassFactory.createVuforiaLocalizer(vuforiaParams);
+        vuforia = ClassFactory.createVuforiaLocalizer(vuforiaParams);
         vuforiaTrackables = vuforia.loadTrackablesFromAsset("FTC_2016-17");
 
         // Set names of trackables
@@ -76,8 +77,8 @@ public class TestDrive extends SimpleOpMode {
         double rightY = gamepad1.rightJoystick.X();
         //final double r = coordinates.getR();
         double r = gamepad1.leftJoystick.polar().getR();
-        final double v1 = .54 * r * Math.cos(robotAngle) + rightY;
-        final double v2 = .54 * r * Math.sin(robotAngle) - rightY;
+        final double v1 = r * Math.cos(robotAngle) + rightY;
+        final double v2 = r * Math.sin(robotAngle) - rightY;
         final double v3 = r * Math.sin(robotAngle) + rightY;
         final double v4 = r * Math.cos(robotAngle) - rightY;
 
