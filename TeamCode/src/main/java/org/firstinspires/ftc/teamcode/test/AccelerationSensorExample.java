@@ -32,11 +32,11 @@
 //    public void loop() {
 //        AccelerationSensor.Acceleration currentAcceleration = sensor.getAcceleration();
 //
-//        double gForceInXAxis = currentAcceleration.x;
-//        double gForceInYAxis = currentAcceleration.y;
+//        double gForceInXAxis = currentAcceleration.X;
+//        double gForceInYAxis = currentAcceleration.Y;
 //        double gForceInZAxis = currentAcceleration.z;
 //
-//        telemetry.addData("ACCL:", "Current acceleration: x - " + gForceInXAxis + " y - " +
+//        telemetry.addData("ACCL:", "Current acceleration: X - " + gForceInXAxis + " Y - " +
 //                gForceInYAxis + " z - " + gForceInZAxis);
 //    }
 //}

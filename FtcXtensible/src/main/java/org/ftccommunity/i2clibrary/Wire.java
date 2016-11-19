@@ -63,10 +63,10 @@ public class Wire implements I2cController.I2cPortReadyCallback {
     private ArrayQueue<Element> upQueue;    // Up stream buffer
     private I2cDevice wireDevice;              // Generic I2C Device Object
     private byte wireDevAddress;               // Generic Device Address
-    private byte[] readCache;                  // Read Cache
-    private byte[] writeCache;                  // Write Cache
-    private Lock readLock;                     // Lock for Read Cache
-    private Lock writeLock;                     // Lock for Write Cache & request queue
+    private byte[] readCache;                  // READ Cache
+    private byte[] writeCache;                  // WRITE Cache
+    private Lock readLock;                     // Lock for READ Cache
+    private Lock writeLock;                     // Lock for WRITE Cache & request queue
 
     private byte[] downStreamCache;                  // Buffer for down stream details
     private int downstreamNextLocation;                      // Next location for incoming bytes

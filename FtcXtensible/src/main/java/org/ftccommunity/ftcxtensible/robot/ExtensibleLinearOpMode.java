@@ -88,7 +88,9 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
     public void loop(RobotContext ctx, LinkedList<Object> out) throws Exception {
         _beginLoop();
         changeState(OpModeState.LOOP);
-        this.notify();
+        synchronized (this) {
+            this.notify();
+        }
 
         watchdog().lock();
     }
@@ -180,7 +182,9 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
                 "The given state has already been achieved");
 
         while (state != checkNotNull(waitTillState)) {
-            state.wait();
+            synchronized (state) {
+                state.wait();
+            }
         }
     }
 
@@ -208,7 +212,11 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
      */
     private void changeState(OpModeState newState) {
         state = newState;
-        state.notifyAll();
+        synchronized (this) {
+            synchronized (state) {
+                state.notifyAll();
+            }
+        }
     }
 
     /**
@@ -250,7 +258,9 @@ public abstract class ExtensibleLinearOpMode extends ExtensibleOpMode {
         checkArgument(loops > 0, "The loops parameter may not be less than or equal to zero.");
         int start = getLoopCount();
         while (getLoopCount() < start + loops) {
-            this.wait();
+            synchronized (this) {
+                this.wait();
+            }
         }
     }
 

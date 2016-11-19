@@ -25,6 +25,7 @@ public class DriveTrain {
         this.leftRear = leftRear;
         this.rightRear = rightRear;
         this.controlGamepad = controlGamepad;
+        this.drive = drive;
         speedTarget = new DriveTrainTarget();
     }
 
@@ -34,9 +35,43 @@ public class DriveTrain {
                 context.hardwareMap().dcMotor(leftRear), context.hardwareMap().dcMotor(rightRear));
     }
 
-    void updateTarget() {
-        drive.drive(controlGamepad.leftJoystick.X(), controlGamepad.leftJoystick.Y(),
-                controlGamepad.rightJoystick.X(), controlGamepad.rightJoystick.Y(), speedTarget);
+    void updateTargetWithGamepad() {
+        updateTarget(controlGamepad.leftJoystick.X(), -controlGamepad.leftJoystick.Y(),
+                controlGamepad.rightJoystick.X());
+    }
+
+    void updateTarget(double x, double y, double rotPower) {
+        PolarCoordinates coordinates = new PolarCoordinates(new CartesianCoordinates(x, y));
+
+        final double robotAngle = coordinates.getTheta() + Math.PI / 4;
+
+        final double r = coordinates.getR();
+        //double r = coordinates.getR();
+        final double v1 = .54 * r * Math.sin(robotAngle) + rotPower;
+        final double v2 = .54 * r * Math.cos(robotAngle) - rotPower;
+        final double v3 = r * Math.cos(robotAngle) + rotPower;
+        final double v4 = r * Math.sin(robotAngle) - rotPower;
+                /* Basic depicition of layout ("/" and "\" represents the tread direction of the wheel)
+
+                   \ 1 2 /
+                   / 3 4 \
+
+                 */
+//                final double robotAngle = coordinates.getTheta() + Math.PI / 4;
+//                final double r = coordinates.getR();
+//                double v1 = r * Math.sin(robotAngle) + rightY;
+//                double v2 = r * Math.cos(robotAngle) - rightY;
+//                double v3 = r * Math.cos(robotAngle) + rightY;
+//                double v4 = r * Math.sin(robotAngle) - rightY;
+//                v1 = Range.clip(v1, -1, 1);
+//                v2 = Range.clip(v2, -1, 1);
+//                v3 = Range.clip(v3, -1, 1);
+//                v4 = Range.clip(v4, -1, 1);
+
+        leftFront.setPower(v1);
+        rightFront.setPower(v2);
+        leftRear.setPower(v3);
+        rightRear.setPower(v4);
     }
 
     void flushTargetToMotors() {
@@ -46,8 +81,8 @@ public class DriveTrain {
         rightRear.setPower(speedTarget.rightRear);
     }
 
-    public void updateAndFlush() {
-        updateTarget();
+    public void updateUsingGamepadAndFlush() {
+
         flushTargetToMotors();
     }
 
@@ -57,22 +92,31 @@ public class DriveTrain {
             public void drive(double leftX, double leftY, double rightX, double rightY, DriveTrainTarget target) {
                 PolarCoordinates coordinates = new PolarCoordinates(new CartesianCoordinates(leftX, leftY));
 
+                final double robotAngle = coordinates.getTheta() - Math.PI / 4;
+
+                //final double r = coordinates.getR();
+                double r = coordinates.getR();
+                final double v1 = .54 * r * Math.cos(robotAngle) + rightX;
+                final double v2 = .54 * r * Math.sin(robotAngle) - rightX;
+                final double v3 = r * Math.sin(robotAngle) + rightX;
+                final double v4 = r * Math.cos(robotAngle) - rightX;
                 /* Basic depicition of layout ("/" and "\" represents the tread direction of the wheel)
 
                    \ 1 2 /
                    / 3 4 \
 
                  */
-                final double robotAngle = coordinates.getTheta() + Math.PI / 4;
-                final double r = coordinates.getR();
-                double v1 = r * Math.sin(robotAngle) + rightY;
-                double v2 = r * Math.cos(robotAngle) - rightY;
-                double v3 = r * Math.cos(robotAngle) + rightY;
-                double v4 = r * Math.sin(robotAngle) - rightY;
-                v1 = Range.clip(v1, -1, 1);
-                v2 = Range.clip(v2, -1, 1);
-                v3 = Range.clip(v3, -1, 1);
-                v4 = Range.clip(v4, -1, 1);
+//                final double robotAngle = coordinates.getTheta() + Math.PI / 4;
+//                final double r = coordinates.getR();
+//                double v1 = r * Math.sin(robotAngle) + rightY;
+//                double v2 = r * Math.cos(robotAngle) - rightY;
+//                double v3 = r * Math.cos(robotAngle) + rightY;
+//                double v4 = r * Math.sin(robotAngle) - rightY;
+//                v1 = Range.clip(v1, -1, 1);
+//                v2 = Range.clip(v2, -1, 1);
+//                v3 = Range.clip(v3, -1, 1);
+//                v4 = Range.clip(v4, -1, 1);
+
                 target.leftFront = v1;
                 target.rightFront = v2;
                 target.leftRear = v3;

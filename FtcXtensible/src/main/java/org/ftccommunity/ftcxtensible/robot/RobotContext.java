@@ -39,7 +39,6 @@ import org.ftccommunity.ftcxtensible.internal.NotDocumentedWell;
 import org.ftccommunity.ftcxtensible.networking.ServerSettings;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -77,8 +76,11 @@ public class RobotContext implements AbstractRobotContext {
     private NetworkedOpMode networkedOpMode;
     private boolean networkingEnabled;
     private View layout;
+    private View cameraViewParent;
+
     //private OpModeManager opModeManager;
     private List<RobotEvent> events = new LinkedList<>();
+
 
     RobotContext() {
         serverSettings = ServerSettings.createServerSettings();
@@ -107,7 +109,7 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     @Nullable
-    public static Context buildApplicationContext() {
+    private static Context buildApplicationContext() {
         try {
             final Class<?> activityThreadClass =
                     Class.forName("android.app.ActivityThread");
@@ -239,6 +241,7 @@ public class RobotContext implements AbstractRobotContext {
         this.gamepad2 = checkNotNull(gamepad2, "Gamepad 2 is null");
         extensibleTelemetry = new ExtensibleTelemetry(checkNotNull(telemetry, "telemetry is null"));
         layout = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.RC_VIEW));
+        cameraViewParent = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.CAMERA_VIEW));
         //opModeManager = ((OpModeManager) controllerBindings().objects().get(DataBinder.RC_MANAGER));
 
         eventManager.run();
@@ -453,11 +456,6 @@ public class RobotContext implements AbstractRobotContext {
         }
 
         if (extensibleTelemetry != null) {
-            try {
-                extensibleTelemetry.close();
-            } catch (IOException e) {
-                Log.wtf("ROBOT_CONTEXT::", e);
-            }
             extensibleTelemetry = null;
         }
 
@@ -478,17 +476,26 @@ public class RobotContext implements AbstractRobotContext {
     }
 
     /**
-     * Gets the recommended robot controller view area
+     * Gets the entire robot controller view area
      *
-     * @return a View representing the real estate that Qualcomm has set aside
+     * @return a View representing the real estate of the entire activity
+     *
+     * @see
      */
     @Override
     @NotNull
     public View robotControllerView() {
-        if (layout == null) {
+        if (layout == null)
             throw new IllegalStateException("Prepare has not been called correctly yet.");
-        }
         return layout;
+    }
+
+    @Override
+    @NotNull
+    public View cameraView() {
+        if (cameraViewParent == null)
+            throw new IllegalStateException("Prepare has not been called correctly yet.");
+        return cameraViewParent;
     }
 
 //    @Override

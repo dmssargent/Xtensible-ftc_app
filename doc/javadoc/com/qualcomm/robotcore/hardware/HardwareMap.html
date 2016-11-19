@@ -712,9 +712,9 @@ implements java.lang.Iterable&lt;<a href="../../../../com/qualcomm/robotcore/har
 <h4>get</h4>
 <pre>public&nbsp;<a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html" title="interface in com.qualcomm.robotcore.hardware">HardwareDevice</a>&nbsp;get(java.lang.String&nbsp;deviceName)</pre>
 <div class="block">Returns the (first) device with the indicated name. If no such device is found, an exception is thrown.
- Note that the compile-time type of the return value of this method is <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html" title="interface in com.qualcomm.robotcore.hardware"><code>HardwareDevice</code></a>,
+ Note that the compile-time type of the return val of this method is <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html" title="interface in com.qualcomm.robotcore.hardware"><code>HardwareDevice</code></a>,
  which is usually not what is desired in user code. Thus, the programmer usually casts the
- return type to the target type that the programmer knows the returned value to be:
+ return type to the target type that the programmer knows the returned val to be:
 
  <pre>
     DcMotor motorLeft = (DcMotor)hardwareMap.get("motorLeft");

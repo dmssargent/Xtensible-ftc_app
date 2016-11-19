@@ -216,7 +216,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html"
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMaxSpeed(int)">setMaxSpeed</a></strong>(int&nbsp;encoderTicksPerSecond)</code>
 <div class="block">When the motor is running in one of the <a href="https://en.wikipedia.org/wiki/PID_controller">PID modes</a>
- the value set using the <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower(double)"><code>setPower()</code></a> method is indicative of a
+ the val set using the <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower(double)"><code>setPower()</code></a> method is indicative of a
  desired motor <em>velocity</em> rather than a raw <em>power</em> level.</div>
 </td>
 </tr>
@@ -286,10 +286,10 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html"
 <h4>setMaxSpeed</h4>
 <pre>void&nbsp;setMaxSpeed(int&nbsp;encoderTicksPerSecond)</pre>
 <div class="block">When the motor is running in one of the <a href="https://en.wikipedia.org/wiki/PID_controller">PID modes</a>
- the value set using the <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower(double)"><code>setPower()</code></a> method is indicative of a
+ the val set using the <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower(double)"><code>setPower()</code></a> method is indicative of a
  desired motor <em>velocity</em> rather than a raw <em>power</em> level. In those modes, the
  <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMaxSpeed(int)"><code>setMaxSpeed()</code></a> method provides the interpretation of the speed to which
- a value of 1.0 passed to <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower(double)"><code>setPower()</code></a> should correspond.</div>
+ a val of 1.0 passed to <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower(double)"><code>setPower()</code></a> should correspond.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>encoderTicksPerSecond</code> - the maximum targetable speed for this motor when the motor is
                               in one of the PID modes, in units of encoder ticks per second.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_USING_ENCODER"><code>DcMotor.RunMode.RUN_USING_ENCODER</code></a>, 
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>DcMotor.RunMode.RUN_TO_POSITION</code></a>, 

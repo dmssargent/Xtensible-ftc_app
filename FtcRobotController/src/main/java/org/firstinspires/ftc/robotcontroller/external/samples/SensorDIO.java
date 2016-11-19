@@ -89,7 +89,7 @@ public class SensorDIO extends LinearOpMode {
 
             outputPin = gamepad1.x;        //  Set the output pin based on x button
             digOut.setState(outputPin);
-            inputPin = digIn.getState();    //  Read the input pin
+            inputPin = digIn.getState();    //  READ the input pin
 
             // Display input pin state on LEDs
             if (inputPin) {

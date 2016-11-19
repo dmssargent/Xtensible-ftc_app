@@ -53,7 +53,9 @@ public class Watchdog {
     public synchronized boolean lock() throws InterruptedException {
         boolean lockResult = lock.tryAcquire(500, TimeUnit.MILLISECONDS);
         locked = lockResult || locked;
-        this.notifyAll();
+        synchronized (this) {
+            this.notifyAll();
+        }
         return lockResult;
     }
 
@@ -63,7 +65,9 @@ public class Watchdog {
     public void unlock() {
         lock.release();
         locked = false;
-        this.notifyAll();
+        synchronized (this) {
+            this.notifyAll();
+        }
     }
 
     /**

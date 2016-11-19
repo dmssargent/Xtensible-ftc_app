@@ -95,7 +95,7 @@ public interface II2cDeviceClient extends HardwareDevice {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Read the byte at the indicated register. See {@link #readTimeStamped(int, int)} for a
+     * READ the byte at the indicated register. See {@link #readTimeStamped(int, int)} for a
      * complete description.
      *
      * @param ireg the register number to read
@@ -107,7 +107,7 @@ public interface II2cDeviceClient extends HardwareDevice {
     byte read8(int ireg);
 
     /**
-     * Read a contiguous set of device I2C registers. See {@link #readTimeStamped(int, int)} for a
+     * READ a contiguous set of device I2C registers. See {@link #readTimeStamped(int, int)} for a
      * complete description.
      *
      * @param ireg the register number of the first byte register to read

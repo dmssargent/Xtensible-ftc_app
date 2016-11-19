@@ -41,6 +41,8 @@ import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 import org.ftccommunity.bindings.DataBinder;
 import org.ftccommunity.ftcxtensible.AnnotationFtcRegister;
 
+import java.util.HashMap;
+
 /**
  * {@link FtcOpModeRegister} is responsible for registering opmodes for use in an FTC game.
  * @see #register(OpModeManager)
@@ -78,7 +80,9 @@ public class FtcOpModeRegister implements OpModeRegister {
          */
         //AnnotatedOpModeRegistrar.register(manager);
         try {
-            DataBinder.getInstance().integers().put(DataBinder.RC_VIEW, R.id.entire_screen);
+            final HashMap<String, Integer> integers = DataBinder.getInstance().integers();
+            integers.put(DataBinder.RC_VIEW, R.id.entire_screen);
+            integers.put(DataBinder.CAMERA_VIEW, R.id.cameraMonitorViewId);
             AnnotationFtcRegister.loadOpModes(manager); // Use the Xtensible version
         } catch (Exception ex) {
             AnnotatedOpModeRegistrar.register(manager); // Use the FIRST version, in case of error
