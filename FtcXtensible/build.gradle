@@ -20,13 +20,13 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    buildToolsVersion '24.0.3'
     defaultConfig {
         minSdkVersion 19
         //noinspection OldTargetApi
         targetSdkVersion 24
         versionCode 1
-        versionName '0.60'
+        versionName '0.7.0'
     }
     lintOptions {
         abortOnError false
