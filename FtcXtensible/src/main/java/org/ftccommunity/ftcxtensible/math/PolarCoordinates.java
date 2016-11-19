@@ -67,7 +67,7 @@ public class PolarCoordinates {
         double x = coordinates.getX();
         double y = coordinates.getY();
 
-        r = Math.sqrt(x * x + y * y);
+        r = Math.hypot(x, y);
         // Purposely flip the X and Y to get rotation on the X relative to Y
         theta = Math.atan2(y, x);
     }

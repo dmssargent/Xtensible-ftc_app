@@ -1,3 +1,5 @@
+package org.firstinspires.ftc.teamcode;
+
 import com.google.common.collect.ImmutableMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,9 +19,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
 public class JoystickQuestions {
+    private static final String NO_RESPONSE_GIVEN = "no response";
     private final ExtensibleGamepad gamepad;
     private final LinkedList<Question> questions;
-    private static final String NO_RESPONSE_GIVEN = "no response";
     private boolean povTrigger = false;
     private boolean buttonPress = false;
     private boolean started = false;
