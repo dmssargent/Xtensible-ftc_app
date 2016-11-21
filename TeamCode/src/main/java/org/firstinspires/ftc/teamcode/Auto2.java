@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.adafruit.AdafruitI2cColorSensor;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
+import android.support.annotation.NonNull;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.clutchauto.nav.Navigation;
 import org.firstinspires.ftc.teamcode.test.AdafruitSensorWrapper;
@@ -16,70 +12,66 @@ import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.util.EnumSet;
 
-/**
- * Created by mhsrobotics on 11/19/16.
- */
 
 public class Auto2 extends SimpleOpMode {
     private Navigation navigation;
-    private DriveTrain driveTrain;
-    private OpticalDistanceSensor opticalDistanceSensor;
-    private UltrasonicSensor distanceSensor;
+    private ClutchHardware hardware;
     private EnumSet<RobotStates> states;
-    private AdafruitSensorWrapper colorSensor;
-    private Servo colorServo;
+    private RobotStates currentState;
+
+    private AdafruitSensorWrapper.Colors allianceColor;
+    private JoystickQuestions questions;
+    private RobotStates parkingLocation;
 
     @Override
     public void init(RobotContext ctx) throws Exception {
-        navigation = new Navigation(ctx.appContext());
-//        leftFront = hardwareMap.dcMotor("leftFront");
-//        leftRear = hardwareMap.dcMotor("leftRear");
-//        rightFront = hardwareMap.dcMotor("rightFront");
-//        rightRear = hardwareMap.dcMotor("rightRear");
-        driveTrain = new DriveTrain(gamepad1, null, this, "leftFront", "rightFront", "leftRear", "rightRear");
-        try {
-            opticalDistanceSensor = hardwareMap.opticalDistanceSensors().get("opticalDistance");
-        } catch (IllegalArgumentException ex) {
-            RobotLog.i("Can't obtain Optical Distance sensor; \"opticalDistance\"");
-        }
-        try {
-            distanceSensor = hardwareMap.ultrasonicSensors().get("ultrasonic");
-        } catch (IllegalArgumentException ex) {
-            RobotLog.i("Can't obtain Ultrasonic sensor; \"ultrasonic\"");
-        }
+        // Obtain navaigtion, however this may be pointless
+        // navigation = new Navigation(ctx.appContext());
+        // Set hardware
+        hardware = new ClutchHardware(this);
 
         states = EnumSet.allOf(RobotStates.class);
+        questions = new JoystickQuestions(this);
+        questions.addQuestion("COLOR", "What is the alliance color?", "RED", "BLUE");
+    }
 
+    @Override
+    public void initLoop(@NonNull RobotContext ctx) {
+        questions.loop();
     }
 
     @Override
     public void loop(RobotContext ctx) throws Exception {
-
+        currentState.perform();
+        if (currentState.nextState != currentState) {
+            currentState = currentState.nextState;
+        }
     }
 
-    enum RobotStates implements RobotAction {
+    private enum RobotStates implements RobotAction {
         START_DRIVING {
             private ElapsedTime time;
 
             @Override
             public void perform() {
-                if (opMode.opticalDistanceSensor.getRawLightDetected() > 200) {
+                if (time == null) time = new ElapsedTime();
+
+                if (opMode.hardware.opticalDistanceSensor.getRawLightDetected() > 200) {
                     nextState = LINE_FOLLOWING;
                 } else {
                     nextState = this;
                 }
 
                 if (time.seconds() > 3)
-                    opMode.driveTrain.updateTarget(0, .1, 0);
+                    opMode.hardware.driveTrain.updateTarget(0, .1, 0);
                 else if (time.seconds() > 2.5)
-                    opMode.driveTrain.updateTarget(0, .2, 0);
+                    opMode.hardware.driveTrain.updateTarget(0, .2, 0);
                 else if (time.seconds() > 2)
-                    opMode.driveTrain.updateTarget(0, .5, 0);
+                    opMode.hardware.driveTrain.updateTarget(0, .5, 0);
                 else if (time.seconds() > 1)
-                    opMode.driveTrain.updateTarget(0, .7, 0);
+                    opMode.hardware.driveTrain.updateTarget(0, .7, 0);
                 else
-                    opMode.driveTrain.updateTarget(0, 1, 0);
-
+                    opMode.hardware.driveTrain.updateTarget(0, 1, 0);
             }
 
         }, LINE_FOLLOWING {
@@ -89,11 +81,11 @@ public class Auto2 extends SimpleOpMode {
             @Override
             public void perform() {
                 double motorSpeed = .1;
-                if (opMode.distanceSensor.getUltrasonicLevel() < 10)
-                    motorSpeed /= opMode.distanceSensor.getUltrasonicLevel();
-                else if (opMode.distanceSensor.getUltrasonicLevel() <= 5)
+                if (opMode.hardware.distanceSensor.getUltrasonicLevel() < 10)
+                    motorSpeed /= opMode.hardware.distanceSensor.getUltrasonicLevel();
+                else if (opMode.hardware.distanceSensor.getUltrasonicLevel() <= 5)
                     nextState = BEACON_COLOR_CHOOSER;
-                boolean b = opMode.opticalDistanceSensor.getRawLightDetected() > 200;
+                boolean b = opMode.hardware.opticalDistanceSensor.getRawLightDetected() > 200;
                 if (b && linePosition != 0) {
                     lastLinePosition = linePosition;
                     linePosition = 0;
@@ -102,27 +94,30 @@ public class Auto2 extends SimpleOpMode {
                 }
 
                 double rotPower = linePosition / 10d;
-                opMode.driveTrain.updateTarget(0, motorSpeed, rotPower);
+                opMode.hardware.driveTrain.updateTarget(0, motorSpeed, rotPower);
             }
         }, BEACON_COLOR_CHOOSER {
-            AdafruitSensorWrapper.Colors color;
             ElapsedTime time;
             int state = 0;
 
             @Override
             public void perform() {
-                AdafruitSensorWrapper.Colors color = opMode.colorSensor.redOrBlue();
+                if (time == null) {
+                    time = new ElapsedTime();
+                }
+
+                AdafruitSensorWrapper.Colors color = opMode.hardware.colorSensor.redOrBlue();
                 if (state == 0) {
                     if (color == opMode.allianceColor) {
-                        opMode.colorServo.setPosition(.25);
+                        opMode.hardware.pressLeftBeacon();
                     } else {
-                        opMode.colorServo.setPosition(.75);
+                        opMode.hardware.pressRightBeacon();
                     }
                 } else if (state == 1) {
                     if (time.milliseconds() > 500) {
-                        opMode.colorServo.setPosition(.5);
+                        opMode.hardware.pressNietherBeaconButton();
                     } else if (time.seconds() > 1) {
-                        if (opMode.colorSensor.redOrBlue() != opMode.allianceColor) {
+                        if (opMode.hardware.colorSensor.redOrBlue() != opMode.allianceColor) {
                             state = 0;
                         } else {
                             state += 1;
@@ -137,8 +132,27 @@ public class Auto2 extends SimpleOpMode {
                 }
 
             }
-        },;
-        //Object foo;
+        }, GO_TO_NEXT_BEACON {
+            ElapsedTime time;
+
+            @Override
+            public void perform() {
+                if (time == null) {
+                    time = new ElapsedTime();
+                    opMode.hardware.driveTrain.updateTarget(0, -.1, 0);
+                }
+
+                if (time.seconds() > 2) {
+                    if (opMode.hardware.opticalDistanceSensor.getRawLightDetected() > 500) {
+                        foo = opMode.parkingLocation;
+                        nextState = LINE_FOLLOWING;
+                    }
+                } else if (time.milliseconds() > 500) {
+                    opMode.hardware.driveTrain.updateTarget(0, -.1, 0);
+                }
+            }
+        };
+        Object foo;
         RobotStates nextState;
         Auto2 opMode;
     }

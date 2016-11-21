@@ -25,7 +25,7 @@ import org.ftccommunity.ftcxtensible.robot.RobotStatus;
 import java.util.LinkedList;
 
 @NotDocumentedWell
-public interface FullOpMode extends OpModeLoop {
+public interface FullOpMode extends RobotInitStartStopLoop {
     void init(final RobotContext ctx,
               final LinkedList<Object> out) throws Exception;
 

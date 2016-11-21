@@ -18,9 +18,12 @@
 
 package org.ftccommunity.ftcxtensible.xsimplify;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import android.support.annotation.CallSuper;
 
-import org.ftccommunity.ftcxtensible.collections.DeviceMap;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.util.RobotLog;
+
+import org.ftccommunity.ftcxtensible.dagger.annonations.Inject;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleGamepad;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleHardwareMap;
 import org.ftccommunity.ftcxtensible.robot.ExtensibleTelemetry;
@@ -48,6 +51,7 @@ public abstract class SimpleOpMode extends StandardOpMode {
     }
 
     @Override
+    @CallSuper
     public void init(RobotContext ctx, LinkedList<Object> out) throws Exception {
         hardwareMap = hardwareMap();
         gamepad1 = gamepad1();
@@ -57,13 +61,23 @@ public abstract class SimpleOpMode extends StandardOpMode {
         if (child != null && childOpMode != null) {
             LinkedList<Field> fields = new LinkedList<>(Arrays.asList(childOpMode.getFields()));
             for (Field field : fields) {
-                DeviceMap map = getFromClass(field.getType());
-                if (map == null) {
+//                DeviceMap map = getFromClass(field.getType());
+//                if (map == null) {
+//                    continue;
+//                }
+//
+//                if (map.containsKey(field.getName())) {
+//                    field.set(child, map.get(field.getName()));
+//                }
+                if (!field.isAnnotationPresent(Inject.class)) {
                     continue;
                 }
 
-                if (map.containsKey(field.getName())) {
-                    field.set(child, map.get(field.getName()));
+                try {
+                    field.setAccessible(true);
+                    field.set(childOpMode, hardwareMap.get((Class<? extends HardwareDevice>) field.getType(), field.getName()));
+                } catch (Exception ex) {
+                    RobotLog.w("Failed to set device on a @Inject field " + field.getName() + " for \"" + childOpMode.getSimpleName() + "\"");
                 }
             }
         }
@@ -76,13 +90,13 @@ public abstract class SimpleOpMode extends StandardOpMode {
         loop(ctx);
     }
 
-    public DeviceMap<DcMotor> getFromClass(Class klazz) {
-        if (klazz == DcMotor.class) {
-            return hardwareMap().dcMotors();
-        }
-
-        return null;
-    }
+//    public DeviceMap<DcMotor> getFromClass(Class klazz) {
+//        if (klazz == DcMotor.class) {
+//            return hardwareMap().dcMotors();
+//        }
+//
+//        return null;
+//    }
 
     public abstract void init(RobotContext ctx) throws Exception;
 

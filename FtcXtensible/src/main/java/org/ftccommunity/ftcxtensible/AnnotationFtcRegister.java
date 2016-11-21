@@ -29,6 +29,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftccommunity.ftcxtensible.core.Attachable;
 import org.ftccommunity.ftcxtensible.dagger.ReflectionUtilities;
+import org.ftccommunity.ftcxtensible.interfaces.FullOpMode;
+import org.ftccommunity.ftcxtensible.interfaces.RobotFullOp;
 import org.ftccommunity.ftcxtensible.interfaces.RobotInitStartStopLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RobotInitStopLoop;
 import org.ftccommunity.ftcxtensible.interfaces.RobotLoop;
@@ -36,6 +38,7 @@ import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 import org.ftccommunity.ftcxtensible.opmodes.internal.AttachedOpMode;
+import org.ftccommunity.ftcxtensible.opmodes.internal.FtcOpModeFullOpModeRunner;
 import org.ftccommunity.ftcxtensible.opmodes.internal.FtcOpModeInterfaceRunner;
 import org.ftccommunity.ftcxtensible.opmodes.internal.FtcOpModeRunner;
 import org.ftccommunity.ftcxtensible.opmodes.internal.FtcOpModeStopInitInterfaceRunner;
@@ -120,6 +123,8 @@ public class AnnotationFtcRegister {
             final OpModeMeta opModeMeta = generateRegistrationMeta(opMode);
             if (ReflectionUtilities.isParent(opMode, OpMode.class))
                 register.register(opModeMeta, (Class) opMode);
+            else if (ReflectionUtilities.isParent(opMode, FullOpMode.class))
+                register.register(opModeMeta, new FtcOpModeFullOpModeRunner<>((Class<? extends RobotFullOp>) opMode));
             else if (ReflectionUtilities.isParent(opMode, RobotInitStartStopLoop.class))
                 register.register(opModeMeta, new FtcOpModeInitStartStopInterfaceRunner<>((Class<? extends RobotInitStartStopLoop>) opMode));
             else if (ReflectionUtilities.isParent(opMode, RobotInitStopLoop.class))
@@ -158,7 +163,7 @@ public class AnnotationFtcRegister {
         auto = opMode.isAnnotationPresent(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class);
         if (auto) {
             group = opMode.getAnnotation(com.qualcomm.robotcore.eventloop.opmode.Autonomous.class).group();
-            return new OpModeMeta(opModeName, OpModeMeta.Flavor.TELEOP, group.equals("") ? OpModeMeta.DefaultGroup : group);
+            return new OpModeMeta(opModeName, OpModeMeta.Flavor.AUTONOMOUS, group.equals("") ? OpModeMeta.DefaultGroup : group);
         }
 
         throw new IllegalArgumentException("OpMode does not contain necessary annotations");
