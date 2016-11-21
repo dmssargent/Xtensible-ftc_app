@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.support.annotation.NonNull;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.clutchauto.nav.Navigation;
@@ -12,7 +13,7 @@ import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.util.EnumSet;
 
-
+@Autonomous
 public class Auto2 extends SimpleOpMode {
     private Navigation navigation;
     private ClutchHardware hardware;
@@ -38,6 +39,18 @@ public class Auto2 extends SimpleOpMode {
     @Override
     public void initLoop(@NonNull RobotContext ctx) {
         questions.loop();
+    }
+
+    @Override
+    public void start(RobotContext ctx) {
+        questions.stop();
+        String color = questions.responseTo("COLOR");
+        if (color != null && color.equals("RED")) {
+            allianceColor = AdafruitSensorWrapper.Colors.RED;
+        } else {
+            allianceColor = AdafruitSensorWrapper.Colors.BLUE;
+        }
+
     }
 
     @Override
