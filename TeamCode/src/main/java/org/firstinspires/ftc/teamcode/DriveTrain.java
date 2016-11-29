@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 import org.ftccommunity.ftcxtensible.math.CartesianCoordinates;
@@ -24,6 +25,8 @@ public class DriveTrain {
         this.rightFront = rightFront;
         this.leftRear = leftRear;
         this.rightRear = rightRear;
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
         this.controlGamepad = controlGamepad;
         this.drive = drive;
         speedTarget = new DriveTrainTarget();

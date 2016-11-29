@@ -53,7 +53,7 @@ public class PerformanceTest extends SimpleOpMode {
     }
 
     @Override
-    public void start(RobotContext ctx, LinkedList<Object> out) {
+    public void start(RobotContext ctx) {
         lastTime = System.nanoTime();
     }
 

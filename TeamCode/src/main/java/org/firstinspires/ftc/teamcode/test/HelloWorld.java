@@ -104,7 +104,7 @@ public class HelloWorld extends SimpleOpMode {
     }
 
     @Override
-    public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
+    public void start(RobotContext ctx) throws Exception {
         telemetry.data(MESS, "Start Date: " +
                 (new Date((long) (System.nanoTime() / 1E3))).toString());
     }
