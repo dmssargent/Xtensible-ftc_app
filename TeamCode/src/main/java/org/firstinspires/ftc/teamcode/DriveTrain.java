@@ -25,8 +25,8 @@ public class DriveTrain {
         this.rightFront = rightFront;
         this.leftRear = leftRear;
         this.rightRear = rightRear;
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         this.controlGamepad = controlGamepad;
         this.drive = drive;
         speedTarget = new DriveTrainTarget();
@@ -39,14 +39,14 @@ public class DriveTrain {
     }
 
     void updateTargetWithGamepad() {
-        updateTarget(controlGamepad.leftJoystick.X(), -controlGamepad.leftJoystick.Y(),
-                controlGamepad.rightJoystick.X());
+        updateTarget(controlGamepad.rightJoystick.X(), -controlGamepad.rightJoystick.Y(),
+                controlGamepad.leftJoystick.X());
     }
 
     void updateTarget(double x, double y, double rotPower) {
         PolarCoordinates coordinates = new PolarCoordinates(new CartesianCoordinates(x, y));
 
-        final double robotAngle = coordinates.getTheta() + Math.PI / 4;
+        final double robotAngle = coordinates.getTheta() - Math.PI / 4;
 
         final double r = coordinates.getR();
         //double r = coordinates.getR();
