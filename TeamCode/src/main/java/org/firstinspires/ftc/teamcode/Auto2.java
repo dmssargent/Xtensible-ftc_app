@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.clutchauto.nav.Navigation;
 import org.firstinspires.ftc.teamcode.test.AdafruitSensorWrapper;
 import org.ftccommunity.ftcxtensible.interfaces.RobotAction;
@@ -13,9 +14,13 @@ import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.util.EnumSet;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
+import static org.firstinspires.ftc.teamcode.test.AdafruitSensorWrapper.Colors.BLUE;
+import static org.firstinspires.ftc.teamcode.test.AdafruitSensorWrapper.Colors.RED;
+
 @Autonomous
 public class Auto2 extends SimpleOpMode {
-    private Navigation navigation;
+    //    private Navigation navigation;
     private ClutchHardware hardware;
     private EnumSet<RobotStates> states;
     private RobotStates currentState;
@@ -46,9 +51,9 @@ public class Auto2 extends SimpleOpMode {
         questions.stop();
         String color = questions.responseTo("COLOR");
         if (color != null && color.equals("RED")) {
-            allianceColor = AdafruitSensorWrapper.Colors.RED;
+            allianceColor = RED;
         } else {
-            allianceColor = AdafruitSensorWrapper.Colors.BLUE;
+            allianceColor = BLUE;
         }
 
     }
@@ -94,11 +99,12 @@ public class Auto2 extends SimpleOpMode {
             @Override
             public void perform() {
                 double motorSpeed = .1;
-                if (opMode.hardware.distanceSensor.getUltrasonicLevel() < 10)
-                    motorSpeed /= opMode.hardware.distanceSensor.getUltrasonicLevel();
-                else if (opMode.hardware.distanceSensor.getUltrasonicLevel() <= 5)
+                double distance = opMode.hardware.distanceSensor.getDistance(CM);
+                if (distance < 10)
+                    motorSpeed /= distance;
+                else if (distance <= 4)
                     nextState = BEACON_COLOR_CHOOSER;
-                boolean b = opMode.hardware.opticalDistanceSensor.getRawLightDetected() > 200;
+                boolean b = opMode.hardware.opticalDistanceSensor.getRawLightDetected() > .7;
                 if (b && linePosition != 0) {
                     lastLinePosition = linePosition;
                     linePosition = 0;
@@ -119,7 +125,8 @@ public class Auto2 extends SimpleOpMode {
                     time = new ElapsedTime();
                 }
 
-                AdafruitSensorWrapper.Colors color = opMode.hardware.colorSensor.redOrBlue();
+                AdafruitSensorWrapper.Colors color = opMode.hardware.colorSensor.red() > opMode.hardware.colorSensor.blue() ?
+                        RED : BLUE;
                 if (state == 0) {
                     if (color == opMode.allianceColor) {
                         opMode.hardware.pressLeftBeacon();
@@ -127,10 +134,11 @@ public class Auto2 extends SimpleOpMode {
                         opMode.hardware.pressRightBeacon();
                     }
                 } else if (state == 1) {
-                    if (time.milliseconds() > 500) {
+                    if (time.milliseconds() > 800) {
                         opMode.hardware.pressNietherBeaconButton();
-                    } else if (time.seconds() > 1) {
-                        if (opMode.hardware.colorSensor.redOrBlue() != opMode.allianceColor) {
+                    } else if (time.seconds() > 2) {
+
+                        if (color != opMode.allianceColor) {
                             state = 0;
                         } else {
                             state += 1;
@@ -156,7 +164,7 @@ public class Auto2 extends SimpleOpMode {
                 }
 
                 if (time.seconds() > 2) {
-                    if (opMode.hardware.opticalDistanceSensor.getRawLightDetected() > 500) {
+                    if (opMode.hardware.opticalDistanceSensor.getRawLightDetected() > .70) {
                         foo = opMode.parkingLocation;
                         nextState = LINE_FOLLOWING;
                     }
