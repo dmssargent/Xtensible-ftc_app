@@ -4,6 +4,8 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
@@ -26,7 +28,7 @@ class ClutchHardware {
     final Servo pressed;
     final Servo ballLift;
     private final DeviceInterfaceModule dim;
-    private final Servo colorServo;
+    //private final Servo colorServo;
 
     ClutchHardware(RobotContext ctx) {
         // Set up drive train
@@ -35,7 +37,7 @@ class ClutchHardware {
         final ExtensibleHardwareMap hardwareMap = ctx.hardwareMap();
         opticalDistanceSensor = hardwareMap.opticalDistanceSensors().get("opticalDistance");
         distanceSensor = ctx.legacyHardwareMap().get(ModernRoboticsI2cRangeSensor.class, "ultrasonic");
-        colorServo = hardwareMap.servos().get("colorServo");
+        //colorServo = hardwareMap.servos().get("colorServo");
         colorSensor = hardwareMap.colorSensors().get("colorSensor");
         dim = hardwareMap.deviceInterfaceModules().get("dim");
         winch = hardwareMap.get("winch");
@@ -43,15 +45,30 @@ class ClutchHardware {
         ballLift = hardwareMap.get("ballLift");
     }
 
+    ClutchHardware(Gamepad gamepad1, HardwareMap map) {
+        // Set up drive train
+        driveTrain = new DriveTrain(gamepad1, null, map, "leftFront", "rightFront", "leftRear", "rightRear");
+        // Obtain sensors
+        final HardwareMap hardwareMap = map;
+        opticalDistanceSensor = hardwareMap.opticalDistanceSensor.get("opticalDistance");
+        distanceSensor = map.get(ModernRoboticsI2cRangeSensor.class, "ultrasonic");
+        //colorServo = hardwareMap.servos().get("colorServo");
+        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        dim = hardwareMap.deviceInterfaceModule.get("dim");
+        winch = (DcMotor) hardwareMap.get("winch");
+        pressed = (Servo) hardwareMap.get("buttonPresser");
+        ballLift = (Servo) hardwareMap.get("ballLift");
+    }
+
     final void pressLeftBeacon() {
-        colorServo.setPosition(SERVO_POSITION_LEFT);
+        pressed.setPosition(SERVO_POSITION_LEFT);
     }
 
     final void pressRightBeacon() {
-        colorServo.setPosition(SERVO_POSITION_RIGHT);
+        pressed.setPosition(SERVO_POSITION_RIGHT);
     }
 
     void pressNietherBeaconButton() {
-        colorServo.setPosition(SERVO_POSITION_NEUTRAL);
+        pressed.setPosition(SERVO_POSITION_NEUTRAL);
     }
 }

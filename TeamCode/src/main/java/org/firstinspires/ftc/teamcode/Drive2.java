@@ -1,16 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.ams.AMSColorSensor;
-import com.qualcomm.hardware.ams.AMSColorSensorImpl;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoImpl;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
@@ -18,23 +9,17 @@ import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 @TeleOp
 public class Drive2 extends SimpleOpMode {
-    //private Navigation navigation;
-    //private DriveTrain driveTrain;
-    //private OpticalDistanceSensor opticalDistanceSensor;
-    //private ModernRoboticsI2cRangeSensor distanceSensor;
-    //private DcMotor winch;
-    //private Servo pressed;
-    //private Servo ballLift;
     private double buttonPresserPos;
     private int ballLiftPos;
     private boolean ballLiftTriggerPressed;
     private boolean buttonPresserTriggerPressed;
-    //private ColorSensor colorSensor;
     private ClutchHardware hardware;
 
     @Override
     public void init(RobotContext ctx) throws Exception {
         hardware = new ClutchHardware(this);
+        //hardware.winch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //hardware.winch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -51,6 +36,8 @@ public class Drive2 extends SimpleOpMode {
             telemetry.data("ODS_READ", hardware.opticalDistanceSensor == null ? "No Sensor " : hardware.opticalDistanceSensor.getRawLightDetected());
             telemetry.data("DIS_READ", hardware.distanceSensor == null ? "No Sensor" : hardware.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.data("COLOR", hardware.colorSensor == null ? "No Sensor" : (hardware.colorSensor.red() > hardware.colorSensor.blue() ? "Red" : "Blue"));
+            telemetry.data("MOTOR_LOCK", hardware.winch.getMode() == DcMotor.RunMode.RUN_USING_ENCODER ? "unlock" : "lock");
+            //telemetry.data("MOTOR_ENC", hardware.winch.getCurrentPosition());
         } catch (NullPointerException ignored) {
         }
     }
@@ -73,9 +60,9 @@ public class Drive2 extends SimpleOpMode {
         if (!buttonPresserTriggerPressed) {
             if (gamepad1.isAPressed()) {
                 //buttonPresserPos += 5;
-                buttonPresserPos = .65;
+                buttonPresserPos = .70;
             } else if (gamepad1.isBPressed()) {
-                buttonPresserPos = .35;
+                buttonPresserPos = .30;
             }
 
             //buttonPresserPos %= 100;
@@ -87,12 +74,31 @@ public class Drive2 extends SimpleOpMode {
     }
 
     private void winchControl() {
+        DcMotor winch = hardware.winch;
         if (gamepad1.dpad.isUpPressed()) {
-            hardware.winch.setPower(-1);
+            //if (winch.getMode() == DcMotor.RunMode.RUN_USING_ENCODER)
+            winch.setPower(-1);
+            //winch.setTargetPosition(winch.getCurrentPosition() - 50);
         } else if (gamepad1.dpad.isDownPressed()) {
-            hardware.winch.setPower(.1);
+            //if (winch.getMode() == DcMotor.RunMode.RUN_USING_ENCODER)
+            winch.setPower(.1);
+            //else winch.setTargetPosition(winch.getCurrentPosition() + 50);
         } else {
-            hardware.winch.setPower(-0.03);
+            winch.setPower(-0.03);
         }
+
+//        if (gamepad1.isLeftBumperPressed()) {
+//            if (winch.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+//                winch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                winch.setPower(0.02);
+//            }
+//
+//            if (winch.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
+//                int currPosition = winch.getCurrentPosition();
+//                winch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                winch.setTargetPosition(currPosition);
+//                winch.setPower(-0.03);
+//            }
+//        }
     }
 }

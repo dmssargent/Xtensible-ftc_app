@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.ftccommunity.ftcxtensible.math.CartesianCoordinates;
@@ -38,6 +40,12 @@ public class DriveTrain {
                 context.hardwareMap().dcMotor(leftRear), context.hardwareMap().dcMotor(rightRear));
     }
 
+    public DriveTrain(Gamepad controlGamepad, GamepadDrive drive, HardwareMap hardwareMap, String leftFront, String rightFront, String leftRear, String rightRear) {
+        this(null, drive,
+                hardwareMap.dcMotor.get(leftFront), hardwareMap.dcMotor.get(rightFront),
+                hardwareMap.dcMotor.get(leftRear), hardwareMap.dcMotor.get(rightRear));
+    }
+
     void updateTargetWithGamepad() {
         updateTarget(controlGamepad.rightJoystick.X(), -controlGamepad.rightJoystick.Y(),
                 controlGamepad.leftJoystick.X());
@@ -46,14 +54,24 @@ public class DriveTrain {
     void updateTarget(double x, double y, double rotPower) {
         PolarCoordinates coordinates = new PolarCoordinates(new CartesianCoordinates(x, y));
 
-        final double robotAngle = coordinates.getTheta() - Math.PI / 4;
+        double theta = coordinates.getTheta();
+        final double robotAngle = theta - Math.PI / 4;
 
         final double r = coordinates.getR();
         //double r = coordinates.getR();
-        final double v1 = .54 * r * Math.sin(robotAngle) + rotPower;
-        final double v2 = .54 * r * Math.cos(robotAngle) - rotPower;
-        final double v3 = r * Math.cos(robotAngle) + rotPower;
-        final double v4 = r * Math.sin(robotAngle) - rotPower;
+        double v1 = r * Math.cos(robotAngle) + rotPower;
+        double v2 = r * Math.sin(robotAngle) - rotPower;
+        double v3 = r * Math.sin(robotAngle) + rotPower;
+        double v4 = r * Math.cos(robotAngle) - rotPower;
+        if (theta < Math.PI / 4 && theta > -Math.PI / 4) {
+            v2 *= .95;
+            v3 *= .95;
+            v4 *= .9;
+        } else if (theta < 3 * Math.PI / 4 && theta > -3 * Math.PI / 4) {
+            v2 *= .95;
+            v3 *= .95;
+            v4 *= .9;
+        }
                 /* Basic depicition of layout ("/" and "\" represents the tread direction of the wheel)
 
                    \ 1 2 /

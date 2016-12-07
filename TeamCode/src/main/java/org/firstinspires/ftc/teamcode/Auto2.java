@@ -39,6 +39,12 @@ public class Auto2 extends SimpleOpMode {
         states = EnumSet.allOf(RobotStates.class);
         questions = new JoystickQuestions(this);
         questions.addQuestion("COLOR", "What is the alliance color?", "RED", "BLUE");
+        parkingLocation = RobotStates.NULL_LOCATION;
+        currentState = RobotStates.START_DRIVING;
+
+        for (RobotStates state : states) {
+            state.opMode = this;
+        }
     }
 
     @Override
@@ -56,34 +62,38 @@ public class Auto2 extends SimpleOpMode {
             allianceColor = BLUE;
         }
 
+        telemetry.addData("COLOR", allianceColor.toString()).setRetained(true);
     }
 
     @Override
     public void loop(RobotContext ctx) throws Exception {
         currentState.perform();
         if (currentState.nextState != currentState) {
+            currentState.reset();
             currentState = currentState.nextState;
         }
+
+        telemetry.addData("CURR_STATE", currentState.toString());
     }
 
-    private enum RobotStates implements RobotAction {
+    private enum RobotStates implements AutoRobotAction {
         START_DRIVING {
             private ElapsedTime time;
 
             @Override
             public void perform() {
                 if (time == null) time = new ElapsedTime();
-
-                if (opMode.hardware.opticalDistanceSensor.getRawLightDetected() > 200) {
+                nextState = this;
+                double rawLightDetected = opMode.hardware.opticalDistanceSensor.getRawLightDetected();
+                opMode.telemetry.addData("ODS_DATA", rawLightDetected);
+                if (rawLightDetected > .70) {
                     nextState = LINE_FOLLOWING;
                 } else {
                     nextState = this;
                 }
 
-                if (time.seconds() > 3)
-                    opMode.hardware.driveTrain.updateTarget(0, .1, 0);
-                else if (time.seconds() > 2.5)
-                    opMode.hardware.driveTrain.updateTarget(0, .2, 0);
+                if (time.seconds() > 2.5)
+                    opMode.hardware.driveTrain.updateTarget(0, .18, 0);
                 else if (time.seconds() > 2)
                     opMode.hardware.driveTrain.updateTarget(0, .5, 0);
                 else if (time.seconds() > 1)
@@ -92,19 +102,24 @@ public class Auto2 extends SimpleOpMode {
                     opMode.hardware.driveTrain.updateTarget(0, 1, 0);
             }
 
+            @Override
+            public void reset() {
+                time = null;
+            }
         }, LINE_FOLLOWING {
-            int linePosition = 0;
-            int lastLinePosition = -1;
+            int linePosition = -1;
+            int lastLinePosition = 1;
 
             @Override
             public void perform() {
-                double motorSpeed = .1;
+                nextState = this;
+                double motorSpeed = .20;
                 double distance = opMode.hardware.distanceSensor.getDistance(CM);
                 if (distance < 10)
                     motorSpeed /= distance;
                 else if (distance <= 4)
                     nextState = BEACON_COLOR_CHOOSER;
-                boolean b = opMode.hardware.opticalDistanceSensor.getRawLightDetected() > .7;
+                boolean b = opMode.hardware.opticalDistanceSensor.getRawLightDetected() > .5;
                 if (b && linePosition != 0) {
                     lastLinePosition = linePosition;
                     linePosition = 0;
@@ -112,8 +127,17 @@ public class Auto2 extends SimpleOpMode {
                     linePosition = (lastLinePosition + 2 % 3) - 1;
                 }
 
-                double rotPower = linePosition / 10d;
+                opMode.telemetry.addData("LINE_POS", linePosition);
+
+                double rotPower = linePosition / 2d;
+                opMode.telemetry.addData("ROT", rotPower);
                 opMode.hardware.driveTrain.updateTarget(0, motorSpeed, rotPower);
+            }
+
+            @Override
+            public void reset() {
+                linePosition = 0;
+                lastLinePosition = -1;
             }
         }, BEACON_COLOR_CHOOSER {
             ElapsedTime time;
@@ -124,6 +148,7 @@ public class Auto2 extends SimpleOpMode {
                 if (time == null) {
                     time = new ElapsedTime();
                 }
+                nextState = this;
 
                 AdafruitSensorWrapper.Colors color = opMode.hardware.colorSensor.red() > opMode.hardware.colorSensor.blue() ?
                         RED : BLUE;
@@ -153,6 +178,11 @@ public class Auto2 extends SimpleOpMode {
                 }
 
             }
+
+            public void reset() {
+                time = null;
+                state = 0;
+            }
         }, GO_TO_NEXT_BEACON {
             ElapsedTime time;
 
@@ -162,7 +192,7 @@ public class Auto2 extends SimpleOpMode {
                     time = new ElapsedTime();
                     opMode.hardware.driveTrain.updateTarget(0, -.1, 0);
                 }
-
+                nextState = this;
                 if (time.seconds() > 2) {
                     if (opMode.hardware.opticalDistanceSensor.getRawLightDetected() > .70) {
                         foo = opMode.parkingLocation;
@@ -171,6 +201,21 @@ public class Auto2 extends SimpleOpMode {
                 } else if (time.milliseconds() > 500) {
                     opMode.hardware.driveTrain.updateTarget(0, -.1, 0);
                 }
+            }
+
+            @Override
+            public void reset() {
+                time = null;
+            }
+        }, NULL_LOCATION {
+            @Override
+            public void perform() {
+                nextState = this;
+            }
+
+            @Override
+            public void reset() {
+
             }
         };
         Object foo;
