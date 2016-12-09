@@ -5,10 +5,7 @@ import android.support.annotation.NonNull;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.clutchauto.nav.Navigation;
 import org.firstinspires.ftc.teamcode.test.AdafruitSensorWrapper;
-import org.ftccommunity.ftcxtensible.interfaces.RobotAction;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 

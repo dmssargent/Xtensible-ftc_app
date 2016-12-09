@@ -37,6 +37,10 @@ public class Drive2 extends SimpleOpMode {
             telemetry.data("DIS_READ", hardware.distanceSensor == null ? "No Sensor" : hardware.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.data("COLOR", hardware.colorSensor == null ? "No Sensor" : (hardware.colorSensor.red() > hardware.colorSensor.blue() ? "Red" : "Blue"));
             telemetry.data("MOTOR_LOCK", hardware.winch.getMode() == DcMotor.RunMode.RUN_USING_ENCODER ? "unlock" : "lock");
+
+            DriveTrain driveTrain = hardware.driveTrain;
+            telemetry.data("THETA", driveTrain.getThetaInDegrees());
+            telemetry.data("READING", driveTrain.getLeftMotorReading() + ", " + driveTrain.getRightMotorReading());
             //telemetry.data("MOTOR_ENC", hardware.winch.getCurrentPosition());
         } catch (NullPointerException ignored) {
         }
