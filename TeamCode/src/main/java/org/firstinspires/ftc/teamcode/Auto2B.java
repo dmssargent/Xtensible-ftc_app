@@ -14,6 +14,7 @@ public class Auto2B extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         ClutchHardware hardware = new ClutchHardware(gamepad1, hardwareMap);
+        hardware.driveTrain.configureDriveSystem(DriveTrain.DriveSystems.HOLONOMIC);
         double rawLightDetected = hardware.opticalDistanceSensor.getRawLightDetected();
 
 

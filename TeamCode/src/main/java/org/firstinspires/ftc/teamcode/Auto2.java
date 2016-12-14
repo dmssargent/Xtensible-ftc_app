@@ -32,6 +32,7 @@ public class Auto2 extends SimpleOpMode {
         // navigation = new Navigation(ctx.appContext());
         // Set hardware
         hardware = new ClutchHardware(this);
+        hardware.driveTrain.configureDriveSystem(DriveTrain.DriveSystems.HOLONOMIC);
 
         states = EnumSet.allOf(RobotStates.class);
         questions = new JoystickQuestions(this);

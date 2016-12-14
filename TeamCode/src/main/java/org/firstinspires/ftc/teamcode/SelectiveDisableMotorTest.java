@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
@@ -9,6 +10,7 @@ import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
  * Test class to verify motor targets
  */
 @TeleOp
+@Disabled
 public class SelectiveDisableMotorTest extends SimpleOpMode {
     private ClutchHardware hardware;
 

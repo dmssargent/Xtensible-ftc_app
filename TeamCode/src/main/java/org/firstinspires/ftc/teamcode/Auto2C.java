@@ -19,7 +19,7 @@ public class Auto2C extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         ClutchHardware hardware = new ClutchHardware(gamepad1, hardwareMap);
-
+        hardware.driveTrain.configureDriveSystem(DriveTrain.DriveSystems.HOLONOMIC);
         ExtensibleGamepad xGamepad1 = new ExtensibleGamepad(gamepad1);
         JoystickQuestions questions = new JoystickQuestions(xGamepad1, telemetry);
         questions.addQuestion("FOO", "What color?", RED, BLUE);

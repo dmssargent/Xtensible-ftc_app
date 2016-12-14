@@ -32,7 +32,7 @@ class ClutchHardware {
 
     ClutchHardware(RobotContext ctx) {
         // Set up drive train
-        driveTrain = new DriveTrain(ctx.gamepad1(), null, ctx, "leftFront", "rightFront", "leftRear", "rightRear");
+        driveTrain = new DriveTrain(ctx.gamepad1(), ctx, "leftFront", "rightFront", "leftRear", "rightRear");
         // Obtain sensors
         final ExtensibleHardwareMap hardwareMap = ctx.hardwareMap();
         opticalDistanceSensor = hardwareMap.opticalDistanceSensors().get("opticalDistance");
@@ -47,7 +47,7 @@ class ClutchHardware {
 
     ClutchHardware(Gamepad gamepad1, HardwareMap map) {
         // Set up drive train
-        driveTrain = new DriveTrain(gamepad1, null, map, "leftFront", "rightFront", "leftRear", "rightRear");
+        driveTrain = new DriveTrain(gamepad1, map, "leftFront", "rightFront", "leftRear", "rightRear");
         // Obtain sensors
         final HardwareMap hardwareMap = map;
         opticalDistanceSensor = hardwareMap.opticalDistanceSensor.get("opticalDistance");
