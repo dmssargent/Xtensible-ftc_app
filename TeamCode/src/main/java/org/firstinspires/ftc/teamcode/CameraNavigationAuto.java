@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import com.google.common.collect.Queues;
 import com.google.common.io.Files;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.RollingAverage;
@@ -42,6 +43,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.M
  * Created by David on 10/23/2016.
  */
 @Autonomous
+@Disabled
 public class CameraNavigationAuto extends LinearOpMode {
     private OpenGLMatrix lastLocation;
     private int VUF_WHEEL_TARGET = 0;
@@ -208,14 +210,14 @@ idle();
     }
 
     private static class AccelerometerListener implements SensorEventListener {
+        //private AccelerometerListenerState state = START;
+        private final Queue<SensorEvent> dataQueue = Queues.synchronizedDeque(Queues.<SensorEvent>newArrayDeque());
         private BufferedWriter bufferedWriter;
         private OutputStream fileStream;
         private int accurancy = SensorManager.SENSOR_STATUS_ACCURACY_LOW;
         private Position currentPosition = new Position(METER, 0,0,0, System.nanoTime());
         private Velocity currentVelocity = new Velocity(METER, 0, 0, 0, System.nanoTime());
         private long lastTimestamp = 0;
-        //private AccelerometerListenerState state = START;
-        private final Queue<SensorEvent> dataQueue = Queues.synchronizedDeque(Queues.<SensorEvent>newArrayDeque());
         private String currentData;
         private boolean initialized = false;
 

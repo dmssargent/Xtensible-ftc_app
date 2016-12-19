@@ -49,7 +49,7 @@ public class JoystickQuestions {
     }
 
     public void loop() {
-        checkState(questions.isEmpty() , "You have either called stopRobot(), or you forgot to call addQuestion");
+        checkState(!questions.isEmpty(), "You have either called stopRobot(), or you forgot to call addQuestion");
         if (iterator == null) {
             started = true;
             iterator = questions.listIterator();
@@ -105,6 +105,7 @@ public class JoystickQuestions {
         for (int i = 0; i < currentQuestion.responses.size(); i++) {
             telemetry.addData(Question.answerCaptions[i], currentQuestion.responses.get(i));
         }
+        telemetry.addData("RESP", currentQuestion.currentResponse == null ? "None" : currentQuestion.currentResponse);
     }
 
     public void stop() {

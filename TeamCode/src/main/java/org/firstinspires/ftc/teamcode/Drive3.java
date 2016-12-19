@@ -8,7 +8,7 @@ import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 @TeleOp
-public class Drive2 extends SimpleOpMode {
+public class Drive3 extends SimpleOpMode {
     private double buttonPresserPos;
     private int ballLiftPos;
     private boolean ballLiftTriggerPressed;
@@ -18,7 +18,7 @@ public class Drive2 extends SimpleOpMode {
     @Override
     public void init(RobotContext ctx) throws Exception {
         hardware = new ClutchHardware(this);
-        hardware.driveTrain.configureDriveSystem(DriveTrain.DriveSystems.MECANUM);
+        hardware.driveTrain.configureDriveSystem(DriveTrain.DriveSystems.HOLONOMIC);
         //hardware.winch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //hardware.winch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }

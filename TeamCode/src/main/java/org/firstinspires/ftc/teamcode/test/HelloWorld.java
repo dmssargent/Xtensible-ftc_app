@@ -19,6 +19,7 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -33,6 +34,7 @@ import java.util.LinkedList;
 
 @Autonomous(name = "Hello World Example")
 @RobotsDontQuit
+@Disabled
 public class HelloWorld extends SimpleOpMode {
     private final String MESS = "MESS";
     private volatile boolean test = false;
@@ -104,7 +106,7 @@ public class HelloWorld extends SimpleOpMode {
     }
 
     @Override
-    public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
+    public void start(RobotContext ctx) throws Exception {
         telemetry.data(MESS, "Start Date: " +
                 (new Date((long) (System.nanoTime() / 1E3))).toString());
     }

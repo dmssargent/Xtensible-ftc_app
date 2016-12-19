@@ -35,8 +35,12 @@ public abstract class StandardOpMode extends ExtensibleOpMode {
     }
 
     @Override
-    public void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
+    public final void start(RobotContext ctx, LinkedList<Object> out) throws Exception {
+        start(ctx);
+    }
 
+    public void start(RobotContext ctx) throws Exception {
+        // doing nothing
     }
 
     @Override

@@ -152,6 +152,8 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
 
     @Override
     public void init_loop() {
+        gamepad1().updateGamepad(this, gamepad1);
+        gamepad2().updateGamepad(this, gamepad2);
         try {
             initLoop(this);
         } catch (Exception e) {
