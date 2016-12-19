@@ -1,6 +1,7 @@
 package org.ftccommunity.ftcxtensible.cv;
 
-import org.opencv.android.OpenCVLoader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class OpenCV {
     private static Status instance = Status.UNLOADED;
@@ -18,12 +19,26 @@ public class OpenCV {
     }
 
     public static boolean initBare() {
-        final boolean b = OpenCVLoader.initDebug();
-        if (b) instance = Status.LOADED_BARE;
-        return b;
+        try {
+            final Class<?> aClass = Class.forName("org.opencv.android.OpenCVLoader");
+            final Method initDebug = aClass.getMethod("initDebug");
+            boolean b = (boolean) initDebug.invoke(null);
+
+            if (b) instance = Status.LOADED_BARE;
+            return b;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("OpenCV is not currently available, please re-add that dependency and try again");
+        } catch (NoSuchMethodException | IllegalAccessException e) {
+            throw new RuntimeException("[OPENCV-initBare] Something bad happened, and I can't call the method I need to. Let someone know about this.", e);
+        } catch (InvocationTargetException e) {
+            final Throwable targetException = e.getTargetException();
+            throw new RuntimeException(targetException.getMessage(), targetException);
+        }
     }
 
     public static boolean initExtras() {
+        if (instance == Status.UNLOADED)
+            throw new IllegalStateException("Call initBare() before you call initExtras()");
         try {
             System.loadLibrary("xfeatures2d");
             instance = Status.LOADED_FULL;

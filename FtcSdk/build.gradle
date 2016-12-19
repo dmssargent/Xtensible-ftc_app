@@ -1,12 +1,5 @@
 apply plugin: 'com.android.library'
 
-//artifacts.add("default", file('FtcCommon-release.aar'))
-//artifacts.add("default", file('Analytics-release.aar'))
-//artifacts.add("default", file('Hardware-release.aar'))
-//artifacts.add("default", file('ModernRobotics-release.aar'))
-//artifacts.add("default", file('RobotCore-release.aar'))
-//artifacts.add("default", file('WirelessP2p-release.aar'))
-
 android {
     compileSdkVersion 24
     buildToolsVersion '24.0.3'
@@ -46,9 +39,6 @@ android {
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
     }
-//    dexOptions {
-//        incremental true
-//    }
 }
 
 repositories {
@@ -59,15 +49,11 @@ repositories {
 }
 
 dependencies {
-    //compile 'com.android.support:support-v4:24.2.0'
     compile name: 'FtcCommon-release', ext: 'aar'
     compile name: 'Hardware-release', ext: 'aar'
     compile name: 'ModernRobotics-release', ext: 'aar'
     compile name: 'RobotCore-release', ext: 'aar'
     compile name: 'Blocks-release', ext: 'aar'
     compile name: 'Inspection-release', ext: 'aar'
-    //compile files('libs/d2xx.jar')
-    //compile files('libs/foo2-dex2jar.jar')
     compile name: 'WirelessP2p-release', ext: 'aar'
-    //compile files('../doc/ftc_app-javadoc.jar')
 }

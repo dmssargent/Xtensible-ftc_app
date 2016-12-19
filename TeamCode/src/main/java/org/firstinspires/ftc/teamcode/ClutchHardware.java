@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
@@ -27,6 +28,7 @@ class ClutchHardware {
         final ExtensibleHardwareMap hardwareMap = ctx.hardwareMap();
         opticalDistanceSensor = hardwareMap.opticalDistanceSensors().get("opticalDistance");
         distanceSensor = hardwareMap.ultrasonicSensors().get("ultrasonic");
+        ((ModernRoboticsI2cRangeSensor) distanceSensor).read8(ModernRoboticsI2cRangeSensor.Register.FIRMWARE_REV);
         colorServo = hardwareMap.servos().get("colorServo");
         colorSensor = new AdafruitSensorWrapper(hardwareMap.colorSensors().get("colorSensor"),
                 hardwareMap.deviceInterfaceModules().get("dim"), 1, false);
