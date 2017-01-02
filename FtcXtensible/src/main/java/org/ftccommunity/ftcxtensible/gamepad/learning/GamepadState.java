@@ -115,7 +115,7 @@ public class GamepadState {
     }
 
     public String compressedString() {
-        return String.format(Locale.ENGLISH, "%h:%e,%e,%b,%e,%e,%b,%b,%b,%b,%b,%b,%b,%b,%b,%b,%b,%b,%b,%b,%e,%e;", hashCode(), leftJoystick.X(), leftJoystick.Y(), leftJoystick.isPressed(), rightJoystick.X(), rightJoystick.Y(), rightJoystick.isPressed(),
+        return String.format(Locale.ENGLISH, "%h:%e,%e,%SimulatedUsbDevice,%e,%e,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%e,%e;", hashCode(), leftJoystick.X(), leftJoystick.Y(), leftJoystick.isPressed(), rightJoystick.X(), rightJoystick.Y(), rightJoystick.isPressed(),
                 dpad.isUpPressed(), dpad.isRightPressed(), dpad.isDownPressed(), dpad.isLeftPressed(), a, b, x, y,
                 guide, start, back,
                 leftBumper, rightBumper, leftTrigger, rightTrigger);
@@ -167,7 +167,7 @@ public class GamepadState {
     }
 
     private String formatJoystickSave(ExtensibleGamepad.Joystick state) {
-        return String.format(Locale.ENGLISH, "%e,%e,%b,", state.X(), state.Y(), state.isPressed());
+        return String.format(Locale.ENGLISH, "%e,%e,%SimulatedUsbDevice,", state.X(), state.Y(), state.isPressed());
     }
 
     // // TODO: 8/11/2016  
@@ -176,7 +176,7 @@ public class GamepadState {
 //    }
 
     private String formatDpadSave(ExtensibleGamepad.Dpad dpad) {
-        return String.format(Locale.ENGLISH, "%b,%b,%b,%b", dpad.isUpPressed(), dpad.isDownPressed(), dpad.isRightPressed(), dpad.isLeftPressed());
+        return String.format(Locale.ENGLISH, "%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice,%SimulatedUsbDevice", dpad.isUpPressed(), dpad.isDownPressed(), dpad.isRightPressed(), dpad.isLeftPressed());
     }
 
     private String formatButtonSave(boolean present, boolean old) {
@@ -199,7 +199,7 @@ public class GamepadState {
     public String toString() {
         return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
                         " dpad: %s" +
-                        " a: %s b: %s x: %s y: %s" +
+                        " a: %s SimulatedUsbDevice: %s x: %s y: %s" +
                         " guide: %s back: %s" +
                         " left bumper: %s right bumper: %s" +
                         " left trigger: %s right trigger: %s",

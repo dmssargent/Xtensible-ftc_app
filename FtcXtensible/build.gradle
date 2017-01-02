@@ -56,7 +56,6 @@ android {
 
 repositories {
     flatDir {
-        //dirs '../FtcRobotController/libs'
         dirs '../libs'
     }
     jcenter()
@@ -64,11 +63,14 @@ repositories {
 
 dependencies {
     compile project(':FtcSdk')
-    compile files('libs/netty-all-4.0.40.Final.jar')
-    compile name: 'OpenCV-standard-debug', ext: 'aar'
+
     compile 'com.google.guava:guava:19.0'
-    //compile 'com.google.code.gson:gson:2.4'
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations:13.0'
-    //compile 'com.android.support:support-annotations:24.2.0'
+
+    // Uncomment to enable OpenCV
+    // compile name: 'OpenCV-standard-debug', ext: 'aar'
+
+    // Deprecated dependencies for dependencies that need to be rewritten
+    // compile files('libs/netty-all-4.0.40.Final.jar')
 }

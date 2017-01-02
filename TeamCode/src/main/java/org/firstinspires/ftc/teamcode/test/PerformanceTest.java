@@ -19,20 +19,20 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import com.google.common.collect.EvictingQueue;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous
-
+@Disabled
 public class PerformanceTest extends SimpleOpMode {
     private static final int REDUCE_BY_FACTOR = 50;
     private final static String test = "TEST";
@@ -40,7 +40,6 @@ public class PerformanceTest extends SimpleOpMode {
     private final static String performTest = "Performing test...";
     private long lastTime;
     private Queue<Long> timeQueue = EvictingQueue.create(1000000 / REDUCE_BY_FACTOR);
-    ;
     private String result;
 
     private static long convert(long nano) {
@@ -53,7 +52,7 @@ public class PerformanceTest extends SimpleOpMode {
     }
 
     @Override
-    public void start(RobotContext ctx, LinkedList<Object> out) {
+    public void start(RobotContext ctx) {
         lastTime = System.nanoTime();
     }
 

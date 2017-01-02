@@ -20,4 +20,5 @@ package org.ftccommunity.ftcxtensible.interfaces;
 
 public interface RobotAction {
     void perform();
+
 }

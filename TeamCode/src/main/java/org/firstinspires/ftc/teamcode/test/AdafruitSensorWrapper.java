@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class AdafruitSensorWrapper {
     private final ColorSensor sensor;
     private Color rawBlue;

@@ -1,53 +1,88 @@
-# Xtensible Library
-### Alpha Release
-##### Code quality may be below usual standards
+# ftc_app
+FTC Android Studio project to create FTC Robot Controller app.
+
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.
 The FTC Robot Controller app is designed to work in conjunction with the FTC Driver Station app.
 The FTC Driver Station app is available through Google Play.
 
 To use this SDK, download/clone the entire project to your local computer.
-Use Android Studio to import the folder ("Import project (Eclipse ADT, Gradle, etc.)").
+Use Android Studio to import the folder  ("Import project (Eclipse ADT, Gradle, etc.)").
 
-# Xtensible OpMode
-This is the main "OpMode" class for this library. You can extend this class for use
-within the FTC SDK. It also bootstraps our library for use.
+Documentation for the FTC SDK are included with this repository.  There is a subfolder called "doc" which contains several subfolders:
 
-### Known Issues:
-- Lack of unit testing
+ * The folder "apk" contains the .apk files for the FTC Driver Station and FTC Robot Controller apps.
+ * The folder "javadoc" contains the JavaDoc user documentation for the FTC SDK.
+ * The folder "tutorial" contains PDF files that help teach the basics of using the FTC SDK.
 
-### Core syntactical changes:
-#### Getting references to robot hardware
-Old Way:
-```java
-hardwareMap.dcMotor.get("motor_1");
-```
-New Way:
-```java
-hardwareMap().getDcMotors().get("motor_1");
-```
-#### Getting access to a gamepad's left joystick X
-Old Way:
-```java
-gamepad1.left_joystick.X;
-```
-New Way:
-```java
-gamepad1.leftJoystick().X();
-```
+For technical questions regarding the SDK, please visit the FTC Technology forum:
 
-#### Logging
-Old Way:
-```java
-RobotLog.i("Hello World!");
-```
-New Way:
-```java
-RobotLogger.i("Hi", "Hello World!");
-```
+  http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
 
-#### Networking
-Old Way:
-There was never an old way.
+
+**************************************************************************************
+
+Version 2.4 (released on 16.11.13)
+  * Fix to avoid crashing for nonexistent resources.
+  * Blocks Programming mode changes:
+     - Added blocks to support OpenGLMatrix, MatrixF, and VectorF.
+     - Added blocks to support AngleUnit, AxesOrder, AxesReference, CameraDirection, CameraMonitorFeedback, DistanceUnit, and TempUnit.
+     - Added blocks to support Acceleration.
+     - Added blocks to support LinearOpMode.getRuntime.
+     - Added blocks to support MagneticFlux and Position.
+     - Fixed typos.
+     - Made blocks for ElapsedTime more consistent with other objects.
+     - Added blocks to support Quaternion, Velocity, Orientation, AngularVelocity.
+     - Added blocks to support VuforiaTrackables, VuforiaTrackable, VuforiaLocalizer, VuforiaTrackableDefaultListener.
+     - Fixed a few blocks.
+     - Added type checking to new blocks.
+     - Updated to latest blockly.
+     - Added default variable blocks to navigation and matrix blocks.
+     - Fixed toolbox entry for openGLMatrix_rotation_withAxesArgs.
+     - When user downloads Blocks-generated op mode, only the .blk file is downloaded.
+     - When user uploads Blocks-generated op mode (.blk file), Javascript code is auto generated.
+     - Added DbgLog support.
+     - Added logging when a blocks file is read/written.
+     - Fixed bug to properly render blocks even if missing devices from configuration file.
+     - Added support for additional characters (not just alphanumeric) for the block file names (for download and upload).
+     - Added support for OpMode flavor (“Autonomous” or “TeleOp”) and group.
+  * Changes to Samples to prevent tutorial issues.
+  * Incorporated suggested changes from public pull 216 (“Replace .. paths”).
+  * Remove Servo Glitches when robot stopped.
+  * if user hits “Cancels” when editing a configuration file, clears the unsaved changes and reverts to original unmodified configuration.
+  * Added log info to help diagnose why the Robot Controller app was terminated (for example, by watch dog function).
+  * Added ability to transfer log from the controller.
+  * Fixed inconsistency for AngularVelocity
+  * Limit unbounded growth of data for telemetry.  If user does not call telemetry.update() for LinearOpMode in a timely manner, data added for telemetry might get lost if size limit is exceeded.
+
+**************************************************************************************
+
+Version 2.35 (released on 16.10.06)
+  * Blockly programming mode - Removed unnecesary idle() call from blocks for new project.
+
+**************************************************************************************
+
+Version 2.30 (released on 16.10.05)
+  * Blockly programming mode:
+     - Mechanism added to save Blockly op modes from Programming Mode Server onto local device
+     - To avoid clutter, blocks are displayed in categorized folders
+     - Added support for DigitalChannel
+     - Added support for ModernRoboticsI2cCompassSensor
+     - Added support for ModernRoboticsI2cRangeSensor
+     - Added support for VoltageSensor
+     - Added support for AnalogInput
+     - Added support for AnalogOutput
+     - Fix for CompassSensor setMode block
+  * Vuforia
+     - Fix deadlock / make camera data available while Vuforia is running.
+     - Update to Vuforia 6.0.117 (recommended by Vuforia and Google to close security loophole). 
+  * Fix for autonomous 30 second timer bug (where timer was in effect, even though it appeared to have timed out).
+  * opModeIsActive changes to allow cleanup after op mode is stopped (with enforced 2 second safety timeout).
+  * Fix to avoid reading i2c twice.
+  * Updated sample Op Modes.
+  * Improved logging and fixed intermittent freezing.
+  * Added digital I/O sample.
+  * Cleaned up device names in sample op modes to be consistent with Pushbot guide.
+  * Fix to allow use of IrSeekerSensorV3.
 
 **************************************************************************************
 
@@ -167,7 +202,7 @@ Release 16.03.09
  * Added code to create log messages while waiting for LinearOpMode shutdown.
  * Fix so Wifi Direct Config activity will no longer launch multiple times.
  * Added the ability to specify an alternate i2c address in software for the Modern Robotics gyro.
-
+ 
 **************************************************************************************
 
 Release 16.02.09
@@ -177,7 +212,7 @@ Release 16.02.09
     - If user attempts to start/restart RC with one or more module missing, it will display a warning but still start up.
     - When running an op mode, if one or more modules gets disconnected, the RC & DS will display warnings,and robot will keep on working in spite of the missing module(s).
     - If a disconnected module gets physically reconnected the RC will auto detect the module and the user will regain control of the recently connected module.
-    - Warning messages are more helpful (identifies the type of module that’s missing plus its USB serial number).
+    - Warning messages are more helpful (identifies the type of module that’s missing plus its USB serial number).   
  * Code changes to fix the null gamepad reference when users try to reference the gamepads in the init() portion of their op mode.
  * NXT light sensor output is now properly scaled.  Note that teams might have to readjust their light threshold values in their op modes.
  * On DS user interface, gamepad icon for a driver will disappear if the matching gamepad is disconnected or if that gamepad gets designated as a different driver.
@@ -192,63 +227,97 @@ Release 16.02.09
 
 **************************************************************************************
 
-New Way:
-```java
-enableNetworking().startNetworking();
-```
+Release 16.01.04
+
+ * Updated compileSdkVersion for apps
+ * Prevent Wifi from entering power saving mode
+ * removed unused import from driver station
+ * Corrrected "Dead zone" joystick code.
+ * LED.getDeviceName and .getConnectionInfo() return null
+ * apps check for ROBOCOL_VERSION mismatch
+ * Fix for Telemetry also has off-by-one errors in its data string sizing / short size limitations error
+ * User telemetry output is sorted.
+ * added formatting variants to DbgLog and RobotLog APIs
+ * code modified to allow for a long list of op mode names.
+ * changes to improve thread safety of RobocolDatagramSocket
+ * Fix for "missing hardware leaves robot controller disconnected from driver station" error
+ * fix for "fast tapping of Init/Start causes problems" (toast is now only instantiated on UI thread).
+ * added some log statements for thread life cycle.
+ * moved gamepad reset logic inside of initActiveOpMode() for robustness
+ * changes made to mitigate risk of race conditions on public methods.
+ * changes to try and flag when WiFi Direct name contains non-printable characters.
+ * fix to correct race condition between .run() and .close() in ReadWriteRunnableStandard.
+ * updated FTDI driver
+ * made ReadWriteRunnableStanard interface public.
+ * fixed off-by-one errors in Command constructor
+ * moved specific hardware implmentations into their own package.
+ * moved specific gamepad implemnatations to the hardware library.
+ * changed LICENSE file to new BSD version.
+ * fixed race condition when shutting down Modern Robotics USB devices.
+ * methods in the ColorSensor classes have been synchronized.
+ * corrected isBusy() status to reflect end of motion.
+ * corrected "back" button keycode.
+ * the notSupported() method of the GyroSensor class was changed to protected (it should not be public).
 
 
-Modifying the server parameter:
-```java
-enableNetworking();
-// The default web directory is "/sdcard/FIRST/web"
-getServerSettings().setWebDirectory("/put/here/where/your/web/directory/is");
-startNetworking();
-```
+**************************************************************************************
 
-### Camera (Alpha)
-Old Way:
+Release 15.11.04.001
 
-Not something easy.
+ * Added Support for Modern Robotics Gyro.
+  - The GyroSensor class now supports the MR Gyro Sensor.
+  - Users can access heading data (about Z axis)
+  - Users can also access raw gyro data (X, Y, & Z axes).
+  - Example MRGyroTest.java op mode included.
+ * Improved error messages
+  - More descriptive error messages for exceptions in user code.
+ * Updated DcMotor API
+ * Enable read mode on new address in setI2cAddress
+ * Fix so that driver station app resets the gamepads when switching op modes.
+ * USB-related code changes to make USB comm more responsive and to display more explicit error messages.
+  - Fix so that USB will recover properly if the USB bus returns garbage data.
+  - Fix USB initializtion race condition.
+  - Better error reporting during FTDI open.
+  - More explicit messages during USB failures.
+  - Fixed bug so that USB device is closed if event loop teardown method was not called.
+ * Fixed timer UI issue
+ * Fixed duplicate name UI bug (Legacy Module configuration).
+ * Fixed race condition in EventLoopManager.
+ * Fix to keep references stable when updating gamepad.
+ * For legacy Matrix motor/servo controllers removed necessity of appending "Motor" and "Servo" to controller names.
+ * Updated HT color sensor driver to use constants from ModernRoboticsUsbLegacyModule class.
+ * Updated MR color sensor driver to use constants from ModernRoboticsUsbDeviceInterfaceModule class. 
+ * Correctly handle I2C Address change in all color sensors
+ * Updated/cleaned up op modes.
+  - Updated comments in LinearI2cAddressChange.java example op mode.
+  - Replaced the calls to "setChannelMode" with "setMode" (to match the new of the DcMotor  method).
+  - Removed K9AutoTime.java op mode.
+  - Added MRGyroTest.java op mode (demonstrates how to use MR Gyro Sensor).
+  - Added MRRGBExample.java op mode (demonstrates how to use MR Color Sensor).
+  - Added HTRGBExample.java op mode (demonstrates how to use HT legacy color sensor).
+  - Added MatrixControllerDemo.java (demonstrates how to use legacy Matrix controller).
+ * Updated javadoc documentation.
+ * Updated release .apk files for Robot Controller and Driver Station apps.
 
-New Way:
-```java
-// What direction, relative to the screen, does the camera face?
-cameraManager().bindCameraInstance(Camera.CameraInfo.CAMERA_FACING_BACK);
-// Set up the capture
-cameraManager().prepareForCapture();
-// Set the delay for image capture
-cameraManager().getPreviewCallback().setDelay(20000);
+T. Eng
+November 5, 2015
+ 
+**************************************************************************************
 
-// Get the latest image
-cameraManager().getNextImage();
+Release 15.10.06.002
 
-// Register a post-processing callback
-CameraImageCallback cb = new MyCameraImageCallback(ctx);
-cameraManager().setImageProcessingCallback(cb);
-```
+ * Added support for Legacy Matrix 9.6V motor/servo controller.
+ * Cleaned up build.gradle file.
+ * Minor UI and bug fixes for driver station and robot controller apps.
+ * Throws error if Ultrasonic sensor (NXT) is not configured for legacy module port 4 or 5.
 
-### Controller Bindings
-#### Under development, for internal use (for now)
+T. Eng
+October 6, 2015
 
-Binds core values and objects present in a module for use in any other module without requiring
-a dependency on that module. This is for use when there is no other sane, readable, or maintable way
-to do something.
+**************************************************************************************
 
+In this latest version of the FTC SDK (20150803_001) the following changes should be noted:
 
-### Structure
- * FtcRobotController
-     - doc - Documentation for the FTC SDK are included with this repository.
-        - "apk" - contains the .apk files for the FTC Driver Station and FTC Robot Controller apps.
-        - "javadoc" - contains the JavaDoc user documentation for the FTC SDK.
-        - "tutorial" - contains PDF files that help teach the basics of using the FTC SDK.
-     - src - contains the source code for the FTC SDK user-editable code portions
-        - "opmodes" - provides user-defined OpModes
- * OpModeLibrary - This module is where you add your OpMode code (note that you must not have
-    dependencies on the FtcRobotController module, but you may depend on its libraries)
- * FtcXtensible - This module contains our code to help you out with your programming
-
-### Upstream Changelog
  * New user interfaces for FTC Driver Station and FTC Robot Controller apps.
  * An init() method is added to the OpMode class.
    - For this release, init() is triggered right before the start() method.
@@ -262,12 +331,6 @@ to do something.
    - Support for encoders with the Legacy Module is now working.
  * The hardware loop has been updated for better performance.
 
-### Authors
-David Sargent, T. Eng, Jonathan Berling
 
-### Credits
-- hexafraction - Image Processing
-- Swerve Robotics - Sensor Classes, I2C functionality, and Dashboard functionalities
-- Ollie - Generic I2C Functionality
-
-
+T. Eng
+August 3, 2015

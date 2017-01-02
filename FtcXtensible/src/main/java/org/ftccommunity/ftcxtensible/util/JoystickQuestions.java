@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.ftccommunity.ftcxtensible.util;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -43,13 +43,14 @@ public class JoystickQuestions {
     public JoystickQuestions addQuestion(String tag, String question, String... responses) {
         checkState(!started, "You can't call this after loop has been called");
         checkArgument(!alreadyHas(tag), "Question tag is already in use");
+        checkArgument(responses.length <= 4, "Too many responses given, current limit is 4");
         questions.add(new Question(tag, question, responses));
 
         return this;
     }
 
     public void loop() {
-        checkState(questions.isEmpty() , "You have either called stopRobot(), or you forgot to call addQuestion");
+        checkState(!questions.isEmpty(), "You have either called stopRobot(), or you forgot to call addQuestion");
         if (iterator == null) {
             started = true;
             iterator = questions.listIterator();
@@ -83,21 +84,22 @@ public class JoystickQuestions {
             }
         }
 
-        if (!buttonPress) {
-            if (gamepad.isAPressed() || gamepad.isBPressed() ||
-                    gamepad.isXPressed() || gamepad.isYPressed()) {
+        if (gamepad.isAPressed() || gamepad.isBPressed() || gamepad.isXPressed() ||
+                gamepad.isYPressed()) {
+            if (!buttonPress) {
                 buttonPress = true;
 
-                if (gamepad.isAPressed()) {
+                if (gamepad.isAPressed())
                     currentQuestion.emulateAPress();
-                } else if (gamepad.isBPressed()) {
+                else if (gamepad.isBPressed())
                     currentQuestion.emulateBPress();
-                } else if (gamepad.isXPressed()) {
+                else if (gamepad.isXPressed())
                     currentQuestion.emulateXPress();
-                } else if (gamepad.isYPressed()) {
+                else if (gamepad.isYPressed())
                     currentQuestion.emulateYPress();
-                }
             }
+        } else {
+            buttonPress = false;
         }
 
         // Update question display
@@ -105,6 +107,7 @@ public class JoystickQuestions {
         for (int i = 0; i < currentQuestion.responses.size(); i++) {
             telemetry.addData(Question.answerCaptions[i], currentQuestion.responses.get(i));
         }
+        telemetry.addData("RESP", currentQuestion.currentResponse == null ? "None" : currentQuestion.currentResponse);
     }
 
     public void stop() {

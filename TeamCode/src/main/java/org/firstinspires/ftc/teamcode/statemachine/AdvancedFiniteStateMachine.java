@@ -116,12 +116,6 @@ public class AdvancedFiniteStateMachine<STATE extends Enum & AdvancedFiniteState
         inject(state, "opMode", opMode.getClass(), opMode);
 
         state.execute();
-//        if (state.stateChange()) {
-//            index = ++index;
-//            if (index > states.size()) {
-//                index = -1;
-//            }
-//        }
     }
 
     /**

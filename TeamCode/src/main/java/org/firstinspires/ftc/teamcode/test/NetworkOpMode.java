@@ -17,18 +17,15 @@
  */
 package org.firstinspires.ftc.teamcode.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
-import org.ftccommunity.ftcxtensible.versioning.RobotSdkApiLevel;
-import org.ftccommunity.ftcxtensible.versioning.RobotSdkVersion;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 
 import java.util.LinkedList;
 import java.util.logging.Level;
 
-@RobotSdkVersion(RobotSdkApiLevel.R16_03_09)
 @Autonomous(name = "Network Op")
 @Disabled
 public class NetworkOpMode extends SimpleOpMode {

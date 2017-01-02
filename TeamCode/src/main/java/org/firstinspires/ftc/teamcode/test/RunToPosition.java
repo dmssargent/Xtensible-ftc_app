@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
-import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
 
 @TeleOp
 @Disabled

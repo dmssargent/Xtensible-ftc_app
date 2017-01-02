@@ -35,6 +35,7 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -57,9 +58,8 @@ public class TemplateOpMode_Iterative extends OpMode
 {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-
-    // private DcMotor leftMotor = null;
-    // private DcMotor rightMotor = null;
+    private DcMotor leftMotor = null;
+    private DcMotor rightMotor = null;
 
     /*
      * Code to run ONCE when the driver hits INIT

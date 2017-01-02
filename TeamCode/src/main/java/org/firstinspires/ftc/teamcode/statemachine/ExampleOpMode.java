@@ -23,15 +23,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
 import org.jetbrains.annotations.Contract;
 
-//import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 @Autonomous
 public class ExampleOpMode extends OpMode {
     AdvancedFiniteStateMachine<States, ExampleOpMode> finiteStateMachine;
 
     @Override
     public void init() {
-        finiteStateMachine = new AdvancedFiniteStateMachine<States, ExampleOpMode>(States.INIT, this);
+        finiteStateMachine = new AdvancedFiniteStateMachine<>(States.INIT, this);
     }
 
     @Override

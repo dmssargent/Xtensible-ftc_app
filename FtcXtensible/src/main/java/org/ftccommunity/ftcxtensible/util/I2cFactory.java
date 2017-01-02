@@ -20,6 +20,7 @@ package org.ftccommunity.ftcxtensible.util;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 
 import org.ftccommunity.i2clibrary.Wire;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.3.1
  */
 public final class I2cFactory {
+    @Contract("_, _ -> !null")
     public static Wire createWire(@NotNull I2cDevice device, byte address) {
         return new Wire(device, address);
     }

@@ -1,12 +1,5 @@
 apply plugin: 'com.android.library'
 
-//artifacts.add("default", file('FtcCommon-release.aar'))
-//artifacts.add("default", file('Analytics-release.aar'))
-//artifacts.add("default", file('Hardware-release.aar'))
-//artifacts.add("default", file('ModernRobotics-release.aar'))
-//artifacts.add("default", file('RobotCore-release.aar'))
-//artifacts.add("default", file('WirelessP2p-release.aar'))
-
 android {
     compileSdkVersion 24
     buildToolsVersion '24.0.3'
@@ -46,9 +39,6 @@ android {
         // location to write the output; can be a file or 'stdout'
         textOutput 'stdout'
     }
-//    dexOptions {
-//        incremental true
-//    }
 }
 
 repositories {

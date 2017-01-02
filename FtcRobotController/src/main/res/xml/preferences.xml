@@ -4,7 +4,7 @@
 
 preferences.xml in FtcRobotController
 
-Copyright (c) 2014, 2015 Qualcomm Technologies Inc
+Copyright (deviceDescription) 2014, 2015 Qualcomm Technologies Inc
 
 All rights reserved.
 
@@ -39,8 +39,8 @@ See https://developer.android.com/guide/topics/ui/settings.html
 -->
 
 <PreferenceScreen
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".FtcRobotControllerActivity"
     >
 
@@ -48,12 +48,12 @@ See https://developer.android.com/guide/topics/ui/settings.html
     android:title="@string/pref_change_wifi_channel">
 
     <PreferenceScreen
-      android:title="@string/pref_change_wifi_channel"
-      android:key="@string/pref_launch_settings">
+        android:key="@string/pref_launch_settings"
+        android:title="@string/pref_change_wifi_channel">
       <intent
         android:action="com.qualcomm.ftccommon.FtcWifiChannelSelectorActivity.intent.action.Launch"
-        android:targetPackage="com.qualcomm.ftccommon"
-        android:targetClass="com.qualcomm.ftccommon.FtcWifiChannelSelectorActivity" />
+          android:targetClass="com.qualcomm.ftccommon.FtcWifiChannelSelectorActivity"
+          android:targetPackage="com.qualcomm.ftccommon" />
     </PreferenceScreen>
   </PreferenceCategory>
 
@@ -61,17 +61,17 @@ See https://developer.android.com/guide/topics/ui/settings.html
     android:title="@string/pref_configure_robot_title">
 
     <PreferenceScreen
-        android:title="@string/pref_view_logs"
-        android:key="@string/pref_launch_viewlogs">
+        android:key="@string/pref_launch_viewlogs"
+        android:title="@string/pref_view_logs">
       <intent
         android:action="com.qualcomm.ftccommon.ViewLogsActivity.intent.action.Launch"
         android:targetClass="com.qualcomm.ftccommon.ViewLogsActivity" />
     </PreferenceScreen>
 
     <SwitchPreference
+        android:defaultValue="true"
         android:key="@string/pref_sound_on_off"
         android:title="@string/pref_sound_on_off_title"
-        android:defaultValue="true"
         />
 
   </PreferenceCategory>

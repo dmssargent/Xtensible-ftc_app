@@ -48,10 +48,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 @Disabled
 public class TestColorSensors extends LinearOpMode {
 
-  public enum ColorSensorDevice {ADAFRUIT, HITECHNIC_NXT, MODERN_ROBOTICS_I2C};
-
   public ColorSensorDevice device = ColorSensorDevice.MODERN_ROBOTICS_I2C;
-
   ColorSensor colorSensor;
   DeviceInterfaceModule cdim;
   LED led;
@@ -124,4 +121,6 @@ public class TestColorSensors extends LinearOpMode {
         break;
     }
   }
+
+  public enum ColorSensorDevice {ADAFRUIT, HITECHNIC_NXT, MODERN_ROBOTICS_I2C}
 }

@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.ftccommunity.bindings.DataBinder;
@@ -42,13 +43,12 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -58,7 +58,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RobotContext implements AbstractRobotContext {
     private final ServerSettings serverSettings;
     private final RobotStatus status;
-    private final LinkedList<InterfaceHttpData> postedData;
+    //private final LinkedList<InterfaceHttpData> postedData;
     //private List<Thread> asyncsRunning;
     private final ExecutorService asyncService;
     private final RobotLogger logger;
@@ -74,7 +74,7 @@ public class RobotContext implements AbstractRobotContext {
     private ExtensibleGamepad extensibleGamepad2;
     private ExtensibleCameraManager extensibleCameraManager;
     private NetworkedOpMode networkedOpMode;
-    private boolean networkingEnabled;
+    // private boolean networkingEnabled;
     private View layout;
     private View cameraViewParent;
 
@@ -85,7 +85,7 @@ public class RobotContext implements AbstractRobotContext {
     RobotContext() {
         serverSettings = ServerSettings.createServerSettings();
         status = new RobotStatus(this, RobotStatus.LogTypes.HTML);
-        postedData = new LinkedList<>();
+        // postedData = new LinkedList<>();
 
         extensibleGamepad1 = new ExtensibleGamepad();
         extensibleGamepad2 = new ExtensibleGamepad();
@@ -124,24 +124,29 @@ public class RobotContext implements AbstractRobotContext {
 
     @Override
     public RobotContext enableNetworking() {
-        if (networkedOpMode == null) {
-            networkedOpMode = new NetworkedOpMode(this);
-        }
-        networkingEnabled = true;
+//        if (networkedOpMode == null) {
+//            networkedOpMode = new NetworkedOpMode(this);
+//        }
+//        networkingEnabled = true;
+        // TODO: 12/19/2016 rebuild networking
+        RobotLog.w("[xNetworking] stub!");
 
         return this;
     }
 
     @Override
     public RobotContext disableNetworking() {
-        if (!networkingEnabled || networkedOpMode == null) {
-            throw new IllegalStateException("Networking is already disabled!");
-        }
+//        if (!networkingEnabled || networkedOpMode == null) {
+//            throw new IllegalStateException("Networking is already disabled!");
+//        }
+//
+//        networkedOpMode.stopServer();
+//        networkedOpMode = null;
+//
+//        networkingEnabled = false;
 
-        networkedOpMode.stopServer();
-        networkedOpMode = null;
-
-        networkingEnabled = false;
+        // TODO: 12/19/2016 rebuild networking
+        RobotLog.w("[xNetworking] stub!");
         return this;
     }
 
@@ -185,21 +190,25 @@ public class RobotContext implements AbstractRobotContext {
 
     @Override
     public RobotContext startNetworking() {
-        if (networkingEnabled && networkedOpMode == null) {
-            throw new IllegalStateException("Networking is disabled!");
-        }
-
-        networkedOpMode.startServer();
+//        if (networkingEnabled && networkedOpMode == null) {
+//            throw new IllegalStateException("Networking is disabled!");
+//        }
+//
+//        networkedOpMode.startServer();
+        // TODO: 12/19/2016 rebuild networking
+        RobotLog.w("[xNetworking] stub!");
         return this;
     }
 
     @Override
     public RobotContext stopNetworking() {
-        if (networkingEnabled && networkedOpMode == null) {
-            throw new IllegalStateException("Networking is disabled!");
-        }
-
-        networkedOpMode.stopServer();
+//        if (networkingEnabled && networkedOpMode == null) {
+//            throw new IllegalStateException("Networking is disabled!");
+//        }
+//
+//        networkedOpMode.stopServer();
+        // TODO: 12/19/2016 rebuild networking
+        RobotLog.w("[xNetworking] stub!");
         return this;
     }
 
@@ -222,10 +231,6 @@ public class RobotContext implements AbstractRobotContext {
     @Override
     public void bindAppContext(Context context) throws IllegalArgumentException, IllegalStateException {
         if (context instanceof Activity) {
-            /*if (appContext != null) {
-                throw new IllegalStateException("Cannot rebind a context when the current context" +
-                        " is not null");
-            }*/
             appContext = context;
         } else {
             throw new IllegalArgumentException("Invalid context; it must be of an activity context type");
@@ -242,7 +247,6 @@ public class RobotContext implements AbstractRobotContext {
         extensibleTelemetry = new ExtensibleTelemetry(checkNotNull(telemetry, "telemetry is null"));
         layout = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.RC_VIEW));
         cameraViewParent = ((Activity) appContext()).findViewById(controllerBindings().integers().get(DataBinder.CAMERA_VIEW));
-        //opModeManager = ((OpModeManager) controllerBindings().objects().get(DataBinder.RC_MANAGER));
 
         eventManager.run();
     }
@@ -387,8 +391,9 @@ public class RobotContext implements AbstractRobotContext {
      * @param datas a collection of type <code>InterfaceHttpData</code> to be added
      */
     @Override
-    public void addPostData(Collection<InterfaceHttpData> datas) {
-        postedData.addAll(datas);
+    public void addPostData(Collection<?> datas) {
+        // TODO: 12/19/2016 rebuild networking
+        RobotLog.w("[xNetworking] stub!");
     }
 
     /**
@@ -397,8 +402,13 @@ public class RobotContext implements AbstractRobotContext {
      * @return an <code>ImmutableList</code> that is a copy of the data received via networking
      */
     @Override
-    public ImmutableList<InterfaceHttpData> getPostedData() {
-        return ImmutableList.copyOf(postedData);
+    @Deprecated
+    public ImmutableList<?> getPostedData() {
+        // TODO: 12/19/2016 rebuild networking
+        RobotLog.w("[xNetworking] stub!");
+        // return ImmutableList.copyOf(postedData);
+
+        return ImmutableList.copyOf(Collections.EMPTY_LIST);
     }
 
     /**
@@ -498,16 +508,6 @@ public class RobotContext implements AbstractRobotContext {
         return cameraViewParent;
     }
 
-//    @Override
-//    @NotNull
-//    public OpModeManager opModeManager() {
-//        if (opModeManager == null) {
-//            throw new IllegalStateException("Prepare has not been called correctly yet.");
-//        }
-//
-//        return opModeManager;
-//    }
-
     public List<RobotEvent> events() {
         return events;
     }
@@ -523,17 +523,5 @@ public class RobotContext implements AbstractRobotContext {
     public RobotContext registerEvent(@NotNull RobotEvent event) {
         events.add(event);
         return this;
-    }
-
-    public void handleEvents() {
-        final List<RobotEvent> events = events();
-        for (RobotEvent event : events) {
-            event.run();
-        }
-    }
-
-    @NotNull
-    public RobotEventManager eventManager() {
-        return eventManager;
     }
 }

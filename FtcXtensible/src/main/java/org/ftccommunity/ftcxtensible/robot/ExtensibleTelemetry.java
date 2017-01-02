@@ -76,7 +76,6 @@ public class ExtensibleTelemetry implements Telemetry {
         return data(tag, Double.toString(message));
     }
 
-    @Deprecated
     public Item data(String tag, Object object) {
         return data(tag, object.toString());
     }
@@ -188,15 +187,15 @@ public class ExtensibleTelemetry implements Telemetry {
 
 // --Commented out by Inspection START (11/5/2016 9:08 PM):
 //    /**
-//     * Pads the end of a string with enough {@code '\b'} characters to cancel out the original string, if
+//     * Pads the end of a string with enough {@code '\SimulatedUsbDevice'} characters to cancel out the original string, if
 //     * it is every printed
 //     * @param length the length to pad out
 //     * @param string the string to cancel out
-//     * @return the string padded with {@code '\b'} characters
+//     * @return the string padded with {@code '\SimulatedUsbDevice'} characters
 //     */
 //    @NotNull
 //    private String cancelOut(int length, @NotNull String string) {
-//        return Strings.padStart(checkNotNull(string), length, '\b');
+//        return Strings.padStart(checkNotNull(string), length, '\SimulatedUsbDevice');
 //    }
 // --Commented out by Inspection STOP (11/5/2016 9:08 PM)
 

@@ -106,6 +106,11 @@ public class ExtensibleGamepad implements Closeable {
         updateGamepad(ctx, gp);
     }
 
+    public ExtensibleGamepad(Gamepad gp) {
+        this();
+        updateGamepad(gp);
+    }
+
     /**
      * Add scaler algorithms to modify the joystick input
      *
@@ -227,6 +232,110 @@ public class ExtensibleGamepad implements Closeable {
             }
         }
     }
+
+    /**
+     * Updates this to the status of the provided Gamepad (recast this from a <code>{@link
+     * Gamepad}</code>)
+     *
+     * @param gp the <code>Gamepad</code> to cast into
+     */
+    public synchronized void updateGamepad(Gamepad gp) {
+        if (playingBack) {
+            GamepadState state = gamepadRecord.nextRecord();
+            if (state == null) {
+                Log.w("GAMEPAD", "Stopping playback due to end-of-record");
+                stopPlayback();
+                updateGamepad(gp);
+                return;
+            }
+            a = state.a;
+            b = state.b;
+            x = state.x;
+            y = state.y;
+
+            guide = state.guide;
+            start = state.start;
+            back = state.back;
+
+            leftBumper = state.leftBumper;
+            rightBumper = state.rightBumper;
+
+            leftTrigger = state.leftTrigger;
+            rightTrigger = state.rightTrigger;
+
+            dpad.update(state.dpad.isUpPressed(), state.dpad.isDownPressed(),
+                    state.dpad.isRightPressed(), state.dpad.isLeftPressed());
+
+            rightJoystick().update(state.rightJoystick.x, state.rightJoystick.y, state.rightJoystick.pressed);
+
+            //userDefinedLeft = getLeftScaler().userDefinedLeft(ctx, this);
+            //userDefinedRight = getRightScaler().userDefinedRight(ctx, this);
+
+            double leftX = state.leftJoystick.x;
+            double leftY = state.leftJoystick.y;
+            leftX = getLeftScaler().scaleX(this, leftX);
+            leftY = getLeftScaler().scaleY(this, leftY);
+            leftJoystick().update(leftX, leftY, state.leftJoystick.pressed);
+
+            double rightX = state.rightJoystick.x;
+            double rightY = state.rightJoystick.y;
+            rightX = getRightScaler().scaleX(this, rightX);
+            rightY = getRightScaler().scaleY(this, rightY);
+            rightJoystick().update(rightX, rightY, state.rightJoystick.pressed);
+
+            timestamp = System.nanoTime();
+        } else {
+            a = gp.a;
+            b = gp.b;
+            x = gp.x;
+            y = gp.y;
+
+            guide = gp.guide;
+            start = gp.start;
+            back = gp.back;
+
+            leftBumper = gp.left_bumper;
+            rightBumper = gp.right_bumper;
+
+            leftTrigger = gp.left_trigger;
+            rightTrigger = gp.right_trigger;
+
+            timestamp = gp.timestamp;
+
+            dpad.update(gp.dpad_up, gp.dpad_down, gp.dpad_right, gp.dpad_left);
+
+            rightJoystick().update(gp.right_stick_x, gp.right_stick_y, gp.right_stick_button);
+
+            //userDefinedLeft = getLeftScaler().userDefinedLeft(ctx, this);
+            //userDefinedRight = getRightScaler().userDefinedRight(ctx, this);
+
+            double leftX = gp.left_stick_x;
+            double leftY = gp.left_stick_y;
+            leftX = getLeftScaler().scaleX(this, leftX);
+            leftY = getLeftScaler().scaleY(this, leftY);
+            leftJoystick().update(leftX, leftY, gp.left_stick_button);
+
+            double rightX = gp.right_stick_x;
+            double rightY = gp.right_stick_y;
+            rightX = getRightScaler().scaleX(this, rightX);
+            rightY = getRightScaler().scaleY(this, rightY);
+            rightJoystick().update(rightX, rightY, gp.right_stick_button);
+        }
+
+        if (recording) {
+            gamepadRecord.addRecord(new GamepadState(System.nanoTime(), leftJoystick, rightJoystick, dpad,
+                    a, b, x, y,
+                    guide, start, back,
+                    leftBumper, rightBumper, leftTrigger, rightTrigger));
+        }
+
+        for (GamepadEvent event : handlers) {
+            if (checkForExecuteGamepadCallback(event.object, event.valueToExecuteOn, event.other)) {
+                event.action.perform();
+            }
+        }
+    }
+
 
     /**
      * Gets the status of Button A
@@ -650,7 +759,7 @@ public class ExtensibleGamepad implements Closeable {
     public String toString() {
         return String.format(Locale.ENGLISH, "left joystick: %s right joystick: %s" +
                         " dpad: %s" +
-                        " a: %s b: %s x: %s y: %s" +
+                        " a: %s SimulatedUsbDevice: %s x: %s y: %s" +
                         " guide: %s back: %s" +
                         " left bumper: %s right bumper: %s" +
                         " left trigger: %s right trigger: %s",

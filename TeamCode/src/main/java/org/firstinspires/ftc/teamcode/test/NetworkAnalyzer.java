@@ -27,12 +27,11 @@ import android.net.wifi.WifiManager;
 
 import com.google.common.collect.HashBiMap;
 import com.google.common.io.Files;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.RunShellCommand;
-
-import org.ftccommunity.ftcxtensible.opmodes.Autonomous;
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
 
 import java.io.File;
 import java.io.IOException;

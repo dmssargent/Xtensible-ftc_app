@@ -1,13 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.ftccommunity.i2clibrary;
 
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 
-import org.ftccommunity.i2clibrary.Wire2T;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: 11/18/2016 STUB 
+// TODO: 11/18/2016 STUB
 public class WireTAdafruitL3GD20H extends Wire2T<WireTAdafruitL3GD20H.Register> {
     public static final I2cAddr I2C_ADDRESS = I2cAddr.zero();
 

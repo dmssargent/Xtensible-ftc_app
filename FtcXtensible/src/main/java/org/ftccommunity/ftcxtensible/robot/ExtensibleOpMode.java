@@ -36,7 +36,7 @@ import org.ftccommunity.ftcxtensible.dagger.annonations.Inject;
 import org.ftccommunity.ftcxtensible.dagger.annonations.Named;
 import org.ftccommunity.ftcxtensible.interfaces.AbstractRobotContext;
 import org.ftccommunity.ftcxtensible.interfaces.FullOpMode;
-import org.ftccommunity.ftcxtensible.interfaces.RobotInitStartStopLoop;
+import org.ftccommunity.ftcxtensible.interfaces.RobotFullOp;
 import org.ftccommunity.ftcxtensible.interfaces.RunAssistant;
 import org.ftccommunity.ftcxtensible.opmodes.RobotsDontQuit;
 import org.ftccommunity.ftcxtensible.robot.handlers.RobotUncaughtExceptionHandler;
@@ -59,7 +59,7 @@ import java.util.concurrent.TimeUnit;
  * @author David Sargent - FTC5395; FRC3465
  * @since 0.1
  */
-public abstract class ExtensibleOpMode extends RobotContext implements FullOpMode, AbstractRobotContext, RobotInitStartStopLoop {
+public abstract class ExtensibleOpMode extends RobotContext implements FullOpMode, AbstractRobotContext, RobotFullOp {
     public static final String TAG = "XTENSIBLE_OP_MODE::";
     //private transient static ExtensibleOpMode parent;
 
@@ -89,15 +89,6 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
      * Bootstraps the Extensible OpMode to the Xtensible library
      */
     public ExtensibleOpMode() {
-        this(null);
-    }
-
-    /**
-     * Creates a new Extensible OpMode, with the master being the given parent
-     *
-     * @param prt the parent Extensible OpMode
-     */
-    protected ExtensibleOpMode(@Nullable ExtensibleOpMode prt) {
         super();
 
         loopCount = 0;
@@ -110,6 +101,16 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
     }
 
     /**
+     * Creates a new Extensible OpMode, with the master being the given parent
+     *
+     * @param prt the parent Extensible OpMode
+     */
+    @Deprecated
+    protected ExtensibleOpMode(@Nullable ExtensibleOpMode prt) {
+        this();
+    }
+
+    /**
      * Initialize the Extensible OpMode and perform the user code operations to initialize the
      * robot
      */
@@ -119,7 +120,6 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
             gamepad1 = new Gamepad();
         if (gamepad2 == null)
             gamepad2 = new Gamepad();
-
 
         prepare(hardwareMap.appContext, hardwareMap, gamepad1, gamepad2, telemetry);
 
@@ -150,13 +150,26 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
         postProcess(list, RobotStatus.MainStates.START);
     }
 
+    @Override
+    public void init_loop() {
+        gamepad1().updateGamepad(this, gamepad1);
+        gamepad2().updateGamepad(this, gamepad2);
+        try {
+            initLoop(this);
+        } catch (Exception e) {
+            handleException(null, e);
+        }
+    }
+
+    protected void initLoop(@NotNull RobotContext ctx) {
+        // Doing nothing right now
+    }
 
     /**
      * Starts the user code operations to start the robot
      */
     @Override
     public final void start() {
-        //handleEvents();
         status().setMainState(RobotStatus.MainStates.START);
         LinkedList<Object> list = new LinkedList<>();
         try {
@@ -360,7 +373,7 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
      * @param list the list of objects to process
      * @param e    the exception thrown by user code
      */
-    private void handleException(LinkedList<Object> list, Exception e) {
+    private void handleException(@org.jetbrains.annotations.Nullable LinkedList<Object> list, Exception e) {
         Log.e(TAG,
                 "An exception occurred running the OpMode \"" + getCallerClassName(e) + "\"", e);
         if (e instanceof NullPointerException && (e.getMessage() == null || e.getMessage().equals(""))) {
@@ -381,8 +394,10 @@ public abstract class ExtensibleOpMode extends RobotContext implements FullOpMod
         RobotStatus.Type failure = status().getCurrentStateType();
         if (onFailure(this, failure, RobotStatus.MainStates.EXCEPTION, e) >= 0) {
             status().setCurrentStateType(RobotStatus.Type.SUCCESS);
-            for (Object o : list) {
-                onFailure(this, failure, RobotStatus.MainStates.EXCEPTION, o);
+            if (list != null) {
+                for (Object o : list) {
+                    onFailure(this, failure, RobotStatus.MainStates.EXCEPTION, o);
+                }
             }
         } else {
             if (this.getClass().isAnnotationPresent(RobotsDontQuit.class)) {

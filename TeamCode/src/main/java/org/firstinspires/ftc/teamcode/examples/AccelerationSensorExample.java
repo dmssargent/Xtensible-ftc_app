@@ -15,39 +15,35 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.firstinspires.ftc.teamcode.test;
+package org.firstinspires.ftc.teamcode.examples;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AccelerationSensor;
 
-public class DriveForwardStop extends OpMode {
-    private DcMotor left;
-    private DcMotor right;
-    private long startTime;
-    private int loopCount;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.ftccommunity.ftcxtensible.robot.RobotContext;
+import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
+
+@TeleOp
+@Disabled
+public class AccelerationSensorExample extends SimpleOpMode {
+    private AccelerationSensor sensor;
 
     @Override
-    public void init() {
-        left = hardwareMap.dcMotor.get("left_motor");
-        right = hardwareMap.dcMotor.get("right_motor");
-        left.getController();
-
-        loopCount = 0;
+    public void init(RobotContext ctx) {
+        sensor = hardwareMap.accelerationSensors().get("acclSensor");
     }
 
     @Override
-    public void loop() {
-        if (loopCount == 0) {
-            startTime = System.nanoTime();
-        }
+    public void loop(RobotContext ctx) {
+        Acceleration currentAcceleration = sensor.getAcceleration();
 
-        if ((startTime + (1E9 * (long) 5)) < System.nanoTime()) {
-            left.setPower(1);
-            right.setPower(1);
-        } else {
-            left.setPower(0);
-            left.setPower(0);
-        }
+        double gForceInXAxis = currentAcceleration.xAccel;
+        double gForceInYAxis = currentAcceleration.yAccel;
+        double gForceInZAxis = currentAcceleration.zAccel;
 
+        telemetry.addData("ACCL:", "Current acceleration: X - " + gForceInXAxis + " Y - " +
+                gForceInYAxis + " z - " + gForceInZAxis);
     }
 }

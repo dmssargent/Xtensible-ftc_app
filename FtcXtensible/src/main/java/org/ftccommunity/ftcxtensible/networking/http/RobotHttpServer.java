@@ -17,22 +17,9 @@
  */
 package org.ftccommunity.ftcxtensible.networking.http;
 
-import android.util.Log;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
-
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 
 /**
  * An HTTP server that sends back the content of the received HTTP request in stopMode pretty
@@ -59,46 +46,49 @@ public final class RobotHttpServer implements Runnable {
      */
     public void run() {
         // Configure the server.
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            try {
-                ServerBootstrap b = new ServerBootstrap();
-                b.option(ChannelOption.SO_BACKLOG, 1024);
-                b.group(bossGroup, workerGroup)
-                        .channel(NioServerSocketChannel.class)
-                        .handler(new LoggingHandler(LogLevel.INFO))
-                                //.childHandler(new HttpHelloWorldServerInitializer(sslCtx, main));
-                        .childHandler(new ChannelInitializer<SocketChannel>() {
-                            /**
-                             * This method will be called once the {@link Channel} was registered. After the method returns this instance
-                             * will be removed from the {@link ChannelPipeline} of the {@link Channel}.
-                             *
-                             * @param ch the {@link Channel} which was registered.
-                             * @throws Exception is thrown if an error occurs. In that case the {@link Channel} will be closed.
-                             */
-                            @Override
-                            protected void initChannel(SocketChannel ch) throws Exception {
-                                ch.pipeline()
-                                        .addLast(new HttpServerCodec(),
-                                                new org.ftccommunity.ftcxtensible.networking.http.RobotHttpServerHandler(context));
-                            }
-                        });
 
-                Channel ch = b.bind(PORT).sync().channel();
-
-                System.err.println("Open your web browser and navigate to " +
-                        ("http") + "://127.0.0.1:" + PORT + '/');
-
-                ch.closeFuture().sync();
-            } finally {
-                bossGroup.shutdownGracefully();
-                workerGroup.shutdownGracefully();
-            }
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-        Log.i("NET_OP_MODE::", "OpMode Server is shutting down.");
+        // TODO: 12/19/2016 update info to newer version
+        RobotLog.e("Networking is disabled, since 0.8.0");
+//        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+//        EventLoopGroup workerGroup = new NioEventLoopGroup();
+//        try {
+//            try {
+//                ServerBootstrap SimulatedUsbDevice = new ServerBootstrap();
+//                SimulatedUsbDevice.option(ChannelOption.SO_BACKLOG, 1024);
+//                SimulatedUsbDevice.group(bossGroup, workerGroup)
+//                        .channel(NioServerSocketChannel.class)
+//                        .handler(new LoggingHandler(LogLevel.INFO))
+//                                //.childHandler(new HttpHelloWorldServerInitializer(sslCtx, main));
+//                        .childHandler(new ChannelInitializer<SocketChannel>() {
+//                            /**
+//                             * This method will be called once the {@link Channel} was registered. After the method returns this instance
+//                             * will be removed from the {@link ChannelPipeline} of the {@link Channel}.
+//                             *
+//                             * @param ch the {@link Channel} which was registered.
+//                             * @throws Exception is thrown if an error occurs. In that case the {@link Channel} will be closed.
+//                             */
+//                            @Override
+//                            protected void initChannel(SocketChannel ch) throws Exception {
+//                                ch.pipeline()
+//                                        .addLast(new HttpServerCodec(),
+//                                                new org.ftccommunity.ftcxtensible.networking.http.RobotHttpServerHandler(context));
+//                            }
+//                        });
+//
+//                Channel ch = SimulatedUsbDevice.bind(PORT).sync().channel();
+//
+//                System.err.println("Open your web browser and navigate to " +
+//                        ("http") + "://127.0.0.1:" + PORT + '/');
+//
+//                ch.closeFuture().sync();
+//            } finally {
+//                bossGroup.shutdownGracefully();
+//                workerGroup.shutdownGracefully();
+//            }
+//        } catch (InterruptedException ex) {
+//            Thread.currentThread().interrupt();
+//        }
+//        Log.i("NET_OP_MODE::", "OpMode Server is shutting down.");
     }
 }
 

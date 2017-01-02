@@ -69,8 +69,8 @@ public class TwoColorSensorsTelemetry extends LinearOpMode
             {
             int left = leftColorSensor.argb();
             int right = rightColorSensor.argb();
-            telemetry.addData("left", String.format("a=%d r=%d g=%d b=%d", Color.alpha(left), Color.red(left), Color.green(left), Color.blue(left)));
-            telemetry.addData("right", String.format("a=%d r=%d g=%d b=%d", Color.alpha(right), Color.red(right), Color.green(right), Color.blue(right)));
+                telemetry.addData("left", String.format("a=%d r=%d g=%d SimulatedUsbDevice=%d", Color.alpha(left), Color.red(left), Color.green(left), Color.blue(left)));
+                telemetry.addData("right", String.format("a=%d r=%d g=%d SimulatedUsbDevice=%d", Color.alpha(right), Color.red(right), Color.green(right), Color.blue(right)));
             this.updateTelemetry(telemetry);
 
             Thread.sleep(500);

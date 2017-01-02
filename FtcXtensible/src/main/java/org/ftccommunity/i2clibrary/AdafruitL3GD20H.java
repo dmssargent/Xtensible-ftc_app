@@ -1,21 +1,13 @@
-package org.firstinspires.ftc.teamcode;
+package org.ftccommunity.i2clibrary;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.I2cAddr;
-import com.qualcomm.robotcore.hardware.I2cDeviceImpl;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchDevice;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 
-import org.ftccommunity.i2clibrary.interfaces.II2cDeviceClient;
-
-/**
- * Created by mhsrobotics on 10/13/16.
- */
 
 public class AdafruitL3GD20H extends I2cDeviceSynchDevice<I2cDeviceSynch> {
-    private SensorRange sensorRange = SensorRange.RANGE_250DPS;
     private final static byte L3GD20H_ID = (byte) 0xD7;
+    private SensorRange sensorRange = SensorRange.RANGE_250DPS;
 
     protected AdafruitL3GD20H(I2cDeviceSynch deviceClient, boolean isOwned) {
         super(deviceClient, isOwned);
@@ -213,8 +205,8 @@ public class AdafruitL3GD20H extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         RANGE_500DPS(0x10, 0.0175),
         RANGE_2000DPS(0x20, 0.070);
 
-        int range;
         public double sensitivity;
+        int range;
 
         SensorRange(int val, double sensitivity) {
             range = val;

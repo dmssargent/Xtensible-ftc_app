@@ -38,8 +38,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
-
 /**
  * Main Robot Context Interface, any class claiming to be a Robot Context compatible class should
  * inherit this interface
@@ -148,14 +146,14 @@ public interface AbstractRobotContext {
      *
      * @param datas a collection of type <code>InterfaceHttpData</code> to be added
      */
-    void addPostData(Collection<InterfaceHttpData> datas);
+    void addPostData(Collection<?> datas);
 
     /**
      * Get a copy of the received data for use
      *
      * @return an <code>ImmutableList</code> that is a copy of the data received via networking
      */
-    ImmutableList<InterfaceHttpData> getPostedData();
+    ImmutableList<?> getPostedData();
 
     /**
      * The telemetry object to be used

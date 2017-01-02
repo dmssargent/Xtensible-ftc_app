@@ -18,8 +18,9 @@
 
 package org.firstinspires.ftc.teamcode.test;
 
-import org.ftccommunity.ftcxtensible.opmodes.Disabled;
-import org.ftccommunity.ftcxtensible.opmodes.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.ftccommunity.ftcxtensible.robot.RobotContext;
 import org.ftccommunity.ftcxtensible.xsimplify.SimpleOpMode;
 

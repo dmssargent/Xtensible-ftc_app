@@ -1,8 +1,5 @@
-package org.firstinspires.ftc.teamcode;
+package org.ftccommunity.ftcxtensible.hardware;
 
-/**
- * Created by David on 10/23/2016.
- */
 public enum AccelerometerListenerState {
     START, CALIBRATION_DATA, CALIBRATION, DATA
 }
