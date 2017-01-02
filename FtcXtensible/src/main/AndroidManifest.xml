@@ -19,6 +19,9 @@
           package="org.ftccommunity.ftcxtensible">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
             android:allowBackup="true"
             android:label="@string/app_name">
